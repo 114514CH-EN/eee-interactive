@@ -11,7 +11,9 @@
 })();
 
 const $=id=>document.getElementById(id);
-const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+/* CSS variable lookups are cached; the cache is cleared on every full redraw (theme change, resize, fonts) */
+const _css={};const css=n=>n in _css?_css[n]:(_css[n]=getComputedStyle(document.documentElement).getPropertyValue(n).trim());
+const cssReset=()=>{for(const k in _css)delete _css[k];};
 const D2R=Math.PI/180;
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -58,7 +60,7 @@ const Lab={labs:{},anims:[],
   add(n,draw,eh){this.labs[n]={draw,eh};},
   shown(n){return !window.EMBED_LAB||window.EMBED_LAB===n;},
   draw(n){const l=this.labs[n];if(l&&this.shown(n)){try{l.draw();}catch(e){console.warn('lab'+n,e);}}},
-  all(){Object.keys(this.labs).forEach(n=>this.draw(+n));},
+  all(){cssReset();Object.keys(this.labs).forEach(n=>this.draw(+n));},
   /* step(dt) returns nothing; canvasEl used for visibility */
   anim(n,canvasEl,step,isOn){const a={n,step,isOn,on:true,last:0,raf:0};this.anims.push(a);
     if('IntersectionObserver' in window)new IntersectionObserver(es=>{a.on=es[0].isIntersecting;Lab.kick(a);}).observe(canvasEl);return a;},

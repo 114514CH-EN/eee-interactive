@@ -123,7 +123,7 @@ function truthTable(){const ins=comps.filter(c=>c.t==='IN'),outs=comps.filter(c=
 let GU=26,OX=0,drag=null,hover=null,lblLeft=new Set();
 const vc=v=>v===1?css('--green'):v==='X'?css('--red'):v==='Z'?css('--grid'):css('--muted');
 function drawSch(){
-  const c=$('sch'),W0=Math.max(Math.round(c.getBoundingClientRect().width||c.parentElement.clientWidth||600),240);GU=Math.min(W0/COLS,window.EMBED_LAB?18:32);OX=(W0-COLS*GU)/2;c.dataset.h=Math.round(GU*ROWS);c.setAttribute('height',c.dataset.h);
+  const c=$('sch'),W0=Math.max(Math.round(c.getBoundingClientRect().width||c.parentElement.clientWidth||600),240);GU=Math.min(W0/COLS,window.EMBED_LAB?18:32);OX=(W0-COLS*GU)/2;c.dataset.h=Math.round(GU*ROWS);
   const [g,Wd,H]=fit(c);g.translate(OX,0);const P=p=>[p[0]*GU,p[1]*GU],fs=Math.max(9,GU*0.42);
   g.fillStyle=css('--grid');for(let i=1;i<COLS;i++)for(let j=1;j<ROWS;j++)g.fillRect(i*GU-1,j*GU-1,2,2);
   wires.forEach(w=>{const v=NET&&w.net!=null?val[w.net]:0;g.strokeStyle=w===sel?css('--accent'):vc(v);g.lineWidth=w===sel?4:v===1?3:2.2;g.beginPath();g.moveTo(...P(w.a));g.lineTo(...P(w.b));g.stroke();});
@@ -159,7 +159,7 @@ function drawComp(g,c,P,fs,ghost){
   else if(c.t==='OUT'){const v=pv(0);lead([c.x-1,c.y],[c.x-0.4,c.y],v);g.beginPath();g.arcS(X,Y,GU*0.4,0,7);g.fillStyle=v===1?css('--amp'):v==='X'?css('--red'):css('--panel');g.fill();g.stroke();text(g,c.name,X+GU*0.55,Y+fs*0.35,ink,fs);}
   else if(c.t==='LBL'){const v=ghost||!NET?0:val[c.net];g.font=`600 ${fs}px ${css('--mono')}`;const w=g.measureText(c.name||'?').width+GU*0.4;g.fillStyle=css('--panel');g.strokeStyle=c===sel?css('--accent'):vc(v);g.lineWidth=1.6;
     const sg=!ghost&&lblLeft.has(key([c.x,c.y]))?-1:1;g.beginPath();g.moveTo(X,Y);g.lineTo(X+sg*GU*0.25,Y-GU*0.3);g.lineTo(X+sg*(GU*0.25+w),Y-GU*0.3);g.lineTo(X+sg*(GU*0.25+w),Y+GU*0.3);g.lineTo(X+sg*GU*0.25,Y+GU*0.3);g.closePath();g.fill();g.stroke();label(g,c.name||'?',sg>0?X+GU*0.42:X-GU*0.42-w+GU*0.4,Y+fs*0.36,v===1?css('--green'):ink,fs);}}
-function drawLA(){const c=$('la');const n=traces.length,rh=window.EMBED_LAB?16:20;c.dataset.h=Math.max(60,n*rh+30);c.setAttribute('height',c.dataset.h);const [g,Wd,H]=fit(c);
+function drawLA(){const c=$('la');const n=traces.length,rh=window.EMBED_LAB?16:20;c.dataset.h=Math.max(60,n*rh+30);const [g,Wd,H]=fit(c);
   if(!n){text(g,'放开关、时钟、LED 或网络标签，它们会出现在逻辑分析仪里',Wd/2,H/2,css('--muted'),12,'center');return;}
   const L=58,R=Wd-8,N=160,X=i=>L+(R-L)*(i+N-hist.length)/N,amp=rh*0.6,t0=tick-hist.length+1;
   g.strokeStyle=css('--grid');g.lineWidth=1;for(let k=0;k<=N;k+=10){const x=L+(R-L)*k/N;g.beginPath();g.moveTo(x,4);g.lineTo(x,H-18);g.stroke();}
@@ -171,7 +171,7 @@ function drawLA(){const c=$('la');const n=traces.length,rh=window.EMBED_LAB?16:2
   for(let k=0;k<=N;k+=20){const tk=t0+k-(N-hist.length);if(tk>=0)text(g,String(tk),L+(R-L)*k/N,H-4,css('--muted'),10,'center');}
   /* glitch count on outputs */
   let gl=0;traces.forEach((tr,j)=>{if(tr.kind!=='out')return;let run=1;for(let i=1;i<hist.length;i++){if(hist[i][j]===hist[i-1][j])run++;else{if(i-run>0&&run<=3&&hist[i][j]===hist[i-run-1]?.[j])gl++;run=1;}}});
-  $('msg').textContent=gl?`逻辑分析仪：输出上检测到 ${gl} 个 ≤ 3 拍的短脉冲（毛刺）`:'';$('msg').style.color=gl?css('--red'):css('--muted');}
+  const mt=gl?`逻辑分析仪：输出上检测到 ${gl} 个 ≤ 3 拍的短脉冲（毛刺）`:'';if($('msg').textContent!==mt){$('msg').textContent=mt;$('msg').style.color=gl?css('--red'):css('--muted');}}
 
 /* ================= UI ================= */
 $('tools').innerHTML=TOOLS.map(([k,n])=>`<button data-t="${k}">${n}</button>`).join('');
@@ -237,7 +237,7 @@ function load(k){comps=[];wires=[];sel=null;running=false;curP=k;PRE[k]();wires=
 document.querySelectorAll('#lab1 [data-p]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.p)));
 function lab1(){syncUI();drawSch();if(view==='la')drawLA();}
 Lab.add(1,lab1,{});
-let acc=0;const anim=Lab.anim(1,sch,dt=>{acc+=dt*(+$('spd').value);let n=Math.min(Math.floor(acc),20);acc-=n;if(n){for(let i=0;i<n;i++)step();drawSch();drawLA();}},()=>running&&!REDUCE);
+let acc=0;const anim=Lab.anim(1,sch,dt=>{acc+=dt*(+$('spd').value);let n=Math.min(Math.floor(acc),20);acc=Math.min(acc-n,5);if(n){for(let i=0;i<n;i++)step();drawSch();drawLA();}},()=>running&&!REDUCE);
 const QP=new URLSearchParams(location.search).get('p');load(PRE[QP]?QP:'haz');Lab.start();
 </script>
 </body></html>
