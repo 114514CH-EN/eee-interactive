@@ -54,9 +54,29 @@ canvas{width:100%;max-width:100%;min-width:0;display:block;border-radius:10px;ba
 .note{font-size:14px;color:var(--muted);margin:0;border-left:3px solid var(--accent);padding-left:12px;border-radius:0;max-width:72ch}
 .note strong{color:var(--ink)}
 @media (max-width:700px){.stage,.stage.even{grid-template-columns:1fr}}
+html.embed body{padding-block:6px 6px;padding-left:10px;padding-right:10px}
+html.embed .wrap{gap:0;max-width:none}
+html.embed header,html.embed .lead,html.embed .note,html.embed section.panel{display:none}
+html.embed.lab-1 #lab1,html.embed.lab-2 #lab2,html.embed.lab-3 #lab3{display:flex}
+html.embed section.panel{border:0;background:transparent;padding:2px 0;gap:8px}
+html.embed h2{font-size:17px}
+html.embed .read b{font-size:15px}
+html.embed .read small{font-size:11px}
+html.embed .read{grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:6px}
+html.embed section.panel>.tag{display:none}
+html.embed h2{font-size:16px;padding-right:96px}
+html.embed button{font-size:12px;padding:3px 9px}
+html.embed .controls{gap:4px 18px}
+html.embed .verdict{font-size:14px}
+@media (max-width:700px){html.embed .stage,html.embed .stage.even{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+@media (max-width:480px){html.embed .stage,html.embed .stage.even{grid-template-columns:1fr}}
+.open{display:none}
+html.embed .open{display:inline-block;position:absolute;top:8px;right:12px;font:500 12px var(--body);color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:2px 10px;background:var(--panel);z-index:2}
 </style>
+<script>(function(){var m=/[?&]lab=([123])/.exec(location.search);if(m){document.documentElement.classList.add("embed","lab-"+m[1]);}})();</script>
 </head><body>
 
+<a class="open" href="./" target="_blank" rel="noopener">全屏打开 ↗</a>
 <div class="wrap">
 <header>
   <div class="tag">DEEM · ELECTRICAL MACHINES · 交流电基础</div>
@@ -114,6 +134,7 @@ canvas{width:100%;max-width:100%;min-width:0;display:block;border-radius:10px;ba
 
 <script>
 const $=id=>document.getElementById(id);
+if(document.documentElement.classList.contains('embed')){[['wave',200],['phasor',200],['tri',210],['xf',210],['reg',230],['regc',230]].forEach(([id,h])=>{const c=document.getElementById(id);c.setAttribute('height',h);c.style.height=h+'px';});}
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const D2R=Math.PI/180;
 CanvasRenderingContext2D.prototype.arcS=function(x,y,r,a,b,cc){this.arc(x,y,Math.max(r,0.5),a,b,cc);};
@@ -139,7 +160,7 @@ function drawLab1(){
   [[amp*Math.sin(tt),V],[amp*.72*Math.sin(tt-phi),A]].forEach(([y,c])=>{x.fillStyle=c;x.beginPath();x.arcS(X(tt),mid-y,5,0,7);x.fill();});
   x.fillStyle=M;x.font=`12px ${css('--mono')}`;['0','π','2π','3π','4π'].forEach((s,k)=>x.fillText(s,X(k*Math.PI)-(k?8:0),h-6));
   if(Math.abs(s1.phi)>2){x.fillStyle=P;x.font=`600 12px ${css('--body')}`;x.fillText((s1.phi>0?'电流晚 ':'电流早 ')+Math.abs(s1.phi)+'°',Math.min(X(pv),X(pi))+4,28);}
-  const [y,pw,ph]=fit($('phasor')),cx=pw/2,cy=ph/2,R=Math.min(pw,ph)/2-28;
+  const [y,pw,ph]=fit($('phasor')),cx=pw/2,cy=ph/2,R=Math.min(pw,ph)/2-30;
   y.strokeStyle=G;y.lineWidth=1;y.beginPath();y.arcS(cx,cy,R,0,7);y.stroke();y.beginPath();y.moveTo(cx-R-8,cy);y.lineTo(cx+R+8,cy);y.moveTo(cx,cy-R-8);y.lineTo(cx,cy+R+8);y.stroke();
   const th=tt,vx=cx+R*Math.cos(th),vy=cy-R*Math.sin(th),ix=cx+.72*R*Math.cos(th-phi),iy=cy-.72*R*Math.sin(th-phi);
   y.strokeStyle=P;y.lineWidth=2;y.beginPath();y.arcS(cx,cy,R*.32,-th,-(th-phi),phi<0);y.stroke();
@@ -147,7 +168,7 @@ function drawLab1(){
   y.setLineDash([3,4]);y.lineWidth=1;[[vx,vy,V],[ix,iy,A]].forEach(([a,b,c])=>{y.strokeStyle=c;y.beginPath();y.moveTo(a,b);y.lineTo(cx-R-8,b);y.stroke();});y.setLineDash([]);
   arrow(y,cx,cy,vx,vy,V,3,12);arrow(y,cx,cy,ix,iy,A,3,12);
   label(y,'V',cx+(R+14)*Math.cos(th)-5,cy-(R+14)*Math.sin(th)+5,V,14);const sd=(Math.sin(phi)>=0?1:-1);tag(y,'I',cx,cy,ix,iy,Math.abs(s1.phi)<1?1:sd,A,12,14);
-  y.fillStyle=M;y.font=`12px ${css('--body')}`;y.fillText('逆时针旋转 · 投影到竖直方向',8,ph-8);
+  y.fillStyle=M;y.font=`12px ${css('--body')}`;y.fillText('逆时针旋转 · 投影到竖直方向',8,14);
 }
 function updText1(){const p=s1.phi,pf=Math.cos(p*D2R);$('phiOut').textContent=(p>0?'+':'')+p+'°';$('pf1').textContent=pf.toFixed(2);
   $('dt1').textContent=(Math.abs(p)/360*20).toFixed(1)+' ms';$('ps1').textContent=Math.round(pf*100)+'%';
@@ -207,7 +228,7 @@ function lab3(){
   const p1=[1+IR[0],IR[1]],vp=[p1[0]+IX[0],p1[1]+IX[1]];
   const k=Math.min((w-70)/1.42,(h-50)/1.15),ox=26,oy=h/2+4,P_=(a,b)=>[ox+a*k,oy-b*k];
   x.strokeStyle=G;x.lineWidth=1;x.setLineDash([5,5]);x.beginPath();x.arcS(ox,oy,k,-0.9,0.9);x.stroke();x.setLineDash([]);
-  const [sx,sy]=P_(1,0);arrow(x,ox,oy,sx,sy,V,3,12);tag(x,"Vs′ 负载电压",ox,oy,sx,sy,vp[1]>=0?1:-1,V,14);
+  const [sx,sy]=P_(1,0);arrow(x,ox,oy,sx,sy,V,3,12);tag(x,"Vs′ 负载电压",ox+k*0.4,oy,sx,sy,vp[1]>=0?1:-1,V,14);
   const ia=[0.42*Math.cos(iu),0.42*Math.sin(iu)],[iX,iY]=P_(...ia);arrow(x,ox,oy,iX,iY,A,2.2,10);label(x,'I',iX+(Math.cos(iu)>0?6:-12),iY+(Math.sin(iu)>0?-4:14),A,14);
   if(Math.abs(pL)>1){x.strokeStyle=A;x.lineWidth=1.6;x.beginPath();x.arcS(ox,oy,k*0.2,Math.min(0,-iu),Math.max(0,-iu));x.stroke();label(x,'φL',ox+k*0.22,oy+(pL>0?18:-8),A,12);}
   const [ax,ay]=P_(...p1),[bx,by]=P_(...vp);arrow(x,sx,sy,ax,ay,Gr,3,10);arrow(x,ax,ay,bx,by,P,3,10);arrow(x,ox,oy,bx,by,K,3.4,13);
