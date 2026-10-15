@@ -1,0 +1,239 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>交流电相位实验室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: oscilloscope bench notebook. One column of three "instrument panels", each = controls strip + live canvas + readout row. */
+:root{
+  --bg:#f3f5f2; --panel:#fbfcfa; --ink:#1d2622; --muted:#5d6b64; --line:#d5ddd7; --grid:#e3e9e4;
+  --volt:#2f3d4a; --amp:#d9631e; --accent:#0f7d6e; --purple:#7a4fd0; --green:#2e8b3e; --red:#c43a31; --blue:#2563b8;
+  --shade:rgba(122,79,208,.12);
+  --display:"Noto Serif SC","Songti SC",serif; --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1513; --panel:#151d1a; --ink:#e4ece7; --muted:#97a69e; --line:#2a3631; --grid:#1f2a26;
+  --volt:#c9d6cf; --amp:#ff9a4d; --accent:#3fd0b8; --purple:#b49aff; --green:#5fd27a; --red:#ff7a6e; --blue:#7fb2ff;
+  --shade:rgba(180,154,255,.16); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --panel:#151d1a; --ink:#e4ece7; --muted:#97a69e; --line:#2a3631; --grid:#1f2a26;
+  --volt:#c9d6cf; --amp:#ff9a4d; --accent:#3fd0b8; --purple:#b49aff; --green:#5fd27a; --red:#ff7a6e; --blue:#7fb2ff;
+  --shade:rgba(180,154,255,.16); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header h1{font-family:var(--display);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:.02em}
+header p{color:var(--muted);margin:.5rem 0 0;max-width:62ch}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:22px;height:3px;border-radius:2px;display:inline-block}
+section.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px clamp(14px,3vw,26px);display:flex;flex-direction:column;gap:14px}
+.tag{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.08em}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:0;max-width:68ch}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 22px;align-items:center}
+.ctl{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;min-width:0}
+.ctl label{font-size:13px;color:var(--muted);white-space:nowrap}
+.ctl output{font-family:var(--mono);font-size:13px;min-width:62px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:500 13px var(--body);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button.play{border-color:var(--accent);color:var(--accent)}
+button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stage{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.stage.even{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+canvas{width:100%;max-width:100%;min-width:0;display:block;border-radius:10px;background:var(--panel)}
+.verdict{font-weight:700;font-size:16px;margin:0}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.read div{border-top:1px solid var(--line);padding-top:8px;min-width:0}
+.read b{display:block;font-family:var(--mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.read small{color:var(--muted);font-size:12px}
+.note{font-size:14px;color:var(--muted);margin:0;border-left:3px solid var(--accent);padding-left:12px;border-radius:0;max-width:72ch}
+.note strong{color:var(--ink)}
+@media (max-width:700px){.stage,.stage.even{grid-template-columns:1fr}}
+</style>
+</head><body>
+
+<div class="wrap">
+<header>
+  <div class="tag">DEEM · ELECTRICAL MACHINES · 交流电基础</div>
+  <h1>交流电相位实验室</h1>
+  <p>拖动滑块，看电压和电流怎样错开、感抗从哪里来、负载的超前或滞后怎样改变变压器的压降。三个实验对应 EM Week 1–4 的核心公式。</p>
+  <div class="legend"><span><i class="sw" style="background:var(--volt)"></i>电压 v / V</span><span><i class="sw" style="background:var(--amp)"></i>电流 i / I</span><span><i class="sw" style="background:var(--green)"></i>电阻压降 IR</span><span><i class="sw" style="background:var(--purple)"></i>电抗压降 jIX</span></div>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 超前与滞后</div>
+  <h2>电流比电压早还是晚到峰值？</h2>
+  <p class="lead">左边是随时间变化的波形，右边是相量图：两根箭头以同样的速度逆时针转，它们在竖直方向的投影就是左边的波形。两根箭头之间的夹角 φ 永远不变。</p>
+  <div class="btns" role="group" aria-label="预设负载">
+    <button data-phi="0">纯电阻 R</button><button data-phi="90">纯电感 L</button><button data-phi="-90">纯电容 C</button><button data-phi="32">电动机 pf 0.85 滞后</button><button data-phi="-25">电容补偿后 超前</button>
+    <button id="play" class="play">⏸ 暂停</button>
+  </div>
+  <div class="controls"><div class="ctl"><label for="phi">负载角 φ</label><input id="phi" type="range" min="-90" max="90" step="1" value="32"><output id="phiOut">+32°</output></div></div>
+  <p class="verdict" id="verdict1"></p>
+  <div class="stage"><canvas id="wave" height="260" style="height:260px" aria-label="电压电流波形"></canvas><canvas id="phasor" height="260" style="height:260px" aria-label="旋转相量图"></canvas></div>
+  <div class="read"><div><small>功率因数 pf = cos φ</small><b id="pf1">0.85</b></div><div><small>峰值时间差（50 Hz）</small><b id="dt1">1.8 ms</b></div><div><small>有功 P / 视在 S</small><b id="ps1">85%</b></div><div><small>负载类型</small><b id="type1">感性</b></div></div>
+  <p class="note"><strong>怎么记：</strong>电感像飞轮，电流被「拖住」才跟上，所以滞后；电容先充电再建立电压，所以电流超前。题目写 lagging 就取 φ &gt; 0，leading 取 φ &lt; 0。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 阻抗三角形</div>
+  <h2>感抗从哪里来？阻抗为什么要用勾股定理？</h2>
+  <p class="lead">一个线圈 = 电阻 R 串联电感 L。感抗 X<sub>L</sub> = 2πfL 随频率线性增长；R 和 X 相差 90°，所以合成阻抗 |Z| 是直角三角形的斜边，夹角 φ 就是电流滞后的角度。电源固定 230 V。</p>
+  <div class="controls">
+    <div class="ctl"><label for="R">电阻 R</label><input id="R" type="range" min="1" max="100" step="1" value="20"><output id="Rout">20 Ω</output></div>
+    <div class="ctl"><label for="L">电感 L</label><input id="L" type="range" min="0" max="300" step="1" value="100"><output id="Lout">100 mH</output></div>
+    <div class="ctl"><label for="f">频率 f</label><input id="f" type="range" min="10" max="400" step="5" value="50"><output id="fout">50 Hz</output></div>
+  </div>
+  <div class="btns" role="group" aria-label="频率预设"><button data-f="50">英国电网 50 Hz</button><button data-f="60">北美 60 Hz</button><button data-f="400">飞机 400 Hz（2025 Q4a）</button></div>
+  <div class="stage even"><canvas id="tri" height="280" style="height:280px" aria-label="阻抗三角形"></canvas><canvas id="xf" height="280" style="height:280px" aria-label="感抗随频率变化"></canvas></div>
+  <div class="read"><div><small>感抗 X<sub>L</sub> = 2πfL</small><b id="X2"></b></div><div><small>阻抗 |Z| = √(R²+X²)</small><b id="Z2"></b></div><div><small>阻抗角 φ = arctan(X/R)</small><b id="phi2"></b></div><div><small>电流 I = 230 / |Z|</small><b id="I2"></b></div><div><small>功率因数 cos φ</small><b id="pf2"></b></div></div>
+  <p class="note"><strong>试一试：</strong>把频率拉到 400 Hz，感抗变成 50 Hz 时的 8 倍，电流变小、滞后更多。把 L 拉到 0，三角形压成一条线：纯电阻，φ = 0。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 变压器压降相量图</div>
+  <h2>为什么滞后负载电压掉得多，超前负载反而升高？</h2>
+  <p class="lead">折算到初级后，电源电压 V<sub>p</sub> = 负载电压 V<sub>s</sub>′ + 电阻压降 IR<sub>e</sub> + 电抗压降 jIX<sub>e</sub>。IR<sub>e</sub> 和电流同方向，jIX<sub>e</sub> 比电流超前 90°。负载角一变，这两段压降的方向跟着转。压降为了看清楚放大了画。</p>
+  <div class="controls">
+    <div class="ctl"><label for="phiL">负载角 φL</label><input id="phiL" type="range" min="-90" max="90" step="1" value="32"><output id="phiLout">+32°</output></div>
+    <div class="ctl"><label for="z">阻抗比 z</label><input id="z" type="range" min="0.001" max="0.35" step="0.001" value="0.15"><output id="zout">0.15</output></div>
+    <div class="ctl"><label for="phie">Ze 的角 φe</label><input id="phie" type="range" min="0" max="85" step="1" value="63"><output id="phieout">63°</output></div>
+  </div>
+  <div class="btns" role="group" aria-label="真题预设"><button data-ex="2023">2023 Q4b：z 0.016, φe 63°, pf 0.85 滞后</button><button data-ex="2025">2025 Q4a：z 0.151, φe 17°, pf 0.9 滞后</button><button data-ex="2026">2026 Q4b：z 0.004, φe 51°, 纯电阻</button></div>
+  <p class="verdict" id="verdict3"></p>
+  <div class="stage even"><canvas id="reg" height="320" style="height:320px" aria-label="变压器相量图"></canvas><canvas id="regc" height="320" style="height:320px" aria-label="调整率随负载角变化"></canvas></div>
+  <div class="read"><div><small>精确值 1 − 1/|1+z∠(φe−φL)|</small><b id="r_ex"></b></div><div><small>公式表 z cos/(1+z cos)</small><b id="r_fs"></b></div><div><small>近似 z cos(φe−φL)</small><b id="r_ap"></b></div><div><small>cos(φe − φL)</small><b id="cosd"></b></div></div>
+  <p class="note"><strong>看哪里：</strong>虚线圆的半径等于 V<sub>s</sub>′。V<sub>p</sub> 的箭头尖在圆外，说明电源比负载电压高，压降为正；超前负载让 jIX<sub>e</sub> 往回指，V<sub>p</sub> 可以缩进圆内，调整率变成负数。真题的 z 都很小，三条公式几乎一样；只有 2025 年那种 z ≈ 0.15 的低压大电流变压器才会差出 1–2 个百分点。</p>
+</section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const D2R=Math.PI/180;
+CanvasRenderingContext2D.prototype.arcS=function(x,y,r,a,b,cc){this.arc(x,y,Math.max(r,0.5),a,b,cc);};
+function fit(c){if(!c.dataset.h)c.dataset.h=c.getAttribute('height');const h=+c.dataset.h,d=window.devicePixelRatio||1,W=Math.max(Math.round(c.getBoundingClientRect().width||c.parentElement.clientWidth||300),120),pw=Math.round(W*d),ph=Math.round(h*d);if(c.width!==pw)c.width=pw;if(c.height!==ph)c.height=ph;const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,W,h);return [x,W,h];}
+function arrow(x,x0,y0,x1,y1,col,w=2.6,head=10){const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0);if(L<1)return;x.strokeStyle=col;x.fillStyle=col;x.lineWidth=w;x.lineCap='round';x.beginPath();x.moveTo(x0,y0);x.lineTo(x1-Math.cos(a)*head*.6,y1-Math.sin(a)*head*.6);x.stroke();x.beginPath();x.moveTo(x1,y1);x.lineTo(x1-head*Math.cos(a-.42),y1-head*Math.sin(a-.42));x.lineTo(x1-head*Math.cos(a+.42),y1-head*Math.sin(a+.42));x.closePath();x.fill();}
+function label(x,s,px,py,col,size=13,font){x.fillStyle=col;x.font=`${font||'600'} ${size}px ${css('--mono')}`;x.fillText(s,px,py);}
+function tag(x,s,x0,y0,x1,y1,side,col,d=14,size=12){const L=Math.hypot(x1-x0,y1-y0)||1,nx=-(y1-y0)/L*side,ny=(x1-x0)/L*side;x.font=`600 ${size}px ${css('--mono')}`;const w=x.measureText(s).width;let px=(x0+x1)/2+nx*d-w/2+nx*w/2,py=(y0+y1)/2+ny*d+size*0.35+ny*size*0.4;px=Math.max(2,Math.min(px,x.canvas.width/(window.devicePixelRatio||1)-w-2));x.fillStyle=col;x.fillText(s,px,py);}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Lab 1 ---------- */
+const s1={phi:32,t:0,play:!reduce};
+$('play').textContent=s1.play?'⏸ 暂停':'▶ 播放';
+function drawLab1(){
+  const phi=s1.phi*D2R,[x,w,h]=fit($('wave')),V=css('--volt'),A=css('--amp'),G=css('--grid'),M=css('--muted'),P=css('--purple');
+  const padL=10,padR=10,mid=h/2,amp=h*0.36,span=4*Math.PI,X=t=>padL+(w-padL-padR)*t/span;
+  x.strokeStyle=G;x.lineWidth=1;for(let k=0;k<=8;k++){const xx=X(k*Math.PI/2);x.beginPath();x.moveTo(xx,14);x.lineTo(xx,h-24);x.stroke();}
+  x.beginPath();x.moveTo(padL,mid);x.lineTo(w-padR,mid);x.stroke();
+  const pv=Math.PI/2,pi=Math.PI/2+phi;x.fillStyle=css('--shade');x.fillRect(Math.min(X(pv),X(pi)),14,Math.abs(X(pi)-X(pv)),h-38);
+  x.setLineDash([4,4]);[[pv,V],[pi,A]].forEach(([p,c])=>{x.strokeStyle=c;x.lineWidth=1.2;x.beginPath();x.moveTo(X(p),14);x.lineTo(X(p),h-24);x.stroke();});x.setLineDash([]);
+  const wave=(f,col,lw,al)=>{x.globalAlpha=al;x.strokeStyle=col;x.lineWidth=lw;x.beginPath();for(let i=0;i<=400;i++){const t=span*i/400;const y=mid-f(t);i?x.lineTo(X(t),y):x.moveTo(X(t),y);}x.stroke();x.globalAlpha=1;};
+  wave(t=>amp*Math.sin(t),V,2.6,1);wave(t=>amp*.72*Math.sin(t-phi),A,2.6,1);
+  const tt=s1.t%span;x.strokeStyle=M;x.lineWidth=1;x.beginPath();x.moveTo(X(tt),14);x.lineTo(X(tt),h-24);x.stroke();
+  [[amp*Math.sin(tt),V],[amp*.72*Math.sin(tt-phi),A]].forEach(([y,c])=>{x.fillStyle=c;x.beginPath();x.arcS(X(tt),mid-y,5,0,7);x.fill();});
+  x.fillStyle=M;x.font=`12px ${css('--mono')}`;['0','π','2π','3π','4π'].forEach((s,k)=>x.fillText(s,X(k*Math.PI)-(k?8:0),h-6));
+  if(Math.abs(s1.phi)>2){x.fillStyle=P;x.font=`600 12px ${css('--body')}`;x.fillText((s1.phi>0?'电流晚 ':'电流早 ')+Math.abs(s1.phi)+'°',Math.min(X(pv),X(pi))+4,28);}
+  const [y,pw,ph]=fit($('phasor')),cx=pw/2,cy=ph/2,R=Math.min(pw,ph)/2-28;
+  y.strokeStyle=G;y.lineWidth=1;y.beginPath();y.arcS(cx,cy,R,0,7);y.stroke();y.beginPath();y.moveTo(cx-R-8,cy);y.lineTo(cx+R+8,cy);y.moveTo(cx,cy-R-8);y.lineTo(cx,cy+R+8);y.stroke();
+  const th=tt,vx=cx+R*Math.cos(th),vy=cy-R*Math.sin(th),ix=cx+.72*R*Math.cos(th-phi),iy=cy-.72*R*Math.sin(th-phi);
+  y.strokeStyle=P;y.lineWidth=2;y.beginPath();y.arcS(cx,cy,R*.32,-th,-(th-phi),phi<0);y.stroke();
+  label(y,'φ',cx+R*.42*Math.cos(th-phi/2)-4,cy-R*.42*Math.sin(th-phi/2)+4,P,13);
+  y.setLineDash([3,4]);y.lineWidth=1;[[vx,vy,V],[ix,iy,A]].forEach(([a,b,c])=>{y.strokeStyle=c;y.beginPath();y.moveTo(a,b);y.lineTo(cx-R-8,b);y.stroke();});y.setLineDash([]);
+  arrow(y,cx,cy,vx,vy,V,3,12);arrow(y,cx,cy,ix,iy,A,3,12);
+  label(y,'V',cx+(R+14)*Math.cos(th)-5,cy-(R+14)*Math.sin(th)+5,V,14);const sd=(Math.sin(phi)>=0?1:-1);tag(y,'I',cx,cy,ix,iy,Math.abs(s1.phi)<1?1:sd,A,12,14);
+  y.fillStyle=M;y.font=`12px ${css('--body')}`;y.fillText('逆时针旋转 · 投影到竖直方向',8,ph-8);
+}
+function updText1(){const p=s1.phi,pf=Math.cos(p*D2R);$('phiOut').textContent=(p>0?'+':'')+p+'°';$('pf1').textContent=pf.toFixed(2);
+  $('dt1').textContent=(Math.abs(p)/360*20).toFixed(1)+' ms';$('ps1').textContent=Math.round(pf*100)+'%';
+  const v=$('verdict1');if(Math.abs(p)<3){v.textContent='同相：电压和电流同时到峰值，纯电阻，功率全部变成热';v.style.color=css('--green');$('type1').textContent='阻性';}
+  else if(p>0){v.textContent=`电流滞后 ${p}°：电压先到峰值，电流晚到 → 感性负载（线圈、电动机、变压器）`;v.style.color=css('--red');$('type1').textContent='感性';}
+  else{v.textContent=`电流超前 ${-p}°：电流先到峰值 → 容性负载（电容）`;v.style.color=css('--blue');$('type1').textContent='容性';}
+  document.querySelectorAll('#lab1 [data-phi]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.phi===p));}
+$('phi').addEventListener('input',e=>{s1.phi=+e.target.value;updText1();drawLab1();});
+document.querySelectorAll('#lab1 [data-phi]').forEach(b=>b.addEventListener('click',()=>{s1.phi=+b.dataset.phi;$('phi').value=s1.phi;updText1();drawLab1();}));
+$('play').addEventListener('click',()=>{s1.play=!s1.play;last=0;$('play').textContent=s1.play?'⏸ 暂停':'▶ 播放';});
+let last=0;function loop(ts){if(s1.play&&last){s1.t+=(ts-last)/1000*1.6;try{drawLab1();}catch(e){}}last=ts;requestAnimationFrame(loop);}
+s1.t=Math.PI*0.9;
+
+/* ---------- Lab 2 ---------- */
+function lab2(){
+  const R=+$('R').value,L=+$('L').value/1000,f=+$('f').value,X=2*Math.PI*f*L,Z=Math.hypot(R,X),ph=Math.atan2(X,R),I=230/Z;
+  $('Rout').textContent=R+' Ω';$('Lout').textContent=Math.round(L*1000)+' mH';$('fout').textContent=f+' Hz';
+  $('X2').textContent=X.toFixed(1)+' Ω';$('Z2').textContent=Z.toFixed(1)+' Ω';$('phi2').textContent=(ph/D2R).toFixed(1)+'°';$('I2').textContent=I.toFixed(2)+' A';$('pf2').textContent=Math.cos(ph).toFixed(2);
+  document.querySelectorAll('#lab2 [data-f]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.f===f));
+  const [x,w,h]=fit($('tri')),G=css('--grid'),M=css('--muted'),Gr=css('--green'),P=css('--purple'),K=css('--ink'),A=css('--amp');
+  const maxL=Math.max(R,X,1),sc=Math.min((w-120)/Math.max(R,1e-9)*0.999,(h-80)/Math.max(X,1e-9)),s=Math.min((w-130)/R,(h-80)/(X||1),1e9);
+  const k=Math.min((w-130)/Math.max(R,1),(h-80)/Math.max(X,1));const ox=50,oy=h-40,ax=ox+R*k,ay=oy-X*k;
+  x.fillStyle=css('--shade');x.beginPath();x.moveTo(ox,oy);x.lineTo(ax,oy);x.lineTo(ax,ay);x.closePath();x.fill();
+  arrow(x,ox,oy,ax,oy,Gr,3,11);arrow(x,ax,oy,ax,ay,P,3,11);arrow(x,ox,oy,ax,ay,K,3.4,12);
+  if(X*k>14){x.strokeStyle=M;x.lineWidth=1;x.strokeRect(ax-10,oy-10,10,10);}
+  x.strokeStyle=A;x.lineWidth=2;x.beginPath();x.arcS(ox,oy,34,-ph,0);x.stroke();label(x,'φ',ox+40,oy-8,A,14);
+  label(x,'R = '+R+' Ω',ox+(ax-ox)/2-30,oy+22,Gr,13);
+  if(X*k>2)tag(x,'jX = '+X.toFixed(1)+' Ω',ax,oy,ax,ay,1,P,16,13);else label(x,'jX = 0',ax+10,oy+4,P,13);
+  tag(x,'|Z| = '+Z.toFixed(1)+' Ω',ox,oy,ax,ay,-1,K,18,13);
+  x.fillStyle=M;x.font=`12px ${css('--body')}`;x.fillText('阻抗三角形（按比例）',8,16);
+  const [y,w2,h2]=fit($('xf')),fmax=400,Xmax=2*Math.PI*fmax*Math.max(L,0.001),pl=46,pb=34,pt=24,pr=14,FX=v=>pl+(w2-pl-pr)*v/fmax,FY=v=>h2-pb-(h2-pb-pt)*v/Xmax;
+  y.strokeStyle=G;y.lineWidth=1;y.fillStyle=M;y.font=`11px ${css('--mono')}`;
+  for(let i=0;i<=4;i++){const v=fmax*i/4;y.beginPath();y.moveTo(FX(v),pt);y.lineTo(FX(v),h2-pb);y.stroke();y.fillText(v,FX(v)-8,h2-pb+16);}
+  for(let i=0;i<=4;i++){const v=Xmax*i/4;y.beginPath();y.moveTo(pl,FY(v));y.lineTo(w2-pr,FY(v));y.stroke();y.fillText(Xmax<20?v.toFixed(1):Math.round(v),4,FY(v)+4);}
+  y.strokeStyle=P;y.lineWidth=2.6;y.beginPath();y.moveTo(FX(0),FY(0));y.lineTo(FX(fmax),FY(Xmax));y.stroke();
+  y.fillStyle=P;y.beginPath();y.arcS(FX(f),FY(X),6,0,7);y.fill();
+  y.fillStyle=M;y.font=`12px ${css('--body')}`;y.fillText('感抗 X(Ω) 随频率 f(Hz) 线性增长',pl,14);
+}
+['R','L','f'].forEach(id=>$(id).addEventListener('input',lab2));
+document.querySelectorAll('#lab2 [data-f]').forEach(b=>b.addEventListener('click',()=>{$('f').value=b.dataset.f;lab2();}));
+
+/* ---------- Lab 3 ---------- */
+const regEx=(z,d)=>{const re=1+z*Math.cos(d),im=z*Math.sin(d);return 1-1/Math.hypot(re,im);};
+function lab3(){
+  const pL=+$('phiL').value,z=+$('z').value,pe=+$('phie').value,d=(pe-pL)*D2R;
+  $('phiLout').textContent=(pL>0?'+':'')+pL+'°';$('zout').textContent=z.toFixed(3);$('phieout').textContent=pe+'°';
+  const c=Math.cos(d),ex=regEx(z,d),fs=z*c/(1+z*c),ap=z*c;
+  $('r_ex').textContent=(ex*100).toFixed(2)+'%';$('r_fs').textContent=(fs*100).toFixed(2)+'%';$('r_ap').textContent=(ap*100).toFixed(2)+'%';$('cosd').textContent=c.toFixed(3);
+  const v=$('verdict3'),kind=Math.abs(pL)<3?'纯电阻负载':(pL>0?'滞后（感性）负载':'超前（容性）负载');
+  if(ex>0.0005){v.textContent=`${kind}：Vp 比 Vs′ 长 → 带载后负载电压下降 ${(ex*100).toFixed(2)}%`;v.style.color=css('--red');}
+  else if(ex<-0.0005){v.textContent=`${kind}：Vp 比 Vs′ 短 → 带载后负载电压反而升高（调整率为负）`;v.style.color=css('--blue');}
+  else{v.textContent=`${kind}：压降和输出电压垂直，几乎不改变大小（调整率 ≈ 0）`;v.style.color=css('--green');}
+  const [x,w,h]=fit($('reg')),M=css('--muted'),G=css('--grid'),V=css('--volt'),A=css('--amp'),Gr=css('--green'),P=css('--purple'),K=css('--ink');
+  const zd=Math.max(z,0.2)/z; /* exaggeration so tiny drops stay visible */
+  const zz=z*zd, iu=-pL*D2R, peR=pe*D2R;
+  const IR=[zz*Math.cos(peR)*Math.cos(iu),zz*Math.cos(peR)*Math.sin(iu)], IX=[-zz*Math.sin(peR)*Math.sin(iu),zz*Math.sin(peR)*Math.cos(iu)];
+  const p1=[1+IR[0],IR[1]],vp=[p1[0]+IX[0],p1[1]+IX[1]];
+  const k=Math.min((w-70)/1.42,(h-50)/1.15),ox=26,oy=h/2+4,P_=(a,b)=>[ox+a*k,oy-b*k];
+  x.strokeStyle=G;x.lineWidth=1;x.setLineDash([5,5]);x.beginPath();x.arcS(ox,oy,k,-0.9,0.9);x.stroke();x.setLineDash([]);
+  const [sx,sy]=P_(1,0);arrow(x,ox,oy,sx,sy,V,3,12);tag(x,"Vs′ 负载电压",ox,oy,sx,sy,vp[1]>=0?1:-1,V,14);
+  const ia=[0.42*Math.cos(iu),0.42*Math.sin(iu)],[iX,iY]=P_(...ia);arrow(x,ox,oy,iX,iY,A,2.2,10);label(x,'I',iX+(Math.cos(iu)>0?6:-12),iY+(Math.sin(iu)>0?-4:14),A,14);
+  if(Math.abs(pL)>1){x.strokeStyle=A;x.lineWidth=1.6;x.beginPath();x.arcS(ox,oy,k*0.2,Math.min(0,-iu),Math.max(0,-iu));x.stroke();label(x,'φL',ox+k*0.22,oy+(pL>0?18:-8),A,12);}
+  const [ax,ay]=P_(...p1),[bx,by]=P_(...vp);arrow(x,sx,sy,ax,ay,Gr,3,10);arrow(x,ax,ay,bx,by,P,3,10);arrow(x,ox,oy,bx,by,K,3.4,13);
+  tag(x,'IRe',sx,sy,ax,ay,vp[1]>=0?1:-1,Gr,14);tag(x,'jIXe',ax,ay,bx,by,vp[1]>=0?1:-1,P,16);tag(x,'Vp 电源',ox,oy,bx,by,vp[1]>=0?-1:1,K,14);
+  x.fillStyle=M;x.font=`12px ${css('--body')}`;x.fillText(zd>1.01?`压降已放大 ×${zd.toFixed(1)} 画（z 太小时看不见）`:'按比例画',8,16);x.fillText('虚线圆半径 = |Vs′|',8,h-8);
+  const [y,w2,h2]=fit($('regc')),pl=44,pb=34,pt=24,pr=12,ys=[];for(let a=-90;a<=90;a+=1)ys.push(regEx(z,(pe-a)*D2R)*100);
+  const ymax=Math.max(...ys,1),ymin=Math.min(...ys,-1),FX=a=>pl+(w2-pl-pr)*(a+90)/180,FY=v=>pt+(h2-pt-pb)*(ymax-v)/(ymax-ymin);
+  y.strokeStyle=G;y.lineWidth=1;y.fillStyle=M;y.font=`11px ${css('--mono')}`;
+  [-90,-45,0,45,90].forEach(a=>{y.beginPath();y.moveTo(FX(a),pt);y.lineTo(FX(a),h2-pb);y.stroke();y.fillText(a,FX(a)-8,h2-pb+15);});
+  y.strokeStyle=M;y.beginPath();y.moveTo(pl,FY(0));y.lineTo(w2-pr,FY(0));y.stroke();
+  [ymax,ymin].forEach(v=>y.fillText(v.toFixed(1)+'%',2,FY(v)+4));y.fillText('0',pl-14,FY(0)+4);
+  y.strokeStyle=css('--accent');y.lineWidth=2.4;y.beginPath();ys.forEach((v,i)=>{const a=-90+i;i?y.lineTo(FX(a),FY(v)):y.moveTo(FX(a),FY(v));});y.stroke();
+  y.fillStyle=ex>=0?css('--red'):css('--blue');y.beginPath();y.arcS(FX(pL),FY(ex*100),6,0,7);y.fill();
+  y.fillStyle=M;y.font=`12px ${css('--body')}`;y.fillText('调整率 vs 负载角',pl,14);y.fillText('← 超前　　φL（°）　　滞后 →',pl+10,h2-2);
+}
+['phiL','z','phie'].forEach(id=>$(id).addEventListener('input',()=>{document.querySelectorAll('#lab3 [data-ex]').forEach(q=>q.setAttribute('aria-pressed',false));lab3();}));
+const EX={2023:[31.8,0.016,63],2025:[25.8,0.151,17],2026:[0,0.004,51]};
+document.querySelectorAll('#lab3 [data-ex]').forEach(b=>b.addEventListener('click',()=>{const [a,zz,e]=EX[b.dataset.ex];$('phiL').value=Math.round(a);$('z').value=zz;$('phie').value=e;
+  document.querySelectorAll('#lab3 [data-ex]').forEach(q=>q.setAttribute('aria-pressed',q===b));lab3();}));
+
+function all(){for(const f of [updText1,drawLab1,lab2,lab3]){try{f();}catch(e){console.warn(e);}}}
+addEventListener('resize',all);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',all);
+new MutationObserver(all).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+document.fonts&&document.fonts.ready.then(all);
+let rq=0;const ro=new ResizeObserver(()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;all();});});document.querySelectorAll('canvas').forEach(c=>ro.observe(c.parentElement));
+all();requestAnimationFrame(loop);
+</script>
+
+</body></html>
