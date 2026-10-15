@@ -1,0 +1,283 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>电路模拟器</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.tools button{padding:4px 10px}
+.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.props{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;min-height:34px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.props b{color:var(--ink)}
+.props input[type=text]{width:90px}
+.msg{font-size:13px;color:var(--red);margin:0}.msg:empty{display:none}
+canvas.sch{touch-action:none;cursor:crosshair;border:1px solid var(--line)}
+table.mini td:first-child span{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+html.embed .tools button{padding:2px 7px;font-size:11.5px}
+html.embed .props{min-height:28px;padding-top:4px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">CIRCUIT SIMULATOR · MNA TRANSIENT + AC ANALYSIS</div>
+  <h1>电路模拟器</h1>
+  <p>在网格上画电路，按运行就能看到每个节点的电压（导线颜色）、电流（流动的小点）和示波器波形，还能对同一个电路扫频画 Bode 图。底层是改进节点分析法（MNA）加梯形积分，二极管用 Shockley 方程迭代求解。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">打开模拟器</a><a href="#help">怎么用</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">模拟器 · 预设对应 Maths B（RC / RLC）、EM（整流 Lab、感性负载）、CS（滤波）</div>
+  <div class="btns" role="group" aria-label="预设"><button data-p="rc">RC 充放电</button><button data-p="rlc">RLC 阶跃（欠阻尼）</button><button data-p="half">半波整流 + 滤波</button><button data-p="bridge">桥式全波整流</button><button data-p="rl">交流 RL：电流滞后</button><button data-p="lpf">RC 低通滤波</button></div>
+  <div class="tools" role="group" aria-label="工具" id="tools"></div>
+  <div class="bar">
+    <button id="run" class="play">▶ 运行</button><button id="reset">重置</button><button id="clear">清空</button>
+    <label style="font-size:13px;color:var(--muted)">扫描时间 <select id="sweep"></select></label>
+    <label style="font-size:13px;color:var(--muted)">速度 <select id="speed"><option value="0.25">×¼</option><option value="0.5">×½</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select></label>
+    <span class="btns" role="group" aria-label="视图"><button data-v="scope">示波器</button><button data-v="bode">频率响应</button></span>
+  </div>
+  <div class="props" id="props"></div>
+  <p class="msg" id="msg"></p>
+  <canvas id="sch" class="sch" height="360" aria-label="电路图编辑区"></canvas>
+  <canvas id="scope" height="200" aria-label="示波器 / 频率响应"></canvas>
+  <div class="scroll"><table class="mini" id="stats"></table></div>
+</section>
+
+<section class="panel" id="help">
+  <div class="tag">怎么用</div>
+  <h2>三步：画、标探针、运行</h2>
+  <p class="lead">选一个工具，在网格上从一点拖到另一点放下元件（只能横竖放）。导线端点落在另一根导线中间会自动接上；交叉但不在端点的导线不相连。用「选择」点元件可以改数值（支持 4.7k、100u、10m 这种写法）、开关会直接切换、勾选「示波器显示电流」可以看它的电流。</p>
+  <p class="note"><strong>约定：</strong>电源从拖动起点（−）指向终点（+）；二极管起点是阳极、终点是阴极。探针测的是对地电压，所以电路里要放一个接地（没放会把第一个电源的负极当作地）。频率响应以第一个交流源为输入、第一个探针为输出，其他直流源按短路处理、二极管按断开处理。</p>
+  <p class="note"><strong>可以试：</strong>RLC 预设里把电阻改成 200 Ω（临界阻尼附近）或 1k（过阻尼），对照 Maths B · Week 2 的阻尼弹簧；半波整流里点开关去掉滤波电容，看平均值从约 11 V 掉到 Vs/π；交流 RL 里比较电源电压和电阻电压（同相于电流）的过零点。</p>
+</section>
+</div>
+
+<script>
+/* ================= model ================= */
+const COLS=24,ROWS=13,PAL=['--amp','--blue','--green','--purple','--red','--accent'];
+const T={s:{n:'选择',k:'选择/移动'},w:{n:'导线'},R:{n:'电阻',u:'Ω',v:1000},C:{n:'电容',u:'F',v:1e-4},L:{n:'电感',u:'H',v:0.1},
+  V:{n:'直流源',u:'V',v:5},A:{n:'交流源',u:'V',v:10,f:50},Q:{n:'方波源',u:'V',v:5,f:1},D:{n:'二极管'},S:{n:'开关'},G:{n:'接地',one:1},P:{n:'探针',one:1},x:{n:'删除'}};
+let els=[],tool='s',sel=null,uid=1,running=false,view='scope',warn='';
+const key=p=>p[0]+','+p[1],eq=(p,q)=>p[0]===q[0]&&p[1]===q[1];
+const SI=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];
+const fmtSI=(v,u='')=>{if(!isFinite(v))return '—';if(Math.abs(v)<1e-10)return '0'+u;const a=Math.abs(v);for(const [m,p] of SI)if(a>=m*0.9999)return (+(v/m).toPrecision(3))+p+u;return v.toExponential(2)+u;};
+const parseSI=s=>{const m=/^\s*([-+]?\d*\.?\d+(?:e[-+]?\d+)?)\s*([pnuµmkKMG]?)/.exec(String(s));if(!m)return NaN;const k={p:1e-12,n:1e-9,u:1e-6,'µ':1e-6,m:1e-3,k:1e3,K:1e3,M:1e6,G:1e9}[m[2]]||1;return parseFloat(m[1])*k;};
+function add(t,a,b,o={}){const e={t,a,b:b||a,id:uid++,v:T[t].v,f:T[t].f,on:true,showI:false,ph:0,...o};els.push(e);return e;}
+
+/* split wires whose interior contains a terminal point */
+function onSeg(p,a,b){if(a[0]===b[0]&&p[0]===a[0])return p[1]>Math.min(a[1],b[1])&&p[1]<Math.max(a[1],b[1]);if(a[1]===b[1]&&p[1]===a[1])return p[0]>Math.min(a[0],b[0])&&p[0]<Math.max(a[0],b[0]);return false;}
+function normalize(){let again=true,guard=0;while(again&&guard++<200){again=false;const pts=[];els.forEach(e=>{pts.push(e.a);if(!T[e.t].one)pts.push(e.b);});
+  for(const w of els){if(w.t!=='w')continue;const p=pts.find(p=>onSeg(p,w.a,w.b));if(p){const b=w.b;w.b=[p[0],p[1]];add('w',[p[0],p[1]],b);again=true;break;}}}
+  els=els.filter(e=>T[e.t].one||!eq(e.a,e.b));}
+
+/* ================= netlist ================= */
+let net=null;
+function build(){
+  normalize();const par={},f=k=>{while(par[k]!==k){par[k]=par[par[k]];k=par[k];}return k;},u=(a,b)=>{par[f(a)]=f(b);};
+  els.forEach(e=>{[e.a,e.b].forEach(p=>{const k=key(p);if(!(k in par))par[k]=k;});});
+  els.forEach(e=>{if(e.t==='w')u(key(e.a),key(e.b));});
+  const gnd=new Set(els.filter(e=>e.t==='G').map(e=>f(key(e.a))));warn='';
+  if(!gnd.size){const s=els.find(e=>'VAQ'.includes(e.t));if(s){gnd.add(f(key(s.a)));warn='没有接地：已把第一个电源的负极当作地。';}}
+  const idx={};let N=0;const node=p=>{const r=f(key(p));if(gnd.has(r))return -1;if(!(r in idx))idx[r]=N++;return idx[r];};
+  const comps=els.filter(e=>e.t!=='w'&&e.t!=='G');comps.forEach(e=>{e.na=node(e.a);e.nb=T[e.t].one?e.na:node(e.b);});
+  els.filter(e=>e.t==='w').forEach(e=>{e.na=e.nb=node(e.a);});
+  let K=N;comps.forEach(e=>{if('VAQ'.includes(e.t))e.k=K++;});
+  /* wire trees for current animation */
+  const adj={};els.filter(e=>e.t==='w').forEach(w=>{const a=key(w.a),b=key(w.b);(adj[a]=adj[a]||[]).push([b,w]);(adj[b]=adj[b]||[]).push([a,w]);});
+  const seen=new Set(),order=[];Object.keys(adj).forEach(s=>{if(seen.has(s))return;seen.add(s);const q=[s];order.push([s,null,null]);
+    while(q.length){const p=q.shift();adj[p].forEach(([nb,w])=>{if(seen.has(nb))return;seen.add(nb);order.push([nb,p,w]);q.push(nb);});}});
+  net={N,K,comps,order,gnd,nodeOf:p=>{const k=key(p);return k in par?(gnd.has(f(k))?-1:idx[f(k)]):-1;}};
+  comps.forEach(e=>{e.vs=0;e.i=0;e.vd=0.6;});resetSim();
+}
+
+/* ================= transient solver ================= */
+let t=0,h=1e-3,x=[],sweep=2,buf=[],bufT=new Float64Array(1000),bi=0,filled=0,traces=[],solveErr='';
+const VT=0.025852,IS=1e-12,GMIN=1e-9,VCRIT=VT*Math.log(VT/(Math.SQRT2*IS));
+function srcV(e,tt){if(e.t==='V')return e.v;if(e.t==='A')return e.v*Math.sin(2*Math.PI*e.f*tt);return ((tt*e.f)%1)<0.5?e.v:0;}
+function solve(A,z){const n=z.length;for(let c=0;c<n;c++){let p=c,m=Math.abs(A[c][c]);for(let r=c+1;r<n;r++){const v=Math.abs(A[r][c]);if(v>m){m=v;p=r;}}
+  if(m<1e-13)throw new Error('sing');if(p!==c){[A[p],A[c]]=[A[c],A[p]];[z[p],z[c]]=[z[c],z[p]];}
+  for(let r=c+1;r<n;r++){const fct=A[r][c]/A[c][c];if(!fct)continue;for(let k=c;k<n;k++)A[r][k]-=fct*A[c][k];z[r]-=fct*z[c];}}
+  const s=new Array(n);for(let r=n-1;r>=0;r--){let v=z[r];for(let k=r+1;k<n;k++)v-=A[r][k]*s[k];s[r]=v/A[r][r];}return s;}
+const Vn=(s,n)=>n<0?0:s[n];
+function dI(v){return IS*(Math.exp(Math.min(v,1.2)/VT)-1)+(v>1.2?IS*Math.exp(1.2/VT)/VT*(v-1.2):0);}
+function dG(v){return IS/VT*Math.exp(Math.min(v,1.2)/VT)+GMIN;}
+function limit(vn,vo){if(vn>VCRIT&&Math.abs(vn-vo)>2*VT){if(vo>0){const a=1+(vn-vo)/VT;vn=a>0?vo+VT*Math.log(a):VCRIT;}else vn=VT*Math.log(vn/VT);}return vn;}
+function step(){
+  const {N,K,comps}=net;if(!K){t+=h;return;}const tn=t+h;let s=null;const hasD=comps.some(e=>e.t==='D');
+  for(let it=0;it<(hasD?40:1);it++){
+    const A=Array.from({length:K},()=>new Float64Array(K)),z=new Float64Array(K);for(let i=0;i<N;i++)A[i][i]+=GMIN;
+    const st=(a,b,G,J)=>{if(a>=0){A[a][a]+=G;z[a]-=J;}if(b>=0){A[b][b]+=G;z[b]+=J;}if(a>=0&&b>=0){A[a][b]-=G;A[b][a]-=G;}};
+    for(const e of comps){const a=e.na,b=e.nb;
+      if(e.t==='R')st(a,b,1/Math.max(e.v,1e-6),0);
+      else if(e.t==='S')st(a,b,e.on?1e3:1e-9,0);
+      else if(e.t==='C'){const G=2*e.v/h;e.G=G;e.J=-(G*e.vs+e.i);st(a,b,G,e.J);}
+      else if(e.t==='L'){const G=h/(2*e.v);e.G=G;e.J=e.i+G*e.vs;st(a,b,G,e.J);}
+      else if(e.t==='D'){const g=dG(e.vd);st(a,b,g,dI(e.vd)-g*e.vd);}
+      else if('VAQ'.includes(e.t)){const k=e.k;if(b>=0){A[b][k]+=1;A[k][b]+=1;}if(a>=0){A[a][k]-=1;A[k][a]-=1;}z[k]=srcV(e,tn);}}
+    s=solve(A,Array.from(z));
+    if(!hasD)break;let ok=true;for(const e of comps)if(e.t==='D'){const vn=Vn(s,e.na)-Vn(s,e.nb);if(Math.abs(vn-e.vd)>1e-6)ok=false;e.vd=limit(vn,e.vd);}if(ok)break;}
+  x=s;t=tn;
+  for(const e of comps){const v=Vn(s,e.na)-Vn(s,e.nb);
+    if(e.t==='R')e.i=v/Math.max(e.v,1e-6);else if(e.t==='S')e.i=v*(e.on?1e3:1e-9);else if(e.t==='C'||e.t==='L')e.i=e.G*v+e.J;else if(e.t==='D')e.i=dI(v);else if('VAQ'.includes(e.t))e.i=-s[e.k];
+    e.vs=v;}
+  bufT[bi]=t;traces.forEach((tr,j)=>{buf[j][bi]=tr.get();});bi=(bi+1)%1000;filled=Math.min(filled+1,1000);
+}
+function resetSim(){t=0;h=sweep/1000;x=new Array(net?net.K:0).fill(0);solveErr='';
+  if(net)net.comps.forEach(e=>{e.vs=0;e.i=0;e.vd=0.6;e.ph=0;});
+  traces=[];let ci=0;els.filter(e=>e.t==='P').forEach((e,j)=>traces.push({name:'V'+(j+1)+' 探针',unit:'V',col:PAL[ci++%PAL.length],el:e,get:()=>Vn(x,e.na)}));
+  els.filter(e=>e.showI&&e.t!=='w'&&!T[e.t].one).forEach(e=>traces.push({name:`I(${(T[e.t].n+' '+shortVal(e)).trim()})`,unit:'A',col:PAL[ci++%PAL.length],el:e,get:()=>e.i}));
+  buf=traces.map(()=>new Float64Array(1000));bi=0;filled=0;}
+function prefill(){if(!net)return;try{for(let i=0;i<3000;i++)step();}catch(e){solveErr='电路无法求解：可能有两个电压源并联、电压源被导线短路，或电感直接接在电压源上形成回路。';running=false;}}
+function rebuild(){build();prefill();Lab.draw(1);}
+const shortVal=e=>e.t==='A'||e.t==='Q'?fmtSI(e.v,'V')+' '+fmtSI(e.f,'Hz'):e.t==='D'||e.t==='S'?'':fmtSI(e.v,T[e.t].u||'');
+
+/* ================= drawing ================= */
+let GU=30,OX=0,simAcc=0,lastDraw=0;
+function vcol(v,vm){if(!isFinite(v))return css('--muted');const r=Math.max(-1,Math.min(1,v/(vm||1)));const g=css('--green'),rd=css('--red'),m=css('--muted');return r>0.04?mix(m,g,r):r<-0.04?mix(m,rd,-r):m;}
+function hex(c){c=c.trim();if(c[0]==='#'){if(c.length===4)c='#'+[...c.slice(1)].map(x=>x+x).join('');return [1,3,5].map(i=>parseInt(c.slice(i,i+2),16));}const m=c.match(/\d+/g);return m?m.slice(0,3).map(Number):[128,128,128];}
+function mix(a,b,r){const A=hex(a),B=hex(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*r)).join(',')})`;}
+function drawSch(){
+  const c=$('sch');const W0=Math.max(Math.round(c.getBoundingClientRect().width||c.parentElement.clientWidth||600),240);GU=Math.min(W0/COLS,window.EMBED_LAB?21:40);OX=(W0-COLS*GU)/2;c.dataset.h=Math.round(GU*ROWS);c.setAttribute('height',c.dataset.h);
+  const [g,W,H]=fit(c);g.translate(OX,0);const P=p=>[p[0]*GU,p[1]*GU];
+  g.fillStyle=css('--grid');for(let i=1;i<COLS;i++)for(let j=1;j<ROWS;j++){g.fillRect(i*GU-1,j*GU-1,2,2);}
+  const vm=Math.max(1,...(net?net.comps.map(e=>Math.abs(Vn(x,e.na))):[1]));
+  const nv=p=>{if(!net)return 0;const n=net.nodeOf(p);return Vn(x,n);};
+  /* wire currents */
+  if(net&&x.length){const inj={};const addI=(p,v)=>{const k=key(p);inj[k]=(inj[k]||0)+v;};net.comps.forEach(e=>{if(T[e.t].one)return;addI(e.a,-e.i);addI(e.b,e.i);});
+    for(let i=net.order.length-1;i>=0;i--){const [p,par,w]=net.order[i];if(!w)continue;const fl=inj[p]||0;w.i=key(w.a)===p?fl:-fl;inj[par]=(inj[par]||0)+fl;}}
+  const imax=Math.max(1e-9,...els.filter(e=>!T[e.t].one).map(e=>Math.abs(e.i||0)));
+  for(const e of els){const A=P(e.a),B=P(e.b),isSel=e===sel;
+    if(e.t==='w'){g.strokeStyle=isSel?css('--accent'):vcol(nv(e.a),vm);g.lineWidth=isSel?4:2.6;g.beginPath();g.moveTo(...A);g.lineTo(...B);g.stroke();}
+    else if(e.t==='G'){g.strokeStyle=css('--ink');g.lineWidth=2;const [X,Y]=A;g.beginPath();g.moveTo(X,Y);g.lineTo(X,Y+GU*0.35);[0.4,0.26,0.12].forEach((w,k)=>{g.moveTo(X-GU*w,Y+GU*(0.35+k*0.14));g.lineTo(X+GU*w,Y+GU*(0.35+k*0.14));});g.stroke();}
+    else if(e.t==='P'){const j=els.filter(q=>q.t==='P').indexOf(e);const col=css(PAL[j%PAL.length]);g.beginPath();g.arcS(A[0],A[1],GU*0.22,0,7);g.fillStyle=col;g.fill();g.strokeStyle=isSel?css('--ink'):col;g.lineWidth=isSel?3:1;g.stroke();
+      label(g,'V'+(j+1),A[0]+GU*0.28,A[1]-GU*0.25,col,Math.max(10,GU*0.4));}
+    else drawComp(g,e,A,B,nv(e.a),nv(e.b),vm,isSel);
+    if(running&&!T[e.t].one&&Math.abs(e.i||0)>imax*0.02){const L=Math.hypot(B[0]-A[0],B[1]-A[1]),ux=(B[0]-A[0])/L,uy=(B[1]-A[1])/L,sp=GU*0.6,off=((e.ph%sp)+sp)%sp;
+      g.fillStyle=css('--amp');for(let s=off;s<L;s+=sp){g.beginPath();g.arcS(A[0]+ux*s,A[1]+uy*s,Math.max(1.8,GU*0.07),0,7);g.fill();}}}
+  /* terminal dots for junctions */
+  const cnt={};els.forEach(e=>{if(T[e.t].one)return;[e.a,e.b].forEach(p=>{const k=key(p);cnt[k]=(cnt[k]||0)+1;});});
+  Object.entries(cnt).forEach(([k,n])=>{if(n>=3){const [X,Y]=k.split(',').map(Number);g.beginPath();g.arcS(X*GU,Y*GU,GU*0.11,0,7);g.fillStyle=css('--ink');g.fill();}});
+  if(drag&&drag.to){const A=P(drag.from),B=P(drag.to);g.strokeStyle=css('--accent');g.setLineDash([5,4]);g.lineWidth=2;g.beginPath();g.moveTo(...A);g.lineTo(...B);g.stroke();g.setLineDash([]);
+    if(drag.tool!=='w'&&drag.tool!=='s')drawComp(g,{t:drag.tool,v:T[drag.tool].v,f:T[drag.tool].f,on:true},A,B,0,0,1,false,true);}
+  if(hover){g.strokeStyle=css('--accent');g.lineWidth=1.5;g.beginPath();g.arcS(hover[0]*GU,hover[1]*GU,GU*0.18,0,7);g.stroke();}
+  text(g,`t = ${fmtSI(t,'s')}`,COLS*GU-6,H-6,css('--muted'),Math.max(10,GU*0.38),'right');
+}
+function drawComp(g,e,A,B,va,vb,vm,isSel,ghost){
+  const L=Math.hypot(B[0]-A[0],B[1]-A[1]);if(L<1)return;const ux=(B[0]-A[0])/L,uy=(B[1]-A[1])/L,nx=-uy,ny=ux,cx=(A[0]+B[0])/2,cy=(A[1]+B[1])/2;
+  const s=Math.min(L-4,GU*1.6),Q=(d,n)=>[cx+ux*d+nx*n,cy+uy*d+ny*n],ink=isSel?css('--accent'):ghost?css('--muted'):css('--ink');
+  g.lineWidth=2.6;g.strokeStyle=vcol(va,vm);g.beginPath();g.moveTo(...A);g.lineTo(...Q(-s/2,0));g.stroke();g.strokeStyle=vcol(vb,vm);g.beginPath();g.moveTo(...Q(s/2,0));g.lineTo(...B);g.stroke();
+  g.strokeStyle=ink;g.fillStyle=ink;g.lineWidth=isSel?3:2;g.beginPath();const a=GU*0.28;
+  switch(e.t){
+    case 'R':{g.moveTo(...Q(-s/2,0));const n=6;for(let i=0;i<n;i++)g.lineTo(...Q(-s/2+s*(i+0.5)/n,(i%2?-1:1)*a*0.9));g.lineTo(...Q(s/2,0));g.stroke();break;}
+    case 'C':{const d=GU*0.13;g.moveTo(...Q(-s/2,0));g.lineTo(...Q(-d,0));g.moveTo(...Q(d,0));g.lineTo(...Q(s/2,0));g.moveTo(...Q(-d,-a*1.4));g.lineTo(...Q(-d,a*1.4));g.moveTo(...Q(d,-a*1.4));g.lineTo(...Q(d,a*1.4));g.stroke();break;}
+    case 'L':{const n=4,r=s/n/2;g.moveTo(...Q(-s/2,0));for(let i=0;i<n;i++){const c0=-s/2+r*(2*i+1);for(let k=0;k<=12;k++){const th=Math.PI-Math.PI*k/12;g.lineTo(...Q(c0+r*Math.cos(th),-r*Math.sin(th)*1.1));}}g.stroke();break;}
+    case 'D':{const d=GU*0.3;g.moveTo(...Q(-s/2,0));g.lineTo(...Q(s/2,0));g.stroke();g.beginPath();g.moveTo(...Q(-d,-d));g.lineTo(...Q(-d,d));g.lineTo(...Q(d,0));g.closePath();g.fill();g.beginPath();g.moveTo(...Q(d,-d));g.lineTo(...Q(d,d));g.stroke();break;}
+    case 'V':{const d=GU*0.1;g.moveTo(...Q(-s/2,0));g.lineTo(...Q(-d,0));g.moveTo(...Q(d,0));g.lineTo(...Q(s/2,0));g.moveTo(...Q(-d,-a*0.8));g.lineTo(...Q(-d,a*0.8));g.stroke();g.lineWidth=4;g.beginPath();g.moveTo(...Q(d,-a*1.5));g.lineTo(...Q(d,a*1.5));g.stroke();
+      label(g,'+',...Q(d+GU*0.2,-a*1.9),ink,Math.max(10,GU*0.42));break;}
+    case 'A':case 'Q':{const r=GU*0.48;g.moveTo(...Q(-s/2,0));g.lineTo(...Q(-r,0));g.moveTo(...Q(r,0));g.lineTo(...Q(s/2,0));g.stroke();g.beginPath();g.arcS(cx,cy,r,0,7);g.stroke();g.beginPath();
+      for(let k=0;k<=20;k++){const u=k/20,yy=e.t==='A'?Math.sin(2*Math.PI*u)*r*0.45:(u<0.5?-1:1)*r*0.4;g.lineTo(cx-r*0.6+1.2*r*u,cy+yy);}g.stroke();label(g,'+',...Q(r+GU*0.12,-r*0.9),ink,Math.max(10,GU*0.4));break;}
+    case 'S':{const d=s*0.32;g.moveTo(...Q(-s/2,0));g.lineTo(...Q(-d,0));g.moveTo(...Q(d,0));g.lineTo(...Q(s/2,0));g.stroke();g.beginPath();g.arcS(...Q(-d,0),2.5,0,7);g.arcS(...Q(d,0),2.5,0,7);g.fill();g.beginPath();g.moveTo(...Q(-d,0));
+      g.lineTo(...(e.on?Q(d,0):Q(d*0.8,-GU*0.45)));g.lineWidth=2.4;g.stroke();break;}}
+  const lv=e.t==='D'?'':e.t==='S'?(e.on?'闭合':'断开'):shortVal(e);if(lv&&!ghost){g.font=`600 ${Math.max(10,GU*0.38)}px ${css('--mono')}`;const w=g.measureText(lv).width,[px,py]=Q(0,GU*0.62*(Math.abs(nx)>0.5?1:-1));
+    g.fillStyle=css('--muted');g.fillText(lv,Math.abs(nx)>0.5?px+(nx>0?0:-w):px-w/2,Math.abs(nx)>0.5?py+4:py+(ny<0?-2:10));}
+}
+function drawScope(){
+  const c=$('scope');const [g,W,H]=fit(c);
+  if(view==='bode'){drawBode(g,W,H);return;}
+  const n=filled;if(!traces.length||!n){text(g,'放一个「探针」或在元件上勾选「示波器显示电流」来看波形',W/2,H/2,css('--muted'),12,'center');$('stats').innerHTML='';return;}
+  const idx=k=>(bi-n+k+1000)%1000,tv=traces.filter(t=>t.unit==='V'),ti=traces.filter(t=>t.unit==='A');
+  const rng=list=>{let lo=Infinity,hi=-Infinity;list.forEach(tr=>{const j=traces.indexOf(tr);for(let k=0;k<n;k++){const v=buf[j][idx(k)];if(v<lo)lo=v;if(v>hi)hi=v;}});if(!isFinite(lo))return [-1,1];if(hi-lo<1e-9){hi+=1;lo-=1;}const p=(hi-lo)*0.1;return [lo-p,hi+p];};
+  const [v0,v1]=rng(tv),[i0,i1]=rng(ti),t0=bufT[idx(0)],t1=t0+sweep;
+  const pl=48,pr=ti.length?54:12,pt=16,pb=24,X=tt=>pl+(W-pl-pr)*(tt-t0)/sweep;
+  g.strokeStyle=css('--grid');g.lineWidth=1;for(let k=0;k<=10;k++){const xx=pl+(W-pl-pr)*k/10;g.beginPath();g.moveTo(xx,pt);g.lineTo(xx,H-pb);g.stroke();}
+  for(let k=0;k<=4;k++){const yy=pt+(H-pt-pb)*k/4;g.beginPath();g.moveTo(pl,yy);g.lineTo(W-pr,yy);g.stroke();}
+  const YV=v=>pt+(H-pt-pb)*(v1-v)/(v1-v0),YI=v=>pt+(H-pt-pb)*(i1-v)/(i1-i0);
+  if(tv.length){[v0,Math.abs(v0+v1)<(v1-v0)*1e-3?0:(v0+v1)/2,v1].forEach(v=>label(g,fmtSI(v,'V'),2,YV(v)+4,css('--muted'),10,'400'));if(v0<0&&v1>0){g.strokeStyle=css('--muted');g.beginPath();g.moveTo(pl,YV(0));g.lineTo(W-pr,YV(0));g.stroke();}}
+  if(ti.length)[i0,Math.abs(i0+i1)<(i1-i0)*1e-3?0:(i0+i1)/2,i1].forEach(v=>label(g,fmtSI(v,'A'),W-pr+4,YI(v)+4,css('--muted'),10,'400'));
+  traces.forEach((tr,j)=>{const Y=tr.unit==='V'?YV:YI;g.strokeStyle=css(tr.col);g.lineWidth=2;g.beginPath();for(let k=0;k<n;k++){const xx=X(bufT[idx(k)]),yy=Y(buf[j][idx(k)]);k?g.lineTo(xx,yy):g.moveTo(xx,yy);}g.stroke();});
+  text(g,`${fmtSI(sweep/10,'s')}/格`,W-pr,H-6,css('--muted'),11,'right');text(g,`窗口 ${fmtSI(t0,'s')} – ${fmtSI(t1,'s')}`,pl,H-6,css('--muted'),11);
+  $('stats').innerHTML='<tr><th>波形</th><th>平均值</th><th>RMS</th><th>峰峰值</th><th>最大 / 最小</th></tr>'+traces.map((tr,j)=>{let s=0,s2=0,lo=Infinity,hi=-Infinity;for(let k=0;k<n;k++){const v=buf[j][idx(k)];s+=v;s2+=v*v;if(v<lo)lo=v;if(v>hi)hi=v;}
+    return `<tr><td><span style="background:var(${tr.col})"></span>${tr.name}</td><td>${fmtSI(s/n,tr.unit)}</td><td>${fmtSI(Math.sqrt(s2/n),tr.unit)}</td><td>${fmtSI(hi-lo,tr.unit)}</td><td>${fmtSI(hi,tr.unit)} / ${fmtSI(lo,tr.unit)}</td></tr>`;}).join('');
+}
+
+/* ================= AC analysis ================= */
+function csolve(A,z){const n=z.length;const ab=([a,b])=>Math.hypot(a,b),mul=([a,b],[c,d])=>[a*c-b*d,a*d+b*c],div=([a,b],[c,d])=>{const m=c*c+d*d;return [(a*c+b*d)/m,(b*c-a*d)/m];},sub=([a,b],[c,d])=>[a-c,b-d];
+  for(let c=0;c<n;c++){let p=c,m=ab(A[c][c]);for(let r=c+1;r<n;r++){const v=ab(A[r][c]);if(v>m){m=v;p=r;}}if(m<1e-15)throw 0;if(p!==c){[A[p],A[c]]=[A[c],A[p]];[z[p],z[c]]=[z[c],z[p]];}
+    for(let r=c+1;r<n;r++){const f=div(A[r][c],A[c][c]);for(let k=c;k<n;k++)A[r][k]=sub(A[r][k],mul(f,A[c][k]));z[r]=sub(z[r],mul(f,z[c]));}}
+  const s=new Array(n);for(let r=n-1;r>=0;r--){let v=z[r];for(let k=r+1;k<n;k++)v=sub(v,mul(A[r][k],s[k]));s[r]=div(v,A[r][r]);}return s;}
+function bode(){const {N,K,comps}=net,src=comps.find(e=>e.t==='A'),pr=els.find(e=>e.t==='P');if(!src||!pr)return null;const out=[];
+  for(let i=0;i<=240;i++){const fq=10**(0+5*i/240),w=2*Math.PI*fq;const A=Array.from({length:K},()=>Array.from({length:K},()=>[0,0])),z=Array.from({length:K},()=>[0,0]);
+    for(let k=0;k<N;k++)A[k][k][0]+=GMIN;const st=(a,b,G)=>{const ad=(r,c,v)=>{A[r][c]=[A[r][c][0]+v[0],A[r][c][1]+v[1]];};if(a>=0)ad(a,a,G);if(b>=0)ad(b,b,G);if(a>=0&&b>=0){ad(a,b,[-G[0],-G[1]]);ad(b,a,[-G[0],-G[1]]);}};
+    for(const e of comps){const a=e.na,b=e.nb;if(e.t==='R')st(a,b,[1/e.v,0]);else if(e.t==='S')st(a,b,[e.on?1e3:1e-9,0]);else if(e.t==='C')st(a,b,[0,w*e.v]);else if(e.t==='L')st(a,b,[0,-1/(w*e.v)]);else if(e.t==='D')st(a,b,[GMIN,0]);
+      else if('VAQ'.includes(e.t)){const k=e.k;if(b>=0){A[b][k][0]+=1;A[k][b][0]+=1;}if(a>=0){A[a][k][0]-=1;A[k][a][0]-=1;}z[k]=[e===src?1:0,0];}}
+    try{const s=csolve(A,z),n=pr.na,v=n<0?[0,0]:s[n];out.push([fq,20*Math.log10(Math.hypot(...v)+1e-15),Math.atan2(v[1],v[0])*180/Math.PI]);}catch(e){return null;}}return out;}
+function drawBode(g,W,H){const d=net&&bode();$('stats').innerHTML='';if(!d){text(g,'频率响应需要至少一个「交流源」（输入）和一个「探针」（输出）',W/2,H/2,css('--muted'),12,'center');return;}
+  const h1=Math.floor(H*0.55),mags=d.map(r=>r[1]),mx=Math.ceil(Math.max(...mags)/10)*10+5,mn=Math.max(Math.floor(Math.min(...mags)/10)*10,mx-80);
+  const a=axes(g,W,h1,{x0:0,x1:5,y0:mn,y1:mx,xt:[0,1,2,3,4,5],yt:[mn,(mn+mx)/2|0,mx],xf:v=>fmtSI(10**v,'Hz'),title:'|H| (dB)  输出探针 V1 / 第一个交流源',pl:44,pb:18});
+  plot(g,a.X,a.Y,u=>{const i=Math.round(u/5*240);return d[Math.max(0,Math.min(240,i))][1];},0,5,css('--blue'),2.4,240);
+  const ref=d[0][1],j3=d.findIndex(r=>r[1]<ref-3),c3=j3>0?[10**(Math.log10(d[j3-1][0])+(Math.log10(d[j3][0])-Math.log10(d[j3-1][0]))*(d[j3-1][1]-(ref-3))/(d[j3-1][1]-d[j3][1])),ref-3]:null;if(c3&&Math.abs(ref-mags[0])<1e-9){const lx=Math.log10(c3[0]);g.strokeStyle=css('--red');g.setLineDash([4,4]);g.beginPath();g.moveTo(a.X(lx),a.pt);g.lineTo(a.X(lx),h1-a.pb);g.stroke();g.setLineDash([]);label(g,`−3 dB ≈ ${fmtSI(c3[0],'Hz')}`,Math.min(a.X(lx)+4,W-120),a.pt+12,css('--red'),11);}
+  g.save();g.translate(0,h1);const b=axes(g,W,H-h1,{x0:0,x1:5,y0:-180,y1:180,xt:[0,1,2,3,4,5],yt:[-180,-90,0,90,180],xf:v=>fmtSI(10**v,'Hz'),title:'相位 (°)',pl:44,pt:16,pb:20});
+  plot(g,b.X,b.Y,u=>{const i=Math.round(u/5*240);return d[Math.max(0,Math.min(240,i))][2];},0,5,css('--amp'),2.2,240);g.restore();
+  const src=net.comps.find(e=>e.t==='A'),i0=Math.round(Math.log10(Math.max(1,src.f))/5*240);const r=d[Math.max(0,Math.min(240,i0))];
+  $('stats').innerHTML=`<tr><th>在电源频率 ${fmtSI(src.f,'Hz')}</th><th>增益</th><th>相位</th><th>−3 dB 频率</th></tr><tr><td>V1 / 输入</td><td>${r[1].toFixed(2)} dB（×${(10**(r[1]/20)).toPrecision(3)}）</td><td>${r[2].toFixed(1)}°</td><td>${c3?fmtSI(c3[0],'Hz'):'—'}</td></tr>`;}
+
+/* ================= UI ================= */
+const SW=[1e-3,2e-3,5e-3,1e-2,2e-2,4e-2,5e-2,0.1,0.2,0.5,1,2,5];$('sweep').innerHTML=SW.map(v=>`<option value="${v}">${fmtSI(v,'s')}</option>`).join('');
+$('tools').innerHTML=Object.entries(T).map(([k,v])=>`<button data-t="${k}">${v.k||v.n}</button>`).join('');
+function syncUI(){pressGroup('#tools [data-t]',b=>b.dataset.t===tool);pressGroup('#lab1 [data-v]',b=>b.dataset.v===view);$('run').textContent=running?'❚❚ 暂停':'▶ 运行';$('sweep').value=String(sweep);
+  $('msg').textContent=solveErr||warn;$('sch').style.cursor=tool==='s'?'pointer':tool==='x'?'not-allowed':'crosshair';
+  const p=$('props');if(!sel){p.innerHTML=tool==='s'?'点元件查看 / 修改参数；拖动可以移动；开关点一下切换':`在网格上${T[tool].one?'点一下':'拖动'}放置「${T[tool].n}」`;return;}
+  const e=sel,hasV='RCLVAQ'.includes(e.t);p.innerHTML=`<b>${T[e.t].n}</b>`+(hasV?` <label>${e.t==='A'?'峰值':e.t==='Q'?'高电平':'数值'} <input type="text" id="pv" value="${fmtSI(e.v,'')}"> ${T[e.t].u}</label>`:'')
+    +('AQ'.includes(e.t)?` <label>频率 <input type="text" id="pf" value="${fmtSI(e.f,'')}"> Hz</label>`:'')+(e.t==='S'?` <button id="ptog">${e.on?'断开':'闭合'}</button>`:'')
+    +(!T[e.t].one&&e.t!=='w'?` <label><input type="checkbox" id="pi" ${e.showI?'checked':''}> 示波器显示电流</label>`:'')+(e.t==='w'||T[e.t].one?'':` <span>当前 ${fmtSI(e.vs,'V')}，${fmtSI(e.i,'A')}</span>`)+` <button id="pdel">删除</button>`;
+  const ch=()=>{const v=parseSI($('pv')?$('pv').value:e.v),fq=parseSI($('pf')?$('pf').value:e.f);if(isFinite(v)&&(v>0||'VAQ'.includes(e.t)))e.v=v;if(isFinite(fq)&&fq>0)e.f=fq;rebuild();};
+  if($('pv'))$('pv').addEventListener('change',ch);if($('pf'))$('pf').addEventListener('change',ch);
+  if($('ptog'))$('ptog').addEventListener('click',()=>{e.on=!e.on;rebuild();});if($('pi'))$('pi').addEventListener('change',ev=>{e.showI=ev.target.checked;rebuild();});
+  $('pdel').addEventListener('click',()=>{els=els.filter(q=>q!==e);sel=null;rebuild();});}
+document.querySelectorAll('#tools [data-t]').forEach(b=>b.addEventListener('click',()=>{tool=b.dataset.t;sel=null;Lab.draw(1);}));
+document.querySelectorAll('#lab1 [data-v]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.v;Lab.draw(1);}));
+$('run').addEventListener('click',()=>{running=!running;if(solveErr)running=false;Lab.draw(1);Lab.kick(anim);});
+$('reset').addEventListener('click',()=>{resetSim();prefill();Lab.draw(1);});$('clear').addEventListener('click',()=>{els=[];sel=null;running=false;rebuild();});
+$('sweep').addEventListener('change',e=>{sweep=+e.target.value;rebuild();});
+/* pointer editing */
+let drag=null,hover=null;const gp=ev=>{const r=$('sch').getBoundingClientRect();return [Math.max(0,Math.min(COLS,Math.round((ev.clientX-r.left-OX)/GU))),Math.max(0,Math.min(ROWS,Math.round((ev.clientY-r.top)/GU)))];};
+function hit(ev){const r=$('sch').getBoundingClientRect(),px=(ev.clientX-r.left-OX)/GU,py=(ev.clientY-r.top)/GU;let best=null,bd=0.45;
+  for(const e of els){let d;if(T[e.t].one)d=Math.hypot(px-e.a[0],py-e.a[1]);else{const [ax,ay]=e.a,[bx,by]=e.b,L2=(bx-ax)**2+(by-ay)**2,u=Math.max(0,Math.min(1,((px-ax)*(bx-ax)+(py-ay)*(by-ay))/L2));d=Math.hypot(px-ax-u*(bx-ax),py-ay-u*(by-ay));if(e.t!=='w')d-=0.1;}
+    if(d<bd){bd=d;best=e;}}return best;}
+const sch=$('sch');
+sch.addEventListener('pointerdown',ev=>{ev.preventDefault();const p=gp(ev);
+  if(tool==='x'){const e=hit(ev);if(e){els=els.filter(q=>q!==e);if(sel===e)sel=null;rebuild();}return;}
+  if(tool==='s'){const e=hit(ev);sel=e;if(e&&e.t==='S'){e.on=!e.on;rebuild();return;}if(e){drag={tool:'s',from:p,el:e,a0:[...e.a],b0:[...e.b]};sch.setPointerCapture(ev.pointerId);}Lab.draw(1);return;}
+  if(T[tool].one){if(!els.some(e=>e.t===tool&&eq(e.a,p))){sel=add(tool,p);rebuild();}return;}
+  drag={tool,from:p,to:p};sch.setPointerCapture(ev.pointerId);});
+sch.addEventListener('pointermove',ev=>{const p=gp(ev);hover=p;if(!drag){if(!running)drawSch();return;}
+  if(drag.tool==='s'){const dx=p[0]-drag.from[0],dy=p[1]-drag.from[1],e=drag.el;e.a=[drag.a0[0]+dx,drag.a0[1]+dy];e.b=[drag.b0[0]+dx,drag.b0[1]+dy];drag.moved=dx||dy;}
+  else{const dx=p[0]-drag.from[0],dy=p[1]-drag.from[1];drag.to=Math.abs(dx)>=Math.abs(dy)?[p[0],drag.from[1]]:[drag.from[0],p[1]];}if(!running)drawSch();});
+sch.addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;
+  if(d.tool==='s'){if(d.moved)rebuild();else Lab.draw(1);return;}
+  if(d.to&&!eq(d.from,d.to)){const e=add(d.tool,d.from,d.to);if(d.tool!=='w')sel=e;rebuild();}else Lab.draw(1);});
+sch.addEventListener('pointerleave',()=>{hover=null;if(!running&&!drag)drawSch();});
+addEventListener('keydown',ev=>{if((ev.key==='Delete'||ev.key==='Backspace')&&sel&&!/INPUT|SELECT/.test(document.activeElement.tagName)){els=els.filter(q=>q!==sel);sel=null;rebuild();}});
+
+/* ================= presets ================= */
+const PRE={
+  rc:{sw:2,b(){add('Q',[3,9],[3,4],{v:5,f:1});add('w',[3,4],[6,4]);add('R',[6,4],[12,4],{v:1000,showI:true});add('w',[12,4],[15,4]);add('C',[15,4],[15,9],{v:1e-4});add('w',[15,9],[3,9]);add('G',[9,9]);add('P',[3,4]);add('P',[15,4]);}},
+  rlc:{sw:0.1,b(){add('Q',[2,9],[2,3],{v:5,f:10});add('w',[2,3],[5,3]);add('R',[5,3],[9,3],{v:20});add('L',[9,3],[14,3],{v:0.1,showI:true});add('w',[14,3],[17,3]);add('C',[17,3],[17,9],{v:1e-4});add('w',[17,9],[2,9]);add('G',[9,9]);add('P',[2,3]);add('P',[17,3]);}},
+  half:{sw:0.1,b(){add('A',[2,9],[2,3],{v:12,f:50});add('w',[2,3],[5,3]);add('D',[5,3],[9,3],{showI:true});add('w',[9,3],[18,3]);add('S',[13,3],[13,5]);add('C',[13,5],[13,9],{v:470e-6});add('R',[18,3],[18,9],{v:100});add('w',[18,9],[2,9]);add('G',[8,9]);add('P',[2,3]);add('P',[18,3]);}},
+  bridge:{sw:0.1,b(){add('A',[12,6],[8,6],{v:12,f:50,showI:true});add('D',[8,6],[8,2]);add('D',[8,10],[8,6]);add('D',[12,6],[12,2]);add('D',[12,10],[12,6]);add('w',[8,2],[20,2]);add('w',[8,10],[20,10]);
+    add('S',[16,2],[16,4]);add('C',[16,4],[16,10],{v:470e-6});add('R',[20,2],[20,10],{v:100});add('G',[14,10]);add('P',[20,2]);}},
+  rl:{sw:0.04,b(){add('A',[2,9],[2,3],{v:10,f:50});add('w',[2,3],[5,3]);add('L',[5,3],[11,3],{v:0.05,showI:true});add('w',[11,3],[14,3]);add('R',[14,3],[14,9],{v:10});add('w',[14,9],[2,9]);add('G',[8,9]);add('P',[2,3]);add('P',[14,3]);}},
+  lpf:{sw:5e-3,v:'bode',b(){add('A',[2,9],[2,3],{v:1,f:1000});add('w',[2,3],[5,3]);add('R',[5,3],[11,3],{v:1000});add('w',[11,3],[14,3]);add('C',[14,3],[14,9],{v:1e-7});add('w',[14,9],[2,9]);add('G',[8,9]);add('P',[14,3]);add('P',[2,3]);}}};
+let curP='rc';
+function load(k){els=[];sel=null;running=false;curP=k;PRE[k].b();sweep=PRE[k].sw;view=PRE[k].v||'scope';rebuild();}
+document.querySelectorAll('#lab1 [data-p]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.p)));
+/* ================= loop ================= */
+function lab1(){syncUI();drawSch();drawScope();pressGroup('#lab1 [data-p]',b=>b.dataset.p===curP);}
+Lab.add(1,lab1,{scope:170});
+const anim=Lab.anim(1,$('sch'),dt=>{const spd=+$('speed').value;simAcc+=dt*spd*(1000/2);let n=Math.min(Math.floor(simAcc),400);simAcc-=n;
+  try{for(let i=0;i<n;i++)step();}catch(e){solveErr='电路无法求解（奇异矩阵）。检查电压源是否被短路或并联。';running=false;}
+  const imax=Math.max(1e-9,...els.filter(e=>!T[e.t].one).map(e=>Math.abs(e.i||0)));els.forEach(e=>{if(!T[e.t].one)e.ph+=(e.i||0)/imax*GU*3*dt;});
+  drawSch();drawScope();if(!running)syncUI();},()=>running&&!REDUCE);
+const QP=new URLSearchParams(location.search).get('p');load(PRE[QP]?QP:'rc');
+Lab.start();
+</script>
+</body></html>
