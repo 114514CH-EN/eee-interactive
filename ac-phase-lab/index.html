@@ -73,10 +73,9 @@ html.embed .verdict{font-size:14px}
 .open{display:none}
 html.embed .open{display:inline-block;position:absolute;top:8px;right:12px;font:500 12px var(--body);color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:2px 10px;background:var(--panel);z-index:2}
 </style>
-<script>(function(){var m=/[?&]lab=([123])/.exec(location.search);if(m){document.documentElement.classList.add("embed","lab-"+m[1]);}})();</script>
+<script>(function(){var m=/[?&]lab=([123])/.exec(location.search);var framed=false;try{framed=window.self!==window.top;}catch(e){framed=true;}if(m&&framed){document.documentElement.classList.add("embed","lab-"+m[1]);}else if(m){addEventListener("load",function(){var el=document.getElementById("lab"+m[1]);if(el)el.scrollIntoView();});}})();</script>
 </head><body>
 
-<a class="open" href="./" target="_blank" rel="noopener">全屏打开 ↗</a>
 <div class="wrap">
 <header>
   <div class="tag">DEEM · ELECTRICAL MACHINES · 交流电基础</div>
@@ -145,7 +144,7 @@ function tag(x,s,x0,y0,x1,y1,side,col,d=14,size=12){const L=Math.hypot(x1-x0,y1-
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- Lab 1 ---------- */
-const s1={phi:32,t:0,play:!reduce};
+const s1={phi:32,t:0,play:!reduce&&!document.documentElement.classList.contains('embed')};
 $('play').textContent=s1.play?'⏸ 暂停':'▶ 播放';
 function drawLab1(){
   const phi=s1.phi*D2R,[x,w,h]=fit($('wave')),V=css('--volt'),A=css('--amp'),G=css('--grid'),M=css('--muted'),P=css('--purple');
@@ -178,8 +177,16 @@ function updText1(){const p=s1.phi,pf=Math.cos(p*D2R);$('phiOut').textContent=(p
   document.querySelectorAll('#lab1 [data-phi]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.phi===p));}
 $('phi').addEventListener('input',e=>{s1.phi=+e.target.value;updText1();drawLab1();});
 document.querySelectorAll('#lab1 [data-phi]').forEach(b=>b.addEventListener('click',()=>{s1.phi=+b.dataset.phi;$('phi').value=s1.phi;updText1();drawLab1();}));
-$('play').addEventListener('click',()=>{s1.play=!s1.play;last=0;$('play').textContent=s1.play?'⏸ 暂停':'▶ 播放';});
-let last=0;function loop(ts){if(s1.play&&last){s1.t+=(ts-last)/1000*1.6;try{drawLab1();}catch(e){}}last=ts;requestAnimationFrame(loop);}
+$('play').addEventListener('click',()=>{s1.play=!s1.play;last=0;kick();$('play').textContent=s1.play?'⏸ 暂停':'▶ 播放';});
+let last=0,onScreen=true,raf=0;
+const isEmbed=document.documentElement.classList.contains('embed');
+const lab1Shown=!isEmbed||document.documentElement.classList.contains('lab-1');
+function loop(ts){raf=0;if(!(s1.play&&onScreen&&lab1Shown&&!document.hidden)){last=0;return;}
+  if(last&&ts-last<33){raf=requestAnimationFrame(loop);return;}
+  if(last){s1.t+=(ts-last)/1000*1.6;try{drawLab1();}catch(e){}}last=ts;raf=requestAnimationFrame(loop);}
+function kick(){if(!raf)raf=requestAnimationFrame(loop);}
+if('IntersectionObserver' in window){new IntersectionObserver(es=>{onScreen=es[0].isIntersecting;kick();}).observe($('wave'));}
+document.addEventListener('visibilitychange',kick);
 s1.t=Math.PI*0.9;
 
 /* ---------- Lab 2 ---------- */
@@ -249,12 +256,12 @@ const EX={2023:[31.8,0.016,63],2025:[25.8,0.151,17],2026:[0,0.004,51]};
 document.querySelectorAll('#lab3 [data-ex]').forEach(b=>b.addEventListener('click',()=>{const [a,zz,e]=EX[b.dataset.ex];$('phiL').value=Math.round(a);$('z').value=zz;$('phie').value=e;
   document.querySelectorAll('#lab3 [data-ex]').forEach(q=>q.setAttribute('aria-pressed',q===b));lab3();}));
 
-function all(){for(const f of [updText1,drawLab1,lab2,lab3]){try{f();}catch(e){console.warn(e);}}}
-addEventListener('resize',all);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',all);
+function all(){const H=document.documentElement.classList,emb=H.contains('embed');const fs=!emb?[updText1,drawLab1,lab2,lab3]:H.contains('lab-1')?[updText1,drawLab1]:H.contains('lab-2')?[lab2]:[lab3];for(const f of fs){try{f();}catch(e){console.warn(e);}}}
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',all);
 new MutationObserver(all).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 document.fonts&&document.fonts.ready.then(all);
-let rq=0;const ro=new ResizeObserver(()=>{if(rq)return;rq=requestAnimationFrame(()=>{rq=0;all();});});document.querySelectorAll('canvas').forEach(c=>ro.observe(c.parentElement));
-all();requestAnimationFrame(loop);
+let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(all,120);});
+all();setTimeout(all,300);kick();
 </script>
 
 </body></html>
