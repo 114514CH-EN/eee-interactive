@@ -1,0 +1,169 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>信息与编码实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">COMMUNICATION SYSTEMS · INFORMATION, SOURCE CODING, DECIBELS</div>
+  <h1>信息与编码实验室</h1>
+  <p>三个实验对应通信系统 Week 1 和 Week 3：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来。预设按钮就是讲义和 Tutorial 的数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 熵</a><a href="#lab2">实验 2 Huffman / Fano / Shannon</a><a href="#lab3">实验 3 分贝</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 信息量与信源熵（Week 1）</div>
+  <h2>概率越均匀，熵越大</h2>
+  <p class="lead">每根柱子分两层：浅色是符号的信息量 I = −log₂P（越罕见越高），深色是它对熵的贡献 P·I。把深色部分全部加起来就是熵 H。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-e="1,1,1,1,1,1,1,1">8 个等概率</button><button data-e="32,16,4,4,4,2,1,1">W1 Tutorial（补全版）</button><button data-e="4,2,1,1">自测 Q3：1/2 1/4 1/8 1/8</button><button data-e="55,30,10,5">W3 例子 A B C D</button><button data-e="97,1,1,1">几乎确定</button></div>
+  <div class="controls"><div class="ctl"><label for="en">符号个数 n</label><input id="en" type="range" min="2" max="8" step="1" value="4"><output id="enO"></output></div></div>
+  <div class="controls" id="esl"></div>
+  <div class="stage even"><canvas id="ebar" height="260" aria-label="各符号信息量与对熵的贡献"></canvas><canvas id="egauge" height="260" aria-label="熵与最大熵"></canvas></div>
+  <div class="read"><div><small>熵 H = Σ P·I</small><b id="eH"></b></div><div><small>最大熵 log₂ n</small><b id="eM"></b></div><div><small>H / H_max</small><b id="eR"></b></div><div><small>定长码每符号位数</small><b id="eF"></b></div></div>
+  <p class="note"><strong>看点：</strong>拖任意一个滑块让某个符号变得特别常见，熵马上下降：更容易猜中，平均每个符号带来的信息就少。所有符号一样时达到最大 log₂ n。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 信源编码（Week 3）</div>
+  <h2>一步一步合并出 Huffman 树</h2>
+  <p class="lead">每一步把当前概率最小的两个节点合并（大的那支标 0，小的标 1），直到只剩概率 1 的根。码字从根往叶读。下面的表把同一信源的 Huffman、Fano、Shannon 三种码放在一起比较。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-c="A,B,C,D|0.55,0.30,0.10,0.05">W3 讲义例子</button><button data-c="A,B,C,D,E|0.4,0.2,0.2,0.1,0.1">自测 Q1 五符号</button><button data-c="A,B,C,D|0.5,0.25,0.125,0.125">2 的幂（效率 100%）</button><button data-c="A,B,C,D,E,F|0.3,0.25,0.15,0.12,0.1,0.08">六符号</button></div>
+  <div class="controls"><div class="ctl"><label for="cp">概率（逗号分隔）</label><input id="cp" type="text" value="0.55,0.30,0.10,0.05"><span></span></div>
+    <div class="btns"><button id="cprev">← 上一步</button><button id="cnext" class="play">下一步合并 →</button><button id="call">直接看结果</button></div></div>
+  <p class="verdict" id="cstep"></p>
+  <div class="stage one"><canvas id="tree" height="270" aria-label="Huffman 树"></canvas></div>
+  <div class="scroll"><table class="mini" id="ctab"></table></div>
+  <div class="read"><div><small>熵 H</small><b id="cH"></b></div><div><small>Huffman L̄ / η</small><b id="cLH"></b></div><div><small>Fano L̄ / η</small><b id="cLF"></b></div><div><small>Shannon L̄ / η</small><b id="cLS"></b></div></div>
+  <p class="note"><strong>规律：</strong>被合并得越早的节点离根越远，码字越长，所以先合并最罕见的符号。三种码的平均码长都不会低于熵；概率全是 2 的幂时三者都能刚好等于熵。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 分贝（Week 3 Decibel Notes）</div>
+  <h2>乘法变加法：整条链路的增益直接相加</h2>
+  <p class="lead">信号依次经过三级（放大器为正 dB，电缆、衰减为负 dB）。线性世界里要连乘，dB 世界里只需把每级加起来。底部尺子对照功率比和电压比。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-g="3,29,0,0">自测 Q5：2 mW 放大 800 倍</button><button data-g="20,10,-10,0">0.1 W 放大 10 dB 再过 10 dB 电缆</button><button data-g="0,20,-3,6">1 mW → ×100 → ×0.5 → ×4</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="g0">输入功率 (dBm)</label><input id="g0" type="range" min="-30" max="40" step="1" value="3"><output id="g0O"></output></div>
+    <div class="ctl"><label for="g1">第 1 级 (dB)</label><input id="g1" type="range" min="-30" max="40" step="1" value="29"><output id="g1O"></output></div>
+    <div class="ctl"><label for="g2">第 2 级 (dB)</label><input id="g2" type="range" min="-30" max="40" step="1" value="0"><output id="g2O"></output></div>
+    <div class="ctl"><label for="g3">第 3 级 (dB)</label><input id="g3" type="range" min="-30" max="40" step="1" value="0"><output id="g3O"></output></div>
+  </div>
+  <div class="stage one"><canvas id="chain" height="230" aria-label="增益链"></canvas></div>
+  <div class="read"><div><small>总增益 (dB)</small><b id="gT"></b></div><div><small>总功率比（线性）</small><b id="gL"></b></div><div><small>对应电压比</small><b id="gV"></b></div><div><small>输出功率</small><b id="gO"></b></div></div>
+  <p class="note"><strong>只背 4 个数：</strong>×10 = +10 dB，×2 ≈ +3 dB，×0.5 ≈ −3 dB，×1 = 0 dB。电压要先平方成功率：电压 ×10 = 功率 ×100 = 20 dB。dBm 和 dBW 差 30 dB（1 W = 1000 mW）。</p>
+</section>
+</div>
+
+<script>
+const lg2=Math.log2,SYM='ABCDEFGH';
+/* ---------- Lab 1: entropy ---------- */
+$('esl').innerHTML=[...SYM].map((s,i)=>`<div class="ctl" id="ec${i}"><label for="ew${i}">${s} 权重</label><input id="ew${i}" type="range" min="0" max="100" step="1" value="${[55,30,10,5,1,1,1,1][i]}"><output id="ew${i}O"></output></div>`).join('');
+function lab1(){
+  const n=+$('en').value;$('enO').textContent=n;
+  const w=[...Array(n)].map((_,i)=>+$('ew'+i).value),S=w.reduce((a,b)=>a+b,0)||1,p=w.map(v=>v/S);
+  for(let i=0;i<8;i++){$('ec'+i).style.display=i<n?'':'none';if(i<n)$('ew'+i+'O').textContent=p[i].toFixed(3);}
+  const I=p.map(q=>q>0?-lg2(q):0),C=p.map((q,i)=>q*I[i]),H=C.reduce((a,b)=>a+b,0),M=lg2(n);
+  pressGroup('#lab1 [data-e]',b=>{const d=b.dataset.e.split(',').map(Number),s=d.reduce((a,c)=>a+c,0);return d.length===n&&d.every((v,i)=>Math.abs(v/s-p[i])<1e-6);});
+  $('eH').textContent=fmt(H,4)+' bit';$('eM').textContent=fmt(M,4)+' bit';$('eR').textContent=(H/M*100).toFixed(1)+'%';$('eF').textContent=Math.ceil(M-1e-9)+' bit';
+  const [x,W,Hh]=fit($('ebar'));const ymax=Math.max(4,Math.ceil(Math.max(...I)));
+  const a=axes(x,W,Hh,{x0:-0.6,x1:n-0.4,y0:0,y1:ymax,xt:[],yt:[...Array(ymax+1).keys()].filter(v=>ymax<=8||v%2===0),title:'bit',pl:30,pb:22});
+  const bw=Math.min(54,(a.X(1)-a.X(0))*0.62);
+  p.forEach((q,i)=>{const cx=a.X(i);x.fillStyle=css('--fillB');x.fillRect(cx-bw/2,a.Y(I[i]),bw,a.Y(0)-a.Y(I[i]));x.strokeStyle=css('--blue');x.lineWidth=1;x.strokeRect(cx-bw/2+.5,a.Y(I[i])+.5,bw-1,a.Y(0)-a.Y(I[i])-1);
+    x.fillStyle=css('--amp');x.fillRect(cx-bw/2,a.Y(C[i]),bw,a.Y(0)-a.Y(C[i]));
+    text(x,SYM[i],cx,Hh-6,css('--ink'),12,'center');text(x,I[i].toFixed(2),cx,a.Y(I[i])-4,css('--blue'),11,'center');});
+  text(x,'浅蓝 = 信息量 I　橙 = 贡献 P·I',W-a.pr,14,css('--muted'),11,'right');
+  /* gauge */
+  const [g,W2,H2]=fit($('egauge'));const top=40,bot=H2-34,cx=W2/2,bw2=Math.min(70,W2*0.32),Y=v=>bot-(bot-top)*v/3;
+  g.strokeStyle=css('--line');g.lineWidth=1;g.strokeRect(cx-bw2/2+.5,top+.5,bw2-1,bot-top-1);
+  for(let k=0;k<=3;k++){g.strokeStyle=css('--grid');g.beginPath();g.moveTo(cx-bw2/2-6,Y(k));g.lineTo(cx-bw2/2,Y(k));g.stroke();label(g,String(k),cx-bw2/2-18,Y(k)+4,css('--muted'),11,'400');}
+  let acc=0;C.forEach((c,i)=>{g.fillStyle=css('--amp');g.globalAlpha=i%2?0.6:0.9;g.fillRect(cx-bw2/2,Y(acc+c),bw2,Y(acc)-Y(acc+c));g.globalAlpha=1;if(Y(acc)-Y(acc+c)>13)text(g,SYM[i],cx,(Y(acc)+Y(acc+c))/2+4,css('--panel'),11,'center');acc+=c;});
+  g.strokeStyle=css('--purple');g.lineWidth=2.4;g.setLineDash([6,4]);g.beginPath();g.moveTo(cx-bw2/2-10,Y(M));g.lineTo(cx+bw2/2+10,Y(M));g.stroke();g.setLineDash([]);
+  label(g,`log₂${n} = ${M.toFixed(2)}`,Math.min(cx+bw2/2+12,W2-100),Y(M)+4,css('--purple'),12);
+  label(g,`H = ${H.toFixed(3)}`,Math.min(cx+bw2/2+12,W2-100),Math.max(Y(H)+4,Y(M)+22),css('--amp'),12);
+  text(g,'熵 = 各段 P·I 叠起来',cx,H2-12,css('--muted'),11,'center');text(g,'bits / symbol',cx,22,css('--muted'),11,'center');
+}
+$('en').addEventListener('input',()=>Lab.draw(1));[...SYM].forEach((_,i)=>$('ew'+i).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-e]').forEach(b=>b.addEventListener('click',()=>{const d=b.dataset.e.split(',');$('en').value=d.length;d.forEach((v,i)=>$('ew'+i).value=v);Lab.draw(1);}));
+Lab.add(1,lab1,{ebar:220,egauge:220});
+
+/* ---------- Lab 2: Huffman / Fano / Shannon ---------- */
+let names=['A','B','C','D'],probs=[0.55,0.30,0.10,0.05],step=0;
+function parse(){const v=$('cp').value.split(/[,\s，]+/).map(Number).filter(t=>isFinite(t)&&t>0).slice(0,8);if(v.length<2)return;const s=v.reduce((a,b)=>a+b,0);
+  probs=v.map(t=>t/s);if(names.length!==probs.length)names=[...SYM].slice(0,probs.length);}
+function huffman(p){let nodes=p.map((q,i)=>({p:q,sym:i,id:i}));const merges=[];let id=p.length;
+  while(nodes.length>1){nodes.sort((a,b)=>b.p-a.p||a.id-b.id);const lo=nodes.pop(),hi=nodes.pop(),m={p:hi.p+lo.p,kids:[hi,lo],id:id++};merges.push(m);nodes.push(m);}
+  const code=[],walk=(n,c)=>{if(n.kids){walk(n.kids[0],c+'0');walk(n.kids[1],c+'1');}else code[n.sym]=c||'0';};walk(nodes[0],'');return {root:nodes[0],merges,code};}
+function fano(p){const idx=p.map((_,i)=>i).sort((a,b)=>p[b]-p[a]),code=p.map(()=>'');
+  const rec=list=>{if(list.length<2)return;const tot=list.reduce((a,i)=>a+p[i],0);let best=1,bd=Infinity,acc=0;
+    for(let k=1;k<list.length;k++){acc+=p[list[k-1]];const d=Math.abs(2*acc-tot);if(d<=bd+1e-12){bd=d;best=k;}else break;}
+    list.slice(0,best).forEach(i=>code[i]+='0');list.slice(best).forEach(i=>code[i]+='1');rec(list.slice(0,best));rec(list.slice(best));};
+  rec(idx);if(p.length===1)code[0]='0';return code;}
+function shannon(p){const idx=p.map((_,i)=>i).sort((a,b)=>p[b]-p[a]),code=[],rows=[];let P=0;
+  idx.forEach(i=>{const m=Math.max(1,Math.ceil(-lg2(p[i])-1e-9)),v=Math.floor(P*2**m+1e-9);code[i]=v.toString(2).padStart(m,'0');rows[i]={m,P,v};P+=p[i];});return {code,rows};}
+function lab2(){
+  const n=probs.length,H=probs.reduce((a,q)=>a-q*lg2(q),0),hf=huffman(probs),fc=fano(probs),sh=shannon(probs);
+  step=Math.max(0,Math.min(step,n-1));
+  const L=c=>probs.reduce((a,q,i)=>a+q*c[i].length,0),show=c=>`${fmt(L(c),3)} / ${(H/L(c)*100).toFixed(1)}%`;
+  $('cH').textContent=fmt(H,3);$('cLH').textContent=show(hf.code);$('cLF').textContent=show(fc);$('cLS').textContent=show(sh.code);
+  pressGroup('#lab2 [data-c]',b=>{const v=b.dataset.c.split('|')[1].split(',').map(Number);return v.length===n&&v.every((t,i)=>Math.abs(t-probs[i])<1e-6);});
+  const order=probs.map((_,i)=>i).sort((a,b)=>probs[b]-probs[a]);
+  $('ctab').innerHTML='<tr><th>符号</th><th>概率</th><th>I = −log₂p</th><th>Huffman</th><th>Fano</th><th>Shannon（m, P_s, ⌊P_s·2^m⌋）</th></tr>'+order.map(i=>`<tr><td>${names[i]}</td><td>${fmt(probs[i],4)}</td><td>${(-lg2(probs[i])).toFixed(3)}</td><td>${step>=n-1?hf.code[i]:'…'}</td><td>${fc[i]}</td><td>${sh.code[i]}　<span style="color:var(--muted)">(${sh.rows[i].m}, ${fmt(sh.rows[i].P,3)}, ${sh.rows[i].v})</span></td></tr>`).join('');
+  /* tree layout: leaves ordered by huffman code so edges never cross */
+  const leaves=probs.map((_,i)=>i).sort((a,b)=>hf.code[a]<hf.code[b]?-1:1),pos={};
+  const [x,W,Hh]=fit($('tree'));const left=Math.min(120,W*0.2),right=W-60,top=18,bot=Hh-14,ny=k=>top+(bot-top)*(n===1?0.5:k/(n-1));
+  leaves.forEach((s,k)=>pos[s]={x:left,y:ny(k)});
+  const colX=k=>left+(right-left)*(k+1)/(n-1);
+  hf.merges.forEach((m,k)=>{const a=m.kids[0],b=m.kids[1],pa=pos[a.kids?'m'+a.id:a.sym],pb=pos[b.kids?'m'+b.id:b.sym];pos['m'+m.id]={x:colX(k),y:(pa.y+pb.y)/2};});
+  const P=nd=>pos[nd.kids?'m'+nd.id:nd.sym];
+  /* edges for done merges */
+  hf.merges.forEach((m,k)=>{if(k>=step)return;const me=P(m);m.kids.forEach((c,j)=>{const pc=P(c);x.strokeStyle=k===step-1?css('--accent'):css('--muted');x.lineWidth=k===step-1?2.6:1.6;
+    x.beginPath();x.moveTo(pc.x,pc.y);x.lineTo(me.x-14,pc.y);x.lineTo(me.x,me.y);x.stroke();label(x,String(j),me.x-28,pc.y+(j?14:-5),j?css('--red'):css('--blue'),12);});});
+  /* active (top-level) nodes after `step` merges */
+  const merged=new Set();hf.merges.slice(0,step).forEach(m=>m.kids.forEach(c=>merged.add(c.kids?'m'+c.id:c.sym)));
+  const nextPair=step<n-1?hf.merges[step].kids.map(c=>c.kids?'m'+c.id:c.sym):[];
+  const drawNode=(key,pp,q,lab,leaf)=>{const active=!merged.has(key),nxt=nextPair.includes(key);x.beginPath();x.arcS(pp.x,pp.y,leaf?5:6,0,7);x.fillStyle=nxt?css('--amp'):active?css('--accent'):css('--muted');x.fill();
+    if(leaf){label(x,lab,8,pp.y+4,css('--ink'),13);label(x,q.toFixed(3),24,pp.y+4,css('--muted'),11,'400');
+      if(step>=n-1)label(x,hf.code[key],left+10,pp.y-6,css('--purple'),12);}
+    else if(active||nxt)label(x,q.toFixed(2),pp.x+8,pp.y+4,nxt?css('--amp'):css('--accent'),12);};
+  leaves.forEach(s=>drawNode(s,pos[s],probs[s],names[s],true));
+  hf.merges.slice(0,step).forEach(m=>drawNode('m'+m.id,P(m),m.p,'',false));
+  const cs=$('cstep');
+  if(step<n-1){const [a,b]=hf.merges[step].kids;cs.textContent=`第 ${step+1} / ${n-1} 步：合并最小的两个 ${a.p.toFixed(2)}（标 0）+ ${b.p.toFixed(2)}（标 1）= ${(a.p+b.p).toFixed(2)}（橙色）`;cs.style.color=css('--amp');}
+  else{cs.textContent=`完成：根概率 = 1，码字从根往叶读（紫色）。平均码长 ${fmt(L(hf.code),3)} 位，熵 ${fmt(H,3)} 位`;cs.style.color=css('--accent');}
+  $('cprev').disabled=step===0;$('cnext').disabled=step>=n-1;
+}
+$('cp').addEventListener('change',()=>{parse();step=0;Lab.draw(2);});
+$('cprev').addEventListener('click',()=>{step--;Lab.draw(2);});$('cnext').addEventListener('click',()=>{step++;Lab.draw(2);});$('call').addEventListener('click',()=>{step=probs.length-1;Lab.draw(2);});
+document.querySelectorAll('#lab2 [data-c]').forEach(b=>b.addEventListener('click',()=>{const [nm,v]=b.dataset.c.split('|');names=nm.split(',');$('cp').value=v;parse();step=0;Lab.draw(2);}));
+Lab.add(2,lab2,{tree:175});
+
+/* ---------- Lab 3: decibels ---------- */
+const pw=dBm=>{const mw=10**(dBm/10);return mw>=1000?fmt(mw/1000,3)+' W':mw>=1?fmt(mw,3)+' mW':mw>=1e-3?fmt(mw*1000,3)+' µW':fmt(mw*1e6,3)+' nW';};
+const ratio=dB=>{const r=10**(dB/10);return r>=0.01&&r<1e5?'×'+(+r.toPrecision(3)):'×'+r.toExponential(2);};
+function lab3(){
+  const v=[0,1,2,3].map(i=>+$('g'+i).value);v.forEach((t,i)=>$('g'+i+'O').textContent=(i?(t>0?'+':''):'')+t+(i?' dB':' dBm'));
+  pressGroup('#lab3 [data-g]',b=>b.dataset.g.split(',').map(Number).every((t,i)=>t===v[i]));
+  const T=v[1]+v[2]+v[3],out=v[0]+T;$('gT').textContent=(T>0?'+':'')+T+' dB';$('gL').textContent=ratio(T);$('gV').textContent=ratio(T/2).replace('×','×')+'（20 log）';$('gO').textContent=`${out} dBm = ${pw(out)}`;
+  const [x,W,H]=fit($('chain'));const n=5,bx=k=>24+(W-48)*k/(n-1),cy=56;
+  const lev=[v[0],v[0]+v[1],v[0]+v[1]+v[2],out];
+  [['输入',0],['第 1 级',1],['第 2 级',2],['第 3 级',3],['输出',4]].forEach(([nm,k])=>{const px=bx(k);
+    if(k>0&&k<4){const g=v[k],col=g>0?css('--green'):g<0?css('--red'):css('--muted'),bw=Math.min(84,(W-48)/(n-1)*0.6);
+      x.fillStyle=css('--panel');x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(px-bw/2,cy-24);x.lineTo(px+bw/2,cy);x.lineTo(px-bw/2,cy+24);x.closePath();x.fill();x.stroke();
+      text(x,(g>0?'+':'')+g+' dB',px-4,cy+42,col,12,'center');text(x,ratio(g),px-4,cy+58,css('--muted'),11,'center');}
+    else{x.beginPath();x.arcS(px,cy,7,0,7);x.fillStyle=css('--accent');x.fill();text(x,nm,px,cy+42,css('--ink'),12,k?'right':'left');}
+    if(k<4){x.strokeStyle=css('--line');x.lineWidth=2;x.beginPath();x.moveTo(px+(k?42:8),cy);x.lineTo(bx(k+1)-(k+1<4?42:8),cy);x.stroke();}
+    if(k<4){const L0=lev[k];const mx=(px+bx(k+1))/2;label(x,`${L0} dBm`,mx-28,cy-14,css('--purple'),11);}});
+  /* ruler */
+  const y0=H-40,rx0=24,rx1=W-24,dmin=-30,dmax=40,RX=d=>rx0+(rx1-rx0)*(d-dmin)/(dmax-dmin);
+  x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();x.moveTo(rx0,y0);x.lineTo(rx1,y0);x.stroke();
+  [-30,-20,-10,-3,0,3,6,10,20,30,40].forEach(d=>{x.beginPath();x.moveTo(RX(d),y0-4);x.lineTo(RX(d),y0+4);x.stroke();if(W>520||[-30,-10,0,10,20,30,40].includes(d)){text(x,(d>0?'+':'')+d,RX(d),y0-8,css('--muted'),10,'center');text(x,ratio(d).replace('×',''),RX(d),y0+16,css('--ink'),10,'center');}});
+  text(x,'dB →',rx0,y0-20,css('--muted'),10);text(x,'功率比',rx0,y0+30,css('--muted'),10);
+  x.fillStyle=css('--amp');x.beginPath();x.moveTo(RX(Math.max(dmin,Math.min(dmax,T))),y0-2);x.lineTo(RX(Math.max(dmin,Math.min(dmax,T)))-6,y0-14);x.lineTo(RX(Math.max(dmin,Math.min(dmax,T)))+6,y0-14);x.closePath();x.fill();
+}
+[0,1,2,3].forEach(i=>$('g'+i).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-g]').forEach(b=>b.addEventListener('click',()=>{b.dataset.g.split(',').forEach((t,i)=>$('g'+i).value=t);Lab.draw(3);}));
+Lab.add(3,lab3,{chain:210});
+Lab.start();
+</script>
+</body></html>

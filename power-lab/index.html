@@ -1,0 +1,148 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>功率与变压器实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL MACHINES · WEEK 1–2 · POWER, TERMINAL EQUATIONS, IDEAL TRANSFORMER</div>
+  <h1>功率与变压器实验室</h1>
+  <p>三个实验对应 EM Week 1 和 Week 2：平均值和 RMS 到底在量什么、电感的伏秒平衡、理想变压器的匝数比和折算阻抗（以及为什么高压输电省电）。预设就是讲义和习题里的数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="../ac-phase-lab/">AC 相位实验室</a><a href="#lab1">实验 1 平均值与 RMS</a><a href="#lab2">实验 2 电感伏秒平衡</a><a href="#lab3">实验 3 理想变压器</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 平均值与 RMS（Week 1）</div>
+  <h2>平均值看「偏向哪边」，RMS 看「发多少热」</h2>
+  <p class="lead">上图是 v(t)，橙线是平均值（面积平分线）。下图是 v²(t)（正比于电阻上的瞬时功率），它的平均值开方就是 RMS。正弦波平均值是 0，但 v² 一直为正，所以照样能发热。</p>
+  <div class="btns" role="group" aria-label="波形"><button data-w="sin">正弦（Q1）</button><button data-w="sq">方波（Q2）</button><button data-w="tri">三角波（Q3）</button><button data-w="full">全波整流</button><button data-w="half">半波整流</button></div>
+  <div class="controls"><div class="ctl"><label for="wV">峰值 Vs</label><input id="wV" type="range" min="1" max="340" step="1" value="100"><output id="wVO"></output></div><div class="ctl"><label for="wD">直流偏置</label><input id="wD" type="range" min="-100" max="100" step="1" value="0"><output id="wDO"></output></div></div>
+  <div class="stage even"><canvas id="wv" height="250" aria-label="电压波形"></canvas><canvas id="wv2" height="250" aria-label="电压平方"></canvas></div>
+  <div class="read"><div><small>平均值 v̄</small><b id="wA"></b></div><div><small>RMS</small><b id="wR"></b></div><div><small>RMS / Vs</small><b id="wK"></b></div><div><small>课本公式</small><b id="wF" style="font-size:14px"></b></div></div>
+  <p class="note"><strong>试一试：</strong>选「全波整流」并把峰值拉到 340 V，平均值约 216 V、RMS 约 240 V，这就是英国市电。给正弦加直流偏置，RMS² 正好等于 偏置² + (Vs/√2)²：直流和交流各自发热，再相加。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 电感端方程 v = L di/dt（Week 1 Q6）</div>
+  <h2>方波电压加在电感上，电流变成三角波</h2>
+  <p class="lead">正电压期间电流以 V/L 的斜率上升，负电压期间下降。电压的正负面积（伏秒）相等时电流每周期回到原处，这就是稳态；把占空比调偏，伏秒不平衡，电流会一周期一周期地漂走。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-q="100,100,50,20,50">Q6 (a)：叠加 20 A 直流</button><button data-q="100,100,50,0,50">Q6 (b)：无直流</button><button data-q="100,100,50,0,60">占空比 60%（不平衡）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="iV">方波幅值 V</label><input id="iV" type="range" min="10" max="200" step="5" value="100"><output id="iVO"></output></div>
+    <div class="ctl"><label for="iL">电感 L (µH)</label><input id="iL" type="range" min="20" max="500" step="10" value="100"><output id="iLO"></output></div>
+    <div class="ctl"><label for="iF">频率 f (kHz)</label><input id="iF" type="range" min="10" max="200" step="5" value="50"><output id="iFO"></output></div>
+    <div class="ctl"><label for="i0">直流分量 (A)</label><input id="i0" type="range" min="-30" max="30" step="1" value="20"><output id="i0O"></output></div>
+    <div class="ctl"><label for="iD">占空比 (%)</label><input id="iD" type="range" min="30" max="70" step="1" value="50"><output id="iDO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="ind" height="270" aria-label="电感电压与电流"></canvas></div>
+  <div class="read"><div><small>斜率 V/L</small><b id="iS"></b></div><div><small>峰峰纹波 Δi</small><b id="iP"></b></div><div><small>电流范围（第 1 周期）</small><b id="iR"></b></div><div><small>平均电压 / 每周期漂移</small><b id="iW"></b></div></div>
+  <p class="note"><strong>要点：</strong>电感电压只决定电流的<strong>变化量</strong>，不决定直流分量（所以 Q6 两问的三角波形状一样，只是上下平移）。稳态时一个周期内电感的平均电压必须是 0。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 理想变压器与折算阻抗（Week 2）</div>
+  <h2>电压按匝数比变，电流反过来变，阻抗按平方变</h2>
+  <p class="lead">源电压 V₁ 先经过线路电阻 R_line，再进入匝数比 a = N₁/N₂ 的理想变压器，次级接负载 R_L。电源「看到」的是 R_line + a²R_L。右图扫遍所有匝数比，看线路损耗怎样随 a 变化。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-t="2400,10,4,0">例 2：2400:240 V，4 Ω</button><button data-t="240,20,2,0">自测 Q2：240:12 V，2 Ω</button><button data-t="100,8,8,0">扬声器 8:1，8 Ω</button><button data-t="400,1,1.6,0.5">例 4：400 V 直接输电</button><button data-t="11000,27.5,1.6,0.5">例 4：11 kV 输电再降压</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="tV">源电压 V₁ (V)</label><input id="tV" type="number" step="any" value="2400"><span></span></div>
+    <div class="ctl"><label for="ta">匝数比 a = N₁/N₂</label><input id="ta" type="range" min="-1" max="2" step="0.005" value="1"><output id="taO"></output></div>
+    <div class="ctl"><label for="tR">负载 R_L (Ω)</label><input id="tR" type="number" step="any" value="4"><span></span></div>
+    <div class="ctl"><label for="tW">线路电阻 R_line (Ω)</label><input id="tW" type="number" step="any" value="0"><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="tx" height="260" aria-label="变压器电路"></canvas><canvas id="teff" height="260" aria-label="效率随匝数比"></canvas></div>
+  <div class="read"><div><small>折算阻抗 Z′ = a²R_L</small><b id="tZ"></b></div><div><small>I₁ / I₂</small><b id="tI"></b></div><div><small>V₂（负载电压）</small><b id="tV2"></b></div><div><small>负载功率 / 线路损耗</small><b id="tP"></b></div><div><small>效率</small><b id="tE"></b></div></div>
+  <p class="note"><strong>记忆：</strong>电压 × a，电流 ÷ a，阻抗 × a²（折算到初级）。R_line 不为 0 时，把负载折算成很大的 Z′，线路电阻在串联分压里就可以忽略：例 4 里效率从 76% 升到 99.96%。</p>
+</section>
+</div>
+
+<script>
+function bgl(x,s,px,py,col){x.font=`600 12px ${css('--mono')}`;const w=x.measureText(s).width;x.fillStyle=css('--panel');x.globalAlpha=.85;x.fillRect(px-3,py-12,w+6,16);x.globalAlpha=1;label(x,s,px,py,col,12);}
+/* ---------- Lab 1: average & RMS ---------- */
+let wk='sin';
+const WF={sin:{f:t=>Math.sin(2*Math.PI*t),txt:'0　Vs/√2'},sq:{f:t=>(t%1)<.5?1:-1,txt:'0　Vs'},tri:{f:t=>{const u=t%1;return u<.5?1-2*u:2*u-1;},txt:'Vs/2　Vs/√3'},
+  full:{f:t=>Math.abs(Math.sin(2*Math.PI*t)),txt:'2Vs/π　Vs/√2'},half:{f:t=>Math.max(0,Math.sin(2*Math.PI*t)),txt:'Vs/π　Vs/2'}};
+function lab1(){
+  const Vs=+$('wV').value,dc=+$('wD').value,F=WF[wk];$('wVO').textContent=Vs+' V';$('wDO').textContent=dc+' V';pressGroup('#lab1 [data-w]',b=>b.dataset.w===wk);
+  const v=t=>Vs*F.f(t)+dc,N=4000;let s=0,s2=0;for(let i=0;i<N;i++){const t=(i+.5)/N,x=v(t);s+=x;s2+=x*x;}let avg=s/N;if(Math.abs(avg)<1e-9)avg=0;const rms=Math.sqrt(s2/N);
+  $('wA').textContent=fmt(avg,2)+' V';$('wR').textContent=fmt(rms,2)+' V';$('wK').textContent=fmt(rms/Vs,4);$('wF').textContent=dc?'（有偏置，见右图）':`v̄ = ${F.txt.split('　')[0]}，RMS = ${F.txt.split('　')[1]}`;
+  const lim=Math.max(Vs+Math.abs(dc),1)*1.1;
+  const [x,W,H]=fit($('wv'));const a=axes(x,W,H,{x0:0,x1:2,y0:-lim,y1:lim,xt:[0,0.5,1,1.5,2],yt:[-Math.round(lim/1.1),0,Math.round(lim/1.1)],xf:v=>v+'T',title:'v(t)  (V)',pl:44});
+  x.fillStyle=css('--fillB');x.beginPath();x.moveTo(a.X(0),a.Y(avg));for(let i=0;i<=600;i++){const t=2*i/600;x.lineTo(a.X(t),a.Y(v(t)));}x.lineTo(a.X(2),a.Y(avg));x.closePath();x.fill();
+  plot(x,a.X,a.Y,v,0,2,css('--blue'),2.4,800);
+  x.strokeStyle=css('--amp');x.lineWidth=2.4;x.setLineDash([7,4]);x.beginPath();x.moveTo(a.X(0),a.Y(avg));x.lineTo(a.X(2),a.Y(avg));x.stroke();x.setLineDash([]);
+  bgl(x,`v̄ = ${fmt(avg,1)}`,W-a.pr-96,a.Y(avg)-6,css('--amp'));
+  const [y,W2,H2]=fit($('wv2'));const m2=lim*lim;const b=axes(y,W2,H2,{x0:0,x1:2,y0:0,y1:m2,xt:[0,1,2],yt:[],xf:v=>v+'T',title:'v²(t) ∝ 发热功率',pl:12});
+  y.fillStyle=css('--fillA');y.beginPath();y.moveTo(b.X(0),b.Y(0));for(let i=0;i<=600;i++){const t=2*i/600;y.lineTo(b.X(t),b.Y(v(t)**2));}y.lineTo(b.X(2),b.Y(0));y.closePath();y.fill();
+  plot(y,b.X,b.Y,t=>v(t)**2,0,2,css('--amp'),2,800);
+  y.strokeStyle=css('--purple');y.lineWidth=2.4;y.setLineDash([7,4]);y.beginPath();y.moveTo(b.X(0),b.Y(rms*rms));y.lineTo(b.X(2),b.Y(rms*rms));y.stroke();y.setLineDash([]);
+  bgl(y,`RMS = ${fmt(rms,1)} V`,b.pl+4,Math.max(b.Y(rms*rms)-6,30),css('--purple'));
+}
+document.querySelectorAll('#lab1 [data-w]').forEach(b=>b.addEventListener('click',()=>{wk=b.dataset.w;Lab.draw(1);}));
+['wV','wD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+Lab.add(1,lab1,{wv:210,wv2:210});
+
+/* ---------- Lab 2: inductor ---------- */
+function lab2(){
+  const Lu=+$('iL').value,V=+$('iV').value,L=Lu*1e-6,f=+$('iF').value*1e3,I0=+$('i0').value,D=+$('iD').value/100;
+  $('iVO').textContent='±'+V+' V';$('iLO').textContent=Lu+' µH';$('iFO').textContent=(f/1e3)+' kHz';$('i0O').textContent=I0+' A';$('iDO').textContent=Math.round(D*100)+'%';
+  pressGroup('#lab2 [data-q]',b=>{const [a,c,d,e,g]=b.dataset.q.split(',').map(Number);return a===V&&c===Lu&&d===f/1e3&&e===I0&&g===Math.round(D*100);});
+  const T=1/f,s=V/L,dp=s*D*T,dn=s*(1-D)*T,drift=dp-dn,start=I0-dp/2,vavg=V*(2*D-1);
+  $('iS').textContent=fmt(s/1e6,3)+' A/µs';$('iP').textContent=fmt(dp,3)+' A';$('iR').textContent=`${fmt(start,2)} ↔ ${fmt(start+dp,2)} A`;
+  $('iW').textContent=`${fmt(vavg,2)} V / ${drift>=0?'+':''}${fmt(drift,3)} A`;$('iW').style.color=Math.abs(drift)>1e-9?css('--red'):css('--green');
+  const cyc=3,i=t=>{const k=Math.floor(t/T),u=t-k*T;return start+k*drift+(u<D*T?s*u:dp-s*(u-D*T));},vt=t=>((t/T)%1)<D?V:-V;
+  const [x,W,H]=fit($('ind'));const top=Math.floor(H*0.36);
+  const a=axes(x,W,top,{x0:0,x1:cyc*T*1e6,y0:-V*1.3,y1:V*1.3,xt:[],yt:[-V,0,V],title:'v_L (V)',pl:48,pb:6});
+  x.fillStyle=css('--fillA');for(let k=0;k<cyc;k++){x.fillRect(a.X(k*T*1e6),a.Y(V),a.X((k+D)*T*1e6)-a.X(k*T*1e6),a.Y(0)-a.Y(V));x.fillStyle=css('--fillB');x.fillRect(a.X((k+D)*T*1e6),a.Y(0),a.X((k+1)*T*1e6)-a.X((k+D)*T*1e6),a.Y(-V)-a.Y(0));x.fillStyle=css('--fillA');}
+  plot(x,a.X,a.Y,t=>vt(t*1e-6),0,cyc*T*1e6,css('--amp'),2.2,1200);
+  const lo=Math.min(start,start+cyc*drift)-Math.max(2,dp*0.3),hi=Math.max(start+dp,start+dp+cyc*drift)+Math.max(2,dp*0.3);
+  x.save();x.translate(0,top);const b=axes(x,W,H-top,{x0:0,x1:cyc*T*1e6,y0:lo,y1:hi,xt:[0,1,2,3].map(k=>+(k*T*1e6).toFixed(1)),yt:[start,I0,start+dp].map(v=>+v.toFixed(1)),title:'i_L (A)',xl:'t (µs)',pl:48,pt:20});
+  x.strokeStyle=css('--muted');x.setLineDash([4,4]);x.beginPath();x.moveTo(b.pl,b.Y(I0));x.lineTo(W-b.pr,b.Y(I0));x.stroke();x.setLineDash([]);
+  plot(x,b.X,b.Y,t=>i(t*1e-6),0,cyc*T*1e6,css('--blue'),2.6,1200);x.restore();
+}
+['iV','iL','iF','i0','iD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-q]').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.q.split(',');['iV','iL','iF','i0','iD'].forEach((id,k)=>$(id).value=v[k]);Lab.draw(2);}));
+Lab.add(2,lab2,{ind:240});
+
+/* ---------- Lab 3: ideal transformer ---------- */
+const unit=(v,u)=>{const a=Math.abs(v);return a>=1e6?fmt(v/1e6,3)+' M'+u:a>=1e3?fmt(v/1e3,3)+' k'+u:a>=1||a===0?fmt(v,3)+' '+u:a>=1e-3?fmt(v*1e3,3)+' m'+u:fmt(v,3)+' '+u;};
+function lab3(){
+  const V1=Math.max(+$('tV').value,0),a=10**(+$('ta').value),RL=Math.max(+$('tR').value,1e-6),Rw=Math.max(+$('tW').value,0);$('taO').textContent=fmt(a,3);
+  pressGroup('#lab3 [data-t]',b=>{const [p,q,r,s]=b.dataset.t.split(',').map(Number);return Math.abs(p-V1)<1e-9&&Math.abs(q-a)/q<3e-3&&Math.abs(r-RL)<1e-9&&Math.abs(s-Rw)<1e-9;});
+  const Zp=a*a*RL,I1=V1/(Rw+Zp),Vp=I1*Zp,V2=Vp/a,I2=I1*a,PL=V2*I2,Pw=I1*I1*Rw,eta=PL/(PL+Pw||1);
+  $('tZ').textContent=unit(Zp,'Ω');$('tI').textContent=`${unit(I1,'A')} / ${unit(I2,'A')}`;$('tV2').textContent=unit(V2,'V');$('tP').textContent=`${unit(PL,'W')} / ${unit(Pw,'W')}`;$('tE').textContent=(eta*100).toFixed(eta>0.999?3:1)+'%';
+  /* circuit */
+  const [x,W,H]=fit($('tx'));const yT=56,yB=H-70,xs=30,xr=Math.min(W*0.3,170),xc=W*0.55,xl=W-40,ink=css('--ink'),mut=css('--muted');
+  x.strokeStyle=ink;x.lineWidth=2;
+  /* source */
+  x.beginPath();x.arcS(xs,(yT+yB)/2,16,0,7);x.stroke();x.beginPath();for(let k=0;k<=20;k++){const u=k/20;x.lineTo(xs-9+18*u,(yT+yB)/2-7*Math.sin(2*Math.PI*u));}x.stroke();
+  const line=(pts)=>{x.beginPath();x.moveTo(...pts[0]);pts.slice(1).forEach(p=>x.lineTo(...p));x.stroke();};
+  line([[xs,(yT+yB)/2-16],[xs,yT],[xr-22,yT]]);line([[xs,(yT+yB)/2+16],[xs,yB],[xc-30,yB]]);
+  /* line resistor */
+  x.strokeStyle=Rw>0?css('--red'):mut;x.beginPath();x.moveTo(xr-22,yT);for(let k=0;k<6;k++)x.lineTo(xr-18+k*7,yT+(k%2?-7:7));x.lineTo(xr+22,yT);x.stroke();x.strokeStyle=ink;
+  line([[xr+22,yT],[xc-30,yT],[xc-30,yT+20]]);line([[xc-30,yB],[xc-30,yB-20]]);
+  /* coils */
+  const coil=(cx,n,dir)=>{const h=yB-yT-40,k=Math.max(2,Math.min(10,Math.round(n)));x.beginPath();for(let j=0;j<k;j++){const y0=yT+20+h*j/k;x.arc(cx,y0+h/k/2,h/k/2,-Math.PI/2,Math.PI/2,dir<0);}x.stroke();};
+  const n1=Math.min(10,Math.max(2,4*Math.sqrt(a))),n2=Math.min(10,Math.max(2,4/Math.sqrt(a)));coil(xc-30,n1,1);coil(xc+30,n2,-1);
+  x.strokeStyle=mut;x.lineWidth=3;line([[xc-8,yT+16],[xc-8,yB-16]]);line([[xc+8,yT+16],[xc+8,yB-16]]);x.lineWidth=2;x.strokeStyle=ink;
+  line([[xc+30,yT+20],[xc+30,yT],[xl,yT],[xl,yT+(yB-yT)/2-20]]);line([[xc+30,yB-20],[xc+30,yB],[xl,yB],[xl,yT+(yB-yT)/2+20]]);
+  x.strokeRect(xl-8,yT+(yB-yT)/2-20,16,40);
+  label(x,`${unit(V1,'V')}`,xs-14,yT-10,ink,12);label(x,`R_line ${fmt(Rw,3)}Ω`,xr-30,yT-12,Rw>0?css('--red'):mut,11);
+  text(x,`a = ${fmt(a,3)} : 1`,xc,yB+20,css('--accent'),12,'center');label(x,`R_L ${fmt(RL,3)}Ω`,xl-60,yB+20,ink,11);
+  label(x,`I₁ ${unit(I1,'A')}`,xr+26,yT+18,css('--blue'),12);label(x,`I₂ ${unit(I2,'A')}`,xc+38,yT-10,css('--blue'),12);
+  label(x,`V₂ ${unit(V2,'V')}`,Math.max(xc+36,xl-110),(yT+yB)/2+4,css('--amp'),12);
+  text(x,`电源看到：R_line + a²R_L = ${unit(Rw+Zp,'Ω')}`,8,H-12,css('--purple'),12);
+  /* efficiency vs a */
+  const [y,W2,H2]=fit($('teff'));const A0=-1,A1=2,ef=lg=>{const aa=10**lg,z=aa*aa*RL;return Rw>0?z/(z+Rw):1;};
+  const c=axes(y,W2,H2,{x0:A0,x1:A1,y0:0,y1:1.05,xt:[-1,0,1,2],yt:[0,0.5,1],xf:v=>String(10**v),yf:v=>(v*100)+'%',title:'效率 vs 匝数比 a（对数轴）',pl:40});
+  if(Rw>0){plot(y,c.X,c.Y,ef,A0,A1,css('--green'),2.6);}else text(y,'R_line = 0：理想情况，效率恒为 100%',c.X(0.5),c.Y(0.55),css('--muted'),12,'center');
+  const la=Math.log10(a);y.beginPath();y.arcS(c.X(la),c.Y(eta),6,0,7);y.fillStyle=css('--amp');y.fill();
+  label(y,(eta*100).toFixed(eta>0.999?2:1)+'%',Math.min(c.X(la)+8,W2-60),Math.max(c.Y(eta)+16,30),css('--amp'),12);
+}
+['tV','tR','tW'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));$('ta').addEventListener('input',()=>Lab.draw(3));
+document.querySelectorAll('#lab3 [data-t]').forEach(b=>b.addEventListener('click',()=>{const [p,q,r,s]=b.dataset.t.split(',');$('tV').value=p;$('ta').value=Math.log10(+q);$('tR').value=r;$('tW').value=s;Lab.draw(3);}));
+Lab.add(3,lab3,{tx:230,teff:230});
+Lab.start();
+</script>
+</body></html>

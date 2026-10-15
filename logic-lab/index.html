@@ -1,0 +1,231 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>数字逻辑实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.expr{font-family:var(--mono);font-size:17px;font-weight:600;overflow-wrap:anywhere;margin:0}
+.expr .ov{text-decoration:overline}
+.expr .t{white-space:nowrap}
+.plist{display:flex;flex-wrap:wrap;gap:6px 10px;font-family:var(--mono);font-size:13px;margin:0}
+.plist span{border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.plist span.ess{border-color:var(--accent);color:var(--accent)}
+.plist span.off{opacity:.45;text-decoration:line-through}
+html.embed .expr{font-size:15px}
+canvas.click{cursor:pointer}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">DIGITAL ELECTRONICS · TOOLBOX, SYNCHRONOUS FSM, ASYNCHRONOUS FSM</div>
+  <h1>数字逻辑实验室</h1>
+  <p>四个实验对应 DE ①②③：点 K-map 自动找质蕴含项和最小和；给触发器喂输入看时序；让讲义里的状态机一步步走（包括从未分配状态出发）；亲眼看静态冒险的毛刺怎样被多加的一项消掉。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 K-map</a><a href="#lab2">实验 2 触发器时序</a><a href="#lab3">实验 3 状态机</a><a href="#lab4">实验 4 静态冒险</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 4 变量 K-map（DE ①）</div>
+  <h2>点格子：0 → 1 → X（don't care）→ 0</h2>
+  <p class="lead">行是 AB、列是 CD，都按 Gray 码 00, 01, 11, 10 排，首尾相邻（环绕的圈画成从边上伸出去）。程序用 Quine–McCluskey 找出全部质蕴含项，再挑最少的几个覆盖所有 1。切换模式看同步（最小和）和异步（全部质蕴含项）的区别。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-k="0,1,2,5,7,9,10,13,15|">课件例子 Σ(0,1,2,5,7,9,10,13,15)</button><button data-k="2,3,6,7,12,13,14,15|">冒险例子 AB + A̅C</button><button data-k="0,2,8,10|">四个角</button><button data-k="1,3,7,11,15|0,2,5">带 don't care</button><button id="kclr">清空</button></div>
+  <div class="btns" role="group" aria-label="模式"><button data-m="min">最小和（同步 FSM）</button><button data-m="all">全部质蕴含项（AFSM / 消冒险）</button></div>
+  <div class="stage"><canvas id="kmap" class="click" height="300" aria-label="可点击的 K-map"></canvas>
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:0"><small style="color:var(--muted)">全部质蕴含项（绿框 = 必要）</small><p class="plist" id="kpl"></p><small style="color:var(--muted)">最小项列表</small><p class="plist" id="ksig" style="font-size:12px"></p></div></div>
+  <p class="expr" id="kexpr"></p>
+  <div class="read"><div><small>质蕴含项总数</small><b id="kn"></b></div><div><small>必要质蕴含项</small><b id="ke"></b></div><div><small>所选项数</small><b id="ks"></b></div><div><small>门成本（门输入总数）</small><b id="kc"></b></div></div>
+  <p class="note"><strong>试一试：</strong>点「课件例子」，A̅B̅C̅ 和 A̅B̅D̅ 都只是为了盖住 M0，最小和只留一个；「冒险例子」在最小和模式下只有 AB + A̅C，切到全部质蕴含项就多出 BC，这正是实验 4 里消除毛刺的那一项。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 触发器时序图（DE ①）</div>
+  <h2>点输入波形的格子改 0/1，看 Q 怎么走</h2>
+  <p class="lead">D、T、JK 是同步器件，只在时钟上升沿（虚线）采样输入；SR 是异步的，没有时钟，输入一变输出立刻跟着变（本课规定 S = R = 1 时置 1）。每一格是一个时钟周期。</p>
+  <div class="btns" role="group" aria-label="类型"><button data-f="D">D</button><button data-f="T">T</button><button data-f="JK">JK</button><button data-f="SR">SR（异步）</button><button id="frand">随机输入</button></div>
+  <div class="stage one"><canvas id="ff" class="click" height="250" aria-label="可点击的时序图"></canvas></div>
+  <div class="read"><div><small>转移方程</small><b id="feq"></b></div><div><small>激励表 0→0 / 0→1 / 1→0 / 1→1</small><b id="fex"></b></div><div><small>Q 翻转次数</small><b id="fn"></b></div></div>
+  <p class="note"><strong>看点：</strong>JK 里 J = K = 1 每个上升沿都翻转，等于 T = 1；J = 1、K = 0 置 1，等于 D = 1。这就是为什么 JK 能「冒充」其他触发器，激励表里的 X 也最多。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 同步状态机（DE ②）</div>
+  <h2>按时钟让讲义里的状态机走起来</h2>
+  <p class="lead">箭头是当前输入下每个状态的下一状态，全部由讲义推出的转移方程算出来（不是手画的）。点任意圆圈把机器「放」到那个状态，包括虚线的未分配状态，看它能不能自己回到正常序列。</p>
+  <div class="btns" role="group" aria-label="机器"><button data-s="ud">未分配状态例子（D 触发器，UD）</button><button data-s="step">步进电机（JK，DIR）</button><button data-s="cnt">4 位计数器（T）</button></div>
+  <div class="btns"><button id="sin">输入 = 1</button><button id="sclk" class="play">时钟 ↑ 走一步</button><button id="splay" class="play">▶ 自动</button><button id="sreset">回到初始</button></div>
+  <div class="stage even"><canvas id="sd" class="click" height="300" aria-label="状态图"></canvas><canvas id="sw" height="300" aria-label="各位波形历史"></canvas></div>
+  <div class="read"><div><small>当前状态</small><b id="scur"></b></div><div><small>下一状态</small><b id="snext"></b></div><div><small>转移方程</small><b id="seq" style="font-size:13px"></b></div></div>
+  <p class="note"><strong>看点：</strong>在未分配状态例子里点 010 或 110，再按时钟：010 去 101 或 100，110 去 101 或 000，都回到了正常序列。这就是讲义「先让 K-map 选去向，再检查」的结果 W、X、Y、Z。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 静态冒险（DE ③）</div>
+  <h2>T = AB + A̅C：理论上一直是 1，实际会闪一下 0</h2>
+  <p class="lead">令 B = C = 1，A 从 1 变 0 再变回 1。逻辑上 T 始终为 1，但反相器有延迟：AB 已经掉到 0 时，A̅C 还没升起来，中间 T 掉成 0。加上跨在两个圈之间的质蕴含项 BC（与 A 无关），毛刺就消失了。</p>
+  <div class="controls"><div class="ctl"><label for="hd">反相器延迟</label><input id="hd" type="range" min="0" max="12" step="0.5" value="5"><output id="hdO"></output></div><div class="btns"><button id="hbc">加上 BC 项</button></div></div>
+  <div class="stage one"><canvas id="haz" height="270" aria-label="静态冒险时序"></canvas></div>
+  <div class="read"><div><small>当前表达式</small><b id="hex"></b></div><div><small>毛刺宽度</small><b id="hw"></b></div><div><small>结论</small><b id="hv" style="font-size:14px"></b></div></div>
+  <p class="note"><strong>为什么同步 FSM 不在乎：</strong>毛刺在下一个时钟沿之前就结束了，触发器看不到；AFSM 的输出直接反馈，一个毛刺就可能让机器跳到错误状态，所以 AFSM 要用全部质蕴含项。</p>
+</section>
+</div>
+
+<script>
+/* ===== shared boolean helpers ===== */
+const G=[0,1,3,2],VN=['A','B','C','D'];
+const bits=(v,n)=>v.toString(2).padStart(n,'0');
+function term(v,m,names){names=names||VN;const n=names.length;let s='';for(let i=0;i<n;i++){const bit=n-1-i;if(m>>bit&1)continue;s+=(v>>bit&1)?names[i]:`<span class="ov">${names[i]}</span>`;}return s||'1';}
+function termTxt(v,m,names){names=names||VN;const n=names.length;let s='';for(let i=0;i<n;i++){const bit=n-1-i;if(m>>bit&1)continue;s+=(v>>bit&1)?names[i]:names[i]+'̅';}return s||'1';}
+const lits=(m,n)=>{let c=0;for(let i=0;i<n;i++)if(!(m>>i&1))c++;return c;};
+function covers(p,x){return ((x^p.v)&~p.m&15)===0;}
+function primes(on,dc,n=4){let cur=new Map();[...on,...dc].forEach(x=>cur.set(x+'/0',{v:x,m:0}));const P=[];
+  while(cur.size){const nxt=new Map(),used=new Set(),arr=[...cur.values()];
+    for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){const a=arr[i],b=arr[j];if(a.m!==b.m)continue;const d=a.v^b.v;if(d&&!(d&(d-1))){const m=a.m|d,v=a.v&~d;nxt.set(v+'/'+m,{v,m});used.add(i);used.add(j);}}
+    arr.forEach((a,i)=>{if(!used.has(i))P.push(a);});cur=nxt;}
+  return P.filter(p=>on.some(x=>covers(p,x)));}
+function minCover(P,on){let best=null;const cost=s=>s.length*100+s.reduce((a,p)=>a+lits(p.m,4),0);
+  const rec=(left,chosen)=>{if(best&&cost(chosen)>=cost(best))return;if(!left.length){best=chosen.slice();return;}
+    let pick=null,opts=null;left.forEach(x=>{const o=P.filter(p=>covers(p,x));if(!opts||o.length<opts.length){opts=o;pick=x;}});
+    opts.sort((a,b)=>lits(a.m,4)-lits(b.m,4)).forEach(p=>{chosen.push(p);rec(left.filter(x=>!covers(p,x)),chosen);chosen.pop();});};
+  rec(on.slice(),[]);return best||[];}
+
+/* ===== Lab 1: K-map ===== */
+let cell=new Array(16).fill(0),kmode='min';
+const setK=(on,dc)=>{cell.fill(0);on.forEach(i=>cell[i]=1);dc.forEach(i=>cell[i]=2);};
+setK([0,1,2,5,7,9,10,13,15],[]);
+const GC=['--amp','--blue','--purple','--green','--red','--accent','--volt'];
+let kgeom=null;
+function lab1(){
+  const on=[],dc=[];cell.forEach((v,i)=>{if(v===1)on.push(i);else if(v===2)dc.push(i);});
+  const P=on.length?primes(on,dc):[],sel=kmode==='all'?P:minCover(P,on),ess=P.filter(p=>on.some(x=>covers(p,x)&&P.filter(q=>covers(q,x)).length===1));
+  pressGroup('#lab1 [data-m]',b=>b.dataset.m===kmode);
+  pressGroup('#lab1 [data-k]',b=>{const [a,c]=b.dataset.k.split('|');const A=a?a.split(',').map(Number):[],C=c?c.split(',').map(Number):[];return cell.every((v,i)=>v===(A.includes(i)?1:C.includes(i)?2:0));});
+  $('kpl').innerHTML=P.length?P.map(p=>`<span class="${ess.includes(p)?'ess':''} ${sel.includes(p)?'':'off'}">${termTxt(p.v,p.m)}</span>`).join(''):'<span>—</span>';
+  $('ksig').textContent=`Σm(${on.join(', ')})`+(dc.length?` + d(${dc.join(', ')})`:'');
+  $('kexpr').innerHTML='T = '+(on.length?(on.length+dc.length===16&&on.length?'1':sel.map((p,i)=>`<span class="t" style="color:var(${GC[i%GC.length]})">${term(p.v,p.m)}</span>`).join(' + ')):'0');
+  $('kn').textContent=P.length;$('ke').textContent=ess.length;$('ks').textContent=sel.length;
+  const nots=new Set();sel.forEach(p=>{for(let i=0;i<4;i++){const bit=3-i;if(!(p.m>>bit&1)&&!(p.v>>bit&1))nots.add(i);}});
+  const and=sel.filter(p=>lits(p.m,4)>1).reduce((a,p)=>a+lits(p.m,4),0),cost=nots.size+and+(sel.length>1?sel.length:0);$('kc').textContent=on.length?cost:'—';
+  /* draw */
+  const [x,W,H]=fit($('kmap'));const S=Math.min((W-80)/4,(H-56)/4,64),x0=Math.max(60,(W-4*S)/2+20),y0=40;kgeom={x0,y0,S};
+  text(x,'AB \\ CD',x0-8,y0-14,css('--muted'),12,'right');
+  G.forEach((g,i)=>{label(x,bits(g,2),x0+i*S+S/2-9,y0-10,css('--muted'),12,'500');label(x,bits(g,2),x0-28,y0+i*S+S/2+5,css('--muted'),12,'500');});
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){const m=G[r]*4+G[c],px=x0+c*S,py=y0+r*S,v=cell[m];
+    x.fillStyle=v===1?css('--fillA'):v===2?css('--shade'):'transparent';x.fillRect(px,py,S,S);x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(px+.5,py+.5,S-1,S-1);
+    label(x,v===1?'1':v===2?'X':'0',px+S/2-5,py+S/2+7,v===0?css('--muted'):v===2?css('--purple'):css('--ink'),18);
+    label(x,String(m),px+4,py+13,css('--muted'),10,'400');}
+  /* groups */
+  const runs=idx=>{const s=[0,1,2,3].map(i=>idx.includes(i));if(s.every(Boolean))return [[0,3,0]];const out=[];
+    if(s[0]&&s[3]&&!(s[1]&&s[2])){const a=[],b=[];let i=0;while(i<4&&s[i]){a.push(i);i++;}let j=3;while(j>=0&&s[j]){b.unshift(j);j--;}out.push([a[0],a[a.length-1],-1]);out.push([b[0],b[b.length-1],1]);return out;}
+    let st=-1;for(let i=0;i<=4;i++){if(i<4&&s[i]){if(st<0)st=i;}else if(st>=0){out.push([st,i-1,0]);st=-1;}}return out;};
+  sel.forEach((p,k)=>{const rows=[0,1,2,3].filter(r=>covers(p,G[r]*4+(p.v&3))),cols=[0,1,2,3].filter(c=>covers(p,(p.v&12)+G[c]));
+    const rr=[0,1,2,3].filter(r=>((G[r]^(p.v>>2))&~(p.m>>2)&3)===0),cc=[0,1,2,3].filter(c=>((G[c]^p.v)&~p.m&3)===0);
+    const col=css(GC[k%GC.length]),ins=4+(k%4)*3.2;x.strokeStyle=col;x.lineWidth=2.6;
+    runs(rr).forEach(([r0,r1,rw])=>runs(cc).forEach(([c0,c1,cw])=>{let L=x0+c0*S+ins,R=x0+(c1+1)*S-ins,T=y0+r0*S+ins,B=y0+(r1+1)*S-ins;
+      if(cw===-1)L=x0-10;if(cw===1)R=x0+4*S+10;if(rw===-1)T=y0-10;if(rw===1)B=y0+4*S+10;
+      x.beginPath();x.roundRect?x.roundRect(L,T,R-L,B-T,10):x.rect(L,T,R-L,B-T);x.stroke();}));});
+  text(x,'点击格子切换',8,H-4,css('--muted'),11);
+}
+$('kmap').addEventListener('click',e=>{if(!kgeom)return;const r=$('kmap').getBoundingClientRect(),c=Math.floor((e.clientX-r.left-kgeom.x0)/kgeom.S),w=Math.floor((e.clientY-r.top-kgeom.y0)/kgeom.S);
+  if(c<0||c>3||w<0||w>3)return;const m=G[w]*4+G[c];cell[m]=(cell[m]+1)%3;Lab.draw(1);});
+document.querySelectorAll('#lab1 [data-k]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.k.split('|');setK(a?a.split(',').map(Number):[],c?c.split(',').map(Number):[]);Lab.draw(1);}));
+document.querySelectorAll('#lab1 [data-m]').forEach(b=>b.addEventListener('click',()=>{kmode=b.dataset.m;Lab.draw(1);}));
+$('kclr').addEventListener('click',()=>{cell.fill(0);Lab.draw(1);});
+Lab.add(1,lab1,{kmap:250});
+
+/* ===== Lab 2: flip-flop timing ===== */
+const NP=10;let ftype='JK',fin={D:[0,1,1,0,1,0,0,1,1,0],T:[1,0,1,1,0,0,1,0,1,1],J:[1,0,0,1,1,0,1,0,0,1],K:[0,0,1,1,1,0,0,1,0,1],S:[0,1,0,0,0,1,1,0,0,0],R:[0,0,0,1,0,0,1,0,1,0]};
+const FT={D:{ins:['D'],f:(q,i)=>i.D,eq:'Qₙ₊₁ = D',ex:'0 / 1 / 0 / 1'},T:{ins:['T'],f:(q,i)=>q^i.T,eq:'Qₙ₊₁ = T̅Q + TQ̅',ex:'0 / 1 / 1 / 0'},
+  JK:{ins:['J','K'],f:(q,i)=>(i.J&(1-q))|((1-i.K)&q),eq:'Qₙ₊₁ = JQ̅ + K̅Q',ex:'0X / 1X / X1 / X0'},SR:{ins:['S','R'],f:(q,i)=>i.S|((1-i.R)&q),eq:'Q⁺ = S + R̅Q',ex:'0X / 10 / 01 / X0'}};
+let fgeom=null;
+function lab2(){
+  const F=FT[ftype];pressGroup('#lab2 [data-f]',b=>b.dataset.f===ftype);$('feq').textContent=F.eq;$('fex').textContent=F.ex;
+  const [x,W,H]=fit($('ff'));const L=46,R=W-10,pw=(R-L)/NP,rows=['CLK',...F.ins,'Q'],rh=(H-24)/rows.length,amp=Math.min(rh*0.55,22);fgeom={L,pw,rh,rows};
+  const sync=ftype!=='SR';let q=0;const Q=[];let flips=0;
+  /* Q as function of time: list of [t,val] */
+  const seg=[[0,0]];for(let i=0;i<NP;i++){const inp={};F.ins.forEach(n=>inp[n]=fin[n][i]);const nq=F.f(q,inp);const t=sync?i+0.5:i;if(nq!==q){flips++;seg.push([t,nq]);}q=nq;Q.push(q);}
+  $('fn').textContent=flips;
+  for(let i=0;i<=NP;i++){x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(L+i*pw,6);x.lineTo(L+i*pw,H-14);x.stroke();}
+  if(sync){x.setLineDash([3,4]);x.strokeStyle=css('--purple');for(let i=0;i<NP;i++){x.beginPath();x.moveTo(L+(i+.5)*pw,6);x.lineTo(L+(i+.5)*pw,H-14);x.stroke();}x.setLineDash([]);}
+  const wave=(row,pts,col,lw=2.4)=>{const yb=10+row*rh+rh/2+amp/2,yt=yb-amp,Y=v=>v?yt:yb;x.strokeStyle=col;x.lineWidth=lw;x.beginPath();x.moveTo(L,Y(pts[0][1]));
+    for(let k=1;k<pts.length;k++){x.lineTo(L+pts[k][0]*pw,Y(pts[k-1][1]));x.lineTo(L+pts[k][0]*pw,Y(pts[k][1]));}x.lineTo(R,Y(pts[pts.length-1][1]));x.stroke();};
+  rows.forEach((nm,r)=>label(x,nm,6,10+r*rh+rh/2+5,r===rows.length-1?css('--amp'):css('--ink'),13));
+  if(sync){const c=[[0,0]];for(let i=0;i<NP;i++){c.push([i+.5,1]);c.push([i+1,0]);}wave(0,c,css('--muted'),1.8);}else text(x,'（异步，无时钟）',L+6,10+rh/2+4,css('--muted'),11);
+  F.ins.forEach((n,k)=>{const r=k+1,pts=[[0,fin[n][0]]];for(let i=1;i<NP;i++)if(fin[n][i]!==fin[n][i-1])pts.push([i,fin[n][i]]);
+    for(let i=0;i<NP;i++){if(fin[n][i]){x.fillStyle=css('--fillB');x.fillRect(L+i*pw+1,10+r*rh+rh/2-amp/2,pw-2,amp);}}wave(r,pts,css('--blue'));});
+  wave(rows.length-1,seg,css('--amp'),2.8);
+  if(ftype==='SR')for(let i=0;i<NP;i++)if(fin.S[i]&&fin.R[i])text(x,'S=R=1→1',L+(i+.5)*pw,10+(rows.length-1)*rh+4,css('--red'),10,'center');
+  text(x,'点蓝色那几行的格子切换 0/1',R,H-2,css('--muted'),11,'right');
+}
+$('ff').addEventListener('click',e=>{if(!fgeom)return;const r=$('ff').getBoundingClientRect(),i=Math.floor((e.clientX-r.left-fgeom.L)/fgeom.pw),row=Math.floor((e.clientY-r.top-10)/fgeom.rh);
+  if(i<0||i>=NP)return;const nm=fgeom.rows[row];if(!nm||nm==='CLK'||nm==='Q')return;fin[nm][i]^=1;Lab.draw(2);});
+document.querySelectorAll('#lab2 [data-f]').forEach(b=>b.addEventListener('click',()=>{ftype=b.dataset.f;Lab.draw(2);}));
+$('frand').addEventListener('click',()=>{FT[ftype].ins.forEach(n=>fin[n]=fin[n].map(()=>Math.random()<.5?1:0));Lab.draw(2);});
+Lab.add(2,lab2,{ff:220});
+
+/* ===== Lab 3: synchronous FSMs ===== */
+const B=(s,i)=>(s>>i)&1,N=v=>1-v;
+const MACH={
+  ud:{n:3,names:['Qc','Qb','Qa'],inp:'UD',init:0,unalloc:[2,6],ring:[0,1,3,4,5,7],inner:[2,6],
+    next:(s,u)=>{const c=B(s,2),b=B(s,1),a=B(s,0);return ((c&N(b))|(N(a)&N(u))|(N(c)&b&u))*4+((N(b)&a&u)|(c&a&N(u)))*2+((c&N(b))|(b&N(u))|(N(b)&u));},
+    eq:'Dc = QcQ̅b + Q̅aU̅D̅ + Q̅cQbUD　Db = Q̅bQaUD + QcQaU̅D̅　Da = QcQ̅b + QbU̅D̅ + Q̅bUD'},
+  step:{n:2,names:['Q2','Q1'],inp:'DIR',init:3,unalloc:[],ring:[3,2,0,1],inner:[],
+    next:(s,d)=>{const q2=B(s,1),q1=B(s,0),J2=(N(q1)&N(d))|(q1&d),K2=(q1&N(d))|(N(q1)&d),J1=(q2&N(d))|(N(q2)&d),K1=(q2&d)|(N(q2)&N(d));return ((J2&N(q2))|(N(K2)&q2))*2+((J1&N(q1))|(N(K1)&q1));},
+    eq:'J2 = (Q1⊕DIR)̅　K2 = Q1⊕DIR　J1 = Q2⊕DIR　K1 = (Q2⊕DIR)̅'},
+  cnt:{n:4,names:['Qd','Qc','Qb','Qa'],inp:null,init:0,unalloc:[],ring:[...Array(16).keys()],inner:[],next:s=>(s+1)&15,eq:'Ta = 1　Tb = Qa　Tc = QbQa　Td = QcQbQa'}};
+let mk='ud',sIn=1,sCur=0,hist=[0],sAnim=null,sAcc=0,sPlaying=false,sgeom=null;
+const lab=s=>MACH[mk].n?bits(s,MACH[mk].n):'';
+function sStep(){const M=MACH[mk];sCur=M.next(sCur,sIn);hist.push(sCur);if(hist.length>17)hist.shift();}
+function lab3(){
+  const M=MACH[mk];pressGroup('#lab3 [data-s]',b=>b.dataset.s===mk);
+  $('sin').style.display=M.inp?'':'none';$('sin').textContent=`${M.inp} = ${sIn}`;$('splay').textContent=sPlaying?'❚❚ 暂停':'▶ 自动';
+  const nx=M.next(sCur,sIn);$('scur').textContent=lab(sCur)+(M.unalloc.includes(sCur)?'（未分配）':'');$('snext').textContent=lab(nx);$('seq').textContent=M.eq;
+  const [x,W,H]=fit($('sd'));const cx=W/2,cy=H/2+4,Rr=Math.min(W,H)/2-26,rad=M.n===4?Math.max(12,Math.min(17,Rr*0.17)):20,pos={};
+  M.ring.forEach((s,k)=>{const a=-Math.PI/2+2*Math.PI*k/M.ring.length;pos[s]={x:cx+Rr*Math.cos(a),y:cy+Rr*Math.sin(a)};});
+  M.inner.forEach((s,k)=>pos[s]={x:cx+(k?1:-1)*Rr*0.38,y:cy});sgeom={pos,rad};
+  /* arrows under current input */
+  Object.keys(pos).map(Number).forEach(s=>{const t=M.next(s,sIn),a=pos[s],b=pos[t],hl=s===sCur;const col=hl?css('--amp'):M.unalloc.includes(s)?css('--purple'):css('--muted');
+    if(s===t){x.strokeStyle=col;x.lineWidth=1.6;x.beginPath();x.arcS(a.x,a.y-rad-8,8,0,7);x.stroke();return;}
+    const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,bend=M.ring.length>4?0.18:0.22,mx=(a.x+b.x)/2-uy*L*bend,my=(a.y+b.y)/2+ux*L*bend;
+    const sx=a.x+ux*rad,sy=a.y+uy*rad,ex=b.x-ux*(rad+2),ey=b.y-uy*(rad+2);x.strokeStyle=col;x.lineWidth=hl?3:1.5;x.setLineDash(M.unalloc.includes(s)?[5,4]:[]);
+    x.beginPath();x.moveTo(sx,sy);x.quadraticCurveTo(mx,my,ex,ey);x.stroke();x.setLineDash([]);const ang=Math.atan2(ey-my,ex-mx);arrow(x,ex-Math.cos(ang)*6,ey-Math.sin(ang)*6,ex,ey,col,hl?3:1.5,hl?11:8);});
+  Object.keys(pos).map(Number).forEach(s=>{const p=pos[s],un=M.unalloc.includes(s);x.beginPath();x.arcS(p.x,p.y,rad,0,7);x.fillStyle=s===sCur?css('--amp'):css('--panel');x.fill();
+    x.strokeStyle=un?css('--purple'):css('--accent');x.lineWidth=2;x.setLineDash(un?[4,3]:[]);x.stroke();x.setLineDash([]);
+    const t=lab(s);x.font=`600 ${M.n===4?10:12}px ${css('--mono')}`;x.fillStyle=s===sCur?css('--panel'):css('--ink');x.fillText(t,p.x-x.measureText(t).width/2,p.y+4);});
+  text(x,M.inp?`箭头 = ${M.inp} = ${sIn} 时的去向`:'无输入：每个状态只有一条箭头',8,14,css('--muted'),11);
+  if(M.unalloc.length)text(x,'虚线 = 未分配状态',8,H-6,css('--purple'),11);
+  /* waveform history */
+  const [y,W2,H2]=fit($('sw'));const n=M.n,L2=34,R2=W2-8,rh=(H2-30)/n,amp=Math.min(rh*0.55,22),stp=(R2-L2)/16;
+  text(y,`最近 ${hist.length} 个时钟的各位`,L2,14,css('--muted'),11);
+  M.names.forEach((nm,k)=>{const bit=n-1-k,yb=24+k*rh+rh/2+amp/2,Y=v=>v?yb-amp:yb;label(y,nm,2,yb-amp/2+4,css('--ink'),11);
+    y.strokeStyle=k===n-1?css('--amp'):css('--blue');y.lineWidth=2.2;y.beginPath();hist.forEach((s,i)=>{const v=B(s,bit),xa=L2+i*stp;if(i===0)y.moveTo(xa,Y(v));else{y.lineTo(xa,Y(B(hist[i-1],bit)));y.lineTo(xa,Y(v));}y.lineTo(xa+stp,Y(v));});y.stroke();});
+  hist.forEach((s,i)=>{if(M.unalloc.includes(s)){y.fillStyle=css('--shade');y.fillRect(L2+i*stp,22,stp,H2-30);}});
+}
+$('sd').addEventListener('click',e=>{if(!sgeom)return;const r=$('sd').getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
+  for(const [s,p] of Object.entries(sgeom.pos))if(Math.hypot(px-p.x,py-p.y)<sgeom.rad+4){sCur=+s;hist=[sCur];Lab.draw(3);return;}});
+$('sin').addEventListener('click',()=>{sIn^=1;Lab.draw(3);});$('sclk').addEventListener('click',()=>{sStep();Lab.draw(3);});
+$('sreset').addEventListener('click',()=>{sCur=MACH[mk].init;hist=[sCur];Lab.draw(3);});
+$('splay').addEventListener('click',()=>{sPlaying=!sPlaying;sAcc=0;Lab.draw(3);Lab.kick(sAnim);});
+document.querySelectorAll('#lab3 [data-s]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.s;sCur=MACH[mk].init;hist=[sCur];Lab.draw(3);}));
+Lab.add(3,lab3,{sd:250,sw:250});
+sAnim=Lab.anim(3,$('sd'),dt=>{sAcc+=dt;if(sAcc>=0.8){sAcc=0;sStep();Lab.draw(3);}},()=>sPlaying&&!REDUCE);
+
+/* ===== Lab 4: static hazard ===== */
+let useBC=false;
+function lab4(){
+  const di=+$('hd').value,dg=2;$('hdO').textContent=di+' 单位';$('hbc').setAttribute('aria-pressed',useBC);$('hbc').textContent=useBC?'去掉 BC 项':'加上 BC 项';
+  const T1=20,T2=62,tmax=100,A=t=>t<T1||t>=T2?1:0,An=t=>1-A(t-di),AB=t=>A(t-dg),AC=t=>An(t-dg),BC=()=>1,Tt=t=>(AB(t-dg)|AC(t-dg)|(useBC?BC():0));
+  let glitch=0;for(let t=0;t<tmax;t+=0.05)if(!Tt(t))glitch+=0.05;glitch=Math.round(glitch*10)/10;
+  $('hex').textContent=useBC?'T = AB + A̅C + BC':'T = AB + A̅C';$('hw').textContent=glitch?glitch+' 单位':'0（无毛刺）';
+  const v=$('hv');v.textContent=glitch?'A 下降沿后 T 闪了一下 0':'T 一直是 1 ✓';v.style.color=glitch?css('--red'):css('--green');
+  const rows=[['A',A,css('--ink')],['A̅（经反相器）',An,css('--blue')],['AB',AB,css('--blue')],['A̅C',AC,css('--blue')]];if(useBC)rows.push(['BC',t=>1,css('--purple')]);rows.push(['T',Tt,css('--amp')]);
+  const [x,W,H]=fit($('haz'));const L=Math.min(118,W*0.24),R=W-10,rh=(H-26)/rows.length,amp=Math.min(rh*0.55,20),X=t=>L+(R-L)*t/tmax;
+  rows.forEach(([nm,f,col],k)=>{const yb=8+k*rh+rh/2+amp/2,Y=s=>s?yb-amp:yb;text(x,nm,6,yb-amp/2+5,k===rows.length-1?css('--amp'):css('--ink'),12);
+    x.strokeStyle=col;x.lineWidth=k===rows.length-1?2.8:2;x.beginPath();let prev=f(0);x.moveTo(X(0),Y(prev));for(let t=0.05;t<=tmax;t+=0.05){const s=f(t);if(s!==prev){x.lineTo(X(t),Y(prev));x.lineTo(X(t),Y(s));prev=s;}}x.lineTo(X(tmax),Y(prev));x.stroke();
+    if(k===rows.length-1&&glitch){x.fillStyle=css('--red');x.globalAlpha=.18;x.fillRect(X(T1+dg+dg),8+k*rh,X(T1+dg+dg+glitch)-X(T1+dg+dg),rh);x.globalAlpha=1;text(x,'毛刺',X(T1+2*dg+glitch)+6,yb-4,css('--red'),12);}});
+  x.setLineDash([3,4]);x.strokeStyle=css('--purple');[T1,T2].forEach(t=>{x.beginPath();x.moveTo(X(t),4);x.lineTo(X(t),H-18);x.stroke();});x.setLineDash([]);
+  text(x,'B = C = 1，与门 / 或门延迟各 2 单位',R,H-4,css('--muted'),11,'right');
+}
+$('hd').addEventListener('input',()=>Lab.draw(4));$('hbc').addEventListener('click',()=>{useBC=!useBC;Lab.draw(4);});
+Lab.add(4,lab4,{haz:240});
+Lab.start();
+</script>
+</body></html>

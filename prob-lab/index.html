@@ -1,0 +1,162 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>概率实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · PROBABILITY</div>
+  <h1>概率实验室</h1>
+  <p>自己动手调骰子、抽骰子、取平均、做检验。四个实验对应 A · Week 1–3，按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 期望与方差（Week 1）</div>
+  <h2>改一改骰子的概率，期望和方差怎么变？</h2>
+  <p class="lead">拖动每个点数的权重（会自动归一化成概率）。紫线是期望 E[r]（分布的「重心」），阴影是 E ± σ。概率越往两头集中，方差越大。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-d="1,1,1,1,1,1">公平骰子</button><button data-d="3,1,1,1,1,3">Tutorial Q1（两头 0.3）</button><button data-d="1,1,1,1,1,20">灌铅骰子（6 占 4/5）</button><button data-d="0,1,4,4,1,0">集中在中间</button></div>
+  <div class="controls" id="dsl"></div>
+  <div class="stage one"><canvas id="pmf" height="250" aria-label="概率分布柱状图"></canvas></div>
+  <div class="read"><div><small>E[r] = Σ x·P(x)</small><b id="e1"></b></div><div><small>E[r²] = Σ x²·P(x)</small><b id="e2"></b></div><div><small>Var = E[r²] − (E[r])²</small><b id="v1"></b></div><div><small>标准差 σ</small><b id="s1"></b></div></div>
+  <p class="note"><strong>对照：</strong>公平骰子 E = 3.5、Var = 35/12 ≈ 2.92；Tutorial Q1 的骰子期望也是 3.5，但方差 4.25，因为概率集中在 1 和 6 两头。期望相同不代表分布一样。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Bayes 一袋骰子（Week 2）</div>
+  <h2>掷出 6，它是公平骰子还是灌铅骰子？</h2>
+  <p class="lead">先验 = 袋子里各有多少个；似然 = 每种骰子掷出 6 的概率；两者相乘再归一化就是后验。增加连续 6 的次数，看证据怎样一步步压过先验。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-b="43,6,1">讲义：43 公平 + 6 灌铅，掷 1 次 6</button><button data-b="43,6,2">讲义：连掷 2 次 6</button><button data-b="50,11,1">Tutorial Q4：50 + 11</button><button data-b="50,10,1">Tutorial Q4：50 + 10</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="nF">公平骰子个数</label><input id="nF" type="range" min="1" max="100" step="1" value="43"><output id="nFO"></output></div>
+    <div class="ctl"><label for="nW">灌铅骰子个数</label><input id="nW" type="range" min="1" max="60" step="1" value="6"><output id="nWO"></output></div>
+    <div class="ctl"><label for="pW">灌铅掷 6 的概率</label><input id="pW" type="range" min="0.2" max="1" step="0.01" value="0.8"><output id="pWO"></output></div>
+    <div class="ctl"><label for="k6">连续掷出 6 的次数</label><input id="k6" type="range" min="0" max="5" step="1" value="1"><output id="k6O"></output></div>
+  </div>
+  <p class="verdict" id="vb"></p>
+  <div class="stage one"><canvas id="bayes" height="260" aria-label="先验、联合、后验"></canvas></div>
+  <div class="read"><div><small>先验 P(F) / P(W)</small><b id="bp"></b></div><div><small>似然比 P(data|W)/P(data|F)</small><b id="bl"></b></div><div><small>后验 P(F|data)</small><b id="bF"></b></div><div><small>后验 P(W|data)</small><b id="bW"></b></div></div>
+  <p class="note"><strong>一句话：</strong>后验 ∝ 先验 × 似然。掷一次 6，灌铅骰子的似然是公平的 4.8 倍，但袋里公平骰子多 7.2 倍，所以还是判公平；掷两次 6，似然比变成 4.8² = 23，证据就赢了。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 中心极限定理（Week 3）</div>
+  <h2>不管原来是什么分布，平均值都会变成钟形</h2>
+  <p class="lead">每次从原分布抽 N 个数取平均，重复 4000 次，画出平均值的直方图。紫色曲线是 CLT 预测的高斯 N(m, v/N)。N 越大，直方图越像钟形、越窄。</p>
+  <div class="btns" role="group" aria-label="原分布"><button data-c="uni">均匀分布 [0, 1]</button><button data-c="die">公平骰子</button><button data-c="exp">指数分布（偏斜）</button><button data-c="two">两头高（Q1 骰子）</button><button id="resample">重新抽样</button></div>
+  <div class="controls"><div class="ctl"><label for="Nc">每次取平均的个数 N</label><input id="Nc" type="range" min="1" max="50" step="1" value="1"><output id="NcO"></output></div></div>
+  <div class="stage even"><canvas id="src" height="250" aria-label="原分布"></canvas><canvas id="hist" height="250" aria-label="样本均值直方图"></canvas></div>
+  <div class="read"><div><small>原分布 m / v</small><b id="c_mv"></b></div><div><small>预测 σ(r̄) = √(v/N)</small><b id="c_pred"></b></div><div><small>4000 次实测 σ(r̄)</small><b id="c_emp"></b></div><div><small>实测平均</small><b id="c_mean"></b></div></div>
+  <p class="note"><strong>试一试：</strong>选「指数分布」，N = 1 时直方图严重偏斜；拉到 N = 30，几乎就是对称的钟形。这就是为什么假设检验可以放心用 ±2σ 规则。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 假设检验 p = 0.05（Week 3）</div>
+  <h2>平均值偏了这么多，是运气还是真有问题？</h2>
+  <p class="lead">如果 H₀ 成立（一切正常），样本均值服从 N(m, v/N)，95% 落在 m ± 2σ(r̄) 里（绿色区）。观测值落在红色区就拒绝 H₀。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-h="3.5,2.9167,10,4">骰子：掷 10 次平均 4</button><button data-h="3.5,2.9167,50,4">骰子：掷 50 次平均 4</button><button data-h="3.5,2.9167,100,3.7">骰子：100 次平均 3.7</button><button data-h="100,0.2,10,99.7">Q3 巧克力：10 块平均 99.7 g</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="hm">H₀ 均值 m</label><input id="hm" type="number" step="any" value="3.5"><span></span></div>
+    <div class="ctl"><label for="hv">H₀ 方差 v</label><input id="hv" type="number" step="any" value="2.9167"><span></span></div>
+    <div class="ctl"><label for="hN">样本数 N</label><input id="hN" type="range" min="1" max="200" step="1" value="10"><output id="hNO"></output></div>
+    <div class="ctl"><label for="hX">观测均值 X</label><input id="hX" type="number" step="any" value="4"><span></span></div>
+  </div>
+  <p class="verdict" id="vh"></p>
+  <div class="stage one"><canvas id="test" height="240" aria-label="接受域与拒绝域"></canvas></div>
+  <div class="read"><div><small>σ(r̄) = √(v/N)</small><b id="h_s"></b></div><div><small>接受区间 m ± 2σ(r̄)</small><b id="h_int"></b></div><div><small>标准化 r̂ = (X − m)/σ(r̄)</small><b id="h_z"></b></div><div><small>要显著至少需要 N ≥</small><b id="h_N"></b></div></div>
+  <p class="note"><strong>注意：</strong>用的是样本均值的标准差 √(v/N)，不是单次的 √v。同样偏 0.5，掷 10 次不算显著，掷 50 次就显著了。接受 H₀ 只代表「证据不够」，不代表证明了它。</p>
+</section>
+</div>
+
+<script>
+/* ---------- Lab 1: die ---------- */
+const W1=[1,1,1,1,1,1];
+$('dsl').innerHTML=W1.map((_,i)=>`<div class="ctl"><label for="w${i}">点数 ${i+1} 权重</label><input id="w${i}" type="range" min="0" max="20" step="0.5" value="1"><output id="w${i}O"></output></div>`).join('');
+function lab1(){
+  const w=W1.map((_,i)=>+$('w'+i).value),S=w.reduce((a,b)=>a+b,0)||1,p=w.map(v=>v/S);
+  const E=p.reduce((a,v,i)=>a+v*(i+1),0),E2=p.reduce((a,v,i)=>a+v*(i+1)**2,0),V=E2-E*E,sd=Math.sqrt(Math.max(V,0));
+  p.forEach((v,i)=>$('w'+i+'O').textContent=v.toFixed(3));
+  $('e1').textContent=fmt(E,3);$('e2').textContent=fmt(E2,3);$('v1').textContent=fmt(V,3);$('s1').textContent=fmt(sd,3);
+  pressGroup('#lab1 [data-d]',b=>{const d=b.dataset.d.split(',').map(Number),s=d.reduce((a,c)=>a+c,0);return d.every((v,i)=>Math.abs(v/s-p[i])<1e-6);});
+  const [x,W,H]=fit($('pmf'));const ymax=Math.max(0.3,...p)*1.15;const a=axes(x,W,H,{x0:0.4,x1:6.6,y0:0,y1:ymax,xt:[1,2,3,4,5,6],yt:[0,+(ymax/2).toFixed(2),+ymax.toFixed(2)],title:'P(r = x)',xl:'点数 x'});
+  x.fillStyle=css('--shade');x.fillRect(a.X(E-sd),a.pt,a.X(E+sd)-a.X(E-sd),H-a.pt-a.pb);
+  p.forEach((v,i)=>{const bw=(a.X(1.35)-a.X(1));x.fillStyle=css('--amp');x.fillRect(a.X(i+1)-bw/2,a.Y(v),bw,a.Y(0)-a.Y(v));label(x,v.toFixed(2),a.X(i+1)-14,a.Y(v)-5,css('--ink'),11,'500');});
+  x.strokeStyle=css('--purple');x.lineWidth=2.4;x.beginPath();x.moveTo(a.X(E),a.pt);x.lineTo(a.X(E),H-a.pb);x.stroke();
+  label(x,`E = ${E.toFixed(2)}`,Math.min(a.X(E)+6,W-90),a.pt+14,css('--purple'),12);text(x,`阴影 = E ± σ（σ = ${sd.toFixed(2)}）`,a.pl+4,a.pt+14,css('--muted'),11);
+}
+W1.forEach((_,i)=>$('w'+i).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-d]').forEach(b=>b.addEventListener('click',()=>{b.dataset.d.split(',').forEach((v,i)=>$('w'+i).value=v);Lab.draw(1);}));
+Lab.add(1,lab1,{pmf:220});
+
+/* ---------- Lab 2: Bayes ---------- */
+function lab2(){
+  const nF=+$('nF').value,nW=+$('nW').value,pW=+$('pW').value,k=+$('k6').value;
+  $('nFO').textContent=nF;$('nWO').textContent=nW;$('pWO').textContent=pW.toFixed(2);$('k6O').textContent=k;
+  pressGroup('#lab2 [data-b]',b=>{const [a,c,d]=b.dataset.b.split(',').map(Number);return a===nF&&c===nW&&d===k&&Math.abs(pW-0.8)<1e-9;});
+  const PF=nF/(nF+nW),PWp=1-PF,LF=(1/6)**k,LW=pW**k,JF=PF*LF,JW=PWp*LW,Z=JF+JW,qF=JF/Z,qW=JW/Z;
+  $('bp').textContent=`${fmt(PF,3)} / ${fmt(PWp,3)}`;$('bl').textContent=fmt(LW/LF,3);$('bF').textContent=fmt(qF,4);$('bW').textContent=fmt(qW,4);
+  const v=$('vb');v.textContent=qF>0.5?`后验 P(F|data) = ${qF.toFixed(3)} > 0.5 → 推断：公平骰子`:`后验 P(W|data) = ${qW.toFixed(3)} > 0.5 → 推断：灌铅骰子`;v.style.color=qF>0.5?css('--blue'):css('--red');
+  const [x,W,H]=fit($('bayes'));const L=Math.min(178,W*0.3),R=W-20,bh=30,rows=[['① 先验（袋中比例）',PF,PWp],[`② × 似然（${k} 次 6）`,JF,JW],['③ 归一化 = 后验',qF,qW]];
+  const Fc=css('--blue'),Wc=css('--red');
+  rows.forEach(([name,a,b],i)=>{const y=20+i*(bh+36);text(x,name,8,y+bh/2+5,css('--ink'),13);
+    const k1=i===1?(R-L)/Math.max(LF,LW):(R-L),wa2=k1*a,wb2=k1*b;
+    x.fillStyle=Fc;x.globalAlpha=.85;x.fillRect(L,y,wa2,bh);x.fillStyle=Wc;x.fillRect(L+wa2,y,wb2,bh);x.globalAlpha=1;
+    x.strokeStyle=css('--line');x.strokeRect(L,y,R-L,bh);
+    const fa=i===1?a.toExponential(2):a.toFixed(3),fb=i===1?b.toExponential(2):b.toFixed(3);
+    label(x,`F ${fa}`,L+4,y+bh+15,Fc,12);const s=`W ${fb}`;x.font=`600 12px ${css('--mono')}`;label(x,s,Math.min(L+wa2+4,R-x.measureText(s).width),y+bh+15,Wc,12);});
+  text(x,'第②行按「最大可能值」缩放：总长变短说明掷出这样的结果本身就不太可能，归一化后再拉满',L,H-6,css('--muted'),11);
+}
+['nF','nW','pW','k6'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-b]').forEach(b=>b.addEventListener('click',()=>{const [a,c,d]=b.dataset.b.split(',');$('nF').value=a;$('nW').value=c;$('k6').value=d;$('pW').value=0.8;Lab.draw(2);}));
+Lab.add(2,lab2,{bayes:240});
+
+/* ---------- Lab 3: CLT ---------- */
+let seed=7;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+const DIST={uni:{n:'均匀 [0,1]',m:0.5,v:1/12,draw:()=>rnd(),pdf:[0,1]},die:{n:'公平骰子',m:3.5,v:35/12,draw:()=>1+Math.floor(rnd()*6),pmf:[1,2,3,4,5,6].map(v=>[v,1/6])},
+  exp:{n:'指数（均值 1）',m:1,v:1,draw:()=>-Math.log(1-rnd()),pdf:[0,5]},two:{n:'Q1 骰子',m:3.5,v:4.25,draw:()=>{const r=rnd();return r<.3?1:r<.4?2:r<.5?3:r<.6?4:r<.7?5:6;},pmf:[[1,.3],[2,.1],[3,.1],[4,.1],[5,.1],[6,.3]]}};
+let ck='exp',samples=null,sKey='';
+function lab3(){
+  const N=+$('Nc').value,D=DIST[ck];$('NcO').textContent=N;pressGroup('#lab3 [data-c]',b=>b.dataset.c===ck);
+  const key=ck+N+seed;if(key!==sKey){const M=4000;samples=new Float64Array(M);for(let i=0;i<M;i++){let s=0;for(let j=0;j<N;j++)s+=D.draw();samples[i]=s/N;}sKey=key;}
+  const M=samples.length,mean=samples.reduce((a,b)=>a+b,0)/M,sd=Math.sqrt(samples.reduce((a,b)=>a+(b-mean)**2,0)/(M-1)),ps=Math.sqrt(D.v/N);
+  $('c_mv').textContent=`${fmt(D.m,3)} / ${fmt(D.v,3)}`;$('c_pred').textContent=fmt(ps,4);$('c_emp').textContent=fmt(sd,4);$('c_mean').textContent=fmt(mean,4);
+  /* source */
+  const [x,W,H]=fit($('src'));
+  if(D.pmf){const a=axes(x,W,H,{x0:0.4,x1:6.6,y0:0,y1:0.35,xt:[1,2,3,4,5,6],yt:[0,0.1,0.2,0.3],title:`原分布：${D.n}（N = 1）`,pl:38});D.pmf.forEach(([v,q])=>{const bw=a.X(1.3)-a.X(1);x.fillStyle=css('--amp');x.fillRect(a.X(v)-bw/2,a.Y(q),bw,a.Y(0)-a.Y(q));});}
+  else if(ck==='uni'){const a=axes(x,W,H,{x0:-0.2,x1:1.2,y0:0,y1:1.3,xt:[0,0.5,1],yt:[0,1],title:`原分布：${D.n}`,pl:38});x.fillStyle=css('--fillA');x.fillRect(a.X(0),a.Y(1),a.X(1)-a.X(0),a.Y(0)-a.Y(1));plot(x,a.X,a.Y,t=>t>=0&&t<=1?1:0,-0.2,1.2,css('--amp'),2.4,600);}
+  else{const a=axes(x,W,H,{x0:0,x1:5,y0:0,y1:1.1,xt:[0,1,2,3,4,5],yt:[0,0.5,1],title:`原分布：${D.n}`,pl:38});plot(x,a.X,a.Y,t=>Math.exp(-t),0,5,css('--amp'),2.4);}
+  /* histogram */
+  const lo=D.m-4.2*Math.max(ps,1e-9),hi=D.m+4.2*Math.max(ps,1e-9),lo2=ck==='uni'?Math.max(lo,0):ck==='exp'?Math.max(lo,0):Math.max(lo,1),hi2=ck==='uni'?Math.min(hi,1):ck==='exp'?hi:Math.min(hi,6);
+  const nb=Math.min(40,ck==='die'||ck==='two'?Math.max(6,Math.round((hi2-lo2)*N)+1):40),bw=(hi2-lo2)/nb,cnt=new Array(nb).fill(0);
+  for(const s of samples){const i=Math.floor((s-lo2)/bw+1e-9);if(i>=0&&i<nb)cnt[i]++;else if(Math.abs(s-hi2)<1e-9)cnt[nb-1]++;}
+  const dens=cnt.map(c=>c/M/bw),g=t=>Math.exp(-((t-D.m)**2)/(2*ps*ps))/Math.sqrt(2*Math.PI)/ps,ymax=Math.max(...dens,g(D.m))*1.12;
+  const [y,W2,H2]=fit($('hist'));const b=axes(y,W2,H2,{x0:lo2,x1:hi2,y0:0,y1:ymax,xt:[lo2,(lo2+hi2)/2,hi2].map(v=>+v.toFixed(2)),yt:[],title:`4000 个样本均值（N = ${N}）`,pl:14});
+  dens.forEach((d,i)=>{y.fillStyle=css('--blue');y.globalAlpha=.55;y.fillRect(b.X(lo2+i*bw)+0.5,b.Y(d),Math.max(b.X(lo2+(i+1)*bw)-b.X(lo2+i*bw)-1,1),b.Y(0)-b.Y(d));});y.globalAlpha=1;
+  plot(y,b.X,b.Y,g,lo2,hi2,css('--purple'),2.6,300);text(y,'紫线 = CLT 预测',W2-b.pr,b.pt+12,css('--purple'),11,'right');
+}
+document.querySelectorAll('#lab3 [data-c]').forEach(b=>b.addEventListener('click',()=>{ck=b.dataset.c;Lab.draw(3);}));
+$('Nc').addEventListener('input',()=>Lab.draw(3));$('resample').addEventListener('click',()=>{seed=(seed*7919+13)>>>0;Lab.draw(3);});
+Lab.add(3,lab3,{src:200,hist:200});
+
+/* ---------- Lab 4: hypothesis test ---------- */
+function lab4(){
+  const m=+$('hm').value,v=Math.max(+$('hv').value,1e-12),N=+$('hN').value,X=+$('hX').value;$('hNO').textContent=N;
+  pressGroup('#lab4 [data-h]',b=>{const [a,c,d,e]=b.dataset.h.split(',').map(Number);return a===m&&Math.abs(c-v)<1e-3&&d===N&&e===X;});
+  const s=Math.sqrt(v/N),lo=m-2*s,hi=m+2*s,z=(X-m)/s,need=Math.abs(X-m)>0?Math.floor(4*v/((X-m)**2))+1:Infinity;
+  $('h_s').textContent=fmt(s,4);$('h_int').textContent=`[${fmt(lo,3)}, ${fmt(hi,3)}]`;$('h_z').textContent=fmt(z,3);$('h_N').textContent=isFinite(need)?need:'—';
+  const rej=Math.abs(z)>2,vh=$('vh');vh.textContent=rej?`|r̂| = ${Math.abs(z).toFixed(2)} > 2 → 拒绝 H₀：差别显著，不太可能是运气`:`|r̂| = ${Math.abs(z).toFixed(2)} ≤ 2 → 接受 H₀：证据不足以说有问题`;vh.style.color=rej?css('--red'):css('--green');
+  const span=Math.max(4.5*s,Math.abs(X-m)*1.25),x0=m-span,x1=m+span,pdf=t=>Math.exp(-((t-m)**2)/(2*s*s))/Math.sqrt(2*Math.PI)/s;
+  const [x,W,H]=fit($('test'));const a=axes(x,W,H,{x0,x1,y0:0,y1:pdf(m)*1.18,xt:[m-2*s,m,m+2*s].map(t=>+t.toFixed(3)),yt:[],pl:14,title:`H₀ 下样本均值的分布 N(${fmt(m,3)}, ${fmt(v,3)}/${N})`});
+  const fill=(a0,b0,col)=>{x.fillStyle=col;x.beginPath();x.moveTo(a.X(a0),a.Y(0));for(let i=0;i<=120;i++){const t=a0+(b0-a0)*i/120;x.lineTo(a.X(t),a.Y(pdf(t)));}x.lineTo(a.X(b0),a.Y(0));x.closePath();x.fill();};
+  x.globalAlpha=.25;fill(lo,hi,css('--green'));x.globalAlpha=.35;fill(x0,lo,css('--red'));fill(hi,x1,css('--red'));x.globalAlpha=1;
+  plot(x,a.X,a.Y,pdf,x0,x1,css('--ink'),2.2);
+  text(x,'95% 接受域',a.X(m),a.Y(pdf(m)*0.35),css('--green'),12,'center');text(x,'拒绝',a.X((x0+lo)/2),a.Y(0)-8,css('--red'),11,'center');text(x,'拒绝',a.X((hi+x1)/2),a.Y(0)-8,css('--red'),11,'center');
+  x.strokeStyle=css('--purple');x.lineWidth=3;x.beginPath();x.moveTo(a.X(X),a.pt+16);x.lineTo(a.X(X),a.Y(0));x.stroke();label(x,`X = ${fmt(X,3)}`,Math.min(Math.max(a.X(X)-30,4),W-90),a.pt+12,css('--purple'),12);
+}
+['hm','hv','hN','hX'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-h]').forEach(b=>b.addEventListener('click',()=>{const [a,c,d,e]=b.dataset.h.split(',');$('hm').value=a;$('hv').value=c;$('hN').value=d;$('hX').value=e;Lab.draw(4);}));
+Lab.add(4,lab4,{test:210});
+Lab.start();
+</script>
+</body></html>

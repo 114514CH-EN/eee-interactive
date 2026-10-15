@@ -1,0 +1,158 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>拉普拉斯实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ENGINEERING MATHEMATICS 2 · PART B · LAPLACE</div>
+  <h1>拉普拉斯实验室</h1>
+  <p>极点在 s 平面上的位置决定响应长什么样；阶跃和冲激让输入可以「开关」；卷积就是把过去每一刻的输入影响加起来。三个实验对应 B · Week 1–3。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 极点与响应</a><a href="#lab2">实验 2 第二平移定理</a><a href="#lab3">实验 3 卷积</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 极点与时域响应（Week 1–2）</div>
+  <h2>s 平面上的点，对应什么样的时域曲线？</h2>
+  <p class="lead">一对复极点 s = σ ± jω 对应 ȳ(s) = (s − σ) / ((s − σ)² + ω²)，逆变换是 e<sup>σt</sup>cos ωt。在左图里直接拖动极点，或者用滑块。实部 σ 管衰减快慢，虚部 ω 管振荡快慢。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-p="-1,0">RC 放电（实根）</button><button data-p="0,3">无阻尼弹簧 ±3j</button><button data-p="-1,3">有阻尼弹簧 −1±3j</button><button data-p="-3,0">快速衰减</button><button data-p="0.3,2">不稳定（右半平面）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sg">实部 σ</label><input id="sg" type="range" min="-3" max="1" step="0.05" value="-1"><output id="sgO"></output></div>
+    <div class="ctl"><label for="om">虚部 ω</label><input id="om" type="range" min="0" max="6" step="0.05" value="3"><output id="omO"></output></div>
+  </div>
+  <p class="verdict" id="v1"></p>
+  <div class="stage even"><canvas id="splane" height="300" aria-label="s 平面，可拖动极点" style="touch-action:none;cursor:grab"></canvas><canvas id="resp" height="300" aria-label="时域响应"></canvas></div>
+  <div class="read"><div><small>s 域</small><b id="r1s"></b></div><div><small>时域 y(t)</small><b id="r1t"></b></div><div><small>时间常数 1/|σ|</small><b id="r1tau"></b></div><div><small>振荡周期 2π/ω</small><b id="r1T"></b></div></div>
+  <p class="note"><strong>规律：</strong>极点在左半平面（σ &lt; 0）→ 衰减，系统稳定；在虚轴上 → 等幅振荡；在右半平面 → 越来越大，不稳定。离虚轴越远衰减越快，离实轴越远振荡越快。这就是配方 (s+a)²+ω² 和部分分式 1/(s+a) 逆变换的几何意义。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 阶跃、冲激与第二平移定理（Week 2）</div>
+  <h2>「推迟 a 秒」在 s 域里就是乘 e<sup>−as</sup></h2>
+  <p class="lead">H(t−a) 是在 t = a 打开的开关。第二平移定理要求开关后面跟的是<strong>整体平移过的</strong> f(t−a)。拖动 a，对比正确写法（实线）和常见错误 H(t−a)·f(t)（虚线）。</p>
+  <div class="btns" role="group" aria-label="函数"><button data-f="t">f(t) = t</button><button data-f="t2">f(t) = t²</button><button data-f="sin">f(t) = sin 2t</button><button data-f="exp">f(t) = e^(−t)</button><button data-f="one">f(t) = 1（阶跃）</button><button data-f="delta">δ(t−a) 冲激</button></div>
+  <div class="controls"><div class="ctl"><label for="a2">延迟 a</label><input id="a2" type="range" min="0" max="4" step="0.1" value="2"><output id="a2O"></output></div></div>
+  <div class="stage one"><canvas id="shift" height="280" aria-label="平移后的函数"></canvas></div>
+  <div class="read"><div><small>时域</small><b id="r2t"></b></div><div><small>F(s) = 𝓛{f(t)}</small><b id="r2F"></b></div><div><small>拉普拉斯变换</small><b id="r2L"></b></div></div>
+  <p class="note"><strong>看虚线：</strong>H(t−a)·f(t) 只是把 t &lt; a 的部分「剪掉」，曲线没有右移，所以它的变换<strong>不是</strong> e<sup>−as</sup>F(s)。遇到这种题要先把 f(t) 改写成 (t−a) 的函数，例如 t = (t−a) + a（Tutorial Q2 就是这个套路）。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 卷积（Week 3）</div>
+  <h2>翻转、平移、相乘、积分</h2>
+  <p class="lead">(f∗g)(t) = ∫₀ᵗ f(u) g(t−u) du。上图：橙色是 f(u)，蓝色是把 g 翻转再平移到 t 的 g(t−u)，两者重叠部分的乘积面积（紫色）就是这一刻的卷积值。下图把每个 t 的面积连成曲线。</p>
+  <div class="controls">
+    <div class="ctl"><label for="cf">f(t)</label><select id="cf"><option value="one">1（阶跃）</option><option value="exp" selected>e^(−t)</option><option value="rect">矩形脉冲 0–1</option><option value="t">t</option><option value="sin">sin t</option></select><span></span></div>
+    <div class="ctl"><label for="cg">g(t)</label><select id="cg"><option value="one" selected>1（阶跃）</option><option value="exp">e^(−t)</option><option value="rect">矩形脉冲 0–1</option><option value="t">t</option><option value="sin">sin t</option></select><span></span></div>
+    <div class="ctl"><label for="ct">时刻 t</label><input id="ct" type="range" min="0" max="6" step="0.02" value="1.5"><output id="ctO"></output></div>
+  </div>
+  <div class="btns"><button id="play3" class="play">▶ 播放 t</button><button data-cv="one,one">1 ∗ 1</button><button data-cv="exp,one">e^(−t) ∗ 1</button><button data-cv="exp,exp">e^(−t) ∗ e^(−t)</button><button data-cv="rect,rect">矩形 ∗ 矩形</button></div>
+  <div class="stage one"><canvas id="conv1" height="210" aria-label="翻转平移与乘积"></canvas><canvas id="conv2" height="190" aria-label="卷积结果"></canvas></div>
+  <div class="read"><div><small>(f∗g)(t) 数值积分</small><b id="r3v"></b></div><div><small>解析结果</small><b id="r3a"></b></div><div><small>s 域：F(s)·G(s)</small><b id="r3s"></b></div></div>
+  <p class="note"><strong>为什么重要：</strong>时域里卷积要做积分，s 域里只要相乘。把 g 换成系统的冲激响应，f 换成输入，(f∗g) 就是输出，这就是传递函数 Y = G·U 的来历。</p>
+</section>
+</div>
+
+<script>
+/* ---------- Lab 1: poles ---------- */
+const P={s:-1,w:3,drag:false};
+function setP(s,w){P.s=Math.max(-3,Math.min(1,Math.round(s*20)/20));P.w=Math.max(0,Math.min(6,Math.round(w*20)/20));$('sg').value=P.s;$('om').value=P.w;Lab.draw(1);}
+function lab1(){
+  const s=P.s,w=P.w;$('sgO').textContent=s.toFixed(2);$('omO').textContent=w.toFixed(2);
+  pressGroup('#lab1 [data-p]',b=>{const [a,c]=b.dataset.p.split(',').map(Number);return Math.abs(a-s)<1e-9&&Math.abs(c-w)<1e-9;});
+  const sgn=v=>v>=0?'− '+fmt(Math.abs(v),2):'+ '+fmt(Math.abs(v),2);
+  $('r1s').textContent=w>0?`(s ${sgn(s)})/((s ${sgn(s)})² + ${fmt(w*w,2)})`:`1/(s ${sgn(s)})`;
+  const ek=s===-1?'−t':s===1?'t':fmt(s,2).replace('-','−')+'t',wk=w===1?'':fmt(w,2);$('r1t').textContent=w>0?(s===0?`cos ${wk}t`:`e^(${ek})·cos ${wk}t`):(s===0?'1（常数）':`e^(${ek})`);
+  $('r1tau').textContent=s===0?'∞（不衰减）':fmt(1/Math.abs(s),2)+' s';$('r1T').textContent=w>0?fmt(2*Math.PI/w,2)+' s':'—（不振荡）';
+  const v=$('v1');
+  if(s<-0.001){v.textContent=w>0?'左半平面复极点 → 衰减振荡（有阻尼弹簧）':'负实轴上的极点 → 单调指数衰减（RC 放电）';v.style.color=css('--green');}
+  else if(s>0.001){v.textContent='右半平面 → 响应越来越大，系统不稳定';v.style.color=css('--red');}
+  else{v.textContent=w>0?'虚轴上 → 等幅振荡，永远不衰减（无阻尼弹簧）':'原点 → 常数（阶跃）';v.style.color=css('--blue');}
+  /* s-plane */
+  const [x,W,H]=fit($('splane')),G=css('--grid'),M=css('--muted');
+  const ax=axes(x,W,H,{x0:-3.3,x1:1.3,y0:-6.6,y1:6.6,xt:[-3,-2,-1,0,1],yt:[-6,-3,0,3,6],pl:34,title:'s 平面（拖动极点）',zero:false});
+  x.fillStyle=css('--fillA');x.fillRect(ax.X(0),ax.pt,ax.X(1.3)-ax.X(0),H-ax.pt-ax.pb);
+  text(x,'不稳定',ax.X(0)+4,ax.pt+14,css('--red'),11);text(x,'稳定',ax.X(-3.3)+4,ax.pt+14,css('--green'),11);
+  x.strokeStyle=M;x.lineWidth=1.2;x.beginPath();x.moveTo(ax.X(0),ax.pt);x.lineTo(ax.X(0),H-ax.pb);x.moveTo(ax.pl,ax.Y(0));x.lineTo(W-ax.pr,ax.Y(0));x.stroke();
+  text(x,'jω',ax.X(0)+4,ax.pt+28,M,11);text(x,'σ',W-ax.pr-8,ax.Y(0)-4,M,11);
+  const P1=[ax.X(s),ax.Y(w)],P2=[ax.X(s),ax.Y(-w)];
+  x.setLineDash([3,4]);x.strokeStyle=css('--purple');x.lineWidth=1;x.beginPath();x.moveTo(P1[0],ax.Y(0));x.lineTo(P1[0],P1[1]);x.moveTo(ax.X(0),P1[1]);x.lineTo(P1[0],P1[1]);x.stroke();x.setLineDash([]);
+  [P1,P2].forEach(([px,py],i)=>{x.strokeStyle=css('--amp');x.lineWidth=3;x.beginPath();x.moveTo(px-7,py-7);x.lineTo(px+7,py+7);x.moveTo(px+7,py-7);x.lineTo(px-7,py+7);x.stroke();});
+  label(x,`${fmt(s,2)}${w>0?' + j'+fmt(w,2):''}`,Math.min(P1[0]+10,W-110),P1[1]-8,css('--amp'),12);
+  /* response */
+  const T=8,f=t=>Math.exp(s*t)*(w>0?Math.cos(w*t):1),ymax=Math.min(Math.max(1.1,...Array.from({length:81},(_,i)=>Math.abs(f(i*T/80)))),6);
+  const [y,W2,H2]=fit($('resp'));const b=axes(y,W2,H2,{x0:0,x1:T,y0:-ymax,y1:ymax,xt:[0,2,4,6,8],yt:[-ymax,0,ymax].map(v=>+v.toFixed(1)),title:'y(t)',xl:'t (s)'});
+  if(s!==0){y.setLineDash([4,4]);plot(y,b.X,b.Y,t=>Math.exp(s*t),0,T,css('--muted'),1.2);plot(y,b.X,b.Y,t=>-Math.exp(s*t),0,T,css('--muted'),1.2);y.setLineDash([]);}
+  y.save();y.beginPath();y.rect(b.pl,b.pt,W2-b.pl-b.pr,H2-b.pt-b.pb);y.clip();plot(y,b.X,b.Y,f,0,T,css('--purple'),2.6,600);y.restore();
+  if(s!==0)text(y,'虚线 = 包络 ±e^(σt)',b.pl+4,H2-b.pb-6,css('--muted'),11);
+}
+(function(){const c=$('splane');const pick=e=>{const r=c.getBoundingClientRect(),W=r.width,H=+c.dataset.h||300,pl=34,pr=12,pt=22,pb=30;
+  const s=-3.3+(e.clientX-r.left-pl)/(W-pl-pr)*4.6,w=Math.abs(6.6-(e.clientY-r.top-pt)/(H-pt-pb)*13.2);setP(s,w);};
+  c.addEventListener('pointerdown',e=>{P.drag=true;c.setPointerCapture(e.pointerId);c.style.cursor='grabbing';pick(e);});
+  c.addEventListener('pointermove',e=>{if(P.drag)pick(e);});c.addEventListener('pointerup',()=>{P.drag=false;c.style.cursor='grab';});})();
+$('sg').addEventListener('input',e=>{P.s=+e.target.value;Lab.draw(1);});$('om').addEventListener('input',e=>{P.w=+e.target.value;Lab.draw(1);});
+document.querySelectorAll('#lab1 [data-p]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.p.split(',').map(Number);setP(a,c);}));
+Lab.add(1,lab1,{splane:240,resp:240});
+
+/* ---------- Lab 2: second shift ---------- */
+const F2={t:{f:t=>t,name:'t',F:'1/s²',L:a=>`e^(−${a}s)/s²`},t2:{f:t=>t*t,name:'t²',F:'2/s³',L:a=>`2e^(−${a}s)/s³`},
+ sin:{f:t=>Math.sin(2*t),name:'sin 2t',F:'2/(s²+4)',L:a=>`2e^(−${a}s)/(s²+4)`},exp:{f:t=>Math.exp(-t),name:'e^(−t)',F:'1/(s+1)',L:a=>`e^(−${a}s)/(s+1)`},
+ one:{f:t=>1,name:'1',F:'1/s',L:a=>`e^(−${a}s)/s`},delta:{f:null,name:'δ',F:'1',L:a=>`e^(−${a}s)`}};
+let k2='t';
+function lab2(){
+  const a=+$('a2').value,F=F2[k2];$('a2O').textContent=a.toFixed(1);pressGroup('#lab2 [data-f]',b=>b.dataset.f===k2);
+  const T=7,[x,W,H]=fit($('shift'));
+  let ymax=2;if(F.f){ymax=1.1*Math.max(...Array.from({length:141},(_,i)=>Math.abs(F.f(i*T/140))));ymax=Math.min(Math.max(ymax,1.2),k2==='t2'?12:8);}
+  const ymin=(k2==='sin')?-ymax:-0.15*ymax,b=axes(x,W,H,{x0:0,x1:T,y0:ymin,y1:ymax,xt:[0,1,2,3,4,5,6,7],yt:[0,+(ymax/2).toFixed(1),+ymax.toFixed(1)],xl:'t',title:''});
+  x.save();x.beginPath();x.rect(b.pl,b.pt,W-b.pl-b.pr,H-b.pt-b.pb);x.clip();
+  x.fillStyle=css('--shade');x.fillRect(b.X(0),b.pt,b.X(a)-b.X(0),H-b.pt-b.pb);
+  if(F.f){
+    x.globalAlpha=.35;plot(x,b.X,b.Y,F.f,0,T,css('--muted'),2);x.globalAlpha=1;
+    x.setLineDash([6,5]);plot(x,b.X,b.Y,t=>t<a?NaN:F.f(t),a,T,css('--red'),2);x.setLineDash([]);
+    plot(x,b.X,b.Y,t=>t<a?0:F.f(t-a),0,T,css('--accent'),3,700);
+  }else{x.strokeStyle=css('--accent');x.lineWidth=3;x.beginPath();x.moveTo(b.X(0),b.Y(0));x.lineTo(b.X(T),b.Y(0));x.stroke();arrow(x,b.X(a),b.Y(0),b.X(a),b.Y(ymax*0.85),css('--accent'),3,12);}
+  x.restore();
+  x.strokeStyle=css('--purple');x.setLineDash([3,3]);x.beginPath();x.moveTo(b.X(a),b.pt);x.lineTo(b.X(a),H-b.pb);x.stroke();x.setLineDash([]);
+  label(x,'t = a',b.X(a)+4,b.pt+12,css('--purple'),12);text(x,'开关关着（输出 0）',b.X(0)+4,b.pt+28,css('--muted'),11);
+  const ly=b.pt+12;let lx=W-b.pr-8;const leg=F.f?[['正确：H(t−a)·f(t−a)',css('--accent'),false],['错误：H(t−a)·f(t)',css('--red'),true],['原函数 f(t)',css('--muted'),false]]:[['δ(t−a)：在 t = a 的一次冲击',css('--accent'),false]];
+  x.font=`12px ${css('--body')}`;{const mw=Math.max(...leg.map(l=>x.measureText(l[0]).width));x.fillStyle=css('--panel');x.globalAlpha=.9;x.fillRect(lx-mw-36,ly-15,mw+40,leg.length*18+6);x.globalAlpha=1;}leg.forEach(([s,c,d],i)=>{const w=x.measureText(s).width;const yy=ly+i*18;x.strokeStyle=c;x.lineWidth=2.4;x.setLineDash(d?[5,4]:[]);x.beginPath();x.moveTo(lx-w-30,yy-4);x.lineTo(lx-w-8,yy-4);x.stroke();x.setLineDash([]);x.fillStyle=c;x.fillText(s,lx-w,yy);});
+  $('r2t').textContent=F.f?`H(t−${a})·${F.name.replace(/t/g,`(t−${a})`)}`:`δ(t−${a})`;$('r2F').textContent=F.f?F.F:'1';$('r2L').textContent=F.L(a);
+}
+$('a2').addEventListener('input',()=>Lab.draw(2));document.querySelectorAll('#lab2 [data-f]').forEach(b=>b.addEventListener('click',()=>{k2=b.dataset.f;Lab.draw(2);}));
+Lab.add(2,lab2,{shift:250});
+
+/* ---------- Lab 3: convolution ---------- */
+const FN={one:{f:u=>u>=0?1:0,n:'1',S:'1/s'},exp:{f:u=>u>=0?Math.exp(-u):0,n:'e^(−t)',S:'1/(s+1)'},rect:{f:u=>u>=0&&u<=1?1:0,n:'矩形',S:'(1−e^(−s))/s'},
+  t:{f:u=>u>=0?u:0,n:'t',S:'1/s²'},sin:{f:u=>u>=0?Math.sin(u):0,n:'sin t',S:'1/(s²+1)'}};
+const AN={'one,one':t=>[t,'t'],'exp,one':t=>[1-Math.exp(-t),'1 − e^(−t)'],'one,exp':t=>[1-Math.exp(-t),'1 − e^(−t)'],'exp,exp':t=>[t*Math.exp(-t),'t·e^(−t)'],
+  't,one':t=>[t*t/2,'t²/2'],'one,t':t=>[t*t/2,'t²/2'],'one,sin':t=>[1-Math.cos(t),'1 − cos t'],'sin,one':t=>[1-Math.cos(t),'1 − cos t'],
+  'rect,rect':t=>[t<1?t:(t<2?2-t:0),'三角形（宽 2）'],'t,t':t=>[t**3/6,'t³/6']};
+const conv=(f,g,t,n=400)=>{if(t<=0)return 0;let s=0;const h=t/n;for(let i=0;i<=n;i++){const u=i*h,wt=(i===0||i===n)?0.5:1;s+=wt*f(u)*g(t-u);}return s*h;};
+const s3={play:false};
+function lab3(){
+  const fk=$('cf').value,gk=$('cg').value,f=FN[fk].f,g=FN[gk].f,t=+$('ct').value,T=6;$('ctO').textContent=t.toFixed(2);
+  pressGroup('#lab3 [data-cv]',b=>b.dataset.cv===fk+','+gk);
+  const [x,W,H]=fit($('conv1'));const ymax=Math.max(1.2,...Array.from({length:121},(_,i)=>Math.max(f(i*T/120),g(i*T/120))))*1.1;
+  const b=axes(x,W,H,{x0:-1,x1:T,y0:-0.15*ymax,y1:ymax,xt:[-1,0,1,2,3,4,5,6],yt:[0,1],xl:'u',title:''});
+  x.save();x.beginPath();x.rect(b.pl,b.pt,W-b.pl-b.pr,H-b.pt-b.pb);x.clip();
+  x.fillStyle=css('--shade');x.beginPath();x.moveTo(b.X(0),b.Y(0));for(let i=0;i<=200;i++){const u=t*i/200;x.lineTo(b.X(u),b.Y(f(u)*g(t-u)));}x.lineTo(b.X(t),b.Y(0));x.closePath();x.fill();
+  plot(x,b.X,b.Y,f,-1,T,css('--amp'),2.6,600);plot(x,b.X,b.Y,u=>g(t-u),-1,T,css('--blue'),2.6,600);
+  plot(x,b.X,b.Y,u=>u>=0&&u<=t?f(u)*g(t-u):NaN,0,t,css('--purple'),2,300);x.restore();
+  x.strokeStyle=css('--blue');x.setLineDash([3,3]);x.beginPath();x.moveTo(b.X(t),b.pt);x.lineTo(b.X(t),H-b.pb);x.stroke();x.setLineDash([]);label(x,'u = t',b.X(t)+4,b.pt+12,css('--blue'),12);
+  x.font=`12px ${css('--body')}`;[[`f(u) = ${FN[fk].n}`,css('--amp')],[`g(t−u)：g 翻转后右移到 t`,css('--blue')],['乘积 f(u)g(t−u)，面积 = 卷积值',css('--purple')]].forEach(([s,c],i)=>{x.fillStyle=c;x.fillText(s,W-b.pr-x.measureText(s).width,b.pt+12+i*17);});
+  const [y,W2,H2]=fit($('conv2'));const vals=Array.from({length:121},(_,i)=>conv(f,g,i*T/120,160)),cmax=Math.max(1,...vals.map(Math.abs))*1.15,cmin=Math.min(0,...vals)*1.15;
+  const c=axes(y,W2,H2,{x0:-1,x1:T,y0:cmin-0.05,y1:cmax,xt:[-1,0,1,2,3,4,5,6],yt:[0,+(cmax/2).toFixed(2)],xl:'t',title:'(f∗g)(t)'});
+  y.globalAlpha=.3;plot(y,c.X,c.Y,tt=>tt<0?0:conv(f,g,tt,160),-1,T,css('--purple'),2,240);y.globalAlpha=1;
+  plot(y,c.X,c.Y,tt=>tt<0?0:conv(f,g,tt,160),-1,t,css('--purple'),3,Math.max(10,Math.round(240*(t+1)/(T+1))));
+  const v=conv(f,g,t);y.fillStyle=css('--purple');y.beginPath();y.arcS(c.X(t),c.Y(v),5.5,0,7);y.fill();
+  $('r3v').textContent=fmt(v,4);const A=AN[fk+','+gk];$('r3a').textContent=A?`${A(t)[1]} = ${fmt(A(t)[0],4)}`:'（数值）';$('r3s').textContent=`${FN[fk].S} · ${FN[gk].S}`;
+}
+['cf','cg','ct'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-cv]').forEach(b=>b.addEventListener('click',()=>{const [a,c]=b.dataset.cv.split(',');$('cf').value=a;$('cg').value=c;Lab.draw(3);}));
+const a3=Lab.anim(3,$('conv1'),dt=>{let t=+$('ct').value+dt*0.9;if(t>6)t=0;$('ct').value=t;Lab.draw(3);},()=>s3.play);
+$('play3').addEventListener('click',()=>{s3.play=!s3.play;$('play3').textContent=s3.play?'⏸ 暂停':'▶ 播放 t';Lab.kick(a3);});
+Lab.add(3,lab3,{conv1:180,conv2:160});
+Lab.start();
+</script>
+</body></html>
