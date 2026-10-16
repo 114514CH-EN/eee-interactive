@@ -245,6 +245,9 @@ $('aemb').addEventListener('click',()=>{A4=OUT.slice();Lab.draw(4);});$('abin').
 $('abest').addEventListener('click',()=>{const b=ALL.slice().sort((a,b)=>(a.ct+a.co)-(b.ct+b.co))[0];A4=b.p.slice();Lab.draw(4);});
 Lab.add(4,lab4,{abar:210});
 
+/* URL presets: ?f=..&g=..  ?want=JK&have=T */
+{const q=new URLSearchParams(location.search);if(q.get('f')!==null){E1.f=q.get('f');$('ef').value=E1.f;}if(q.get('g')!==null){E1.g=q.get('g');$('eg').value=E1.g;}
+  if(WANT[q.get('want')])C3.want=q.get('want');if(HAVE[q.get('have')])C3.have=q.get('have');}
 Lab.start();
 </script>
 </body></html>
