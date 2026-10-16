@@ -1,0 +1,307 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>异步状态机实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+table.ft{border-collapse:collapse;font-family:var(--mono);font-size:12px;width:100%;table-layout:fixed}
+table.ft th,table.ft td{border:1px solid var(--line);padding:2px 0;text-align:center;font-variant-numeric:tabular-nums}
+table.ft th{color:var(--muted);font-weight:500;font-size:10.5px;letter-spacing:-.02em}
+table.ft th:first-child,table.ft td:first-child{width:34px}
+table.ft td.s{font-weight:700;color:var(--accent)}
+table.ft .col{background:var(--shade)}
+table.ft tr.row td{background:var(--fillB)}
+table.ft td.cur{background:var(--amp)!important;color:var(--panel)!important;font-weight:700}
+.eqs{font-family:var(--mono);font-size:14px;margin:0;line-height:1.9;overflow-wrap:anywhere}
+.eqs .ov{text-decoration:overline}
+.eqs .tm{border-radius:5px;padding:0 3px;white-space:nowrap}
+.eqs .tm.on{background:var(--accent);color:var(--panel)}
+.eqs .tm.add{outline:1.5px dashed var(--purple);outline-offset:1px}
+.verdict.ok{color:var(--green)}.verdict.bad{color:var(--red)}
+html.embed .eqs{font-size:12.5px;line-height:1.7}
+html.embed table.ft{font-size:11px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">DIGITAL ELECTRONICS · ASYNCHRONOUS FINITE STATE MACHINES</div>
+  <h1>异步状态机实验室</h1>
+  <p>三个实验对应 DE ③（DE15–DE20）：开一座继电器控制的河道闸门；看两个反馈位「赛跑」怎样把机器带进错误状态、虚拟状态怎样救回来；再用门电路搭出讲义里的 D / T / JK 异步触发器，调延迟、换最小和，亲眼看冒险让它跳错。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 河道闸门</a><a href="#lab2">实验 2 竞争与虚拟状态</a><a href="#lab3">实验 3 门级 AFSM 触发器</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 继电器 AFSM：河道闸门（DE15）</div>
+  <h2>拖水位、按过流，看接触器和闸门怎么动</h2>
+  <p class="lead">完全按 DE15 的结果实现：Raise = Float·SW1̅·Over̅·Lower̅，Lower = Float̅·SW2̅·Over̅·Raise̅。继电器有吸合 / 释放时间，所以「升 → 降」一定先经过「不动」A。限位开关由闸门位置自动触发。右边是梯形图：亮的导线有电，触点画成闭合 / 断开的真实状态。</p>
+  <div class="controls">
+    <div class="ctl"><label for="wl">上游水位</label><input id="wl" type="range" min="0" max="1" step="0.01" value="0.72"><output id="wlO"></output></div>
+    <div class="btns"><button id="gwave">波浪</button><button id="ghys">机械滞回</button><button id="gover">过流 Over</button><button id="greset">重置</button></div>
+  </div>
+  <div class="stage even"><canvas id="gs" height="300" aria-label="闸门示意"></canvas><canvas id="gl" height="300" aria-label="继电器梯形图"></canvas></div>
+  <div class="read"><div><small>状态（Raise Lower）</small><b id="gst"></b></div><div><small>Float SW1 SW2 Over</small><b id="gin"></b></div><div><small>闸门位置</small><b id="gp"></b></div><div><small>电机启动次数</small><b id="gn"></b></div></div>
+  <div class="scroll"><table class="ft" id="gft"></table></div>
+  <p class="note"><strong>试一试：</strong>① 把水位拖低，看 Raise 先断开、过一会儿 Lower 才吸合（B → A → C）。② 打开「波浪」再关掉「机械滞回」：水位在阈值附近抖，Float 来回跳，电机启动次数猛涨；打开滞回就安静了（DE15 p.11）。③ 闸门运动时按「过流」，两个接触器立刻全断，回到 A。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 多比特变化与虚拟状态（DE16–DE17）</div>
+  <h2>A(00) → C(11) 要变两位：谁先到，机器就去哪</h2>
+  <p class="lead">编码 Y1Y0：A = 00，B = 01，C = 11，D = 10（未用）。输入 x 变成 1 时，A 应该去 C；但 B 在 x = 1 时是稳定状态（有 sling）。两个反馈位的延迟不同：Y0 先到，机器经过 01 = B 就停住了。改成「经过虚拟状态 D」：A → D → C，每一步只变一位，延迟怎么配都对。</p>
+  <div class="controls">
+    <div class="ctl"><label for="d1">Y1 的延迟</label><input id="d1" type="range" min="1" max="10" step="1" value="6"><output id="d1O"></output></div>
+    <div class="ctl"><label for="d0">Y0 的延迟</label><input id="d0" type="range" min="1" max="10" step="1" value="3"><output id="d0O"></output></div>
+  </div>
+  <div class="btns"><button data-r="direct">直接 A → C（两位同时变）</button><button data-r="dummy">经过虚拟状态 D</button><button id="rgo" class="play">x：0 → 1</button><button id="rmany">随机延迟跑 200 次</button></div>
+  <div class="stage even"><canvas id="rk" height="260" aria-label="编码 K-map 与路径"></canvas><canvas id="rw" height="260" aria-label="时序"></canvas></div>
+  <div class="read"><div><small>路径</small><b id="rpath"></b></div><div><small>最后停在</small><b id="rend"></b></div><div><small>200 次里走错</small><b id="rstat">—</b></div></div>
+  <p class="note"><strong>看点：</strong>直接模式下，Y0 比 Y1 快就停在 B，Y1 快就经过 D 到 C——结果取决于门延迟，这就是「关键竞争」。DE16 的规则：AFSM 编码只允许单比特转移，不可避免时借未用的编码做虚拟状态。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 用门电路搭 AFSM 触发器（DE17–DE20）</div>
+  <h2>按讲义方程接成 AND-OR 加反馈，一次只拨一个输入</h2>
+  <p class="lead">Qb⁺、Q⁺ 用讲义流表求出的方程实现：每个乘积项一个与门，一个或门，输出直接接回输入。每级门 1 个时间单位，反相器延迟可调。默认用全部质蕴含项（AFSM 规则）；切到「最小和」后，T 和 JK 在某些转移上会因静态冒险跳错。Clk 反相器太慢、或 Clk 脉冲太窄，则是本质冒险。</p>
+  <div class="btns"><button data-m3="D">D（上升沿，DE18）</button><button data-m3="T">T（下降沿，DE19）</button><button data-m3="JK">JK（双边沿，DE20）</button></div>
+  <div class="btns"><button data-e3="all">全部质蕴含项</button><button data-e3="min">只用最小和</button></div>
+  <div class="btns" id="ins3"></div>
+  <div class="controls">
+    <div class="ctl"><label for="dk">Clk 反相器延迟</label><input id="dk" type="range" min="1" max="8" step="1" value="2"><output id="dkO"></output></div>
+    <div class="ctl"><label for="dn">其他反相器延迟</label><input id="dn" type="range" min="1" max="8" step="1" value="2"><output id="dnO"></output></div>
+    <div class="ctl"><label for="pw">脉冲宽度</label><input id="pw" type="range" min="1" max="12" step="1" value="8"><output id="pwO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="aq" height="300" aria-label="四象限状态图"></canvas><canvas id="aw" height="300" aria-label="逻辑分析仪"></canvas></div>
+  <p class="eqs" id="aeq"></p>
+  <div class="read"><div><small>流表预测</small><b id="aexp"></b></div><div><small>电路实际</small><b id="aact"></b></div><div><small>结论</small><b id="aver" class="verdict" style="font-size:15px"></b></div></div>
+  <div class="scroll"><table class="ft" id="aft"></table></div>
+  <p class="note"><strong>试一试：</strong>① T 型切到「只用最小和」，先拨 T = 1、Clk = 1（到 B），再把 Clk 拨回 0：B 应该去 C（Q 翻成 1），电路却回到 A。看方程里亮着的项：Clk 下降那一刻 Qb⁺ 的项全灭了。切回全部质蕴含项，虚线框的「桥」一直亮着，就对了。JK 在 C、J = K = 1 时拨 Clk 0 → 1 同理。② 本质冒险：把「Clk 反相器延迟」拖到 5 以上，T 型（全部质蕴含项）在 A、T = 1 时拨 Clk 0 → 1 会跳到 D；或者把脉冲宽度调到 1–2 再按「Clk 窄脉冲」，D 型直接漏掉这个时钟沿。</p>
+</section>
+</div>
+
+<script>
+/* ================= shared: Quine–McCluskey on n variables ================= */
+const cov=(p,x)=>((x^p.v)&~p.m)===0;
+const litsN=(p,n)=>{let c=0;for(let i=0;i<n;i++)if(!(p.m>>i&1))c++;return c;};
+function primesN(on,dc,n){let cur=new Map();[...on,...dc].forEach(x=>cur.set(x+'/0',{v:x,m:0}));const P=[];
+  while(cur.size){const nxt=new Map(),used=new Set(),arr=[...cur.values()];
+    for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){const a=arr[i],b=arr[j];if(a.m!==b.m)continue;const d=a.v^b.v;if(d&&!(d&(d-1))){nxt.set((a.v&~d)+'/'+(a.m|d),{v:a.v&~d,m:a.m|d});used.add(i);used.add(j);}}
+    arr.forEach((a,i)=>{if(!used.has(i))P.push(a);});cur=nxt;}
+  return P.filter(p=>on.some(x=>cov(p,x)));}
+function minCoverN(P,on,n){let best=null;const cost=s=>s.length*100+s.reduce((a,p)=>a+litsN(p,n),0);
+  const rec=(left,ch)=>{if(best&&cost(ch)>=cost(best))return;if(!left.length){best=ch.slice();return;}
+    let opts=null;left.forEach(x=>{const o=P.filter(p=>cov(p,x));if(!opts||o.length<opts.length)opts=o;});
+    opts.slice().sort((a,b)=>litsN(a,n)-litsN(b,n)).forEach(p=>{ch.push(p);rec(left.filter(x=>!cov(p,x)),ch);ch.pop();});};
+  rec(on.slice(),[]);return best||[];}
+function termHTML(p,names){const n=names.length;let s='';for(let i=0;i<n;i++){const b=n-1-i;if(p.m>>b&1)continue;s+=(p.v>>b&1)?names[i]:`<span class="ov">${names[i]}</span>`;}return s||'1';}
+const stateCol=s=>({A:css('--muted'),B:css('--blue'),C:css('--amp'),D:css('--purple')})[s]||css('--red');
+
+/* ================= Lab 1: river gate ================= */
+const G1={w:.72,wave:false,hys:true,over:false,p:.5,float:1,cR:0,cL:0,rR:0,rL:0,tR:0,tL:0,t:0,starts:0,lastDir:0};
+const TAU=.35,SPEED=.16;
+function g1Inputs(){const g=G1;const sw1=g.p>=.999?1:0,sw2=g.p<=.001?1:0;return {F:g.float,S1:sw1,S2:sw2,O:g.over?1:0};}
+function g1Step(dt){const g=G1;g.t+=dt;
+  const we=g.w+(g.wave?.07*Math.sin(g.t*4.1)+.035*Math.sin(g.t*9.7+1):0);g.we=we;
+  if(g.hys){if(we>.58)g.float=1;else if(we<.42)g.float=0;}else g.float=we>.5?1:0;
+  const I=g1Inputs();
+  g.cR=(!I.O&&I.F&&!I.S1&&!g.rL)?1:0;g.cL=(!I.O&&!I.F&&!I.S2&&!g.rR)?1:0;
+  /* relay contacts follow their coil after TAU (drop-out immediate when over-current: protective) */
+  if(g.cR!==g.rR){g.tR+=dt;if(g.tR>=TAU||(!g.cR&&I.O)){g.rR=g.cR;g.tR=0;}}else g.tR=0;
+  if(g.cL!==g.rL){g.tL+=dt;if(g.tL>=TAU||(!g.cL&&I.O)){g.rL=g.cL;g.tL=0;}}else g.tL=0;
+  const dir=g.rR&&!g.rL?1:g.rL&&!g.rR?-1:0;if(dir&&dir!==g.lastDir)g.starts++;g.lastDir=dir;
+  g.p=Math.max(0,Math.min(1,g.p+dir*SPEED*dt));}
+const ST1=(r,l)=>r&&l?'D':r?'B':l?'C':'A';
+function ft1(){const rows={A:[],B:[],C:[],D:[]};for(let k=0;k<16;k++){const F=k>>3&1,S1=k>>2&1,S2=k>>1&1,O=k&1;
+  ['A','B','C','D'].forEach(s=>{const R=s==='B'||s==='D'?1:0,L=s==='C'||s==='D'?1:0;const nR=F&!S1&!O&!L,nL=(1-F)&!S2&!O&!R;rows[s].push(ST1(nR,nL));});}return rows;}
+const FT1=ft1();
+function buildFT(el,rows,colLbl){let h='<tr><th></th>'+colLbl.map((c,i)=>`<th data-c="${i}">${c}</th>`).join('')+'</tr>';
+  Object.keys(rows).forEach(s=>{h+=`<tr data-r="${s}"><td><b>${s}</b></td>`+rows[s].map((n,i)=>`<td data-c="${i}" class="${n===s?'s':''}">${n}</td>`).join('')+'</tr>';});el.innerHTML=h;}
+buildFT($('gft'),FT1,[...Array(16).keys()].map(k=>k.toString(2).padStart(4,'0')));
+function hlFT(el,row,col){el.querySelectorAll('tr').forEach(tr=>tr.classList.toggle('row',tr.dataset.r===row));
+  el.querySelectorAll('[data-c]').forEach(td=>{const c=+td.dataset.c;td.classList.toggle('col',c===col);td.classList.toggle('cur',c===col&&td.parentElement.dataset.r===row);});}
+let g1last='';
+function lab1(){const g=G1,I=g1Inputs(),st=ST1(g.rR,g.rL),k=I.F*8+I.S1*4+I.S2*2+I.O;
+  $('wlO').textContent=(g.w*100).toFixed(0)+'%';pressGroup('#gwave',()=>g.wave);pressGroup('#ghys',()=>g.hys);pressGroup('#gover',()=>g.over);
+  $('gst').textContent=`${st}（${g.rR}${g.rL}）`;$('gin').textContent=`${I.F} ${I.S1} ${I.S2} ${I.O}`;$('gp').textContent=I.S1?'顶（SW1）':I.S2?'底（SW2）':(g.p*100).toFixed(0)+'%';$('gn').textContent=g.starts;
+  const key=st+k;if(key!==g1last){hlFT($('gft'),st,k);g1last=key;}
+  /* ---- scene ---- */
+  {const [x,W,H]=fit($('gs'));const bed=H-30,top=24,gx=W*.56,gw=Math.max(14,W*.05),gh=(bed-top)*.52,lvl=v=>bed-(bed-top-10)*v;
+    const we=Math.max(0,Math.min(1,g.we??g.w));
+    /* water upstream (left) and downstream (right) */
+    x.fillStyle=css('--fillB');x.fillRect(8,lvl(we),gx-8,bed-lvl(we));
+    const gateBottom=bed-(g.p*(gh*.95)),down=Math.min(we,.12+.6*g.p*we);x.fillRect(gx+gw,lvl(down),W-gx-gw-8,bed-lvl(down));
+    if(g.p>.02){x.fillStyle=css('--fillB');x.fillRect(gx,gateBottom,gw,bed-gateBottom);}
+    x.strokeStyle=css('--blue');x.lineWidth=2;x.beginPath();for(let i=0;i<=40;i++){const px=8+(gx-8)*i/40,py=lvl(we)+(g.wave?2*Math.sin(i*.9+g.t*6):0);i?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+    /* bed and frame */
+    x.strokeStyle=css('--volt');x.lineWidth=3;x.beginPath();x.moveTo(6,bed);x.lineTo(W-6,bed);x.stroke();
+    x.lineWidth=2;x.beginPath();x.moveTo(gx-6,top);x.lineTo(gx-6,bed);x.moveTo(gx+gw+6,top);x.lineTo(gx+gw+6,bed);x.moveTo(gx-12,top);x.lineTo(gx+gw+12,top);x.stroke();
+    /* gate leaf */
+    x.fillStyle=css('--volt');x.fillRect(gx,gateBottom-gh,gw,gh);
+    const dir=g.rR&&!g.rL?1:g.rL&&!g.rR?-1:0;
+    if(dir)arrow(x,gx+gw/2,gateBottom-gh/2+dir*16,gx+gw/2,gateBottom-gh/2-dir*16,css('--panel'),2.4,9);
+    /* limit switches */
+    const sw=(y,on,name)=>{x.beginPath();x.arcS(gx+gw+16,y,6,0,7);x.fillStyle=on?css('--red'):css('--panel');x.fill();x.strokeStyle=css('--red');x.lineWidth=1.6;x.stroke();label(x,name,gx+gw+26,y+4,on?css('--red'):css('--muted'),11);};
+    sw(bed-gh*.95-gh+8,I.S1,'SW1 上限');sw(bed-8,I.S2,'SW2 下限');
+    /* float on rod */
+    const rx=gx*.35;x.strokeStyle=css('--muted');x.lineWidth=2;x.beginPath();x.moveTo(rx,top);x.lineTo(rx,bed);x.stroke();
+    const tUp=g.hys?.58:.5,tDn=g.hys?.42:.5;x.setLineDash([4,4]);x.strokeStyle=css('--purple');x.lineWidth=1.2;
+    [[tUp,'升阈值'],[tDn,'降阈值']].forEach(([v,n],i)=>{if(!g.hys&&i)return;x.beginPath();x.moveTo(rx-26,lvl(v));x.lineTo(rx+26,lvl(v));x.stroke();text(x,g.hys?n:'阈值',rx+30,lvl(v)+4,css('--purple'),10);});x.setLineDash([]);
+    x.fillStyle=g.float?css('--accent'):css('--panel');x.strokeStyle=css('--accent');x.lineWidth=2;x.beginPath();x.roundRect?x.roundRect(rx-10,lvl(we)-8,20,14,4):x.rect(rx-10,lvl(we)-8,20,14);x.fill();x.stroke();
+    label(x,`Float = ${g.float}`,8,16,g.float?css('--accent'):css('--muted'),12);
+    text(x,'上游',14,bed-8,css('--muted'),11);text(x,'下游',W-14,bed-8,css('--muted'),11,'right');
+    if(I.O)label(x,'⚡ 过流',W-70,16,css('--red'),12);}
+  /* ---- ladder ---- */
+  {const [x,W,H]=fit($('gl'));const xl=18,xr=W-14,y1=H*.33,y2=H*.72,on=css('--accent'),off=css('--muted');
+    const p0=1,p1=p0&&!I.O,aR=p1&&I.F,bR=aR&&!I.S1,cR=bR&&!g.rL,aL=p1&&!I.F,bL=aL&&!I.S2,cL=bL&&!g.rR;
+    const seg=(x0,y0,x1,y1,pw)=>{x.strokeStyle=pw?on:off;x.lineWidth=pw?3:1.6;x.beginPath();x.moveTo(x0,y0);x.lineTo(x1,y1);x.stroke();};
+    /* rails */
+    x.strokeStyle=css('--red');x.lineWidth=3;x.beginPath();x.moveTo(xl,14);x.lineTo(xl,H-14);x.stroke();x.strokeStyle=css('--volt');x.beginPath();x.moveTo(xr,14);x.lineTo(xr,H-14);x.stroke();
+    label(x,'+48 V',xl+4,14,css('--red'),11);label(x,'0 V',xr-30,14,css('--muted'),11);
+    const cw=Math.max(18,Math.min(26,(xr-xl)/18));
+    /* contact symbol: NC draws a slash; closed = bridged */
+    const contact=(cx,cy,nc,closed,pin,name,pout)=>{seg(cx-cw,cy,cx-5,cy,pin);seg(cx+5,cy,cx+cw,cy,pout);
+      x.strokeStyle=pin?on:off;x.lineWidth=2;x.beginPath();x.moveTo(cx-5,cy-9);x.lineTo(cx-5,cy+9);x.stroke();x.strokeStyle=pout?on:off;x.beginPath();x.moveTo(cx+5,cy-9);x.lineTo(cx+5,cy+9);x.stroke();
+      if(nc){x.strokeStyle=css('--muted');x.lineWidth=1.3;x.beginPath();x.moveTo(cx-9,cy+11);x.lineTo(cx+9,cy-11);x.stroke();}
+      if(closed){x.strokeStyle=pout?on:css('--ink');x.lineWidth=3;x.beginPath();x.moveTo(cx-5,cy);x.lineTo(cx+5,cy);x.stroke();}
+      text(x,name,cx,cy-14,closed?css('--ink'):css('--muted'),10.5,'center');};
+    const coil=(cx,cy,pw,name,energ)=>{seg(cx-cw,cy,cx-13,cy,pw);x.beginPath();x.arcS(cx,cy,13,0,7);x.fillStyle=energ?css('--accent'):css('--panel');x.fill();x.strokeStyle=pw?on:off;x.lineWidth=2;x.stroke();
+      label(x,name,cx-4,cy+4,energ?css('--panel'):css('--ink'),12);seg(cx+13,cy,xr,cy,false);};
+    const c0=xl+cw+10,split=c0+cw+12;
+    seg(xl,y1,c0-cw,y1,true);contact(c0,y1,true,!I.O,true,'Over̅',p1);seg(c0+cw,y1,split,y1,p1);seg(split,y1,split,y2,p1);
+    const xs=[split+cw+6,split+3*cw+14,split+5*cw+22],xc=Math.min(xr-30,split+7*cw+28);
+    contact(xs[0],y1,false,!!I.F,p1,'Float',aR);contact(xs[1],y1,true,!I.S1,aR,'SW1̅',bR);contact(xs[2],y1,true,!g.rL,bR,'Lower̅',cR);seg(xs[2]+cw,y1,xc-cw,y1,cR);coil(xc,y1,cR,'R',g.rR);
+    seg(split,y2,xs[0]-cw,y2,p1);contact(xs[0],y2,true,!I.F,p1,'Float̅',aL);contact(xs[1],y2,true,!I.S2,aL,'SW2̅',bL);contact(xs[2],y2,true,!g.rR,bL,'Raise̅',cL);seg(xs[2]+cw,y2,xc-cw,y2,cL);coil(xc,y2,cL,'L',g.rL);
+    text(x,'Raise 接触器线圈',xc,y1+28,css('--muted'),10.5,'center');text(x,'Lower 接触器线圈',xc,y2+28,css('--muted'),10.5,'center');
+    text(x,'斜线 = 常闭（NC）触点；粗横线 = 此刻闭合',xl+4,H-4,css('--muted'),10.5);}
+}
+const a1=Lab.anim(1,$('gs'),dt=>{g1Step(Math.min(dt,.1));lab1();},()=>true);
+$('wl').addEventListener('input',e=>{G1.w=+e.target.value;if(REDUCE){for(let i=0;i<40;i++)g1Step(.05);}Lab.draw(1);});
+$('gwave').addEventListener('click',()=>{G1.wave=!G1.wave;Lab.draw(1);});
+$('ghys').addEventListener('click',()=>{G1.hys=!G1.hys;Lab.draw(1);});
+$('gover').addEventListener('click',()=>{G1.over=!G1.over;Lab.draw(1);});
+$('greset').addEventListener('click',()=>{Object.assign(G1,{w:.72,wave:false,hys:true,over:false,p:.5,float:1,cR:0,cL:0,rR:0,rL:0,tR:0,tL:0,starts:0,lastDir:0});$('wl').value=.72;Lab.draw(1);});
+Lab.add(1,lab1,{gs:240,gl:240});
+
+/* ================= Lab 2: race and dummy state ================= */
+const R2={mode:'direct',d1:6,d0:3,trace:null,stat:null};
+const NM2=['A','B','D','C'];/* index = Y1*2+Y0: 00 A, 01 B, 10 D, 11 C */
+function next2(mode,y,x){if(!x)return 0;/* x = 1 column */
+  if(y===0)return mode==='direct'?3:2;if(y===1)return 1;if(y===2)return 3;return 3;}
+function run2(mode,d1,d0){/* inertial delays: bit i takes the excitation only after it has been stable for d_i */
+  let y=0,t1=0,t0=0;const tr=[{t:0,y,e:next2(mode,0,1)}];const path=['A'];
+  for(let t=1;t<=40;t++){const e=next2(mode,y,1);const e1=e>>1&1,e0=e&1;
+    t1=(e1!==(y>>1&1))?t1+1:0;t0=(e0!==(y&1))?t0+1:0;let ny=y;if(t1>=d1){ny^=2;t1=0;}if(t0>=d0){ny^=1;t0=0;}
+    if(ny!==y){y=ny;path.push(NM2[y]);}tr.push({t,y,e:next2(mode,y,1)});}
+  return {tr,path,end:NM2[y]};}
+function lab2(){const r=R2;$('d1O').textContent=r.d1;$('d0O').textContent=r.d0;pressGroup('#lab2 [data-r]',b=>b.dataset.r===r.mode);
+  const res=r.trace||run2(r.mode,r.d1,r.d0);$('rpath').textContent=res.path.join(' → ');$('rend').textContent=res.end+(res.end==='C'?' ✓':' ✗（卡住）');$('rend').style.color=res.end==='C'?css('--green'):css('--red');
+  $('rstat').textContent=r.stat?`${r.stat.bad} / 200（${r.mode==='direct'?'直接':'虚拟状态'}）`:'—';
+  /* code map */
+  {const [x,W,H]=fit($('rk'));const S=Math.min((W-60)/2,(H-60)/2,96),x0=(W-2*S)/2+12,y0=34;
+    text(x,'Y1 \\ Y0',x0-6,y0-12,css('--muted'),11,'right');['0','1'].forEach((v,i)=>{label(x,v,x0+i*S+S/2-4,y0-8,css('--muted'),12,'500');label(x,v,x0-18,y0+i*S+S/2+4,css('--muted'),12,'500');});
+    const pos=y=>({x:x0+(y&1)*S+S/2,y:y0+(y>>1)*S+S/2});
+    [0,1,2,3].forEach(y=>{const p=pos(y),nm=NM2[y],px=x0+(y&1)*S,py=y0+(y>>1)*S;x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(px+.5,py+.5,S-1,S-1);
+      const isD=nm==='D';x.fillStyle=isD&&r.mode==='direct'?'transparent':css('--panel');x.beginPath();x.arcS(p.x,p.y,S*.26,0,7);x.fill();x.strokeStyle=stateCol(nm);x.lineWidth=2;x.setLineDash(isD?[4,3]:[]);x.stroke();x.setLineDash([]);
+      label(x,nm,p.x-5,p.y+5,stateCol(nm),16);text(x,(y>>1)+''+(y&1),p.x,p.y+S*.26+13,css('--muted'),10,'center');
+      if(nm==='B'||nm==='C'){x.strokeStyle=stateCol(nm);x.lineWidth=1.4;x.beginPath();x.arcS(p.x+S*.26,p.y-S*.22,7,0,7);x.stroke();}});
+    text(x,'小圈 = x = 1 时稳定（sling）',x0,y0+2*S+18,css('--muted'),10.5);
+    /* intended arrows */
+    const ar=(a,b,col,w,dash)=>{const p=pos(a),q=pos(b),dx=q.x-p.x,dy=q.y-p.y,L=Math.hypot(dx,dy),u=[dx/L,dy/L],rr=S*.28;x.setLineDash(dash?[5,4]:[]);arrow(x,p.x+u[0]*rr,p.y+u[1]*rr,q.x-u[0]*rr,q.y-u[1]*rr,col,w,10);x.setLineDash([]);};
+    if(r.mode==='direct')ar(0,3,css('--muted'),1.6,true);else{ar(0,2,css('--muted'),1.6,true);ar(2,3,css('--muted'),1.6,true);}
+    /* actual path */
+    const ys=[0];res.tr.forEach(s=>{if(s.y!==ys[ys.length-1])ys.push(s.y);});for(let i=1;i<ys.length;i++)ar(ys[i-1],ys[i],res.end==='C'?css('--green'):css('--red'),3,false);}
+  /* timing */
+  {const [x,W,H]=fit($('rw'));const L=40,R=W-8,T=40,rows=['x','E1','E0','Y1','Y0','状态'],rh=(H-28)/rows.length,amp=Math.min(rh*.55,18),X=t=>L+(R-L)*(t+2)/(T+2);
+    for(let t=0;t<=T;t+=5){x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(X(t),6);x.lineTo(X(t),H-18);x.stroke();text(x,String(t),X(t),H-4,css('--muted'),10,'center');}
+    const wave=(r,f,col)=>{const yb=8+r*rh+rh/2+amp/2,Y=v=>v?yb-amp:yb;x.strokeStyle=col;x.lineWidth=2.2;x.beginPath();const v0=r<=2?0:f(res.tr[0]);x.moveTo(X(-2),Y(v0));let pv=v0;
+      if(r<=2){const v1=f(res.tr[0]);x.lineTo(X(0),Y(0));x.lineTo(X(0),Y(v1));pv=v1;}res.tr.forEach(s=>{const v=f(s);if(v!==pv){x.lineTo(X(s.t),Y(pv));x.lineTo(X(s.t),Y(v));pv=v;}});x.lineTo(R,Y(pv));x.stroke();};
+    rows.forEach((n,i)=>label(x,n,4,8+i*rh+rh/2+4,i>=3&&i<5?css('--amp'):css('--ink'),11));
+    wave(0,()=>1,css('--blue'));wave(1,s=>s.e>>1&1,css('--muted'));wave(2,s=>s.e&1,css('--muted'));wave(3,s=>s.y>>1&1,css('--amp'));wave(4,s=>s.y&1,css('--amp'));
+    let prev=null,st=0;const yS=8+5*rh+4;res.tr.concat([{t:T+1,y:-1}]).forEach(s=>{if(prev===null){prev=s.y;st=-2;return;}if(s.y!==prev){const nm=NM2[prev];x.fillStyle=stateCol(nm);x.globalAlpha=.25;x.fillRect(X(st),yS,X(s.t)-X(st),rh-8);x.globalAlpha=1;label(x,nm,(X(st)+X(s.t))/2-4,yS+rh/2,stateCol(nm),12);prev=s.y;st=s.t;}});
+  }
+}
+$('d1').addEventListener('input',e=>{R2.d1=+e.target.value;R2.trace=null;Lab.draw(2);});
+$('d0').addEventListener('input',e=>{R2.d0=+e.target.value;R2.trace=null;Lab.draw(2);});
+document.querySelectorAll('#lab2 [data-r]').forEach(b=>b.addEventListener('click',()=>{R2.mode=b.dataset.r;R2.trace=null;R2.stat=null;Lab.draw(2);}));
+$('rgo').addEventListener('click',()=>{R2.trace=null;Lab.draw(2);});
+$('rmany').addEventListener('click',()=>{let bad=0;for(let i=0;i<200;i++){const a=1+Math.floor(Math.random()*10),b=1+Math.floor(Math.random()*10);if(run2(R2.mode,a,b).end!=='C')bad++;}R2.stat={bad};Lab.draw(2);});
+Lab.add(2,lab2,{rk:220,rw:220});
+
+/* ================= Lab 3: gate-level AFSM flip-flops ================= */
+const CODE={A:[0,0],B:[1,0],C:[1,1],D:[0,1]},DEC=(qb,q)=>qb?(q?'C':'B'):(q?'D':'A');
+const M3={
+  D:{ins:['D','Clk'],ft:{A:'A B A D',B:'A B A B',C:'C B C D',D:'C D C D'}},
+  T:{ins:['T','Clk'],ft:{A:'A B A B',B:'A B C B',C:'C D C D',D:'C D A D'}},
+  JK:{ins:['J','K','Clk'],ft:{A:'A B A B A D A D',B:'A B A B C B C B',C:'C D C B C D C B',D:'C D A D C D A D'}}};
+Object.values(M3).forEach(M=>{Object.keys(M.ft).forEach(s=>M.ft[s]=M.ft[s].split(' '));const ni=M.ins.length,n=ni+2;M.names=['Qb','Q',...M.ins];
+  M.eq=[0,1].map(bit=>{const on=[];Object.keys(CODE).forEach(s=>{for(let k=0;k<1<<ni;k++)if(CODE[M.ft[s][k]][bit])on.push((CODE[s][0]<<(ni+1))|(CODE[s][1]<<ni)|k);});
+    const P=primesN(on,[],n).sort((a,b)=>litsN(a,n)-litsN(b,n)||a.v-b.v);const mn=minCoverN(P,on,n);return {all:P,min:P.filter(p=>mn.includes(p))};});});
+const S3={m:'T',e:'all',inp:{},dk:2,dn:2,pw:8,t:0,H:{},AND:[],rec:[],run:0,pend:null,exp:'A',state0:'A',done:true};
+const RING=64;
+function reset3(){const M=M3[S3.m];S3.inp={};M.ins.forEach(n=>S3.inp[n]=0);S3.t=0;S3.H={};M.names.forEach(n=>S3.H[n]=new Array(RING).fill(0));S3.rec=[];S3.exp='A';S3.pend=null;S3.run=0;
+  S3.terms=[0,1].map(b=>M.eq[b][S3.e]);S3.AND=[0,1].map(b=>S3.terms[b].map(()=>new Array(RING).fill(0)));
+  /* settle internal nodes at A with all inputs 0 */
+  for(let i=0;i<RING;i++)sim3();S3.rec=S3.rec.slice(-40);S3.ok=null;}
+const hv=(n,t)=>S3.H[n][((t%RING)+RING)%RING];
+function lit3(n,neg,t){if(!neg)return hv(n,t);const d=n==='Clk'?S3.dk:S3.dn;return 1-hv(n,t-d);}
+function sim3(){const M=M3[S3.m],names=M.names,nv=names.length,t=++S3.t,i=t%RING;
+  if(S3.pend&&t>=S3.pend.at){S3.inp[S3.pend.n]=S3.pend.v;S3.pend=null;}
+  M.ins.forEach(n=>S3.H[n][i]=S3.inp[n]);
+  [0,1].forEach(b=>S3.terms[b].forEach((p,j)=>{let v=1;for(let k=0;k<nv;k++){const bb=nv-1-k;if(p.m>>bb&1)continue;v&=lit3(names[k],!(p.v>>bb&1),t-1);}S3.AND[b][j][i]=v;}));
+  ['Qb','Q'].forEach((n,b)=>{let o=0;S3.AND[b].forEach(a=>o|=a[((t-1)%RING+RING)%RING]);S3.H[n][i]=o;});
+  const r={t};names.forEach(n=>r[n]=S3.H[n][i]);S3.rec.push(r);if(S3.rec.length>170)S3.rec.shift();}
+function kOf(inp){const M=M3[S3.m];return M.ins.reduce((a,n)=>a*2+inp[n],0);}
+function settleFT(s,k){const ft=M3[S3.m].ft;for(let i=0;i<6;i++)s=ft[s][k];return s;}
+function curState(){return DEC(hv('Qb',S3.t),hv('Q',S3.t));}
+function change3(n,pulse){if(S3.run>0)return;const s0=curState(),k0=kOf(S3.inp);S3.inp[n]^=1;const k1=kOf(S3.inp);let exp=settleFT(s0,k1);
+  if(pulse){S3.pend={n,v:1-S3.inp[n],at:S3.t+S3.pw};exp=settleFT(exp,k0);}S3.exp=exp;S3.state0=s0;S3.run=pulse?S3.pw+60:60;S3.ok=null;if(REDUCE){while(S3.run>0){sim3();S3.run--;}finish3();}Lab.draw(3);}
+function finish3(){const a=curState();S3.ok=a===S3.exp;const last=S3.rec.slice(-12);S3.osc=last.some((r,i)=>i&&(r.Q!==last[i-1].Q||r.Qb!==last[i-1].Qb));}
+function insButtons(){const M=M3[S3.m];$('ins3').innerHTML=M.ins.map(n=>`<button data-i="${n}">${n} = 0</button>`).join('')+`<button id="pulse" class="play">Clk 窄脉冲</button><button id="r3">回到 A</button>`;
+  $('ins3').querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>change3(b.dataset.i,false)));
+  $('pulse').addEventListener('click',()=>change3('Clk',true));$('r3').addEventListener('click',()=>{reset3();Lab.draw(3);});
+  buildFT($('aft'),M.ft,[...Array(1<<M.ins.length).keys()].map(k=>k.toString(2).padStart(M.ins.length,'0')));}
+let a3last='';
+function lab3(){const M=M3[S3.m],t=S3.t,cs=curState(),k=kOf(S3.inp);
+  pressGroup('#lab3 [data-m3]',b=>b.dataset.m3===S3.m);pressGroup('#lab3 [data-e3]',b=>b.dataset.e3===S3.e);
+  $('ins3').querySelectorAll('[data-i]').forEach(b=>{b.textContent=`${b.dataset.i} = ${S3.inp[b.dataset.i]}`;b.setAttribute('aria-pressed',!!S3.inp[b.dataset.i]);});
+  $('dkO').textContent=S3.dk;$('dnO').textContent=S3.dn;$('pwO').textContent=S3.pw;
+  /* equations with live terms */
+  const allT=[0,1].map(b=>M.eq[b].all),i=((t-1)%RING+RING)%RING;
+  $('aeq').innerHTML=['Qb','Q'].map((n,b)=>`${n}⁺ = `+S3.terms[b].map((p,j)=>`<span class="tm ${S3.AND[b][j][i]?'on':''} ${S3.e==='all'&&!M.eq[b].min.includes(p)?'add':''}">${termHTML(p,M.names)}</span>`).join(' + ')).join('<br>')+
+    `<br><small style="color:var(--muted);font-family:var(--body)">${S3.e==='all'?`共 ${allT[0].length+allT[1].length} 个质蕴含项；虚线框 = 最小和里没有、为消冒险加上的项。`:'最小和：逻辑上等价，但相邻的 1 之间可能没有「桥」。'}亮 = 此刻这个与门输出 1。</small>`;
+  $('aexp').textContent=S3.ok===null&&S3.run>0?`${S3.exp}（${S3.state0} 出发）`:S3.exp;$('aact').textContent=cs+`（Qb Q = ${CODE[cs].join('')}）`;
+  const v=$('aver');if(S3.run>0){v.textContent='传播中…';v.className='verdict';}else if(S3.ok===null){v.textContent='拨一个输入';v.className='verdict';}
+  else{v.textContent=S3.osc?'✗ 振荡，停不下来':S3.ok?'✓ 和流表一致':`✗ 跳错：应到 ${S3.exp}`;v.className='verdict '+(S3.ok&&!S3.osc?'ok':'bad');}
+  const key=cs+k+S3.m;if(key!==a3last){hlFT($('aft'),cs,k);a3last=key;}
+  /* quadrant diagram */
+  {const [x,W,H]=fit($('aq'));const cx=W/2,cy=H/2+6,dx=Math.min(W*.24,120),dy=Math.min(H*.25,70),r=24,pos={A:[cx-dx,cy-dy],B:[cx+dx,cy-dy],C:[cx-dx,cy+dy],D:[cx+dx,cy+dy]};
+    x.strokeStyle=css('--grid');x.lineWidth=1;x.setLineDash([4,4]);x.beginPath();x.moveTo(cx,16);x.lineTo(cx,H-16);x.moveTo(14,cy);x.lineTo(W-14,cy);x.stroke();x.setLineDash([]);
+    text(x,'Clk = 0',cx-dx,16,css('--muted'),11,'center');text(x,'Clk = 1',cx+dx,16,css('--muted'),11,'center');text(x,'Q = 0',12,cy-dy+4,css('--muted'),11);text(x,'Q = 1',12,cy+dy+4,css('--muted'),11);
+    Object.keys(pos).forEach(s=>{const n=M.ft[s][k],a=pos[s],hl=s===cs;const col=hl?css('--amp'):css('--muted');
+      if(n===s){x.strokeStyle=col;x.lineWidth=hl?2.6:1.5;x.beginPath();x.arcS(a[0]+(a[0]<cx?-1:1)*(r+7),a[1]+(a[1]<cy?-1:1)*(r-4),9,0,7);x.stroke();return;}
+      const b=pos[n],ddx=b[0]-a[0],ddy=b[1]-a[1],L=Math.hypot(ddx,ddy),u=[ddx/L,ddy/L],off=[-u[1]*6,u[0]*6];
+      arrow(x,a[0]+u[0]*r+off[0],a[1]+u[1]*r+off[1],b[0]-u[0]*(r+2)+off[0],b[1]-u[1]*(r+2)+off[1],col,hl?3:1.6,hl?11:8);});
+    Object.keys(pos).forEach(s=>{const a=pos[s];x.beginPath();x.arcS(a[0],a[1],r,0,7);x.fillStyle=s===cs?css('--amp'):css('--panel');x.fill();x.strokeStyle=stateCol(s);x.lineWidth=2.2;x.stroke();
+      label(x,s,a[0]-5,a[1]+2,s===cs?css('--panel'):css('--ink'),15);text(x,CODE[s].join(''),a[0],a[1]+14,s===cs?css('--panel'):css('--muted'),9.5,'center');});
+    text(x,`箭头 = 当前输入 ${M.ins.join('')} = ${k.toString(2).padStart(M.ins.length,'0')} 的去向；小圈 = 稳定`,8,H-4,css('--muted'),10.5);}
+  /* logic analyser */
+  {const [x,W,H]=fit($('aw'));const rows=[...M.ins,'Qb','Q','状态'],L=36,R=W-8,rh=(H-14)/rows.length,amp=Math.min(rh*.55,16),N=170,X=j=>L+(R-L)*j/N,rec=S3.rec,off=N-rec.length;
+    rows.forEach((n,r)=>label(x,n,3,6+r*rh+rh/2+4,n==='Qb'||n==='Q'?css('--amp'):css('--ink'),11));
+    for(let j=0;j<=N;j+=10){x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(X(j),4);x.lineTo(X(j),H-10);x.stroke();}
+    rows.slice(0,-1).forEach((n,r)=>{const yb=6+r*rh+rh/2+amp/2,Y=v=>v?yb-amp:yb;x.strokeStyle=n==='Qb'||n==='Q'?css('--amp'):css('--blue');x.lineWidth=2;x.beginPath();
+      rec.forEach((s,j)=>{const px=X(off+j);if(!j)x.moveTo(px,Y(s[n]));else{x.lineTo(px,Y(rec[j-1][n]));x.lineTo(px,Y(s[n]));}});if(rec.length)x.lineTo(X(N),Y(rec[rec.length-1][n]));x.stroke();});
+    const yS=6+(rows.length-1)*rh+3;let st=0;for(let j=1;j<=rec.length;j++){const a=j<rec.length?DEC(rec[j].Qb,rec[j].Q):null,p=DEC(rec[j-1].Qb,rec[j-1].Q);if(a!==p){x.fillStyle=stateCol(p);x.globalAlpha=.25;x.fillRect(X(off+st),yS,X(off+j)-X(off+st),rh-6);x.globalAlpha=1;if(X(off+j)-X(off+st)>12)label(x,p,(X(off+st)+X(off+j))/2-4,yS+rh/2,stateCol(p),11);st=j;}}
+    text(x,'每格 10 个门延迟；最右边是现在',R,H-1,css('--muted'),10,'right');}
+}
+const a3=Lab.anim(3,$('aw'),()=>{if(S3.run<=0)return;for(let i=0;i<2&&S3.run>0;i++){sim3();S3.run--;}if(S3.run<=0)finish3();lab3();},()=>S3.run>0);
+document.querySelectorAll('#lab3 [data-m3]').forEach(b=>b.addEventListener('click',()=>{S3.m=b.dataset.m3;reset3();insButtons();Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-e3]').forEach(b=>b.addEventListener('click',()=>{S3.e=b.dataset.e3;reset3();Lab.draw(3);}));
+['dk','dn','pw'].forEach(id=>$(id).addEventListener('input',e=>{S3[id]=+e.target.value;Lab.draw(3);}));
+const _ch=change3;change3=function(n,p){_ch(n,p);Lab.kick(a3);};
+Lab.add(3,lab3,{aq:230,aw:230});
+
+/* URL presets: ?m=T&e=min */
+{const q=new URLSearchParams(location.search);if(M3[q.get('m')])S3.m=q.get('m');if(q.get('e')==='min')S3.e='min';if(q.get('r')==='dummy')R2.mode='dummy';}
+reset3();insButtons();
+Lab.start();
+</script>
+</body></html>

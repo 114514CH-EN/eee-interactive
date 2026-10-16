@@ -1,0 +1,250 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>同步状态机实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ov{text-decoration:overline}
+.eqs{font-family:var(--mono);font-size:15px;margin:0;line-height:1.9;overflow-wrap:anywhere}
+.exin{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px;align-items:center}
+.exin label{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.exin input{font-size:15px;padding:5px 8px;width:100%}
+.exin input.err{border-color:var(--red)}
+table.tt{border-collapse:collapse;font-family:var(--mono);font-size:12.5px;width:100%}
+table.tt th,table.tt td{border-bottom:1px solid var(--line);padding:2px 6px;text-align:center;font-variant-numeric:tabular-nums}
+table.tt th{color:var(--muted);font-weight:500}
+table.tt tr.diff td{background:rgba(196,58,49,.16)}
+table.tt td.one{color:var(--accent);font-weight:700}
+table.tt td.x{color:var(--purple);font-weight:700}
+.verdict.ok{color:var(--green)}.verdict.bad{color:var(--red)}
+.sel{display:flex;flex-wrap:wrap;gap:8px 14px;font-family:var(--mono);font-size:13px;align-items:center}
+.sel select{font-size:13px}
+html.embed .eqs{font-size:13px;line-height:1.7}
+html.embed table.tt{font-size:11.5px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">DIGITAL ELECTRONICS · TOOLBOX AND SYNCHRONOUS FINITE STATE MACHINES</div>
+  <h1>同步状态机实验室</h1>
+  <p>四个实验对应 DE ①②：同一个逻辑函数的几种写法互相转换、验证布尔代数；同一个序列检测器做成 Moore 和 Mealy，对比输出时序；「用 X 触发器实现 Y」自动查激励表、化简；给步进电机控制器换编码，看转移逻辑和输出逻辑怎么变。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 布尔函数</a><a href="#lab2">实验 2 Moore vs Mealy</a><a href="#lab3">实验 3 触发器互换</a><a href="#lab4">实验 4 编码分配</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 一个函数的几种写法（DE2–DE4）</div>
+  <h2>输入两个表达式：真值表、Σm、K-map、最简积之和一起出来</h2>
+  <p class="lead">变量用 A–D。写法：<code>'</code> 或 <code>~</code> 取反，<code>+</code> 或，<code>·</code> / <code>*</code> / 直接相邻 与，<code>^</code> 异或，括号随便套；也可以直接写 <code>m(0,2,4,5)</code>。两个表达式不一致的行会标红。</p>
+  <div class="btns" role="group" aria-label="例子">
+    <button data-x="(A+B)'|A'B'">De Morgan</button><button data-x="A+AB|A">吸收律</button><button data-x="A+BC|(A+B)(A+C)">分配律</button>
+    <button data-x="AB+A'C+BC|AB+A'C">共识定理</button><button data-x="A^B|AB'+A'B">异或</button><button data-x="(A'B')'|A+B">只用与非 / 非</button>
+    <button data-x="m(0,2,4,5)|A'C'+AB'">DE4 Σm 例子</button><button data-x="m(0,1,2,5,7,9,10,13,15)|A'B'C'+A'B'D'+BD+B'CD'+C'D">DE3 K-map 例子</button></div>
+  <div class="exin"><label for="ef">f =</label><input id="ef" type="text" value="AB+A'C+BC" spellcheck="false" autocomplete="off"><label for="eg">g =</label><input id="eg" type="text" value="AB+A'C" spellcheck="false" autocomplete="off"></div>
+  <div class="stage even"><canvas id="ekm" height="250" aria-label="f 的 K-map"></canvas><div class="scroll" style="max-height:290px;overflow-y:auto"><table class="tt" id="ett"></table></div></div>
+  <p class="eqs" id="eeq"></p>
+  <div class="read"><div><small>f 的 Σm</small><b id="esf" style="font-size:14px"></b></div><div><small>g 的 Σm</small><b id="esg" style="font-size:14px"></b></div><div><small>结论</small><b id="ever" class="verdict" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>看点：</strong>「共识定理」里 BC 在真值表上不改变任何一行，所以同步设计可以去掉它；但它正是 DE17 消除静态冒险要加回去的那一项。K-map 上的圈是 f 的最简积之和。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Moore 和 Mealy（DE7）</div>
+  <h2>同一个「连续两个 1」检测器，两种模型的输出差在哪</h2>
+  <p class="lead">Moore：3 个状态，输出写在状态里，只在时钟上升沿后变化。Mealy：2 个状态，输出写在箭头上（输入 / 输出），输入一变输出立刻跟着变。点 x 那一行的格子改输入（每个时钟沿之后换一个新输入），拖时间游标看两个状态图里当前在哪。</p>
+  <div class="controls"><div class="ctl"><label for="mt">时间游标</label><input id="mt" type="range" min="0" max="12" step="0.05" value="4.6"><output id="mtO"></output></div><div class="btns"><button id="mrand">随机输入</button></div></div>
+  <div class="stage even"><canvas id="mw" class="click" height="290" aria-label="时序图"></canvas><canvas id="md" height="290" aria-label="两个状态图"></canvas></div>
+  <div class="read"><div><small>Moore 状态 / 输出</small><b id="mmo"></b></div><div><small>Mealy 状态 / 输出</small><b id="mme"></b></div><div><small>第一次输出 1：Mealy vs Moore</small><b id="mearly"></b></div></div>
+  <p class="note"><strong>看点：</strong>Mealy 在第二个 1 出现的那个周期里就输出 1（比 Moore 早一个周期），状态也少一个；代价是输出直接受输入控制：如果输入在周期中间抖一下，Mealy 的输出也跟着抖，Moore 的输出只在时钟沿后变。所以本课以 Moore 为主，并争取让输出就是状态位。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 用 X 触发器实现 Y（DE6、DE8）</div>
+  <h2>选「想要的行为」和「手里的触发器」，激励表和 K-map 自动做完</h2>
+  <p class="lead">步骤就是 DE8 的 recipe：列出目标行为的全式转移表（输入 + Qn → Qn+1），再用手里那种触发器的反向转移表查出它的输入该是多少（X = don't care），最后 K-map 化简。</p>
+  <div class="sel"><span>想要的行为</span><span class="btns" id="cwant"></span><span>手里的触发器</span><span class="btns" id="chave"></span></div>
+  <div class="stage even"><canvas id="ckm" height="250" aria-label="K-map"></canvas><div class="scroll"><table class="tt" id="ctt"></table></div></div>
+  <p class="eqs" id="ceq"></p>
+  <p class="note"><strong>对照讲义：</strong>JK 行为 + T 触发器 → T = JQ̅ + KQ（DE8）。SR 触发器的反向表按本课约定（S = R = 1 置位）取 0→0：0X，0→1：1X，1→0：01，1→1：X0。试试用 D 实现 T：D = T ⊕ Q，K-map 是棋盘，化简不了。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 编码分配（DE10、DE12）</div>
+  <h2>给步进电机控制器的 4 个状态换编码，看要多少门</h2>
+  <p class="lead">状态和输出固定：S0 = 11、S1 = 10、S2 = 00、S3 = 01（输出 Q2 Q1），DIR = 1 正转 S0→S1→S2→S3→S0。用 D 触发器，状态位记作 y1 y0。编码随便选，程序算出转移方程 D1、D0 和输出逻辑 Q2、Q1 的最简积之和。2 位编码给 4 个状态，一共 4! = 24 种分法。</p>
+  <div class="sel" id="asel"></div>
+  <div class="btns"><button id="aemb">把编码嵌入输出（编码 = 输出）</button><button id="abin">按状态号二进制（S0 = 00…）</button><button id="abest">找门最少的</button></div>
+  <div class="stage even"><canvas id="abar" height="250" aria-label="24 种编码的门成本"></canvas><div><p class="eqs" id="aeq"></p></div></div>
+  <div class="read"><div><small>转移逻辑成本</small><b id="act"></b></div><div><small>输出逻辑成本</small><b id="aco"></b></div><div><small>总成本（门输入数）</small><b id="acs"></b></div></div>
+  <p class="note"><strong>看点：</strong>把编码嵌入输出时 Q2 = y1、Q1 = y0，输出逻辑变成两根导线。24 种分法里只有「编码 = 输出」和「两位对调」这 2 种完全不需要输出门（取反的那几种还要反相器）；按状态号硬编二进制反而要额外的输出逻辑。这就是 DE12 说的「尽量把输出位当成状态位」。</p>
+</section>
+</div>
+
+<script>
+/* ================= shared QM ================= */
+const cov=(p,x)=>((x^p.v)&~p.m)===0;
+const litsN=(p,n)=>{let c=0;for(let i=0;i<n;i++)if(!(p.m>>i&1))c++;return c;};
+function primesN(on,dc,n){let cur=new Map();[...on,...dc].forEach(x=>cur.set(x+'/0',{v:x,m:0}));const P=[];
+  while(cur.size){const nxt=new Map(),used=new Set(),arr=[...cur.values()];
+    for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){const a=arr[i],b=arr[j];if(a.m!==b.m)continue;const d=a.v^b.v;if(d&&!(d&(d-1))){nxt.set((a.v&~d)+'/'+(a.m|d),{v:a.v&~d,m:a.m|d});used.add(i);used.add(j);}}
+    arr.forEach((a,i)=>{if(!used.has(i))P.push(a);});cur=nxt;}
+  return P.filter(p=>on.some(x=>cov(p,x)));}
+function minSOP(on,dc,n){if(!on.length)return [];const P=primesN(on,dc,n);let best=null;const cost=s=>s.length*100+s.reduce((a,p)=>a+litsN(p,n),0);
+  const rec=(left,ch)=>{if(best&&cost(ch)>=cost(best))return;if(!left.length){best=ch.slice();return;}
+    let opts=null;left.forEach(x=>{const o=P.filter(p=>cov(p,x));if(!opts||o.length<opts.length)opts=o;});
+    opts.slice().sort((a,b)=>litsN(a,n)-litsN(b,n)).forEach(p=>{ch.push(p);rec(left.filter(x=>!cov(p,x)),ch);ch.pop();});};
+  rec(on.slice(),[]);return best||[];}
+function termH(p,names){const n=names.length;let s='';for(let i=0;i<n;i++){const b=n-1-i;if(p.m>>b&1)continue;s+=(p.v>>b&1)?names[i]:`<span class="ov">${names[i]}</span>`;}return s||'1';}
+function sopH(sel,on,n,names){if(!on.length)return '0';if(sel.length===1&&sel[0].m===(1<<n)-1)return '1';return sel.map(p=>termH(p,names)).join(' + ');}
+function sopCost(sel,n){if(!sel.length)return 0;let c=0;sel.forEach(p=>{const l=litsN(p,n);if(l>1)c+=l;});if(sel.length>1)c+=sel.length;
+  /* inverters: one per complemented variable used */const inv=new Set();sel.forEach(p=>{for(let b=0;b<n;b++)if(!(p.m>>b&1)&&!(p.v>>b&1))inv.add(b);});return c+inv.size;}
+const GRAY=k=>k===1?[0,1]:k===2?[0,1,3,2]:[0];
+const GC=['--amp','--blue','--purple','--green','--red','--accent','--volt'];
+/* K-map drawer: n = 2..4 variables, vals[m] = 0/1/2(X); groups = selected implicants */
+function drawKmap(x,W,H,n,names,vals,groups,title,ox=0,maxS=60){
+  const rv=n>>1,cvn=n-rv,RG=GRAY(rv),CG=GRAY(cvn),nr=RG.length,nc=CG.length;
+  const S=Math.min((W-70)/nc,(H-60)/nr,maxS),x0=ox+Math.max(54,(W-nc*S)/2+18),y0=title?44:34;
+  if(title)label(x,title,ox+8,16,css('--ink'),13);
+  text(x,names.slice(0,rv).join('')+' \\ '+names.slice(rv).join(''),x0-6,y0-12,css('--muted'),11,'right');
+  CG.forEach((g,i)=>label(x,g.toString(2).padStart(cvn,'0'),x0+i*S+S/2-(cvn>1?9:4),y0-6,css('--muted'),11,'500'));
+  RG.forEach((g,i)=>label(x,g.toString(2).padStart(rv,'0'),x0-(rv>1?24:14),y0+i*S+S/2+4,css('--muted'),11,'500'));
+  for(let r=0;r<nr;r++)for(let c=0;c<nc;c++){const m=(RG[r]<<cvn)|CG[c],v=vals[m],px=x0+c*S,py=y0+r*S;
+    x.fillStyle=v===1?css('--fillA'):v===2?css('--shade'):'transparent';x.fillRect(px,py,S,S);x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(px+.5,py+.5,S-1,S-1);
+    label(x,v===1?'1':v===2?'X':'0',px+S/2-5,py+S/2+6,v===0?css('--muted'):v===2?css('--purple'):css('--ink'),16);}
+  const runs=(idx,N)=>{const s=[...Array(N).keys()].map(i=>idx.includes(i));if(s.every(Boolean))return [[0,N-1,0]];const out=[];
+    if(N===4&&s[0]&&s[3]&&!(s[1]&&s[2])){const a=[],b=[];let i=0;while(i<4&&s[i]){a.push(i);i++;}let j=3;while(j>=0&&s[j]){b.unshift(j);j--;}out.push([a[0],a[a.length-1],-1]);out.push([b[0],b[b.length-1],1]);return out;}
+    let st=-1;for(let i=0;i<=N;i++){if(i<N&&s[i]){if(st<0)st=i;}else if(st>=0){out.push([st,i-1,0]);st=-1;}}return out;};
+  const cm=(1<<cvn)-1;groups.forEach((p,k)=>{const rr=[...Array(nr).keys()].filter(r=>((RG[r]^(p.v>>cvn))&~(p.m>>cvn)&((1<<rv)-1))===0),cc=[...Array(nc).keys()].filter(c=>((CG[c]^p.v)&~p.m&cm)===0);
+    const col=css(GC[k%GC.length]),ins=4+(k%4)*3;x.strokeStyle=col;x.lineWidth=2.4;
+    runs(rr,nr).forEach(([r0,r1,rw])=>runs(cc,nc).forEach(([c0,c1,cw])=>{let L=x0+c0*S+ins,R=x0+(c1+1)*S-ins,T=y0+r0*S+ins,B=y0+(r1+1)*S-ins;
+      if(cw===-1)L=x0-10;if(cw===1)R=x0+nc*S+10;if(rw===-1)T=y0-10;if(rw===1)B=y0+nr*S+10;x.beginPath();x.roundRect?x.roundRect(L,T,R-L,B-T,9):x.rect(L,T,R-L,B-T);x.stroke();}));});}
+
+/* ================= Lab 1: expressions ================= */
+function parse(src){src=src.replace(/\s+/g,'');const mm=/^[mΣ]*\(([\d,]*)\)$/i.exec(src.replace(/^Σ/,''));
+  if(mm||/^Σ?m\(/i.test(src)){const inner=(/\(([\d,]*)\)/.exec(src)||[])[1];if(inner===undefined)throw 0;const ms=inner?inner.split(',').map(Number):[];if(ms.some(v=>!(v>=0&&v<16)))throw 0;const mx=Math.max(3,...ms.map(v=>v>=8?3:v>=4?2:1));return {vars:Math.max(...ms,0)>=8?4:3,f:m=>ms.includes(m)?1:0,sigma:true,max:ms.length?Math.max(...ms):0};}
+  let i=0;const peek=()=>src[i];let maxv=-1;
+  const prim=()=>{const c=peek();if(!c)throw 0;
+    if('~!¬'.includes(c)){i++;const a=prim();return post(e=>1-a(e));}
+    if(c==='('){i++;const a=orE();if(peek()!==')')throw 0;i++;return post(a);}
+    if(c==='0'||c==='1'){i++;const v=+c;return post(()=>v);}
+    const u=c.toUpperCase();if('ABCD'.includes(u)){i++;const k='ABCD'.indexOf(u);maxv=Math.max(maxv,k);return post(e=>e[k]);}throw 0;};
+  const post=a=>{while(peek()==="'"||peek()==='̅'||peek()==='’'){i++;const b=a;a=e=>1-b(e);}return a;};
+  const andE=()=>{let a=prim();while(i<src.length){const c=peek();if('*·.&'.includes(c)){i++;}else if(!('(~!¬01ABCDabcd'.includes(c)))break;const l=a,r=prim();a=e=>l(e)&r(e);}return a;};
+  const xorE=()=>{let a=andE();while(peek()==='^'||peek()==='⊕'){i++;const l=a,r=andE();a=e=>l(e)^r(e);}return a;};
+  const orE=()=>{let a=xorE();while(peek()==='+'||peek()==='|'){i++;const l=a,r=xorE();a=e=>l(e)|r(e);}return a;};
+  const f=orE();if(i!==src.length)throw 0;return {vars:maxv+1,ev:f};}
+function compile(p,n){if(p.sigma)return m=>p.f(m);return m=>{const e=[0,1,2,3].map(k=>k<n?(m>>(n-1-k))&1:0);return p.ev(e);};}
+let E1={f:"AB+A'C+BC",g:"AB+A'C"};
+function lab1(){let pf=null,pg=null;try{pf=parse(E1.f);$('ef').classList.remove('err');}catch(e){$('ef').classList.add('err');}
+  try{pg=parse(E1.g);$('eg').classList.remove('err');}catch(e){$('eg').classList.add('err');}
+  pressGroup('#lab1 [data-x]',b=>b.dataset.x===E1.f+'|'+E1.g);
+  const n=Math.max(2,pf?pf.vars:0,pg?pg.vars:0),N=1<<n,names=['A','B','C','D'].slice(0,n);
+  const F=pf?compile(pf,n):null,G=pg?compile(pg,n):null;
+  const fv=F?[...Array(N).keys()].map(F):null,gv=G?[...Array(N).keys()].map(G):null;
+  let h='<tr>'+names.map(v=>`<th>${v}</th>`).join('')+'<th>m</th><th>f</th><th>g</th></tr>',diff=0;
+  for(let m=0;m<N;m++){const d=fv&&gv&&fv[m]!==gv[m];if(d)diff++;h+=`<tr class="${d?'diff':''}">`+names.map((v,k)=>`<td>${(m>>(n-1-k))&1}</td>`).join('')+`<td style="color:var(--muted)">${m}</td><td class="${fv&&fv[m]?'one':''}">${fv?fv[m]:'?'}</td><td class="${gv&&gv[m]?'one':''}">${gv?gv[m]:'?'}</td></tr>`;}
+  $('ett').innerHTML=h;
+  const onf=fv?[...Array(N).keys()].filter(m=>fv[m]):[],ong=gv?[...Array(N).keys()].filter(m=>gv[m]):[];
+  $('esf').textContent=fv?`Σm(${onf.join(',')})`:'表达式有误';$('esg').textContent=gv?`Σm(${ong.join(',')})`:'表达式有误';
+  const sf=fv?minSOP(onf,[],n):[],sg=gv?minSOP(ong,[],n):[];
+  $('eeq').innerHTML=`最简 f = ${fv?sopH(sf,onf,n,names):'—'}<br>最简 g = ${gv?sopH(sg,ong,n,names):'—'}`;
+  const v=$('ever');if(!fv||!gv){v.textContent='有表达式写错了';v.className='verdict bad';}else if(diff){v.textContent=`✗ 不等价（${diff} 行不同）`;v.className='verdict bad';}else{v.textContent='✓ 等价：每一行都相同';v.className='verdict ok';}
+  const [x,W,H]=fit($('ekm'));if(fv)drawKmap(x,W,H,n,names,fv,sf.length===1&&sf[0].m===N-1?[sf[0]]:sf,'f 的 K-map 与最简圈',0,58);}
+['ef','eg'].forEach(id=>$(id).addEventListener('input',e=>{E1[id==='ef'?'f':'g']=e.target.value;Lab.draw(1);}));
+document.querySelectorAll('#lab1 [data-x]').forEach(b=>b.addEventListener('click',()=>{const [f,g]=b.dataset.x.split('|');E1={f,g};$('ef').value=f;$('eg').value=g;Lab.draw(1);}));
+Lab.add(1,lab1,{ekm:220});
+
+/* ================= Lab 2: Moore vs Mealy ================= */
+const NC=12;let MX=[0,1,1,0,1,1,1,0,0,1,0,1];let mgeom=null;
+function simMM(){/* x[k] holds on [k, k+1); the edge at t = k+1 samples x[k] just before it changes */
+  const xv=t=>{const k=Math.floor(t+1e-9);return k<0?0:MX[Math.min(k,NC-1)];};
+  const moore=[0],mealy=[0];/* state during cycle k (between edge k and k+1) */
+  for(let k=1;k<=NC;k++){const x=MX[k-1];const s=moore[k-1];moore.push(x?Math.min(s+1,2):0);mealy.push(x?1:0);}
+  const stAt=(arr,t)=>arr[Math.max(0,Math.min(NC,Math.floor(t+1e-9)))];
+  return {xv,moore,mealy,mo:t=>stAt(moore,t),me:t=>stAt(mealy,t),zMo:t=>stAt(moore,t)===2?1:0,zMe:t=>(stAt(mealy,t)===1&&xv(t))?1:0};}
+function lab2(){const t=+$('mt').value,S=simMM();$('mtO').textContent=t.toFixed(2);
+  const mo=S.mo(t),me=S.me(t);$('mmo').textContent=`S${mo} / Z = ${S.zMo(t)}`;$('mme').textContent=`S${me} / Z = ${S.zMe(t)}`;
+  /* first Z=1 times (exact event times: edges at k, input changes at k+0.3) */let fMo=null,fMe=null;for(let k=0;k<=NC&&(fMo===null||fMe===null);k++){[k].forEach(u=>{if(fMo===null&&S.zMo(u+1e-6))fMo=u;if(fMe===null&&S.zMe(u+1e-6))fMe=u;});}
+  $('mearly').textContent=fMo!==null&&fMe!==null?`t = ${fMe.toFixed(1)} vs ${fMo.toFixed(1)}`:'—';
+  {const [x,W,H]=fit($('mw'));const L=60,R=W-8,rows=['CLK','x','Moore 状态','Moore Z','Mealy 状态','Mealy Z'],rh=(H-22)/rows.length,amp=Math.min(rh*.55,16),X=u=>L+(R-L)*u/(NC+1);mgeom={L,R,rh,X};
+    for(let k=0;k<=NC+1;k++){x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(X(k),4);x.lineTo(X(k),H-16);x.stroke();}
+    rows.forEach((n,r)=>label(x,n,2,6+r*rh+rh/2+4,n.endsWith('Z')?css('--amp'):css('--ink'),10.5,'600',css('--body')));
+    const wave=(r,f,col,lw=2.2)=>{const yb=6+r*rh+rh/2+amp/2,Y=v=>v?yb-amp:yb;x.strokeStyle=col;x.lineWidth=lw;x.beginPath();let pv=f(0);x.moveTo(X(0),Y(pv));
+      for(let u=0;u<=NC+1;u+=0.05){const v=f(u);if(v!==pv){x.lineTo(X(u),Y(pv));x.lineTo(X(u),Y(v));pv=v;}}x.lineTo(X(NC+1),Y(pv));x.stroke();};
+    wave(0,u=>(u%1)<.5&&u>=1?1:(u>=1&&(u%1)<.5)?1:0,css('--muted'),1.6);
+    for(let k=0;k<NC;k++)if(MX[k]){x.fillStyle=css('--fillB');x.fillRect(X(k)+1,6+rh+rh/2-amp/2,X(k+1)-X(k)-2,amp);}
+    wave(1,S.xv,css('--blue'));
+    const strip=(r,f,nm)=>{const y=6+r*rh+3;let st=0,pv=f(0);for(let u=0.05;u<=NC+1.001;u+=.05){const v=u<=NC+1-1e-9?f(u):-1;if(v!==pv||u>=NC+1){x.fillStyle=pv===2?css('--amp'):pv===1?css('--blue'):css('--muted');x.globalAlpha=.22;x.fillRect(X(st),y,X(u)-X(st),rh-6);x.globalAlpha=1;
+      if(X(u)-X(st)>18)label(x,nm+pv,(X(st)+X(u))/2-8,y+rh/2,css('--ink'),10.5);st=u;pv=v;}}};
+    strip(2,S.mo,'S');wave(3,S.zMo,css('--amp'),2.6);strip(4,S.me,'S');wave(5,S.zMe,css('--amp'),2.6);
+    x.strokeStyle=css('--red');x.lineWidth=1.5;x.setLineDash([4,3]);x.beginPath();x.moveTo(X(t),4);x.lineTo(X(t),H-16);x.stroke();x.setLineDash([]);
+    for(let k=1;k<=NC;k++)text(x,String(k),X(k),H-4,css('--muted'),9.5,'center');}
+  {const [x,W,H]=fit($('md'));const r=18,x1=W*.25,x2=W*.75,col=(on)=>on?css('--amp'):css('--accent');
+    label(x,'Moore',x1-W*.13-r,16,css('--ink'),12);label(x,'Mealy',x2-W*.1,16,css('--ink'),12);
+    const P1=[[x1,H*.24],[x1-W*.13,H*.62],[x1+W*.13,H*.62]],P2=[[x2,H*.3],[x2,H*.72]];
+    const node=(p,name,out,act)=>{x.beginPath();x.arcS(p[0],p[1],r,0,7);x.fillStyle=act?css('--amp'):css('--panel');x.fill();x.strokeStyle=css('--accent');x.lineWidth=2;x.stroke();
+      const s=out===null?name:name+'/'+out;x.font=`600 11px ${css('--mono')}`;x.fillStyle=act?css('--panel'):css('--ink');x.fillText(s,p[0]-x.measureText(s).width/2,p[1]+4);};
+    const ed=(a,b,lab,act,bend=0)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),u=[dx/L,dy/L],o=[-u[1]*bend,u[0]*bend];const c=act?css('--amp'):css('--muted');
+      arrow(x,a[0]+u[0]*r+o[0],a[1]+u[1]*r+o[1],b[0]-u[0]*(r+2)+o[0],b[1]-u[1]*(r+2)+o[1],c,act?2.6:1.4,8);tag(x,lab,a[0]+o[0],a[1]+o[1],b[0]+o[0],b[1]+o[1],1,c,10,10.5);};
+    const loop=(p,lab,act,ang)=>{const c=act?css('--amp'):css('--muted');const cx=p[0]+Math.cos(ang)*(r+9),cy=p[1]+Math.sin(ang)*(r+9);x.strokeStyle=c;x.lineWidth=act?2.4:1.4;x.beginPath();x.arcS(cx,cy,9,0,7);x.stroke();
+      text(x,lab,p[0]+Math.cos(ang)*(r+30),p[1]+Math.sin(ang)*(r+30)+4,c,10.5,'center');};
+    const xn=S.xv(t),mo2=S.mo(t),me2=S.me(t);
+    node(P1[0],'S0',0,mo2===0);node(P1[1],'S1',0,mo2===1);node(P1[2],'S2',1,mo2===2);
+    ed(P1[0],P1[1],'1',mo2===0&&xn,6);ed(P1[1],P1[0],'0',mo2===1&&!xn,6);ed(P1[1],P1[2],'1',mo2===1&&xn,6);ed(P1[2],P1[0],'0',mo2===2&&!xn,6);
+    loop(P1[0],'0',mo2===0&&!xn,Math.PI);loop(P1[2],'1',mo2===2&&xn,0);
+    node(P2[0],'S0',null,me2===0);node(P2[1],'S1',null,me2===1);
+    ed(P2[0],P2[1],'1/0',me2===0&&xn,10);ed(P2[1],P2[0],'0/0',me2===1&&!xn,10);loop(P2[0],'0/0',me2===0&&!xn,0);loop(P2[1],'1/1',me2===1&&xn,Math.PI/2);
+    text(x,`现在 x = ${xn}：亮的箭头 = 下一个时钟沿要走的路`,W/2,H-6,css('--muted'),10.5,'center');}
+}
+$('mt').addEventListener('input',()=>Lab.draw(2));
+$('mw').addEventListener('click',e=>{if(!mgeom)return;const r=$('mw').getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,row=Math.floor((py-6)/mgeom.rh);if(row!==1)return;
+  const u=(px-mgeom.L)/(mgeom.R-mgeom.L)*(NC+1),k=Math.floor(u);if(k<0||k>=NC)return;MX[k]^=1;Lab.draw(2);});
+$('mrand').addEventListener('click',()=>{MX=MX.map(()=>Math.random()<.55?1:0);Lab.draw(2);});
+Lab.add(2,lab2,{mw:250,md:250});
+
+/* ================= Lab 3: flip-flop conversion ================= */
+const WANT={JK:{ins:['J','K'],f:(i,q)=>(i[0]&(1-q))|((1-i[1])&q)},D:{ins:['D'],f:(i,q)=>i[0]},T:{ins:['T'],f:(i,q)=>i[0]^q},SR:{ins:['S','R'],f:(i,q)=>i[0]|((1-i[1])&q)}};
+/* excitation: [q][q'] -> required inputs (2 = X) */
+const HAVE={D:{ins:['D'],ex:(q,n)=>[n]},T:{ins:['T'],ex:(q,n)=>[q^n]},JK:{ins:['J','K'],ex:(q,n)=>q?[2,1-n]:[n,2]},SR:{ins:['S','R'],ex:(q,n)=>q?(n?[2,0]:[0,1]):(n?[1,2]:[0,2])}};
+let C3={want:'JK',have:'T'};
+$('cwant').innerHTML=Object.keys(WANT).map(k=>`<button data-w="${k}">${k}</button>`).join('');$('chave').innerHTML=Object.keys(HAVE).map(k=>`<button data-h="${k}">${k}</button>`).join('');
+function lab3(){pressGroup('#lab3 [data-w]',b=>b.dataset.w===C3.want);pressGroup('#lab3 [data-h]',b=>b.dataset.h===C3.have);
+  const W_=WANT[C3.want],H_=HAVE[C3.have],names=[...W_.ins,'Qn'],n=names.length,N=1<<n;
+  const req=H_.ins.map(()=>new Array(N).fill(0));let h='<tr>'+names.map(v=>`<th>${v}</th>`).join('')+'<th>Qn+1</th>'+H_.ins.map(v=>`<th>需要的 ${v}</th>`).join('')+'</tr>';
+  for(let m=0;m<N;m++){const ib=W_.ins.map((_,k)=>(m>>(n-1-k))&1),q=m&1,nq=W_.f(ib,q),r=H_.ex(q,nq);r.forEach((v,k)=>req[k][m]=v);
+    h+='<tr>'+names.map((_,k)=>`<td>${(m>>(n-1-k))&1}</td>`).join('')+`<td class="${nq?'one':''}">${nq}</td>`+r.map(v=>`<td class="${v===1?'one':v===2?'x':''}">${v===2?'X':v}</td>`).join('')+'</tr>';}
+  $('ctt').innerHTML=h;
+  const res=req.map(v=>{const on=[],dc=[];v.forEach((b,m)=>{if(b===1)on.push(m);else if(b===2)dc.push(m);});const s=minSOP(on,dc,n);return {on,dc,s};});
+  $('ceq').innerHTML=H_.ins.map((v,k)=>`${v} = ${sopH(res[k].s,res[k].on,n,names.map(s=>s==='Qn'?'Q':s))}`).join('　　');
+  const [x,W,Hh]=fit($('ckm'));const k=H_.ins.length,w=W/k;H_.ins.forEach((v,i)=>{const vals=req[i];const g=res[i].s.length===1&&res[i].s[0].m===N-1?[]:res[i].s;
+    drawKmap(x,w,Hh,n,names.map(s=>s==='Qn'?'Q':s),vals,g,`需要的 ${v}`,i*w,n===2?52:44);});}
+document.querySelectorAll('#lab3 [data-w]').forEach(b=>b.addEventListener('click',()=>{C3.want=b.dataset.w;Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-h]').forEach(b=>b.addEventListener('click',()=>{C3.have=b.dataset.h;Lab.draw(3);}));
+Lab.add(3,lab3,{ckm:210});
+
+/* ================= Lab 4: code assignment ================= */
+const OUT=[3,2,0,1];/* S0..S3 outputs Q2Q1 */const NXT=[[3,1],[0,2],[1,3],[2,0]];/* [DIR=0, DIR=1] */
+const PERMS=[];(function g(a,rest){if(!rest.length){PERMS.push(a);return;}rest.forEach((v,i)=>g([...a,v],rest.filter((_,j)=>j!==i)));})([],[0,1,2,3]);
+function design(code){/* vars y1 y0 DIR */const dec=new Array(4);code.forEach((c,s)=>dec[c]=s);
+  const D=[1,0].map(bit=>{const on=[];for(let y=0;y<4;y++)for(let d=0;d<2;d++){const nx=code[NXT[dec[y]][d]];if(nx>>bit&1)on.push(y*2+d);}const s=minSOP(on,[],3);return {on,s,c:sopCost(s,3)};});
+  const O=[1,0].map(bit=>{const on=[];for(let y=0;y<4;y++)if(OUT[dec[y]]>>bit&1)on.push(y);const s=minSOP(on,[],2);return {on,s,c:sopCost(s,2)};});
+  return {D,O,ct:D[0].c+D[1].c,co:O[0].c+O[1].c};}
+const ALL=PERMS.map(p=>({p,...design(p)}));
+let A4=[0,1,2,3];
+function lab4(){const d=design(A4);
+  $('asel').innerHTML=['S0','S1','S2','S3'].map((s,i)=>`<label>${s}（输出 ${OUT[i].toString(2).padStart(2,'0')}）→ <select data-s="${i}">${[0,1,2,3].map(c=>`<option value="${c}" ${A4[i]===c?'selected':''}>${c.toString(2).padStart(2,'0')}</option>`).join('')}</select></label>`).join('');
+  $('asel').querySelectorAll('select').forEach(sl=>sl.addEventListener('change',e=>{const i=+e.target.dataset.s,v=+e.target.value,j=A4.indexOf(v);A4[j]=A4[i];A4[i]=v;Lab.draw(4);}));
+  const nm=['y1','y0','DIR'],nm2=['y1','y0'];
+  $('aeq').innerHTML=`D1 = ${sopH(d.D[0].s,d.D[0].on,3,nm)}<br>D0 = ${sopH(d.D[1].s,d.D[1].on,3,nm)}<br>Q2 = ${sopH(d.O[0].s,d.O[0].on,2,nm2)}${d.O[0].c===0?' <small style="color:var(--green)">（导线）</small>':''}<br>Q1 = ${sopH(d.O[1].s,d.O[1].on,2,nm2)}${d.O[1].c===0?' <small style="color:var(--green)">（导线）</small>':''}`;
+  $('act').textContent=d.ct;$('aco').textContent=d.co+(d.co===0?'（无输出逻辑）':'');$('acs').textContent=d.ct+d.co;
+  const [x,W,H]=fit($('abar'));const sorted=ALL.slice().sort((a,b)=>(a.ct+a.co)-(b.ct+b.co)),mx=Math.max(...ALL.map(a=>a.ct+a.co)),L=30,B=H-34,bw=(W-L-8)/24;
+  text(x,'24 种编码的总成本（橙 = 转移逻辑，紫 = 输出逻辑；描边 = 当前）',L,14,css('--muted'),11);
+  sorted.forEach((a,i)=>{const px=L+i*bw,h1=(B-26)*a.ct/mx,h2=(B-26)*a.co/mx;x.fillStyle=css('--amp');x.fillRect(px+2,B-h1,bw-4,h1);x.fillStyle=css('--purple');x.fillRect(px+2,B-h1-h2,bw-4,h2);
+    if(a.p.join()===A4.join()){x.strokeStyle=css('--ink');x.lineWidth=2.4;x.strokeRect(px+1,B-h1-h2-2,bw-2,h1+h2+3);}
+    if(a.co===0)text(x,'✓',px+bw/2,B+12,css('--green'),11,'center');});
+  x.strokeStyle=css('--line');x.beginPath();x.moveTo(L,B);x.lineTo(W-6,B);x.stroke();text(x,'✓ = 不需要输出门',L,H-4,css('--green'),10.5);}
+$('aemb').addEventListener('click',()=>{A4=OUT.slice();Lab.draw(4);});$('abin').addEventListener('click',()=>{A4=[0,1,2,3];Lab.draw(4);});
+$('abest').addEventListener('click',()=>{const b=ALL.slice().sort((a,b)=>(a.ct+a.co)-(b.ct+b.co))[0];A4=b.p.slice();Lab.draw(4);});
+Lab.add(4,lab4,{abar:210});
+
+Lab.start();
+</script>
+</body></html>
