@@ -1,0 +1,180 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>交流功率实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · AC POWER · THREE PHASE</div>
+  <h1>交流功率实验室</h1>
+  <p>四个实验对应一年级 EE 的 AC Power：瞬时功率 p = vi（电阻消耗、电感电容来回存取）、有功 / 无功 / 视在功率与功率因数校正、最大功率传输与效率、三相功率为什么是常数。预设就是讲义例题的数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 瞬时功率</a><a href="#lab2">实验 2 功率因数校正</a><a href="#lab3">实验 3 最大功率传输</a><a href="#lab4">实验 4 三相功率</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 时域里的功率（Lecture 1）</div>
+  <h2>p = v × i：电阻一直在吃能量，电感电容只是借了又还</h2>
+  <p class="lead">电压 v = V<sub>p</sub> sin ωt，电流比电压滞后阻抗角 φ（φ &gt; 0 是电感性，φ &lt; 0 是电容性）。红色阴影是 p &gt; 0（电源送进负载），蓝色是 p &lt; 0（负载还给电源）。平均值就是有功功率 P，来回流动的幅度就是无功功率 Q。</p>
+  <div class="btns" role="group" aria-label="负载"><button data-l="0">纯电阻 φ = 0°</button><button data-l="30">讲义电机 φ = 30°</button><button data-l="90">纯电感 φ = 90°</button><button data-l="-90">纯电容 φ = −90°</button><button data-l="-57.9">例 2 RC φ = −57.9°</button></div>
+  <div class="controls"><div class="ctl"><label for="pPhi">阻抗角 φ</label><input id="pPhi" type="range" min="-90" max="90" step="0.5" value="30"><output id="pPhiO"></output></div></div>
+  <div class="stage one"><canvas id="pw" height="280" aria-label="v、i、p 波形"></canvas></div>
+  <div class="read"><div><small>平均功率 P = ½V<sub>p</sub>I<sub>p</sub> cos φ</small><b id="pP"></b></div><div><small>无功 Q = ½V<sub>p</sub>I<sub>p</sub> sin φ</small><b id="pQ"></b></div><div><small>功率因数 cos φ</small><b id="pF"></b></div><div><small>p 的频率</small><b>2ω</b></div></div>
+  <p class="note"><strong>看点：</strong>纯电阻时 p 永远 ≥ 0，平均是 V<sub>p</sub>I<sub>p</sub>/2 = V<sub>rms</sub>I<sub>rms</sub>；纯电感、纯电容时红蓝面积相等，平均为 0，能量只是在磁场 / 电场和电源之间来回搬。只看耗散的功会低估电源实际要送出的电流。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 有功、无功、视在功率与功率因数校正（Lecture 2–3）</div>
+  <h2>给电机并一个电容，抵消无功功率，电源电流就变小</h2>
+  <p class="lead">电机 = 电阻 + 电感串联，讲义例 1：240 V、5 A、φ = 30°，S = 1200 VA，P = 1039 W，Q = 600 VAr。拖动电容 C，左图是功率三角形（灰色 = 校正前），右图是电流相量。默认并联（实际做法，电机两端电压不变）；切换到串联可以看到为什么不能串联。</p>
+  <div class="btns" role="group" aria-label="接法"><button data-m="par">电容并联（实际做法）</button><button data-m="ser">电容串联（讲义 p.34 的谐振图）</button><button id="cBest">C 取最佳值</button><button id="cZero">去掉电容</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="fV">电压 V<sub>rms</sub> (V)</label><input id="fV" type="range" min="100" max="415" step="1" value="240"><output id="fVO"></output></div>
+    <div class="ctl"><label for="fI">电机电流 I<sub>rms</sub> (A)</label><input id="fI" type="range" min="1" max="20" step="0.5" value="5"><output id="fIO"></output></div>
+    <div class="ctl"><label for="fPhi">电机阻抗角 φ</label><input id="fPhi" type="range" min="0" max="85" step="1" value="30"><output id="fPhiO"></output></div>
+    <div class="ctl"><label for="fC">电容 C (µF)</label><input id="fC" type="range" min="0" max="200" step="0.01" value="0"><output id="fCO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="tri" height="270" aria-label="功率三角形"></canvas><canvas id="iph" height="270" aria-label="电流相量图"></canvas></div>
+  <div class="read"><div><small>电源电流</small><b id="fIs"></b></div><div><small>功率因数</small><b id="fPF"></b></div><div><small>P / Q / S（电源侧）</small><b id="fPQS" style="font-size:14px"></b></div><div><small>功率因数 = 1 需要的 C</small><b id="fCb"></b></div></div>
+  <p class="note"><strong>并联 vs 串联：</strong>并联时电机两端还是 240 V，它的 P、Q 都不变，电容提供 −Q，电源只需要送 P：电流 5 A → 4.33 A（讲义 p.36 的数）。串联时电机电压变了，谐振时电流反而<strong>变大</strong>（5.77 A），电机吸收的 P 也变了，所以讲义 p.36 的 4.33 A 只对并联成立。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 最大功率传输与效率（Lecture 3）</div>
+  <h2>R<sub>L</sub> = R<sub>out</sub> 时负载功率最大，但效率只有 50%</h2>
+  <p class="lead">戴维宁源 V<sub>Th</sub> 串 R<sub>out</sub> 接负载 R<sub>L</sub>。蓝线是负载功率 P<sub>L</sub>（横轴对数），橙线是效率 η = R<sub>L</sub>/(R<sub>out</sub>+R<sub>L</sub>)。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-r="1">匹配 R<sub>L</sub> = R<sub>out</sub></button><button data-r="0.2">R<sub>L</sub> 太小（过热）</button><button data-r="10">R<sub>L</sub> = 10 R<sub>out</sub>（功放常用）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="mV">V<sub>Th</sub> (V)</label><input id="mV" type="range" min="1" max="50" step="0.5" value="10"><output id="mVO"></output></div>
+    <div class="ctl"><label for="mRo">R<sub>out</sub> (Ω)</label><input id="mRo" type="range" min="1" max="200" step="1" value="50"><output id="mRoO"></output></div>
+    <div class="ctl"><label for="mRL">R<sub>L</sub>（对数）</label><input id="mRL" type="range" min="-1.5" max="1.5" step="0.01" value="0"><output id="mRLO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="mp" height="260" aria-label="负载功率与效率"></canvas></div>
+  <div class="read"><div><small>负载功率 P<sub>L</sub></small><b id="mPL"></b></div><div><small>效率 η</small><b id="mEta"></b></div><div><small>最大可能 V<sub>Th</sub>²/4R<sub>out</sub></small><b id="mPm"></b></div><div><small>R<sub>out</sub> 上发热</small><b id="mPo"></b></div></div>
+  <p class="note"><strong>推导：</strong>P<sub>L</sub> = V<sub>Th</sub>²R<sub>L</sub>/(R<sub>out</sub>+R<sub>L</sub>)²，对 R<sub>L</sub> 求导令其为 0 得 R<sub>out</sub> = R<sub>L</sub>。交流时推广成共轭匹配：负载 = R<sub>out</sub> − jX<sub>out</sub>。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 三相功率（Lecture 4）</div>
+  <h2>三个相差 120° 的电源一起供电，总功率变成常数</h2>
+  <p class="lead">星形连接，每相负载阻抗 |Z|∠φ。上图是三相各自的瞬时功率（细线）和总和（粗线）；平衡时总和是一条直线。右图是相电压（实线）和线电压 V<sub>RY</sub> = V<sub>RN</sub> − V<sub>YN</sub>（虚线，长 √3 倍、超前 30°）。把 B 相负载调得不一样，看总功率开始波动、中线电流出现。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-t="16,42,1">讲义三相电机（16 Ω∠42°）</button><button data-t="16,0,1">纯电阻平衡</button><button data-t="16,0,0.4">B 相不平衡</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="tZ">每相 |Z| (Ω)</label><input id="tZ" type="range" min="2" max="60" step="0.5" value="16"><output id="tZO"></output></div>
+    <div class="ctl"><label for="tPhi">阻抗角 φ</label><input id="tPhi" type="range" min="-60" max="80" step="1" value="42"><output id="tPhiO"></output></div>
+    <div class="ctl"><label for="tB">B 相 |Z| 倍数</label><input id="tB" type="range" min="0.2" max="3" step="0.05" value="1"><output id="tBO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="tp" height="260" aria-label="三相瞬时功率"></canvas><canvas id="tph" height="260" aria-label="相电压与线电压相量"></canvas></div>
+  <div class="read"><div><small>线电流 I<sub>L</sub>（R 相）</small><b id="tI"></b></div><div><small>每相 P = V<sub>LN</sub>I<sub>L</sub> cos φ</small><b id="tP1"></b></div><div><small>总 P</small><b id="tP"></b></div><div><small>中线电流 I<sub>N</sub></small><b id="tN"></b></div></div>
+  <p class="note"><strong>英国电网：</strong>V<sub>LN</sub> = 240 V rms（峰值 339.4 V），V<sub>LL</sub> = √3 × 240 ≈ 415 V。平衡负载时三相电流相加为 0，中线可以省掉。</p>
+</section>
+</div>
+
+<script>
+const SI=(v,u,d=3)=>{if(!isFinite(v))return '∞ '+u;if(Math.abs(v)<1e-9)return '0 '+u;const a=Math.abs(v);const P=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n']];for(const [s,p] of P){if(a>=s*0.9995||s===1e-9)return (+(v/s).toPrecision(d))+' '+p+u;}return '0 '+u;};
+const val=id=>+$(id).value;
+/* ---------- Lab 1 ---------- */
+function lab1(){
+  const phi=val('pPhi');$('pPhiO').textContent=phi+'°';pressGroup('#lab1 [data-l]',b=>+b.dataset.l===phi);
+  const r=phi*D2R,P=0.5*Math.cos(r),Q=0.5*Math.sin(r);
+  $('pP').innerHTML=fmt(P,3)+' × V<sub>p</sub>I<sub>p</sub>';$('pQ').innerHTML=fmt(Q,3)+' × V<sub>p</sub>I<sub>p</sub>';
+  $('pF').textContent=fmt(Math.cos(r),3)+(Math.abs(phi)<0.01?'':phi>0?'（滞后 lagging）':'（超前 leading）');
+  const [x,W,H]=fit($('pw'));const a=axes(x,W,H,{x0:0,x1:4*Math.PI,y0:-1.25,y1:1.25,xt:[0,Math.PI,2*Math.PI,3*Math.PI,4*Math.PI],xf:v=>Math.round(v/Math.PI*180)+'°',yt:[-1,-0.5,0,0.5,1],title:'蓝 v　橙 i　红 p = vi（虚线 = 平均值 P）',pl:40});
+  const v=t=>Math.sin(t),i=t=>Math.sin(t-r),p=t=>v(t)*i(t);
+  for(let k=0;k<400;k++){const t0=4*Math.PI*k/400,t1=4*Math.PI*(k+1)/400,pv=p((t0+t1)/2);x.fillStyle=pv>=0?css('--red'):css('--blue');x.globalAlpha=.18;x.fillRect(a.X(t0),Math.min(a.Y(0),a.Y(pv)),a.X(t1)-a.X(t0)+.5,Math.abs(a.Y(pv)-a.Y(0)));}
+  x.globalAlpha=1;
+  plot(x,a.X,a.Y,v,0,4*Math.PI,css('--blue'),2);plot(x,a.X,a.Y,i,0,4*Math.PI,css('--amp'),2);plot(x,a.X,a.Y,p,0,4*Math.PI,css('--red'),2.6);
+  x.setLineDash([6,4]);plot(x,a.X,a.Y,()=>P,0,4*Math.PI,css('--red'),1.6,2);x.setLineDash([]);
+  text(x,'P = '+fmt(P,3),a.X(4*Math.PI)-4,a.Y(P)-6,css('--red'),12,'right');
+}
+$('pPhi').addEventListener('input',()=>Lab.draw(1));
+document.querySelectorAll('#lab1 [data-l]').forEach(b=>b.addEventListener('click',()=>{$('pPhi').value=b.dataset.l;Lab.draw(1);}));
+Lab.add(1,lab1,{pw:250});
+
+/* ---------- Lab 2: PFC ---------- */
+let fm='par';
+function pfc(){const V=val('fV'),I=val('fI'),phi=val('fPhi')*D2R,C=val('fC')*1e-6,w=2*Math.PI*50;
+  const Zm=V/I,R=Zm*Math.cos(phi),X=Zm*Math.sin(phi);
+  const P0=V*I*Math.cos(phi),Q0=V*I*Math.sin(phi);
+  let Is,P,Q,Ilx,Ily,Icx=0,Icy=0;
+  if(fm==='par'){const Qc=V*V*w*C;P=P0;Q=Q0-Qc;Ilx=I*Math.cos(phi);Ily=-I*Math.sin(phi);Icy=V*w*C;Is=Math.hypot(Ilx,Ily+Icy);}
+  else{const Xc=C>0?1/(w*C):0,Xt=X-Xc;const Zt=Math.hypot(R,Xt);Is=V/Zt;P=Is*Is*R;Q=Is*Is*Xt;const ang=Math.atan2(Xt,R);Ilx=Is*Math.cos(ang);Ily=-Is*Math.sin(ang);}
+  const Cb=fm==='par'?Q0/(V*V*w):(X>0?1/(w*X):0);
+  return {V,I,phi,P0,Q0,P,Q,Is,Ilx,Ily,Icy,Cb,R,X};}
+function lab2(){
+  pressGroup('#lab2 [data-m]',b=>b.dataset.m===fm);
+  ['fV','fI','fPhi','fC'].forEach(id=>$(id+'O').textContent=$(id).value+({fV:' V',fI:' A',fPhi:'°',fC:' µF'})[id]);
+  const o=pfc(),S=Math.hypot(o.P,o.Q),pf=S?o.P/S:1;
+  $('fIs').textContent=fmt(o.Is,3)+' A';$('fPF').textContent=fmt(pf,3)+(Math.abs(o.Q)<1?'（= 1）':o.Q>0?'（滞后）':'（超前）');
+  $('fPQS').textContent=`${Math.round(o.P)} W · ${Math.round(o.Q)} VAr · ${Math.round(S)} VA`;$('fCb').textContent=fmt(o.Cb*1e6,3)+' µF'+(fm==='ser'?'（串联谐振）':'');
+  /* triangle */
+  const [x,W,H]=fit($('tri'));const S0=Math.hypot(o.P0,o.Q0),M=Math.max(S0,S,o.P,1),sc=Math.min((W-90)/M,(H-60)/(M*0.9));
+  const ox=40,oy=H/2+10;
+  const tri=(P,Q,col,al,lw)=>{x.globalAlpha=al;x.strokeStyle=col;x.lineWidth=lw;x.beginPath();x.moveTo(ox,oy);x.lineTo(ox+P*sc,oy);x.lineTo(ox+P*sc,oy-Q*sc);x.closePath();x.stroke();x.globalAlpha=1;};
+  tri(o.P0,o.Q0,css('--muted'),.5,1.5);
+  arrow(x,ox,oy,ox+o.P*sc,oy,css('--accent'),2.6,9);arrow(x,ox+o.P*sc,oy,ox+o.P*sc,oy-o.Q*sc,css('--red'),2.6,9);arrow(x,ox,oy,ox+o.P*sc,oy-o.Q*sc,css('--blue'),2.6,9);
+  label(x,'P '+Math.round(o.P)+' W',ox+o.P*sc/2-30,oy+18,css('--accent'),12);
+  label(x,'Q '+Math.round(o.Q)+' VAr',ox+o.P*sc+6,oy-o.Q*sc/2,css('--red'),12);
+  label(x,'S '+Math.round(S)+' VA',ox+o.P*sc/2-60,oy-o.Q*sc/2-10,css('--blue'),12);
+  text(x,'功率三角形（灰 = 校正前）',8,16,css('--muted'),11);
+  /* current phasors */
+  const [y,W2,H2]=fit($('iph'));const m=Math.max(o.I,o.Is,Math.hypot(o.Ilx,o.Ily),Math.abs(o.Icy),0.1),k=Math.min((W2-60)/(m*1.1),(H2/2-24)/m);
+  const cx=30,cy=H2/2;
+  arrow(y,cx,cy,W2-16,cy,css('--muted'),1.4,8);label(y,'V（参考）',W2-80,cy-8,css('--muted'),11);
+  if(fm==='par'){arrow(y,cx,cy,cx+o.Ilx*k,cy-o.Ily*k,css('--amp'),2.4,9);label(y,'I电机',cx+o.Ilx*k+4,cy-o.Ily*k+14,css('--amp'),12);
+    if(o.Icy>0){arrow(y,cx+o.Ilx*k,cy-o.Ily*k,cx+o.Ilx*k,cy-(o.Ily+o.Icy)*k,css('--purple'),2.4,9);label(y,'I_C',cx+o.Ilx*k+6,cy-(o.Ily+o.Icy/2)*k,css('--purple'),12);}
+    arrow(y,cx,cy,cx+o.Ilx*k,cy-(o.Ily+o.Icy)*k,css('--blue'),2.8,10);label(y,'I电源 '+fmt(o.Is,3)+' A',cx+o.Ilx*k*0.35,cy-(o.Ily+o.Icy)*k*0.35-12,css('--blue'),12);}
+  else{arrow(y,cx,cy,cx+o.Ilx*k,cy-o.Ily*k,css('--blue'),2.8,10);label(y,'I '+fmt(o.Is,3)+' A',cx+o.Ilx*k+4,cy-o.Ily*k+14,css('--blue'),12);}
+  text(y,fm==='par'?'电流相量：I电源 = I电机 + I_C':'串联：只有一个电流',8,16,css('--muted'),11);
+}
+document.querySelectorAll('#lab2 [data-m]').forEach(b=>b.addEventListener('click',()=>{fm=b.dataset.m;Lab.draw(2);}));
+['fV','fI','fPhi','fC'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+$('cBest').addEventListener('click',()=>{const o=pfc();$('fC').max=Math.max(200,Math.ceil(o.Cb*1e6*1.5));$('fC').value=(o.Cb*1e6).toFixed(2);Lab.draw(2);});
+$('cZero').addEventListener('click',()=>{$('fC').value=0;Lab.draw(2);});
+Lab.add(2,lab2,{tri:240,iph:240});
+
+/* ---------- Lab 3: max power ---------- */
+function lab3(){
+  const V=val('mV'),Ro=val('mRo'),RL=Ro*10**val('mRL');$('mVO').textContent=V+' V';$('mRoO').textContent=Ro+' Ω';$('mRLO').textContent=SI(RL,'Ω');
+  const PL=V*V*RL/(Ro+RL)**2,eta=RL/(Ro+RL),Pm=V*V/(4*Ro);
+  $('mPL').textContent=SI(PL,'W');$('mEta').textContent=fmt(eta*100,3)+' %';$('mPm').textContent=SI(Pm,'W');$('mPo').textContent=SI(V*V*Ro/(Ro+RL)**2,'W');
+  const [x,W,H]=fit($('mp'));const a=axes(x,W,H,{x0:-1.5,x1:1.5,y0:0,y1:1.08,xt:[-1.5,-1,-0.5,0,0.5,1,1.5],xf:v=>fmt(10**v,2)+'R',yt:[0,0.25,0.5,0.75,1],yf:v=>v*100+'%',title:'蓝：P_L / P_max　橙：效率 η　（横轴 R_L / R_out，对数）',pl:44});
+  plot(x,a.X,a.Y,u=>{const r=10**u;return 4*r/(1+r)**2;},-1.5,1.5,css('--blue'),2.6);
+  plot(x,a.X,a.Y,u=>{const r=10**u;return r/(1+r);},-1.5,1.5,css('--amp'),2.2);
+  const u=val('mRL'),r=10**u;x.fillStyle=css('--blue');x.beginPath();x.arc(a.X(u),a.Y(4*r/(1+r)**2),6,0,7);x.fill();x.fillStyle=css('--amp');x.beginPath();x.arc(a.X(u),a.Y(r/(1+r)),5,0,7);x.fill();
+  x.strokeStyle=css('--grid');x.setLineDash([4,4]);x.beginPath();x.moveTo(a.X(0),a.pt);x.lineTo(a.X(0),H-a.pb);x.stroke();x.setLineDash([]);
+  text(x,'匹配点',a.X(0)+4,a.pt+12,css('--muted'),11);text(x,'效率低、源发热',a.X(-1.2),a.pt+30,css('--red'),11);text(x,'效率高',a.X(1.0),a.pt+30,css('--accent'),11);
+}
+['mV','mRo','mRL'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-r]').forEach(b=>b.addEventListener('click',()=>{$('mRL').value=Math.log10(+b.dataset.r);Lab.draw(3);}));
+Lab.add(3,lab3,{mp:240});
+
+/* ---------- Lab 4: three phase ---------- */
+function lab4(){
+  const Z=val('tZ'),phi=val('tPhi'),kB=val('tB');$('tZO').textContent=Z+' Ω';$('tPhiO').textContent=phi+'°';$('tBO').textContent='× '+kB;
+  pressGroup('#lab4 [data-t]',b=>b.dataset.t===`${Z},${phi},${kB}`);
+  const VLN=240,Vp=VLN*Math.SQRT2,r=phi*D2R,Zs=[Z,Z,Z*kB],sh=[0,-120,-240].map(d=>d*D2R);
+  const I=Zs.map(z=>VLN/z),Pph=I.map(i=>VLN*i*Math.cos(r));
+  $('tI').textContent=fmt(I[0],3)+' A ∠'+(-phi)+'°';$('tP1').textContent=Pph.map(p=>Math.round(p)).join(' / ')+' W';$('tP').textContent=Math.round(Pph.reduce((a,b)=>a+b))+' W';
+  let nx=0,ny=0;sh.forEach((s,k)=>{nx+=I[k]*Math.cos(s-r);ny+=I[k]*Math.sin(s-r);});const In=Math.hypot(nx,ny);$('tN').textContent=(In<1e-6?'0':fmt(In,3))+' A';
+  const p=(k,t)=>Vp*Math.sin(t+sh[k])*(Vp/Zs[k])*Math.sin(t+sh[k]-r);
+  const pmax=Math.max(...[0,1,2].map(k=>Vp*Vp/Zs[k]))*1.6;
+  const [x,W,H]=fit($('tp'));const a=axes(x,W,H,{x0:0,x1:3*Math.PI,y0:-pmax*0.35,y1:pmax*1.05,xt:[0,Math.PI,2*Math.PI,3*Math.PI],xf:v=>Math.round(v/Math.PI*180)+'°',yt:[0,pmax/2,pmax],yf:v=>SI(v,'W',2),title:'细线：R / Y / B 各相 p(t)　粗线：总和',pl:56});
+  const cols=[css('--red'),css('--amp'),css('--blue')];
+  [0,1,2].forEach(k=>plot(x,a.X,a.Y,t=>p(k,t),0,3*Math.PI,cols[k],1.4));
+  plot(x,a.X,a.Y,t=>p(0,t)+p(1,t)+p(2,t),0,3*Math.PI,css('--ink'),3);
+  /* phasors */
+  const [y,W2,H2]=fit($('tph'));const cx=W2/2,cy=H2/2+6,R=Math.min(W2,H2)/2-36,sc=R/(VLN*Math.sqrt(3));
+  const ph=(ang,mag)=>[cx+mag*sc*Math.cos(ang),cy-mag*sc*Math.sin(ang)];
+  ['V_RN','V_YN','V_BN'].forEach((n,k)=>{const [px,py]=ph(sh[k],VLN);arrow(y,cx,cy,px,py,cols[k],2.6,9);label(y,n,px+(px>cx?4:-40),py+(py>cy?14:-4),cols[k],12);});
+  const [rx,ry]=ph(sh[0],VLN),[yx,yy]=ph(sh[1],VLN);y.setLineDash([6,4]);arrow(y,yx,yy,rx,ry,css('--purple'),2,9);y.setLineDash([]);
+  const [lx,ly]=ph(30*D2R,VLN*Math.sqrt(3));y.setLineDash([3,3]);arrow(y,cx,cy,lx,ly,css('--purple'),1.6,8);y.setLineDash([]);
+  label(y,'V_RY = √3·240∠30° ≈ 415 V',8,H2-8,css('--purple'),11);
+  text(y,'相电压 240 V（实线）与线电压（虚线）',8,16,css('--muted'),11);
+}
+['tZ','tPhi','tB'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-t]').forEach(b=>b.addEventListener('click',()=>{const [z,f,k]=b.dataset.t.split(',');$('tZ').value=z;$('tPhi').value=f;$('tB').value=k;Lab.draw(4);}));
+Lab.add(4,lab4,{tp:240,tph:240});
+Lab.start();
+</script>
+</body></html>
