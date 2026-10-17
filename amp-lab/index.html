@@ -1,0 +1,208 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>放大器与电桥实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.ctl input[type=number]{width:100%}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · VOLTAGE AMPLIFIERS · NETWORK THEOREMS</div>
+  <h1>放大器与电桥实验室</h1>
+  <p>四个实验对应一年级 EE 的电压放大器和网络定理：加载效应、负反馈、运放的四种接法（含饱和削顶）、惠斯通电桥与应变片。预设就是讲义例题和 Student examples 的数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 加载效应</a><a href="#lab2">实验 2 负反馈</a><a href="#lab3">实验 3 运放电路</a><a href="#lab4">实验 4 惠斯通电桥</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 加载效应（Voltage Amplifiers L1）</div>
+  <h2>传感器 → 放大器 → 负载：每一级都在分压</h2>
+  <p class="lead">传感器内阻 R<sub>s</sub> 和放大器输入电阻 R<sub>i</sub> 分压，放大器输出电阻 R<sub>o</sub> 和负载 R<sub>L</sub> 再分压一次。所以「带载增益」总比标称增益 A<sub>v</sub> 小。把 R<sub>i</sub> 拉到很大、R<sub>o</sub> 拉到 0，两次损失都消失。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-p="2,100,1000,10,10,50">讲义例题（p.3–5）</button><button data-p="2,100,1e9,10,0,50">理想放大器（p.6–7）</button><button data-p="0.01,0,140,-50,2,2000">Student Q1–Q2</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="aVs">传感器电压 V<sub>s</sub> (V)</label><input id="aVs" type="number" step="any" value="2"><span></span></div>
+    <div class="ctl"><label for="aRs">传感器内阻 R<sub>s</sub> (Ω)</label><input id="aRs" type="number" step="any" value="100"><span></span></div>
+    <div class="ctl"><label for="aRi">输入电阻 R<sub>i</sub> (Ω)</label><input id="aRi" type="number" step="any" value="1000"><span></span></div>
+    <div class="ctl"><label for="aAv">标称增益 A<sub>v</sub></label><input id="aAv" type="number" step="any" value="10"><span></span></div>
+    <div class="ctl"><label for="aRo">输出电阻 R<sub>o</sub> (Ω)</label><input id="aRo" type="number" step="any" value="10"><span></span></div>
+    <div class="ctl"><label for="aRL">负载 R<sub>L</sub> (Ω)</label><input id="aRL" type="number" step="any" value="50"><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="ldc" height="250" aria-label="等效电路"></canvas><canvas id="ldb" height="250" aria-label="各级电压"></canvas></div>
+  <div class="read"><div><small>V<sub>i</sub> = V<sub>s</sub>·R<sub>i</sub>/(R<sub>s</sub>+R<sub>i</sub>)</small><b id="aVi"></b></div><div><small>V<sub>o</sub>（负载电压）</small><b id="aVo"></b></div><div><small>带载增益 V<sub>o</sub>/V<sub>i</sub></small><b id="aG"></b></div><div><small>总增益 V<sub>o</sub>/V<sub>s</sub></small><b id="aGT"></b></div><div><small>输入电流 / 输入功率</small><b id="aPi" style="font-size:15px"></b></div><div><small>负载功率 / 功率增益</small><b id="aPo" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>设计原则：</strong>前一级的输出电阻 ≪ 后一级的输入电阻。讲义例题里 V<sub>i</sub> 只剩 1.82 V（损失 9%），负载上又损失 17%，带载增益 8.35，而不是 10。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 负反馈（Voltage Amplifiers L2）</div>
+  <h2>开环增益 A 再怎么变，闭环增益都钉在 1/B</h2>
+  <p class="lead">G = A / (1 + AB)。当 AB ≫ 1 时 G ≈ 1/B，只由反馈网络（两个电阻）决定。拖动 A 看 G 几乎不动；把 B 调大或 A 调小到 AB 不再远大于 1，近似就失效了。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-f="5,0.02">设计例题：A = 100 000</button><button data-f="5.301,0.02">A = 200 000</button><button data-f="2,0.02">A 只有 100</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="fA">开环增益 A</label><input id="fA" type="range" min="0" max="6" step="0.01" value="5"><output id="fAO"></output></div>
+    <div class="ctl"><label for="fB">反馈系数 B</label><input id="fB" type="number" step="any" value="0.02"><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="fbk" height="260" aria-label="闭环增益随开环增益变化"></canvas></div>
+  <div class="read"><div><small>闭环增益 G = A/(1+AB)</small><b id="fG"></b></div><div><small>理想值 1/B</small><b id="fI"></b></div><div><small>误差</small><b id="fE"></b></div><div><small>环路增益 AB</small><b id="fL"></b></div></div>
+  <p class="note"><strong>反馈网络就是分压器：</strong>B = 0.02 用 49R 和 R 分压即可（R/(49R+R) = 1/50）。A 从 10⁵ 翻倍到 2×10⁵，G 只从 49.975 变到 49.988。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 运放的四种接法（Voltage Amplifiers L3–L4）</div>
+  <h2>黄金法则算增益，电源电压决定会不会削顶</h2>
+  <p class="lead">按课件的记号：<strong>R₁ 是反馈电阻</strong>（输出到 V₋），R₂ 是另一个电阻（反相时接输入，同相时接地）。输出不可能超过电源 ±V<sub>CC</sub>，超出就被削平（饱和），电路不再是线性放大器。</p>
+  <div class="btns" role="group" aria-label="接法"><button data-m="inv">反相</button><button data-m="non">同相</button><button data-m="fol">电压跟随器</button><button data-m="dif">差分</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-o="inv,15,1.5,0,0.707,5,0">Q4(ii) 0.5 V rms，±5 V</button><button data-o="inv,15,1.5,0.1,0,5,0">Q4(iii) 0.1 V 直流</button><button data-o="inv,39,15,4,1,15,0">Q5(iv) 4 − sin ωt</button><button data-o="non,96,4,0,0.04,15,0">设计例题 40 mV → 1 V</button><button data-o="dif,10,1,0,0.05,15,0">差分 R₁/R₂ = 10</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="oR1">R₁ 反馈 (kΩ)</label><input id="oR1" type="number" step="any" value="15"><span></span></div>
+    <div class="ctl"><label for="oR2">R₂ (kΩ)</label><input id="oR2" type="number" step="any" value="1.5"><span></span></div>
+    <div class="ctl"><label for="oDC">输入直流分量 (V)</label><input id="oDC" type="number" step="any" value="0"><span></span></div>
+    <div class="ctl"><label for="oAC">输入正弦幅值 (V)</label><input id="oAC" type="number" step="any" value="0.707"><span></span></div>
+    <div class="ctl"><label for="oV">电源 ±V<sub>CC</sub> (V)</label><input id="oV" type="number" step="any" value="5"><span></span></div>
+    <div class="ctl"><label for="oV2">差分：V₂ 直流 (V)</label><input id="oV2" type="number" step="any" value="0"><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="osc" height="260" aria-label="电路"></canvas><canvas id="owv" height="260" aria-label="输入输出波形"></canvas></div>
+  <div class="read"><div><small>电路增益 G</small><b id="oG"></b></div><div><small>输出范围（理想）</small><b id="oR" style="font-size:15px"></b></div><div><small>是否削顶</small><b id="oC"></b></div><div><small>电路输入阻抗</small><b id="oZ"></b></div><div><small>反馈电阻电流（直流分量）</small><b id="oI" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>两条黄金法则：</strong>① 运放输入端不取电流；② 有负反馈时 V₊ = V₋。反相接法 V₋ 被拉到 0 V（虚地），所以输入阻抗就是 R₂；同相接法信号直接进 V₊，输入阻抗理想上无穷大。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 惠斯通电桥与应变片（Network Theorems）</div>
+  <h2>零点附近看微小变化，再算它的戴维宁等效</h2>
+  <p class="lead">R₁ 左上、R₃ 左下、R₂ 右上、R₄ 右下，输出 V<sub>AB</sub> = V<sub>A</sub> − V<sub>B</sub>。应变片 δR = G·ε·R。半桥（两片应变片，一拉一压）时 V<sub>AB</sub> = −V<sub>s</sub>δR/(2R)；电桥的输出电阻约等于 R，接到输入电阻有限的放大器上会被分压。</p>
+  <div class="btns" role="group" aria-label="接法"><button data-g="1">单片应变片（只有 R₁ 变）</button><button data-g="2">两片（R₁ 拉伸、R₃ 压缩）</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-b="10,120,2,0.5,1e9">笔记数值：ε = 0.5%</button><button data-b="10,120,2,0.58,1e9">ε = 0.58%（δR = 1.4 Ω）</button><button data-b="10,120,2,0.5,240">接 240 Ω 的放大器</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="bVs">供电 V<sub>s</sub> (V)</label><input id="bVs" type="number" step="any" value="10"><span></span></div>
+    <div class="ctl"><label for="bR">标称电阻 R (Ω)</label><input id="bR" type="number" step="any" value="120"><span></span></div>
+    <div class="ctl"><label for="bG">灵敏系数 G</label><input id="bG" type="number" step="any" value="2"><span></span></div>
+    <div class="ctl"><label for="bE">应变 ε (%)</label><input id="bE" type="range" min="-1" max="1" step="0.01" value="0.5"><output id="bEO"></output></div>
+    <div class="ctl"><label for="bRin">放大器输入电阻 (Ω)</label><input id="bRin" type="number" step="any" value="1e9"><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="bsc" height="270" aria-label="电桥"></canvas><canvas id="bpl" height="270" aria-label="输出随应变变化"></canvas></div>
+  <div class="read"><div><small>δR = G·ε·R</small><b id="bdR"></b></div><div><small>V<sub>TH</sub> = V<sub>AB</sub>（精确）</small><b id="bV"></b></div><div><small>近似公式</small><b id="bVa"></b></div><div><small>R<sub>TH</sub> = R₁∥R₃ + R₂∥R₄</small><b id="bRt"></b></div><div><small>接放大器后的电压</small><b id="bVl"></b></div></div>
+  <p class="note"><strong>为什么用两片：</strong>一片拉伸、一片压缩，两个变化方向相反却都让 V<sub>A</sub> 往同一个方向走，输出翻倍，而且精确值和近似公式完全一致（单片时近似公式只在 δR ≪ R 时成立）。</p>
+</section>
+</div>
+
+<script>
+const SI=(v,u,d=3)=>{if(!isFinite(v))return '∞ '+u;const a=Math.abs(v);const P=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n']];for(const [s,p] of P){if(a>=s*0.9995||s===1e-9)return (+(v/s).toPrecision(d))+' '+p+u;}return '0 '+u;};
+const num=id=>{const v=parseFloat($(id).value);return isFinite(v)?v:0;};
+function box(x,x0,y0,w,h,col){x.strokeStyle=col;x.lineWidth=1.6;x.strokeRect(x0,y0,w,h);}
+function res(x,x0,y0,x1,y1,col){/* zig-zag resistor between two points */const L=Math.hypot(x1-x0,y1-y0),ux=(x1-x0)/L,uy=(y1-y0)/L,nx=-uy,ny=ux,a=L*0.25,b=L*0.75,n=6;
+  x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(x0,y0);x.lineTo(x0+ux*a,y0+uy*a);for(let i=1;i<=n;i++){const t=a+(b-a)*(i-.5)/n,s=(i%2?1:-1)*6;x.lineTo(x0+ux*t+nx*s,y0+uy*t+ny*s);}x.lineTo(x0+ux*b,y0+uy*b);x.lineTo(x1,y1);x.stroke();}
+function wire(x,pts,col){x.strokeStyle=col;x.lineWidth=2;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke();}
+function src(x,cx,cy,r,col,lbl){x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.arc(cx,cy,r,0,7);x.stroke();x.beginPath();x.moveTo(cx-r*.5,cy);for(let i=0;i<=20;i++){const t=i/20;x.lineTo(cx-r*.5+r*t,cy-Math.sin(t*2*Math.PI)*r*.3);}x.stroke();if(lbl)label(x,lbl,cx-r-4-x.measureText(lbl).width,cy+4,col,12);}
+
+/* ---------- Lab 1 ---------- */
+function lab1(){
+  const Vs=num('aVs'),Rs=num('aRs'),Ri=num('aRi'),Av=num('aAv'),Ro=num('aRo'),RL=num('aRL');
+  const Vi=Vs*Ri/(Rs+Ri),Vo=Av*Vi*RL/(Ro+RL),Ii=Vs/(Rs+Ri),Pi=Ii*Ii*Ri,PL=Vo*Vo/RL;
+  $('aVi').textContent=SI(Vi,'V');$('aVo').textContent=SI(Vo,'V');$('aG').textContent=fmt(Vo/Vi,3);$('aGT').textContent=fmt(Vo/Vs,3);
+  $('aPi').textContent=SI(Ii,'A')+' / '+SI(Pi,'W');$('aPo').textContent=SI(PL,'W')+' / '+(Pi>0?fmt(PL/Pi,1):'∞');
+  const [x,W,H]=fit($('ldc'));const ink=css('--volt'),mu=css('--muted'),ac=css('--accent'),am=css('--amp');
+  const y0=60,y1=176,s=W/640;const X=v=>v*s;
+  src(x,X(40),130,16,ink);wire(x,[[X(40),114],[X(40),y0],[X(70),y0]],ink);res(x,X(70),y0,X(140),y0,am);label(x,'Rs',X(92),y0-12,am,12);
+  wire(x,[[X(140),y0],[X(200),y0]],ink);wire(x,[[X(40),146],[X(40),y1],[X(250),y1]],ink);
+  box(x,X(185),y0-28,X(250),y1-y0+56,mu);text(x,'放大器',X(310),y0-34,mu,12,'center');
+  res(x,X(200),y0+8,X(200),y1-8,am);wire(x,[[X(200),y0],[X(200),y0+8]],ink);wire(x,[[X(200),y1-8],[X(200),y1]],ink);label(x,'Ri',X(208),130,am,12);
+  src(x,X(330),130,16,ac);wire(x,[[X(330),114],[X(330),y0],[X(350),y0]],ink);wire(x,[[X(330),146],[X(330),y1]],ink);text(x,'Av·Vi',X(330),170,ac,11,'center');
+  res(x,X(350),y0,X(420),y0,am);label(x,'Ro',X(372),y0-12,am,12);wire(x,[[X(420),y0],[X(520),y0]],ink);
+  res(x,X(520),y0,X(520),y1,am);label(x,'RL',X(530),130,am,12);wire(x,[[X(250),y1],[X(520),y1]],ink);
+  text(x,'Vs = '+SI(Vs,'V'),X(40),y1+50,ink,12,'center');text(x,'Vi = '+SI(Vi,'V'),X(200),y1+50,css('--blue'),12,'center');text(x,'Vo = '+SI(Vo,'V'),X(520),y1+50,css('--red'),12,'center');
+  const [b,W2,H2]=fit($('ldb'));const vals=[['Vs',Vs],['Vi',Vi],['Av·Vi',Av*Vi],['Vo',Vo],['理想 Vo',Av*Vs]];const m=Math.max(...vals.map(v=>Math.abs(v[1])),1e-12);
+  const a=axes(b,W2,H2,{x0:0,x1:vals.length,y0:0,y1:m*1.15,xt:[],yt:[],title:'各级电压的大小（绝对值）',pl:12});
+  vals.forEach(([n,v],i)=>{const c=i===3?css('--red'):i===4?css('--muted'):i===1?css('--blue'):ink;b.fillStyle=c;b.globalAlpha=i===4?.35:.85;b.fillRect(a.X(i+.18),a.Y(Math.abs(v)),a.X(i+.82)-a.X(i+.18),a.Y(0)-a.Y(Math.abs(v)));b.globalAlpha=1;
+    text(b,n,a.X(i+.5),H2-12,mu,11,'center');text(b,SI(v,'V'),a.X(i+.5),a.Y(Math.abs(v))-5,c,11,'center');});
+}
+['aVs','aRs','aRi','aAv','aRo','aRL'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-p]').forEach(bt=>bt.addEventListener('click',()=>{bt.dataset.p.split(',').forEach((v,k)=>$(['aVs','aRs','aRi','aAv','aRo','aRL'][k]).value=v);Lab.draw(1);}));
+Lab.add(1,lab1,{ldc:240,ldb:240});
+
+/* ---------- Lab 2 ---------- */
+function lab2(){
+  const A=10**+$('fA').value,B=num('fB'),G=A/(1+A*B);$('fAO').textContent=A>=1e4?A.toExponential(2):fmt(A,1);
+  $('fG').textContent=fmt(G,4);$('fI').textContent=B?fmt(1/B,4):'∞';$('fE').textContent=B?fmt((1/B-G)/(1/B)*100,4)+' %':'—';$('fL').textContent=fmt(A*B,4);
+  const [x,W,H]=fit($('fbk'));const top=B?Math.max(1.3/B,1):10;const a=axes(x,W,H,{x0:0,x1:6,y0:0,y1:top,xt:[0,1,2,3,4,5,6],xf:v=>'10^'+v,yt:[0,B?1/B:0].filter((v,i,s)=>s.indexOf(v)===i),yf:v=>fmt(v,3),title:'闭环增益 G（横轴：开环增益 A，对数）',pl:52});
+  if(B){x.strokeStyle=css('--muted');x.setLineDash([6,4]);x.beginPath();x.moveTo(a.X(0),a.Y(1/B));x.lineTo(a.X(6),a.Y(1/B));x.stroke();x.setLineDash([]);text(x,'1/B',a.X(6)-4,a.Y(1/B)-6,css('--muted'),12,'right');}
+  plot(x,a.X,a.Y,u=>{const AA=10**u;return Math.min(AA/(1+AA*B),top);},0,6,css('--accent'),2.4,400);
+  plot(x,a.X,a.Y,u=>{const AA=10**u;return AA<=top?AA:NaN;},0,6,css('--amp'),1.4,400);text(x,'无反馈：G = A',a.X(0.3),a.Y(Math.min(top*0.8,8)),css('--amp'),11);
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(+$('fA').value),a.Y(G),6,0,7);x.fill();
+}
+$('fA').addEventListener('input',()=>Lab.draw(2));$('fB').addEventListener('input',()=>Lab.draw(2));
+document.querySelectorAll('#lab2 [data-f]').forEach(bt=>bt.addEventListener('click',()=>{const [a,b]=bt.dataset.f.split(',');$('fA').value=a;$('fB').value=b;Lab.draw(2);}));
+Lab.add(2,lab2,{fbk:240});
+
+/* ---------- Lab 3 ---------- */
+let om='inv';
+function gainOf(m,R1,R2){return m==='inv'?-R1/R2:m==='non'?1+R1/R2:m==='fol'?1:R1/R2;}
+function lab3(){
+  pressGroup('#lab3 [data-m]',b=>b.dataset.m===om);
+  const R1=num('oR1'),R2=num('oR2'),dc=num('oDC'),ac=num('oAC'),Vcc=Math.abs(num('oV')),V2=num('oV2');
+  const G=gainOf(om,R1,R2);const vin=t=>dc+ac*Math.sin(2*Math.PI*t);
+  const vid=t=>om==='dif'?G*(vin(t)-V2):G*vin(t);const vo=t=>Math.max(-Vcc,Math.min(Vcc,vid(t)));
+  let lo=1e9,hi=-1e9;for(let i=0;i<=200;i++){const v=vid(i/200);lo=Math.min(lo,v);hi=Math.max(hi,v);}
+  const clip=hi>Vcc+1e-9||lo<-Vcc-1e-9;
+  $('oG').textContent=om==='dif'?'Vo = '+fmt(G,4)+'(V₁−V₂)':fmt(G,4);$('oR').textContent=fmt(lo,3)+' … '+fmt(hi,3)+' V';
+  $('oC').textContent=clip?'会削顶（饱和）':'不会';$('oC').style.color=clip?css('--red'):css('--green');
+  $('oZ').textContent=om==='inv'?SI(R2*1e3,'Ω'):om==='dif'?'有限（两端不同）':'∞（理想）';
+  $('oI').textContent=om==='inv'?SI(dc/(R2*1e3),'A')+'（= V_in/R₂）':om==='non'?SI(dc/(R2*1e3),'A')+'（= V_in/R₂）':om==='fol'?'0（没有电阻）':'—';
+  /* schematic */
+  const [x,W,H]=fit($('osc'));const ink=css('--volt'),am=css('--amp'),mu=css('--muted'),ac2=css('--accent');const s=Math.min(W/420,(H-16)/300);const P=(px,py)=>[px*s,py*s+10];
+  const tri=(cx,cy)=>{const [a,b]=P(cx-40,cy-50),[c,d]=P(cx-40,cy+50),[e,f]=P(cx+50,cy);x.strokeStyle=ink;x.lineWidth=2;x.beginPath();x.moveTo(a,b);x.lineTo(c,d);x.lineTo(e,f);x.closePath();x.stroke();
+    label(x,'−',...P(cx-34,cy-20),ink,14);label(x,'+',...P(cx-34,cy+30),ink,14);};
+  const cx=230,cy=130;tri(cx,cy);const inM=P(cx-40,cy-25),inP=P(cx-40,cy+25),out=P(cx+50,cy);
+  wire(x,[out,P(380,cy)],ink);text(x,'Vo',...P(386,cy+4),css('--red'),13);
+  if(om==='fol'){wire(x,[inM,P(cx-60,cy-25),P(cx-60,cy-80),P(cx+70,cy-80),P(cx+70,cy)],ink);wire(x,[inP,P(40,cy+25)],ink);text(x,'Vin',...P(14,cy+29),css('--blue'),13);}
+  else{
+    const fb=[P(cx-60,cy-25),P(cx-60,cy-80)];wire(x,[inM,fb[0],fb[1]],ink);res(x,...fb[1],...P(cx+70,cy-80),am);wire(x,[P(cx+70,cy-80),P(cx+70,cy)],ink);label(x,'R₁ '+fmt(R1,3)+'k',...P(cx-20,cy-92),am,12);
+    if(om==='inv'){res(x,...P(40,cy-25),...P(cx-60,cy-25),am);label(x,'R₂ '+fmt(R2,3)+'k',...P(70,cy-37),am,12);text(x,'Vin',...P(14,cy-21),css('--blue'),13);wire(x,[inP,P(cx-60,cy+25),P(cx-60,cy+70)],ink);text(x,'⏚',...P(cx-66,cy+86),ink,16);}
+    if(om==='non'){res(x,...P(cx-60,cy-25),...P(60,cy-25),am);label(x,'R₂ '+fmt(R2,3)+'k',...P(80,cy-37),am,12);wire(x,[P(60,cy-25),P(60,cy-5)],ink);text(x,'⏚',...P(54,cy+10),ink,16);wire(x,[inP,P(40,cy+25)],ink);text(x,'Vin',...P(14,cy+29),css('--blue'),13);}
+    if(om==='dif'){res(x,...P(40,cy-25),...P(cx-60,cy-25),am);label(x,'R₂',...P(70,cy-37),am,12);text(x,'V₂',...P(18,cy-21),css('--blue'),13);
+      res(x,...P(40,cy+25),...P(cx-60,cy+25),am);wire(x,[P(cx-60,cy+25),inP],ink);label(x,'R₂',...P(70,cy+15),am,12);text(x,'V₁',...P(18,cy+29),css('--blue'),13);
+      res(x,...P(cx-50,cy+25),...P(cx-50,cy+130),am);label(x,'R₁',...P(cx-42,cy+90),am,12);text(x,'⏚',...P(cx-56,cy+146),ink,16);}
+  }
+  text(x,'电源 ±Vcc = ±'+fmt(Vcc,3)+' V',...P(cx+10,cy+80),mu,11);
+  if(om==='dif')text(x,'课件 p.34 记号：Vo = (R₁/R₂)(V₁ − V₂)',...P(10,H/s-14),mu,11);
+  /* waveforms */
+  const [y,W2,H2]=fit($('owv'));const lim=Math.max(Vcc*1.15,Math.abs(hi),Math.abs(lo),Math.abs(dc)+Math.abs(ac),0.1);
+  const b=axes(y,W2,H2,{x0:0,x1:2,y0:-lim,y1:lim,xt:[0,1,2],xf:v=>v+'T',yt:[-Vcc,0,Vcc],yf:v=>fmt(v,2),title:'输入（蓝）与输出（红），虚线 = ±Vcc',pl:44});
+  y.strokeStyle=css('--muted');y.setLineDash([5,4]);[Vcc,-Vcc].forEach(v=>{y.beginPath();y.moveTo(b.X(0),b.Y(v));y.lineTo(b.X(2),b.Y(v));y.stroke();});y.setLineDash([]);
+  if(clip)plot(y,b.X,b.Y,vid,0,2,css('--red'),1,400),y.globalAlpha=1;
+  plot(y,b.X,b.Y,vin,0,2,css('--blue'),2.2,400);plot(y,b.X,b.Y,vo,0,2,css('--red'),2.6,400);
+}
+['oR1','oR2','oDC','oAC','oV','oV2'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-m]').forEach(bt=>bt.addEventListener('click',()=>{om=bt.dataset.m;Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-o]').forEach(bt=>bt.addEventListener('click',()=>{const v=bt.dataset.o.split(',');om=v[0];['oR1','oR2','oDC','oAC','oV','oV2'].forEach((id,k)=>$(id).value=v[k+1]);Lab.draw(3);}));
+Lab.add(3,lab3,{osc:240,owv:240});
+
+/* ---------- Lab 4 ---------- */
+let bg=2;
+const par=(a,b)=>a*b/(a+b);
+function bridge(Vs,R,dR){const R1=R+dR,R3=bg===2?R-dR:R,R2=R,R4=R;const VA=Vs*R3/(R1+R3),VB=Vs*R4/(R2+R4);return {V:VA-VB,Rt:par(R1,R3)+par(R2,R4),R1,R3,VA,VB};}
+function lab4(){
+  pressGroup('#lab4 [data-g]',b=>+b.dataset.g===bg);
+  const Vs=num('bVs'),R=num('bR'),G=num('bG'),e=+$('bE').value/100,Rin=num('bRin');$('bEO').textContent=fmt(e*100,2)+' %';
+  const dR=G*e*R,o=bridge(Vs,R,dR),approx=bg===2?-Vs*dR/(2*R):-Vs*dR/(4*R),VL=o.V*Rin/(Rin+o.Rt);
+  $('bdR').textContent=SI(dR,'Ω');$('bV').textContent=SI(o.V,'V');$('bVa').textContent=SI(approx,'V')+(bg===2?'（−Vs·δR/2R）':'（−Vs·δR/4R）');$('bRt').textContent=SI(o.Rt,'Ω');$('bVl').textContent=SI(VL,'V');
+  const [x,W,H]=fit($('bsc'));const ink=css('--volt'),am=css('--amp'),mu=css('--muted');const cx=W*0.45,top=26,bot=H-34,mid=(top+bot)/2,dx=Math.min(W*0.3,130);
+  const L=[cx-dx,mid],Rr=[cx+dx,mid];
+  res(x,cx,top,...L,o.R1!==R?am:ink);res(x,...L,cx,bot,o.R3!==R?am:ink);res(x,cx,top,...Rr,ink);res(x,...Rr,cx,bot,ink);
+  label(x,'R₁ '+fmt(o.R1,4),cx-dx-6-60,top+(mid-top)/2-4,o.R1!==R?am:mu,12);label(x,'R₃ '+fmt(o.R3,4),cx-dx-6-60,mid+(bot-mid)/2+14,o.R3!==R?am:mu,12);
+  label(x,'R₂ '+fmt(R,4),cx+dx*0.62,top+(mid-top)/2-4,mu,12);label(x,'R₄ '+fmt(R,4),cx+dx*0.62,mid+(bot-mid)/2+14,mu,12);
+  text(x,'Vs = '+fmt(Vs,3)+' V',cx,top-8,ink,12,'center');text(x,'⏚',cx-5,bot+18,ink,14);
+  x.fillStyle=css('--blue');x.beginPath();x.arc(...L,4,0,7);x.fill();x.beginPath();x.arc(...Rr,4,0,7);x.fill();
+  label(x,'A',L[0]-16,L[1]+4,css('--blue'),13);label(x,'B',Rr[0]+8,Rr[1]+4,css('--blue'),13);
+  x.strokeStyle=css('--red');x.setLineDash([5,4]);x.lineWidth=1.6;x.beginPath();x.moveTo(L[0]+6,mid);x.lineTo(Rr[0]-6,mid);x.stroke();x.setLineDash([]);
+  text(x,'V_AB = '+SI(o.V,'V'),cx,mid-8,css('--red'),12,'center');
+  const [y,W2,H2]=fit($('bpl'));const vm=Math.max(Math.abs(bridge(Vs,R,G*0.01*R).V),Math.abs(bridge(Vs,R,-G*0.01*R).V),1e-9)*1.15;
+  const b=axes(y,W2,H2,{x0:-1,x1:1,y0:-vm,y1:vm,xt:[-1,-0.5,0,0.5,1],xf:v=>v+'%',yt:[-vm/1.15,0,vm/1.15],yf:v=>SI(v,'V',2),title:'V_AB 随应变 ε 变化（实线精确、虚线近似）',pl:58});
+  plot(y,b.X,b.Y,u=>bridge(Vs,R,G*u/100*R).V,-1,1,css('--accent'),2.4,200);
+  y.setLineDash([6,4]);plot(y,b.X,b.Y,u=>{const d=G*u/100*R;return bg===2?-Vs*d/(2*R):-Vs*d/(4*R);},-1,1,css('--amp'),1.6,200);y.setLineDash([]);
+  y.fillStyle=css('--red');y.beginPath();y.arc(b.X(e*100),b.Y(o.V),6,0,7);y.fill();
+}
+['bVs','bR','bG','bE','bRin'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-g]').forEach(bt=>bt.addEventListener('click',()=>{bg=+bt.dataset.g;Lab.draw(4);}));
+document.querySelectorAll('#lab4 [data-b]').forEach(bt=>bt.addEventListener('click',()=>{bt.dataset.b.split(',').forEach((v,k)=>$(['bVs','bR','bG','bE','bRin'][k]).value=v);Lab.draw(4);}));
+Lab.add(4,lab4,{bsc:240,bpl:240});
+Lab.start();
+</script>
+</body></html>
