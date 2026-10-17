@@ -1,0 +1,207 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>数字基础实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ov{text-decoration:overline;text-decoration-thickness:1.5px}
+.ctl input[type=text]{width:100%;font-family:var(--mono);font-size:15px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel,transparent);color:var(--ink)}
+.ctl select{width:100%}
+ol.steps{margin:6px 0 0;padding-left:22px;font-family:var(--mono);font-size:13px;line-height:1.7}
+.expr{font-family:var(--mono);font-size:16px;font-weight:600;overflow-wrap:anywhere}
+table.mini tr.bad td{color:var(--red);font-weight:700}
+table.mini td.o{font-weight:700}
+.err{color:var(--red);font-size:13px;min-height:1em;margin:4px 0 0}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · DIGITAL FUNDAMENTALS</div>
+  <h1>数字基础实验室</h1>
+  <p>三个实验对应一年级 EE 的 Digital Fundamentals：二进制 / 十进制 / 十六进制互换、Gray 码编码盘为什么不会误读、布尔表达式的真值表、等价判断与化简收益（门输入数和延迟）。预设就是讲义例子和 Student examples。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 进制转换</a><a href="#lab2">实验 2 Gray 码编码盘</a><a href="#lab3">实验 3 布尔表达式</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 进制转换（Lecture 2–3）</div>
+  <h2>每一位都有权重：二进制是 2 的幂，十六进制是 4 位一组</h2>
+  <p class="lead">输入一个数并选它的进制。上面一排是每一位的权重 2<sup>k</sup>，填色的位是 1；下面的花括号把 4 位并成一个十六进制数字。右边列出「减最大的 2 的幂」的步骤。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-v="105,10">讲义 105</button><button data-v="43,10">2.1：43</button><button data-v="1011,2">2.3：1011₂</button><button data-v="2D3,16">讲义 (2D3)₁₆</button><button data-v="1011110010100011,2">题 3.1</button><button data-v="1A8,16">3.3：(1A8)₁₆</button><button data-v="31,10">5 位最大值</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="nIn">数字</label><input id="nIn" type="text" value="105" autocomplete="off" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="nBase">它是几进制</label><select id="nBase"><option value="10">十进制（denary）</option><option value="2">二进制（binary）</option><option value="16">十六进制（hex）</option></select><span></span></div>
+  </div>
+  <p class="err" id="nErr"></p>
+  <div class="stage one"><canvas id="bitc" height="170" aria-label="位权重图"></canvas></div>
+  <div class="read"><div><small>十进制</small><b id="nD"></b></div><div><small>二进制</small><b id="nB" style="font-size:15px;overflow-wrap:anywhere"></b></div><div><small>十六进制</small><b id="nH"></b></div><div><small>至少几位 / n 位能表示</small><b id="nR" style="font-size:15px"></b></div></div>
+  <ol class="steps" id="nSteps"></ol>
+  <p class="note"><strong>记住：</strong>n 位二进制有 2<sup>n</sup> 个值，范围 0 到 2<sup>n</sup>−1。二进制 → 十六进制：从<strong>右边</strong>开始 4 位一组，不够在左边补 0。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Gray 码编码盘（Lecture 3）</div>
+  <h2>传感器没对齐时，二进制盘会瞬间读出离谱的位置</h2>
+  <p class="lead">编码盘分 8 格，三圈分别是最高位（内）、中间位、最低位（外），填色 = 1。三个光传感器本该在同一条半径上；拉大「错位」后，最高位传感器落后、最低位传感器超前。转动盘子，看右图红线：二进制盘在 3→4、7→0 这类多位同时变化的边界会乱跳，Gray 码相邻两格只差一位，最多读成相邻格。</p>
+  <div class="btns" role="group" aria-label="编码方式"><button data-m="bin" aria-pressed="true">二进制编码盘</button><button data-m="gray">Gray 码编码盘</button><button id="gPlay">▶ 转起来</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="gT">转角 θ</label><input id="gT" type="range" min="0" max="359.5" step="0.5" value="134"><span id="gTv"></span></div>
+    <div class="ctl"><label for="gD">传感器错位 δ</label><input id="gD" type="range" min="0" max="20" step="0.5" value="6"><span id="gDv"></span></div>
+  </div>
+  <div class="stage even"><canvas id="disc" height="300" aria-label="编码盘"></canvas><canvas id="grd" height="300" aria-label="读数随转角变化"></canvas></div>
+  <div class="read"><div><small>真实所在格</small><b id="gZ"></b></div><div><small>传感器读到的码</small><b id="gC"></b></div><div><small>解码成位置</small><b id="gV"></b></div><div><small>整圈最大误读</small><b id="gM"></b></div></div>
+  <p class="note"><strong>Gray 码的定义性质：</strong>相邻两个数只有一位不同。所以无论哪个传感器先变、后变，中间态只可能是两个相邻格之一。3 位 Gray 码：000 001 011 010 110 111 101 100。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 布尔表达式（Lecture 5–7）</div>
+  <h2>写两个表达式：真值表逐行比较，顺便算化简省了多少门</h2>
+  <p class="lead">写法：变量用大写字母；与 = <code>.</code> 或 <code>*</code>（也可以直接相邻 <code>AB</code>）；或 = <code>+</code>；非 = 后缀 <code>'</code>（<code>A'</code>、<code>(A+B)'</code>）或前缀 <code>~</code>。AND 优先于 OR。<strong>复杂度</strong> = 所有门的输入数之和（相同的子表达式只算一次，不加括号的连续同种运算算一个多输入门）；<strong>延迟</strong> = 从输入到输出最多经过几个门 × τ。</p>
+  <div class="btns" role="group" aria-label="预设">
+    <button data-e="A.(A+A')+B|A+B">讲义 p.18 化简</button><button data-e="A+A.B|A">吸收律 p.21</button><button data-e="A.(B+C)|A.B+A.C">AND 对 OR 分配</button><button data-e="A+B.C|(A+B).(A+C)">OR 对 AND 分配</button><button data-e="A.(B'+C')|">防盗报警 p.11</button><button data-e="A+B.C|(A+B).C">优先级陷阱</button><button data-e="A+A.A'+B|A+B">题 7.1</button><button data-e="(A.B'+B')+A|A+B'">题 7.2</button><button data-e="(A+B').(B+C)|A.B'+B.C">题 5.1 vs 5.2</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="e1">表达式 1</label><input id="e1" type="text" value="A.(A+A')+B" autocomplete="off" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="e2">表达式 2（可留空）</label><input id="e2" type="text" value="A+B" autocomplete="off" spellcheck="false"><span></span></div>
+  </div>
+  <p class="err" id="eErr"></p>
+  <div class="read"><div><small>表达式 1</small><b class="expr" id="r1"></b></div><div><small>表达式 2</small><b class="expr" id="r2"></b></div><div><small>是否等价</small><b id="rEq"></b></div><div><small>复杂度 / 延迟</small><b id="rC" style="font-size:15px"></b></div></div>
+  <div class="scroll"><table class="mini" id="tt"></table></div>
+  <p class="note"><strong>证明等价的两种办法：</strong>① 真值表逐行比较（这里自动做）；② 用代数规则一步步化。单变量规则：A.1=A，A.0=0，A.A=A，A.A̅=0，A+0=A，A+1=1，A+A=A，A+A̅=1，A̿=A。</p>
+</section>
+</div>
+
+<script>
+/* ---------- Lab 1: number bases ---------- */
+const RX={2:/^[01]+$/,10:/^[0-9]+$/,16:/^[0-9A-F]+$/};
+function lab1(){
+  const raw=$('nIn').value.replace(/[\s_]/g,'').toUpperCase(),base=+$('nBase').value;
+  let v=NaN;$('nErr').textContent='';
+  if(!RX[base].test(raw))$('nErr').textContent=raw?`「${raw}」不是合法的${base===2?'二':base===10?'十':'十六'}进制数`:'请输入一个数';
+  else v=parseInt(raw,base);
+  if(isFinite(v)&&v>2**32-1){$('nErr').textContent='太大了：这里最多 32 位';v=NaN;}
+  const [x,W,H]=fit($('bitc'));const mu=css('--muted'),ac=css('--accent'),ink=css('--ink'),am=css('--amp');
+  if(!isFinite(v)){['nD','nB','nH','nR'].forEach(i=>$(i).textContent='—');$('nSteps').innerHTML='';return;}
+  const need=Math.max(1,v.toString(2).length),n=Math.ceil(need/4)*4,bin=v.toString(2).padStart(n,'0'),hex=v.toString(16).toUpperCase();
+  $('nD').textContent=v;$('nB').textContent=bin.replace(/(.{4})(?=.)/g,'$1 ');$('nH').textContent=hex;
+  $('nR').textContent=`${need} 位 · 0–${2**need-1}`;
+  const cw=Math.min(54,(W-24)/n),x0=(W-cw*n)/2,y0=46,bh=Math.min(40,cw*0.9);
+  for(let i=0;i<n;i++){const k=n-1-i,b=bin[i]==='1',px=x0+i*cw;
+    x.fillStyle=b?ac:'transparent';x.globalAlpha=b?.85:1;x.fillRect(px+2,y0,cw-4,bh);x.globalAlpha=1;
+    x.strokeStyle=b?ac:css('--line');x.lineWidth=1.4;x.strokeRect(px+2,y0,cw-4,bh);
+    x.font=`700 ${Math.min(18,cw*.45)}px ${css('--mono')}`;x.fillStyle=b?'#fff':mu;x.textAlign='center';x.fillText(bin[i],px+cw/2,y0+bh/2+6);
+    if(cw>=26||k%4===0){x.font=`${Math.min(11,cw*.3)}px ${css('--mono')}`;x.fillStyle=b?ink:mu;x.fillText(cw>=34||k<10?String(2**k):'2^'+k,px+cw/2,y0-8);}
+    x.textAlign='left';}
+  text(x,'权重',x0-4,y0-24,mu,11);
+  for(let g=0;g<n/4;g++){const gx0=x0+g*4*cw+4,gx1=x0+(g+1)*4*cw-4,gy=y0+bh+10;
+    x.strokeStyle=am;x.lineWidth=1.6;x.beginPath();x.moveTo(gx0,gy);x.lineTo(gx0,gy+8);x.lineTo(gx1,gy+8);x.lineTo(gx1,gy);x.moveTo((gx0+gx1)/2,gy+8);x.lineTo((gx0+gx1)/2,gy+16);x.stroke();
+    const nib=bin.slice(g*4,g*4+4);x.font=`700 ${Math.min(20,cw*.5)}px ${css('--mono')}`;x.fillStyle=am;x.textAlign='center';x.fillText(parseInt(nib,2).toString(16).toUpperCase(),(gx0+gx1)/2,gy+36);
+    x.font=`11px ${css('--mono')}`;x.fillStyle=mu;x.fillText('= '+parseInt(nib,2),(gx0+gx1)/2,gy+52);x.textAlign='left';}
+  /* steps */
+  const st=[];
+  if(base===10||base===16){
+    if(base===16)st.push(`十六进制每一位 = 4 位二进制：${raw.split('').map(c=>c+'→'+parseInt(c,16).toString(2).padStart(4,'0')).join('，')}`);
+    if(base===16)st.push(`也可以按权重：${raw.split('').map((c,i)=>`${parseInt(c,16)}×16${sup(raw.length-1-i)}`).join(' + ')} = ${v}`);
+    if(base===10){let r=v;if(r===0)st.push('0 → 0');
+      while(r>0){const p=2**Math.floor(Math.log2(r));st.push(`不超过 ${r} 的最大 2 的幂是 ${p}，写 1，剩 ${r}−${p} = ${r-p}`);r-=p;}}
+  }
+  if(base===2||base===10){const ones=[...bin].map((c,i)=>[c,n-1-i]).filter(([c,k])=>k<need);
+    st.push(`按权重相加：${ones.map(([c,k])=>`${c}×${2**k}`).join(' + ')} = ${v}`);}
+  if(base!==16)st.push(`4 位一组（左边补 0）：${bin.replace(/(.{4})(?=.)/g,'$1 ')} → ${hex}`);
+  $('nSteps').innerHTML=st.map(s=>`<li>${s}</li>`).join('');
+}
+function sup(k){return String(k).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');}
+['nIn','nBase'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-v]').forEach(bt=>bt.addEventListener('click',()=>{const [v,b]=bt.dataset.v.split(',');$('nIn').value=v;$('nBase').value=b;Lab.draw(1);}));
+Lab.add(1,lab1,{bitc:160});
+
+/* ---------- Lab 2: Gray-code encoder disc ---------- */
+let gm='bin',gPlay=false;
+const code=k=>gm==='gray'?k^(k>>1):k, decode=c=>{if(gm!=='gray')return c;let b=c;for(let s=c>>1;s;s>>=1)b^=s;return b;};
+const zoneAt=a=>Math.floor((((a%360)+360)%360)/45);
+const OFF=d=>[d/2,0,-d]; /* LSB leads, MSB lags */
+function readAt(t,d){const o=OFF(d);let c=0;for(let b=0;b<3;b++){c|=((code(zoneAt(t+o[b]))>>b)&1)<<b;}return c;}
+const cdist=(a,b)=>{const d=Math.abs(a-b)%8;return Math.min(d,8-d);};
+function lab2(){
+  pressGroup('#lab2 [data-m]',b=>b.dataset.m===gm);$('gPlay').textContent=gPlay?'❚❚ 暂停':'▶ 转起来';
+  const t=+$('gT').value,d=+$('gD').value;$('gTv').textContent=t.toFixed(1)+'°';$('gDv').textContent=d.toFixed(1)+'°';
+  const z=zoneAt(t),c=readAt(t,d),v=decode(c);
+  $('gZ').textContent=`${z}（码 ${code(z).toString(2).padStart(3,'0')}）`;$('gC').textContent=c.toString(2).padStart(3,'0');
+  const e=cdist(v,z);$('gV').innerHTML=`${v}`+(e?` <span style="color:var(--red)">偏 ${e} 格</span>`:' ✓');
+  let mx=0;for(let a=0;a<360;a+=0.25)mx=Math.max(mx,cdist(decode(readAt(a,d)),zoneAt(a)));
+  $('gM').innerHTML=mx>1?`<span style="color:var(--red)">${mx} 格</span>`:mx+' 格'+(mx<=1?'（只会读成相邻格）':'');
+  /* disc */
+  const [x,W,H]=fit($('disc'));const cx=W/2,cy=H/2,R=Math.min(W,H)/2-34,ac=css('--accent'),mu=css('--muted'),ln=css('--line'),red=css('--red'),ink=css('--ink');
+  const rr=[R*.38,R*.58,R*.78,R*.98];
+  for(let k=0;k<8;k++){const cd=code(k);for(let ring=0;ring<3;ring++){const bit=2-ring;const on=(cd>>bit)&1;
+      x.beginPath();x.arc(cx,cy,rr[ring+1],-k*45*D2R,-(k+1)*45*D2R,true);x.arc(cx,cy,rr[ring],-(k+1)*45*D2R,-k*45*D2R,false);x.closePath();
+      x.fillStyle=on?ac:css('--bg');x.globalAlpha=on?.8:1;x.fill();x.globalAlpha=1;x.strokeStyle=ln;x.lineWidth=1;x.stroke();}
+    const am=-(k+.5)*45*D2R,lx=cx+Math.cos(am)*(R+20),ly=cy+Math.sin(am)*(R+20);x.textAlign='center';
+    x.font=`700 13px ${css('--mono')}`;x.fillStyle=k===z?red:mu;x.fillText(k,lx,ly-1);
+    x.font=`10px ${css('--mono')}`;x.fillText(cd.toString(2).padStart(3,'0'),lx,ly+11);x.textAlign='left';}
+  const o=OFF(d);
+  for(let b=0;b<3;b++){const ring=2-b,a=-(t+o[b])*D2R,r=(rr[ring]+rr[ring+1])/2;
+    x.strokeStyle=ink;x.lineWidth=1;x.setLineDash([3,3]);x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(a)*(R+4),cy+Math.sin(a)*(R+4));x.stroke();x.setLineDash([]);
+    const bit=(c>>b)&1;x.fillStyle=bit?red:'#fff';x.strokeStyle=red;x.lineWidth=2;x.beginPath();x.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,6,0,7);x.fill();x.stroke();}
+  text(x,'内圈 = 最高位',8,16,mu,11);text(x,'外圈 = 最低位',8,32,mu,11);text(x,gm==='gray'?'Gray 码':'二进制',W-8,16,ac,12,'right');
+  /* read-out plot */
+  const [y,W2,H2]=fit($('grd'));const a2=axes(y,W2,H2,{x0:0,x1:360,y0:-.5,y1:7.5,xt:[0,90,180,270,360],xf:v=>v+'°',yt:[0,1,2,3,4,5,6,7],title:'灰线：真实位置　红线：解码后的读数',pl:26});
+  y.strokeStyle=mu;y.lineWidth=5;y.globalAlpha=.35;y.beginPath();for(let k=0;k<8;k++){y.moveTo(a2.X(k*45),a2.Y(k));y.lineTo(a2.X(k*45+45),a2.Y(k));}y.stroke();y.globalAlpha=1;
+  y.strokeStyle=red;y.lineWidth=1.8;y.beginPath();let pv=null;
+  for(let a=0;a<360;a+=0.25){const r=decode(readAt(a,d));if(pv===null)y.moveTo(a2.X(a),a2.Y(r));else{y.lineTo(a2.X(a),a2.Y(pv));y.lineTo(a2.X(a),a2.Y(r));}pv=r;}y.lineTo(a2.X(360),a2.Y(pv));y.stroke();
+  y.strokeStyle=ac;y.lineWidth=1.5;y.beginPath();y.moveTo(a2.X(t),a2.pt);y.lineTo(a2.X(t),H2-a2.pb);y.stroke();
+  y.fillStyle=red;y.beginPath();y.arc(a2.X(t),a2.Y(v),5,0,7);y.fill();
+}
+document.querySelectorAll('#lab2 [data-m]').forEach(b=>b.addEventListener('click',()=>{gm=b.dataset.m;Lab.draw(2);}));
+['gT','gD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+$('gPlay').addEventListener('click',()=>{gPlay=!gPlay;Lab.draw(2);Lab.kick(gAnim);});
+Lab.add(2,lab2,{disc:260,grd:260});
+const gAnim=Lab.anim(2,$('disc'),dt=>{const s=$('gT');s.value=((+s.value+dt*14)%360).toFixed(1);lab2();},()=>gPlay);
+
+/* ---------- Lab 3: Boolean expressions ---------- */
+function parse(src){
+  const s=src.replace(/\s+/g,'').replace(/[·∙×]/g,'.').replace(/[¬!]/g,'~').replace(/[’‘`]/g,"'");let i=0;
+  const err=m=>{throw new Error(m+(i<s.length?`（第 ${i+1} 个字符「${s[i]}」附近）`:'（表达式结尾）'));};
+  const peek=()=>s[i];
+  function expr(){const a=[orx()];while(peek()==='^'||peek()==='⊕'){i++;a.push(orx());}return a.length>1?{t:'xor',a}:a[0];}
+  function orx(){const a=[term()];while(peek()==='+'){i++;a.push(term());}return a.length>1?{t:'or',a}:a[0];}
+  function term(){const a=[un()];while(true){if(peek()==='.'||peek()==='*'){i++;a.push(un());}else if(peek()&&/[A-Z01(~]/.test(peek()))a.push(un());else break;}return a.length>1?{t:'and',a}:a[0];}
+  function un(){if(peek()==='~'){i++;return {t:'not',a:[un()]};}let p=prim();while(peek()==="'"){i++;p={t:'not',a:[p]};}return p;}
+  function prim(){const c=peek();if(c===undefined)err('缺少操作数');
+    if(/[A-Z]/.test(c)){i++;return {t:'v',n:c};}
+    if(c==='0'||c==='1'){i++;return {t:'c',v:+c};}
+    if(c==='('){i++;const e=expr();if(peek()!==')')err('缺少右括号');i++;e.paren=true;return e;}
+    err('看不懂的符号');}
+  if(!s)return null;const e=expr();if(i<s.length)err('多出来的符号');return e;}
+const ev=(e,env)=>e.t==='v'?env[e.n]:e.t==='c'?e.v:e.t==='not'?1-ev(e.a[0],env):e.t==='and'?+e.a.every(z=>ev(z,env)):e.t==='or'?+e.a.some(z=>ev(z,env)):e.a.reduce((p,z)=>p^ev(z,env),0);
+const vars=(e,S=new Set())=>{if(e.t==='v')S.add(e.n);else if(e.a)e.a.forEach(z=>vars(z,S));return S;};
+const key=e=>e.t==='v'?e.n:e.t==='c'?''+e.v:e.t+'('+e.a.map(key).join(',')+')';
+function cost(e){const seen=new Set();let n=0;const dep=z=>{if(z.t==='v'||z.t==='c')return 0;const d=1+Math.max(...z.a.map(dep));const k=key(z);if(!seen.has(k)){seen.add(k);n+=z.a.length;}return d;};const d=dep(e);return {n,d};}
+const OP={and:'.',or:' + ',xor:' ⊕ '};
+function html(e,top=true){let h;
+  if(e.t==='v')h=e.n;else if(e.t==='c')h=''+e.v;
+  else if(e.t==='not'){const z=e.a[0];h=`<span class="ov">${html(z,true)}</span>`;}
+  else h=e.a.map(z=>{const inner=html(z,false);const needP=(z.t!=='v'&&z.t!=='c'&&z.t!=='not')&&(z.paren||(e.t==='and'&&z.t!=='and'));return needP?`(${inner})`:inner;}).join(OP[e.t]);
+  return h;}
+function lab3(){
+  let E=[null,null];$('eErr').textContent='';
+  [['e1','r1'],['e2','r2']].forEach(([id,r],k)=>{try{E[k]=parse($(id).value.toUpperCase());$(r).innerHTML=E[k]?html(E[k]):'—';}catch(err){$(r).textContent='—';$('eErr').textContent=`表达式 ${k+1}：`+err.message;E[k]=undefined;}});
+  const ok=E.filter(e=>e);const tt=$('tt');
+  if(!ok.length){tt.innerHTML='';$('rEq').textContent='—';$('rC').textContent='—';return;}
+  const V=[...new Set(ok.flatMap(e=>[...vars(e)]))].sort();
+  if(V.length>5){$('eErr').textContent='变量太多：最多 5 个';tt.innerHTML='';return;}
+  let rows='',diff=[];const N=2**V.length;
+  for(let r=0;r<N;r++){const env={};V.forEach((v,j)=>env[v]=(r>>(V.length-1-j))&1);
+    const o=E.map(e=>e?ev(e,env):null);const bad=E[0]&&E[1]&&o[0]!==o[1];if(bad)diff.push(r);
+    rows+=`<tr class="${bad?'bad':''}">${V.map(v=>`<td>${env[v]}</td>`).join('')}${o.map(z=>z===null?'':`<td class="o">${z}</td>`).join('')}</tr>`;}
+  tt.innerHTML=`<tr>${V.map(v=>`<th>${v}</th>`).join('')}${E.map((e,k)=>e?`<th>表达式 ${k+1}</th>`:'').join('')}</tr>`+rows;
+  if(E[0]&&E[1])$('rEq').innerHTML=diff.length?`<span style="color:var(--red)">不等价（${diff.length} 行不同）</span>`:'<span style="color:var(--accent)">等价 ✓</span>';
+  else $('rEq').textContent='（只有一个表达式）';
+  const C=E.map(e=>e?cost(e):null);
+  $('rC').innerHTML=C.map((c,k)=>c?`${k+1}：${c.n} 输入 · ${c.d}τ`:'').filter(Boolean).join('<br>')+
+    (C[0]&&C[1]&&C[1].n&&C[1].d?`<br><small>复杂度 ${fmt(C[0].n/C[1].n,2)} 倍 · 速度 ${fmt(C[0].d/C[1].d,2)} 倍</small>`:'');
+}
+['e1','e2'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-e]').forEach(bt=>bt.addEventListener('click',()=>{const [a,b]=bt.dataset.e.split('|');$('e1').value=a;$('e2').value=b;Lab.draw(3);}));
+Lab.add(3,lab3,{});
+Lab.start();
+</script>
+</body></html>

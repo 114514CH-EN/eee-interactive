@@ -24,7 +24,7 @@ html.embed .tools button{padding:2px 7px;font-size:11.5px}html.embed .props{min-
 
 <section class="panel" id="lab1">
   <div class="tag">模拟器 · 预设对应 DE ①②③ 的例题</div>
-  <div class="btns" role="group" aria-label="预设"><button data-p="haz">静态冒险 AB + A̅C</button><button data-p="jk">用 T 触发器做 JK</button><button data-p="cnt">4 位计数器（T）</button><button data-p="step">步进电机控制器（JK）</button><button data-p="sr">NOR 构成的 SR 锁存器</button><button data-p="fa">全加器</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-p="haz">静态冒险 AB + A̅C</button><button data-p="jk">用 T 触发器做 JK</button><button data-p="cnt">4 位计数器（T）</button><button data-p="step">步进电机控制器（JK）</button><button data-p="sr">NOR 构成的 SR 锁存器</button><button data-p="fa">全加器</button><button data-p="alarm">防盗报警 A(B̅+C̅)</button><button data-p="simp">化简前后对比</button></div>
   <div class="tools" id="tools" role="group" aria-label="工具"></div>
   <div class="bar"><button id="run" class="play">▶ 运行</button><button id="stepb">单步 +1 拍</button><button id="reset">重置</button><button id="clear">清空</button>
     <label>速度 <select id="spd"><option value="2">2 拍/秒</option><option value="5">5 拍/秒</option><option value="10" selected>10 拍/秒</option><option value="25">25 拍/秒</option></select></label>
@@ -232,7 +232,14 @@ const PRE={
     addC('OUT',22,5,{name:'Q灯'});W([16,5],[21,5]);addC('OUT',22,11,{name:'Q̅灯'});W([16,11],[21,11]);},
   fa(){addC('IN',2,3,{name:'A'});L(3,3,'A');addC('IN',2,7,{name:'B'});L(3,7,'B');addC('IN',2,11,{name:'Cin'});L(3,11,'Cin');
     addC('XOR',8,4);L(8,3,'A');L(8,5,'B');L(12,4,'x1');addC('XOR',16,5);L(16,4,'x1');L(16,6,'Cin');addC('OUT',24,5,{name:'S'});W([20,5],[23,5]);
-    addC('AND',8,10);L(8,9,'A');L(8,11,'B');addC('AND',8,15);L(8,14,'x1');L(8,16,'Cin');addC('OR',16,12);W([12,10],[14,10],[14,11],[16,11]);W([12,15],[14,15],[14,13],[16,13]);addC('OUT',24,12,{name:'Cout'});W([20,12],[23,12]);}};
+    addC('AND',8,10);L(8,9,'A');L(8,11,'B');addC('AND',8,15);L(8,14,'x1');L(8,16,'Cin');addC('OR',16,12);W([12,10],[14,10],[14,11],[16,11]);W([12,15],[14,15],[14,13],[16,13]);addC('OUT',24,12,{name:'Cout'});W([20,12],[23,12]);},
+  alarm(){addC('IN',2,3,{name:'A',on:1});L(3,3,'A');addC('IN',2,7,{name:'B'});L(3,7,'B');addC('IN',2,11,{name:'C',on:1});L(3,11,'C');
+    addC('NOT',8,7);L(8,7,'B');L(11,7,'X');addC('NOT',8,11);L(8,11,'C');L(11,11,'Y');
+    addC('OR',15,9);L(15,8,'X');L(15,10,'Y');L(19,9,'Z');addC('AND',22,4);L(22,3,'A');L(22,5,'Z');addC('OUT',29,4,{name:'D报警'});W([26,4],[28,4]);},
+  simp(){addC('IN',2,3,{name:'A',on:1});L(3,3,'A');addC('IN',2,13,{name:'B'});L(3,13,'B');
+    addC('NOT',7,6);L(7,6,'A');L(10,6,'Z');addC('OR',13,5);L(13,4,'A');L(13,6,'Z');L(17,5,'Y');
+    addC('AND',20,4);L(20,3,'A');L(20,5,'Y');L(24,4,'X');addC('OR',27,6);L(27,5,'X');L(27,7,'B');addC('OUT',34,6,{name:'C原电路'});W([31,6],[33,6]);
+    addC('OR',27,12);L(27,11,'A');L(27,13,'B');addC('OUT',34,12,{name:'C化简'});W([31,12],[33,12]);}};
 function load(k){comps=[];wires=[];sel=null;running=false;curP=k;PRE[k]();wires=wires.filter(w=>!eq(w.a,w.b));compile();for(let i=0;i<(k==='haz'?66:k==='cnt'?70:40);i++)step();view='la';Lab.draw(1);}
 document.querySelectorAll('#lab1 [data-p]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.p)));
 function lab1(){syncUI();drawSch();if(view==='la')drawLA();}
