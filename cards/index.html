@@ -1,0 +1,118 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>复习卡片</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="data-de.js"></script>
+<script src="data-em.js"></script>
+<script src="data-maths.js"></script>
+<script src="data-comms.js"></script>
+<script src="data-msse.js"></script>
+<style>
+.bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.bar select{font:13px var(--body);padding:4px 6px}
+.card{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:18px clamp(14px,3vw,24px);min-height:200px;display:flex;flex-direction:column;gap:12px}
+.card .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px;color:var(--muted)}
+.chip{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.chip.k-err{border-color:var(--red);color:var(--red)}.chip.k-fix{border-color:var(--purple);color:var(--purple)}.chip.k-q{border-color:var(--accent);color:var(--accent)}
+.q{font-size:17px;font-weight:600;line-height:1.7;margin:0}
+.a{font-size:15px;line-height:1.8;margin:0;border-top:1px dashed var(--line);padding-top:12px}
+.a ul{margin:4px 0;padding-left:20px}
+.grade{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grade button{padding:10px 6px;font-weight:600}
+.grade .g1{border-color:var(--red);color:var(--red)}.grade .g2{border-color:var(--amp);color:var(--amp)}.grade .g3{border-color:var(--green);color:var(--green)}
+.show{padding:10px;font-weight:600;border-color:var(--accent);color:var(--accent)}
+.prog{height:6px;border-radius:3px;background:var(--grid);overflow:hidden}.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.done{text-align:center;padding:30px 10px;color:var(--muted)}
+.done b{display:block;font-size:22px;color:var(--ink);margin-bottom:6px}
+a.golink{font-size:13px;color:var(--accent);text-decoration:none}
+.small{font-size:12px;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto;font-size:13px}
+.list div{display:grid;grid-template-columns:70px 1fr 74px;gap:8px;border-bottom:1px solid var(--line);padding:4px 0}
+html.embed .q{font-size:15.5px}html.embed .a{font-size:14px}html.embed .card{min-height:160px;padding:14px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">EEE YEAR 2 · SPACED REPETITION</div>
+  <h1>复习卡片</h1>
+  <p>所有 Year 2 笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。</p>
+  <nav><a href="../">← 所有互动页</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">今天要复习的卡片</div>
+  <div class="bar">
+    <select id="fc" aria-label="课程"></select>
+    <select id="fl" aria-label="讲次"></select>
+    <span class="btns" role="group" aria-label="模式"><button data-m="due">到期 + 新卡</button><button data-m="weak">只看不熟</button><button data-m="all">全部顺序过</button></span>
+  </div>
+  <div class="read"><div><small>今天到期</small><b id="sDue"></b></div><div><small>没学过</small><b id="sNew"></b></div><div><small>已掌握（≥16 天）</small><b id="sOk"></b></div><div><small>本组共</small><b id="sAll"></b></div></div>
+  <div class="prog"><i id="pg"></i></div>
+  <div class="card" id="card"></div>
+  <div class="btns"><button id="blist">看本组清单</button><button id="bexp">导出进度</button><button id="bimp">导入进度</button><button id="breset">清空本组进度</button></div>
+  <div id="extra"></div>
+  <p class="note"><strong>用法：</strong>空格键翻面，1 / 2 / 3 打分。每讲笔记里嵌的版本只显示那一讲的卡片；想跨课程混着复习，打开这个页面选「全部课程」。</p>
+</section>
+</div>
+<script>
+const ALL=(window.CARDS||[]);
+const COURSES={DE:'数字电子 DE',EM:'电机 EM',MA:'数学 Part A',MB:'数学 Part B',CS:'通信系统',SE:'MSSE'};
+const KIND={q:['自测','k-q'],err:['易错','k-err'],fix:['勘误','k-fix']};
+const INT=[0,1,3,7,16,35];
+const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);};
+let S={};try{S=JSON.parse(localStorage.getItem('eee-cards-v1')||'{}');}catch(e){S={};}
+const save=()=>{try{localStorage.setItem('eee-cards-v1',JSON.stringify(S));}catch(e){}};
+const qp=new URLSearchParams(location.search);
+let fc=qp.get('c')||'',fl=qp.get('l')||'',mode=qp.get('m')||'due',queue=[],pos=0,shown=false,sessionN=0;
+function mk(s){/* tiny markup: **b**, lines starting with "- " become list items, \n -> <br> */
+  const lines=s.split('\n');let out='',inList=false;
+  lines.forEach(l=>{const li=/^\s*-\s+/.test(l);if(li&&!inList){out+='<ul>';inList=true;}if(!li&&inList){out+='</ul>';inList=false;}
+    const t=l.replace(/^\s*-\s+/,'').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');out+=li?`<li>${t}</li>`:(t?t+'<br>':'');});
+  if(inList)out+='</ul>';return out.replace(/<br>$/,'');}
+function math(el){if(window.renderMathInElement){try{renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}catch(e){}}}
+function pool(){return ALL.filter(c=>(!fc||c.c===fc)&&(!fl||c.l===fl));}
+function stats(){const P=pool(),t=today();let due=0,nw=0,ok=0;P.forEach(c=>{const s=S[c.id];if(!s)nw++;else{if(s.d<=t)due++;if(s.b>=4)ok++;}});
+  $('sDue').textContent=due;$('sNew').textContent=nw;$('sOk').textContent=ok;$('sAll').textContent=P.length;}
+function build(){const P=pool(),t=today();
+  if(mode==='all')queue=P.slice();
+  else if(mode==='weak')queue=P.filter(c=>{const s=S[c.id];return s&&(s.b<=1||s.l>0);});
+  else{const due=P.filter(c=>S[c.id]&&S[c.id].d<=t).sort((a,b)=>S[a.id].d-S[b.id].d||S[a.id].b-S[b.id].b);queue=due.concat(P.filter(c=>!S[c.id]));}
+  pos=0;shown=false;sessionN=queue.length;}
+function render(){stats();pressGroup('#lab1 [data-m]',b=>b.dataset.m===mode);
+  const el=$('card');$('pg').style.width=(sessionN?Math.min(100,100*pos/sessionN):0)+'%';
+  if(pos>=queue.length){el.innerHTML=`<div class="done"><b>${sessionN?'这一组做完了 🎉':'这里没有要复习的卡片'}</b>${mode==='due'?'明天再来，或者切到「全部顺序过」再刷一遍。':'换个模式或范围试试。'}</div>`;return;}
+  const c=queue[pos],s=S[c.id],k=KIND[c.k||'q'];
+  el.innerHTML=`<div class="meta"><span class="chip ${k[1]}">${k[0]}</span><span class="chip">${COURSES[c.c]||c.c} · ${c.l}</span><span>${c.t||''}</span><span style="margin-left:auto">${s?`第 ${s.n} 次 · 间隔 ${INT[s.b]} 天`:'新卡'}</span></div>
+    <p class="q">${mk(c.q)}</p>${shown?`<div class="a">${mk(c.a)}</div><div class="grade"><button class="g1" data-g="1">1 不会</button><button class="g2" data-g="2">2 模糊</button><button class="g3" data-g="3">3 会了</button></div>`:`<button class="show" id="bshow">显示答案（空格）</button>`}
+    ${c.u?`<a class="golink" href="${c.u}" target="_blank" rel="noopener">📖 回到笔记</a>`:''}`;
+  math(el);
+  const b=$('bshow');if(b)b.onclick=()=>{shown=true;render();};
+  el.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>grade(+x.dataset.g));}
+function grade(g){const c=queue[pos],t=today();const s=S[c.id]||{b:0,d:t,n:0,l:0};s.n++;
+  if(g===1){s.b=0;s.d=t;s.l++;queue.splice(Math.min(queue.length,pos+4),0,c);sessionN++;}
+  else if(g===2){s.b=Math.max(1,Math.min(s.b,2));s.d=t+1;}
+  else{s.b=Math.min(5,s.b+1);s.d=t+INT[s.b];}
+  S[c.id]=s;save();pos++;shown=false;render();}
+function fillSel(){const cs=[...new Set(ALL.map(c=>c.c))];
+  $('fc').innerHTML='<option value="">全部课程</option>'+cs.map(c=>`<option value="${c}" ${c===fc?'selected':''}>${COURSES[c]||c}</option>`).join('');
+  const ls=[...new Set(ALL.filter(c=>!fc||c.c===fc).map(c=>c.l))];if(fl&&!ls.includes(fl))fl='';
+  $('fl').innerHTML='<option value="">全部讲次</option>'+ls.map(l=>`<option value="${l}" ${l===fl?'selected':''}>${l} ${(ALL.find(c=>c.l===l)||{}).t||''}</option>`).join('');}
+$('fc').onchange=e=>{fc=e.target.value;fl='';fillSel();build();render();};
+$('fl').onchange=e=>{fl=e.target.value;build();render();};
+document.querySelectorAll('#lab1 [data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;build();render();});
+addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
+  if(e.key===' '&&!shown&&pos<queue.length){e.preventDefault();shown=true;render();}else if(shown&&['1','2','3'].includes(e.key))grade(+e.key);});
+$('blist').onclick=()=>{const t=today(),P=pool();$('extra').innerHTML=`<div class="list">${P.map(c=>{const s=S[c.id];return `<div><span class="chip">${c.l}</span><span>${mk(c.q.split('\n')[0])}</span><span class="small">${s?(s.d<=t?'今天到期':'还剩 '+(s.d-t)+' 天'):'新卡'}</span></div>`;}).join('')}</div>`;math($('extra'));};
+$('bexp').onclick=()=>{$('extra').innerHTML=`<p class="small">复制下面这段保存（换设备时粘贴到「导入进度」）：</p><textarea style="width:100%;height:90px;font:12px var(--mono)">${JSON.stringify(S)}</textarea>`;};
+$('bimp').onclick=()=>{$('extra').innerHTML=`<p class="small">粘贴之前导出的进度，然后点「合并」：</p><textarea id="ti" style="width:100%;height:90px;font:12px var(--mono)"></textarea><div class="btns"><button id="bmerge">合并</button></div>`;
+  $('bmerge').onclick=()=>{try{const o=JSON.parse($('ti').value);Object.entries(o).forEach(([k,v])=>{if(!S[k]||(v.n||0)>(S[k].n||0))S[k]=v;});save();build();render();$('extra').innerHTML='<p class="small">已合并。</p>';}catch(e){$('extra').innerHTML='<p class="small" style="color:var(--red)">格式不对，没有导入。</p>';}};};
+$('breset').onclick=()=>{if($('breset').dataset.ok){pool().forEach(c=>delete S[c.id]);save();build();render();$('breset').textContent='清空本组进度';delete $('breset').dataset.ok;}else{$('breset').dataset.ok=1;$('breset').textContent='再点一次确认清空';}};
+fillSel();build();
+addEventListener('load',()=>render());render();
+Lab.add(1,()=>{},{});Lab.start();
+</script>
+</body></html>

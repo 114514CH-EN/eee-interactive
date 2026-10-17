@@ -1,0 +1,1 @@
+window.CARDS=window.CARDS||[];
