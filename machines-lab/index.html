@@ -1,0 +1,133 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>电机与变压器实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · ELECTRICAL MACHINES</div>
+  <h1>电机与变压器实验室</h1>
+  <p>三个实验对应一年级 EE 的 Electrical Machines：直流电机的转矩–转速特性（吊重物例题）、用变压器做阻抗匹配（n = N₂/N₁）、桥式整流加电容滤波。预设就是讲义例题。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 直流电机</a><a href="#lab2">实验 2 变压器匹配</a><a href="#lab3">实验 3 整流滤波</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 直流电机（Machines 1）</div>
+  <h2>转矩–转速是一条直线：加负载就变慢，提高电压整条线平移</h2>
+  <p class="lead">等效电路 V<sub>s</sub> = IR + ε，反电动势 ε = κω，转矩 T = κI，所以 T = κ(V<sub>s</sub> − κω)/R。蓝线是电机特性，橙线是负载需要的转矩，交点就是稳定运行点。虚线是其他电压下的特性（平行线）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-m="41.875,0.5,0.5,1.875">讲义吊重物（10 kg、80 rad/s）</button><button data-m="41.875,0.5,0.5,0">空载</button><button data-m="41.875,0.5,0.5,45">堵转</button><button data-m="20,0.5,0.5,1.875">电压减半</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="mVs">电源 V<sub>s</sub> (V)</label><input id="mVs" type="range" min="0" max="60" step="0.125" value="41.875"><output id="mVsO"></output></div>
+    <div class="ctl"><label for="mK">电机常数 κ (Nm/A)</label><input id="mK" type="range" min="0.1" max="1" step="0.05" value="0.5"><output id="mKO"></output></div>
+    <div class="ctl"><label for="mR">绕组电阻 R (Ω)</label><input id="mR" type="range" min="0.1" max="3" step="0.05" value="0.5"><output id="mRO"></output></div>
+    <div class="ctl"><label for="mT">负载转矩 T<sub>L</sub> (Nm)</label><input id="mT" type="range" min="0" max="50" step="0.025" value="1.875"><output id="mTO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="ts" height="260" aria-label="转矩–转速特性"></canvas><canvas id="pf" height="260" aria-label="功率流"></canvas></div>
+  <div class="read"><div><small>转速 ω（电机 / 滑轮经 20:1）</small><b id="mW" style="font-size:15px"></b></div><div><small>电流 I = T/κ，反电动势 ε = κω</small><b id="mI" style="font-size:15px"></b></div><div><small>输入 V<sub>s</sub>I / 机械 Tω / 铜损 I²R</small><b id="mP" style="font-size:15px"></b></div><div><small>效率 η</small><b id="mE"></b></div></div>
+  <p class="note"><strong>两个端点：</strong>ω = 0（堵转）时转矩最大 κV<sub>s</sub>/R，电流 V<sub>s</sub>/R 全部变成热；T = 0（空载）时 ω = V<sub>s</sub>/κ，反电动势正好等于电源电压。用 PWM 改变平均 V<sub>s</sub> 就能电子调速。（这里忽略转动惯量，只看稳态。）</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 变压器阻抗匹配（Machines 2）</div>
+  <h2>从初级看进去，次级负载变成 Z₂ / n²</h2>
+  <p class="lead">放大器（V<sub>s</sub>、内阻 R<sub>th</sub>）经匝数比 n = N₂/N₁ 的理想变压器接负载 R<sub>L</sub>。初级看到 Z₁ = R<sub>L</sub>/n²；当 Z₁ = R<sub>th</sub> 时负载功率最大。曲线是 P<sub>L</sub> 随 n 变化。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-t="10,148,8,0.2325">例 2：148 Ω 驱动 8 Ω 扬声器</button><button data-t="240,8,36,0.6">例 3：240 V，8 Ω，N₁:N₂ = 5:3，36 Ω</button><button data-t="240,0,24,0.1">例 1：240 V，n = 0.1</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="tV">V<sub>s</sub> (V rms)</label><input id="tV" type="range" min="1" max="240" step="1" value="10"><output id="tVO"></output></div>
+    <div class="ctl"><label for="tR">R<sub>th</sub> (Ω)</label><input id="tR" type="range" min="0" max="300" step="1" value="148"><output id="tRO"></output></div>
+    <div class="ctl"><label for="tL">R<sub>L</sub> (Ω)</label><input id="tL" type="range" min="1" max="100" step="1" value="8"><output id="tLO"></output></div>
+    <div class="ctl"><label for="tN">n = N₂/N₁</label><input id="tN" type="range" min="0.02" max="2" step="0.0025" value="0.2325"><output id="tNO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="tm" height="250" aria-label="负载功率随匝数比"></canvas></div>
+  <div class="read"><div><small>Z₁ = R<sub>L</sub>/n²</small><b id="tZ"></b></div><div><small>I₁ / I₂ = I₁/n</small><b id="tI" style="font-size:15px"></b></div><div><small>V₁（线圈上）/ V₂ = nV₁</small><b id="tV2" style="font-size:15px"></b></div><div><small>负载功率 P<sub>L</sub>（最佳 n）</small><b id="tP" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>记法：</strong>V₂ = nV₁，I₁ = nI₂（功率守恒 V₁I₁ = V₂I₂），所以 Z₁ = V₁/I₁ = (V₂/n)/(nI₂) = Z₂/n²。降压变压器（n &lt; 1）让小阻抗「看起来」变大。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 桥式整流与电容滤波（Machines 3）</div>
+  <h2>二极管桥把负半周翻上来，电容把波形填平</h2>
+  <p class="lead">理想二极管（忽略压降）。灰线是整流后的 |v|，蓝线是负载电压：电容在峰值附近充电，其余时间经 R 放电。C = 0 时就是纯整流，平均值 2V<sub>p</sub>/π。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-r="5,25,0">无电容</button><button data-r="5,25,2000">讲义例 2：C = 2 mF（RC = 5·T/2）</button><button data-r="5,25,10000">真正满足 0.2 V 纹波：C = 10 mF</button><button data-r="325,46,0">230 V 市电、46 Ω</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="rV">峰值 V<sub>p</sub> (V)</label><input id="rV" type="range" min="1" max="340" step="1" value="5"><output id="rVO"></output></div>
+    <div class="ctl"><label for="rR">负载 R (Ω)</label><input id="rR" type="range" min="1" max="200" step="1" value="25"><output id="rRO"></output></div>
+    <div class="ctl"><label for="rC">电容 C (µF)</label><input id="rC" type="range" min="0" max="20000" step="50" value="2000"><output id="rCO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="rw" height="250" aria-label="整流滤波波形"></canvas></div>
+  <div class="read"><div><small>平均输出 V<sub>DC</sub></small><b id="rA"></b></div><div><small>纹波（峰–峰）</small><b id="rP"></b></div><div><small>RC 与 T/2 之比</small><b id="rT"></b></div><div><small>（无电容时）DC 功率 / 交流功率</small><b>8/π² = 0.81</b></div></div>
+  <p class="note"><strong>估算纹波：</strong>两次充电之间（全波整流约 T/2 = 10 ms）电容独自给负载供电，ΔV ≈ I<sub>DC</sub>·(T/2)/C。讲义例 2 用 RC = 5·T/2 得 2 mF，但这样 ΔV ≈ 0.2 A × 10 ms / 2 mF = 1 V（这里逐点仿真约 0.75 V，因为电容在峰值前就开始充电），都大于题目要求的 0.2 V；要 0.2 V 需要约 10 mF。</p>
+</section>
+</div>
+
+<script>
+const SI=(v,u,d=3)=>{if(!isFinite(v))return '∞ '+u;if(Math.abs(v)<1e-12)return '0 '+u;const a=Math.abs(v);const P=[[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ']];for(const [s,p] of P){if(a>=s*0.9995||s===1e-6)return (+(v/s).toPrecision(d))+' '+p+u;}return '0 '+u;};
+const val=id=>+$(id).value;
+/* ---------- Lab 1: DC motor ---------- */
+function lab1(){
+  const Vs=val('mVs'),k=val('mK'),R=val('mR'),TL=val('mT');
+  $('mVsO').textContent=Vs+' V';$('mKO').textContent=k;$('mRO').textContent=R+' Ω';$('mTO').textContent=TL+' Nm';
+  pressGroup('#lab1 [data-m]',b=>b.dataset.m===`${Vs},${k},${R},${TL}`);
+  const Tst=k*Vs/R,w0=Vs/k;let w=(Vs-R*TL/k)/k;const stall=w<=0;if(stall)w=0;
+  const T=stall?Tst:TL,I=T/k,eps=k*w,Pin=Vs*I,Pm=T*w,Pl=I*I*R;
+  $('mW').textContent=stall?'堵转 0':`${fmt(w,3)} rad/s（${Math.round(w*60/(2*Math.PI))} rpm）/ 滑轮 ${fmt(w/20,3)} rad/s`;
+  $('mI').textContent=`${fmt(I,3)} A，ε = ${fmt(eps,3)} V`;
+  $('mP').textContent=`${Pin.toFixed(1)} / ${Pm.toFixed(1)} / ${Pl.toFixed(2)} W`;$('mE').textContent=Pin>0?fmt(Pm/Pin*100,3)+' %':'—';
+  const [x,W,H]=fit($('ts'));const wm=Math.max(w0,60/k,1)*1.08,Tm=Math.max(Tst,TL,1)*1.1;
+  const a=axes(x,W,H,{x0:0,x1:wm,y0:0,y1:Tm,xt:[0,wm/4,wm/2,3*wm/4].map(v=>+v.toPrecision(2)),yt:[0,Tm/2,Tm].map(v=>+v.toPrecision(2)),title:'转矩 T (Nm) – 转速 ω (rad/s)',pl:44});
+  x.setLineDash([5,4]);[0.5,1.5].forEach(f=>plot(x,a.X,a.Y,u=>{const t=k*(Vs*f-k*u)/R;return t>=0?t:NaN;},0,wm,css('--muted'),1.2,100));x.setLineDash([]);
+  plot(x,a.X,a.Y,u=>{const t=k*(Vs-k*u)/R;return t>=0?t:NaN;},0,wm,css('--blue'),2.6,200);
+  plot(x,a.X,a.Y,()=>TL,0,wm,css('--amp'),2,2);
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(w),a.Y(T),6,0,7);x.fill();
+  label(x,'κV_s/R = '+fmt(Tst,3),a.X(0)+6,a.Y(Tst)+14,css('--blue'),11);label(x,'V_s/κ',a.X(Math.min(w0,wm))-40,a.Y(0)-8,css('--blue'),11);
+  /* power flow bars */
+  const [y,W2,H2]=fit($('pf'));const mx=Math.max(Pin,1);const bw=(W2-60)/3;
+  [['输入 V_sI',Pin,css('--blue')],['机械 Tω',Pm,css('--accent')],['铜损 I²R',Pl,css('--red')]].forEach(([n,v,c],i)=>{const h=(H2-60)*v/mx;y.fillStyle=c;y.globalAlpha=.8;y.fillRect(30+i*bw+10,H2-30-h,bw-20,h);y.globalAlpha=1;
+    text(y,n,30+i*bw+bw/2,H2-10,css('--muted'),11,'center');text(y,v.toFixed(1)+' W',30+i*bw+bw/2,H2-36-h,c,12,'center');});
+  text(y,'功率守恒：V_sI = Tω + I²R',8,16,css('--muted'),11);
+}
+['mVs','mK','mR','mT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-m]').forEach(b=>b.addEventListener('click',()=>{b.dataset.m.split(',').forEach((v,i)=>$(['mVs','mK','mR','mT'][i]).value=v);Lab.draw(1);}));
+Lab.add(1,lab1,{ts:240,pf:240});
+
+/* ---------- Lab 2: transformer matching ---------- */
+function lab2(){
+  const Vs=val('tV'),Rt=val('tR'),RL=val('tL'),n=val('tN');
+  $('tVO').textContent=Vs+' V';$('tRO').textContent=Rt+' Ω';$('tLO').textContent=RL+' Ω';$('tNO').textContent=n.toFixed(4)+'（N₁:N₂ = '+fmt(1/n,3)+':1）';
+  pressGroup('#lab2 [data-t]',b=>b.dataset.t===`${Vs},${Rt},${RL},${n}`);
+  const Z1=RL/(n*n),I1=Vs/(Rt+Z1),I2=I1/n,V1=I1*Z1,V2=n*V1,PL=I2*I2*RL,nb=Rt>0?Math.sqrt(RL/Rt):NaN,Pmax=Rt>0?Vs*Vs/(4*Rt):NaN;
+  $('tZ').textContent=SI(Z1,'Ω');$('tI').textContent=`${fmt(I1,3)} A / ${fmt(I2,3)} A`;$('tV2').textContent=`${fmt(V1,4)} V / ${fmt(V2,4)} V`;
+  $('tP').textContent=SI(PL,'W')+(Rt>0?`（n = ${fmt(nb,3)} 时 ${SI(Pmax,'W')}）`:'');
+  const [x,W,H]=fit($('tm'));const f=m=>{const z=RL/(m*m);const i=Vs/(Rt+z)/m;return i*i*RL;};let pm=0;for(let m=0.02;m<=2;m+=0.005)pm=Math.max(pm,f(m));
+  const a=axes(x,W,H,{x0:0,x1:2,y0:0,y1:pm*1.12,xt:[0,0.25,0.5,0.75,1,1.25,1.5,1.75,2],yt:[0,pm/2,pm],yf:v=>SI(v,'W',2),title:'负载功率 P_L 随匝数比 n = N₂/N₁',pl:56});
+  plot(x,a.X,a.Y,f,0.02,2,css('--blue'),2.6,400);
+  if(Rt>0){x.strokeStyle=css('--grid');x.setLineDash([4,4]);x.beginPath();x.moveTo(a.X(nb),a.pt);x.lineTo(a.X(nb),H-a.pb);x.stroke();x.setLineDash([]);text(x,'Z₁ = R_th',a.X(nb)+4,a.pt+12,css('--muted'),11);}
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(n),a.Y(PL),6,0,7);x.fill();
+}
+['tV','tR','tL','tN'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-t]').forEach(b=>b.addEventListener('click',()=>{b.dataset.t.split(',').forEach((v,i)=>$(['tV','tR','tL','tN'][i]).value=v);Lab.draw(2);}));
+Lab.add(2,lab2,{tm:230});
+
+/* ---------- Lab 3: rectifier ---------- */
+function lab3(){
+  const Vp=val('rV'),R=val('rR'),C=val('rC')*1e-6,f=50,T=1/f;
+  $('rVO').textContent=Vp+' V';$('rRO').textContent=R+' Ω';$('rCO').textContent=C?SI(C,'F'):'0';
+  pressGroup('#lab3 [data-r]',b=>b.dataset.r===`${Vp},${R},${C*1e6}`);
+  const dt=T/2000,N=Math.round(3*T/dt),out=[];let vc=0;
+  for(let k=0;k<N+Math.round(5*T/dt);k++){const t=k*dt,vr=Math.abs(Vp*Math.sin(2*Math.PI*f*t));
+    if(C===0)vc=vr;else{vc=vc*Math.exp(-dt/(R*C));if(vr>vc)vc=vr;}
+    if(k>=Math.round(5*T/dt))out.push([t-5*T,vr,vc]);}
+  const vs=out.map(o=>o[2]),avg=vs.reduce((a,b)=>a+b)/vs.length,mx=Math.max(...vs),mn=Math.min(...vs);
+  $('rA').textContent=fmt(avg,4)+' V（'+fmt(avg/Vp,3)+' V_p）';$('rP').textContent=fmt(mx-mn,3)+' V';$('rT').textContent=C?fmt(R*C/(T/2),3):'—';
+  const [x,W,H]=fit($('rw'));const a=axes(x,W,H,{x0:0,x1:3*T,y0:-Vp*1.1,y1:Vp*1.15,xt:[0,T,2*T,3*T],xf:v=>Math.round(v*1000)+' ms',yt:[-Vp,0,Vp],yf:v=>fmt(v,3),title:'细线：电源 v　灰：|v|　蓝：负载电压',pl:40});
+  plot(x,a.X,a.Y,t=>Vp*Math.sin(2*Math.PI*f*t),0,3*T,css('--grid'),1.2,300);
+  x.strokeStyle=css('--muted');x.lineWidth=1.4;x.beginPath();out.forEach((o,i)=>i?x.lineTo(a.X(o[0]),a.Y(o[1])):x.moveTo(a.X(o[0]),a.Y(o[1])));x.stroke();
+  x.strokeStyle=css('--blue');x.lineWidth=2.6;x.beginPath();out.forEach((o,i)=>i?x.lineTo(a.X(o[0]),a.Y(o[2])):x.moveTo(a.X(o[0]),a.Y(o[2])));x.stroke();
+  x.setLineDash([6,4]);plot(x,a.X,a.Y,()=>avg,0,3*T,css('--red'),1.4,2);x.setLineDash([]);text(x,'平均 '+fmt(avg,3)+' V',a.X(3*T)-4,a.Y(avg)-6,css('--red'),11,'right');
+}
+['rV','rR','rC'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-r]').forEach(b=>b.addEventListener('click',()=>{b.dataset.r.split(',').forEach((v,i)=>$(['rV','rR','rC'][i]).value=v);Lab.draw(3);}));
+Lab.add(3,lab3,{rw:230});
+Lab.start();
+</script>
+</body></html>
