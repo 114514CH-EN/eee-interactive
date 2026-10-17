@@ -18,8 +18,8 @@ table.mini td.o{font-weight:700}
 <header>
   <div class="tag">ELECTRICAL ENGINEERING 1 · DIGITAL FUNDAMENTALS</div>
   <h1>数字基础实验室</h1>
-  <p>四个实验对应一年级 EE 的 Digital Fundamentals 和 Digital Circuit Synthesis：二进制 / 十进制 / 十六进制互换、Gray 码编码盘为什么不会误读、布尔表达式的真值表、等价判断（含德摩根、NAND 改写）与化简收益、2–4 变量卡诺图。预设就是讲义例子和 Student examples。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 进制转换</a><a href="#lab2">实验 2 Gray 码编码盘</a><a href="#lab3">实验 3 布尔表达式</a><a href="#lab4">实验 4 卡诺图</a></nav>
+  <p>五个实验对应一年级 EE 的 Digital Fundamentals、Digital Circuit Synthesis 和 Sequential Logic：二进制 / 十进制 / 十六进制互换、Gray 码编码盘为什么不会误读、布尔表达式的真值表、等价判断（含德摩根、NAND 改写）与化简收益、2–4 变量卡诺图。预设就是讲义例子和 Student examples。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 进制转换</a><a href="#lab2">实验 2 Gray 码编码盘</a><a href="#lab3">实验 3 布尔表达式</a><a href="#lab4">实验 4 卡诺图</a><a href="#lab5">实验 5 计数器设计</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -78,6 +78,18 @@ table.mini td.o{font-weight:700}
     <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><small style="color:var(--muted)">最简与或式</small><p class="expr" id="kMin" style="margin:0"></p><small style="color:var(--muted)">圈（质蕴含项）</small><p id="kPI" style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.8"></p><small style="color:var(--muted)">标准与或式（每个 1 一个最小项）</small><p id="kCan" style="margin:0;font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere"></p></div></div>
   <div class="read"><div><small>最小项</small><b id="kSig" style="font-size:14px"></b></div><div><small>标准式 门输入数</small><b id="kC0" style="font-size:15px"></b></div><div><small>化简后 门输入数</small><b id="kC1" style="font-size:15px"></b></div><div><small>节省</small><b id="kSave"></b></div></div>
   <p class="note"><strong>读圈的规则：</strong>圈里<strong>不变</strong>的变量留下（1 写原变量，0 写取反），变化的变量消掉。每把圈扩大一倍，就少一个变量，这正是 $A.B+A.\bar B=A$ 的图形版本。对角线不能圈：XOR 那种棋盘格一个都合并不了。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 计数器设计与分析（Sequential Logic L4–L7）</div>
+  <h2>定好状态序列，自动求每个触发器的 D 或 T 输入</h2>
+  <p class="lead">计数器 = 一排触发器（存当前状态 Q）+ 一块组合逻辑（算下一个状态）。设计步骤就是课件那一套：列出每个状态「之后要变成什么」（Q⁺），D 触发器直接要 D = Q⁺；T 触发器查激励表，Q 要变就 T = 1、不变就 T = 0。再用卡诺图化简。点表格里的 Q⁺ 格可以改下一个状态（每点一次加 1）。</p>
+  <div class="btns" role="group" aria-label="位数和触发器"><button data-b="2">2 位</button><button data-b="3">3 位</button><span style="width:12px"></span><button data-ff="D">D 触发器</button><button data-ff="T">T 触发器</button></div>
+  <div class="btns" role="group" aria-label="序列预设"><button data-s="up">加法计数 0→1→2→3</button><button data-s="down">减法计数（L6 / L7 例题）</button><button data-s="gray">Gray 码序列</button><button data-s="step">步进电机 100→110→010→011→001→101</button><button data-s="ring">环形 001→010→100</button></div>
+  <div class="stage even"><div class="scroll"><table class="mini" id="cTab"></table></div><canvas id="cSt" height="260" aria-label="状态转移图"></canvas></div>
+  <div class="read" id="cEq"></div>
+  <div class="stage one"><canvas id="cTim" height="190" aria-label="时序图"></canvas></div>
+  <p class="note"><strong>D 和 T 的区别：</strong>D 输入是「下一拍的数据」，D = Q⁺；T 输入是「指令」，T = Q ⊕ Q⁺（要翻转才给 1）。同样的加法计数，T 型只要 T₀ = 1、T₁ = Q₀，比 D 型少门，这就是 L7 说 T 触发器受欢迎的原因。没用到的状态（灰色）默认跳到序列的第一个状态，万一上电落进去也能回到正轨；也可以点它改。</p>
 </section>
 </div>
 
@@ -285,6 +297,68 @@ $('kClr').addEventListener('click',()=>{kv.fill(0);Lab.draw(4);});
 document.querySelectorAll('#lab4 [data-k]').forEach(b=>b.addEventListener('click',()=>{const [n,l]=b.dataset.k.split('|');kn=+n;kv.fill(0);l.split(',').forEach(v=>kv[+v]=1);Lab.draw(4);}));
 [3,5,6,7].forEach(v=>kv[v]=1);
 Lab.add(4,lab4,{kc:280});
+
+/* ---------- Lab 5: counter design ---------- */
+let cb=2,cff='D',cnx=[1,2,3,0],cused=new Set([0,1,2,3]),cst0=0,corder=[0,1,2,3];
+const SEQ={up:n=>[...Array(1<<n).keys()],down:n=>[...Array(1<<n).keys()].map(i=>((1<<n)-i)%(1<<n)),gray:n=>[...Array(1<<n).keys()].map(i=>i^(i>>1)),step:()=>[4,6,2,3,1,5],ring:()=>[1,2,4]};
+function setSeq(k){let seq=SEQ[k](cb);if(k==='step'||k==='ring'){cb=3;seq=SEQ[k](3);}
+  cnx=new Array(1<<cb).fill(seq[0]);cused=new Set(seq);cst0=seq[0];corder=seq.slice();seq.forEach((v,i)=>cnx[v]=seq[(i+1)%seq.length]);}
+function minimize(n,f){const N=1<<n,out=[];
+  for(let m=0;m<N;m++)for(let v=0;v<N;v++){if(v&~m)continue;let ok=true;for(let x=0;x<N;x++)if((x&m)===v&&!f[x]){ok=false;break;}if(ok)out.push({m,v});}
+  const P=out.filter(a=>!out.some(b=>b!==a&&(b.m&a.m)===b.m&&b.m!==a.m&&(a.v&b.m)===b.v));
+  const ones=[...Array(N).keys()].filter(x=>f[x]);if(!ones.length)return null;let best=null;
+  for(let sb=1;sb<1<<P.length&&P.length<=16;sb++){const sel=P.filter((_,i)=>sb>>i&1);if(best&&sel.length>best.length)continue;
+    if(!ones.every(x=>sel.some(c=>(x&c.m)===c.v)))continue;const lc=c=>{let k=0;for(let b=0;b<n;b++)if(c.m>>b&1)k++;return k;};
+    const cost=sel.length*100+sel.reduce((a,c)=>a+lc(c),0),bc=best?best.length*100+best.reduce((a,c)=>a+lc(c),0):1e9;if(cost<bc)best=sel;}
+  return best;}
+const qn=b=>`Q<sub>${b}</sub>`;
+function cTerm(n,c){if(c.m===0)return '1';const p=[];for(let b=n-1;b>=0;b--)if(c.m>>b&1)p.push(c.v>>b&1?qn(b):`<span class="ov">${qn(b)}</span>`);return p.join('.');}
+function lab5(){
+  pressGroup('#lab5 [data-b]',b=>+b.dataset.b===cb);pressGroup('#lab5 [data-ff]',b=>b.dataset.ff===cff);
+  const N=1<<cb,bits=v=>v.toString(2).padStart(cb,'0');
+  /* table */
+  let h=`<tr><th>Q (${[...Array(cb)].map((_,i)=>'Q'+(cb-1-i)).join('')})</th><th>Q⁺</th>${[...Array(cb)].map((_,i)=>`<th>${cff}${cb-1-i}</th>`).join('')}</tr>`;
+  for(let st=0;st<N;st++){const nx=cnx[st],ex=cff==='D'?nx:(st^nx);const u=cused.has(st);
+    h+=`<tr style="${u?'':'opacity:.45'}"><td>${bits(st)}</td><td><button data-c="${st}" style="font-family:var(--mono);padding:1px 8px">${bits(nx)}</button></td>${[...Array(cb)].map((_,i)=>{const b=cb-1-i;const v=ex>>b&1;
+      const why=cff==='T'?((st>>b&1)===(nx>>b&1)?'保持':'翻转'):'';return `<td>${v}${why?` <small style="color:var(--muted)">${why}</small>`:''}</td>`;}).join('')}</tr>`;}
+  $('cTab').innerHTML=h;
+  $('cTab').querySelectorAll('[data-c]').forEach(bt=>bt.addEventListener('click',()=>{const st=+bt.dataset.c;cnx[st]=(cnx[st]+1)%N;cused=new Set();corder=[];let v=cst0;for(let k=0;k<N&&!cused.has(v);k++){cused.add(v);corder.push(v);v=cnx[v];}Lab.draw(5);}));
+  /* equations */
+  let eq='',inv=0,andI=0,orI=0;
+  for(let b=cb-1;b>=0;b--){const f=[...Array(N).keys()].map(st=>{const nx=cnx[st];return cff==='D'?(nx>>b&1):((st^nx)>>b&1);});
+    const S=minimize(cb,f);let ex;
+    if(!S)ex='0';else if(S.some(c=>c.m===0))ex='1';else{ex=S.map(c=>cTerm(cb,c)).join(' + ');
+      S.forEach(c=>{let l=0;for(let k=0;k<cb;k++)if(c.m>>k&1){l++;}if(l>=2)andI+=l;});if(S.length>1)orI+=S.length;}
+    eq+=`<div><small>${cff}<sub>${b}</sub> =</small><b class="expr">${ex}</b></div>`;}
+  $('cEq').innerHTML=eq+`<div><small>门输入（不算反相器，Q̄ 由触发器直接给）</small><b>${andI+orI}</b></div>`;
+  /* state diagram */
+  const [x,W,H]=fit($('cSt'));const cx=W/2,cy=H/2,R=Math.min(W,H)/2-34,mu=css('--muted'),ac=css('--accent'),ink=css('--ink');
+  const un=[...Array(N).keys()].filter(v=>!cused.has(v)),M=corder.length;const pos=st=>{const k=corder.indexOf(st);if(k<0){const j=un.indexOf(st);return [cx+(j-(un.length-1)/2)*48,cy];}const a=-Math.PI/2+2*Math.PI*k/M;return [cx+R*Math.cos(a),cy+R*Math.sin(a)];};
+  for(let st=0;st<N;st++){const [x1,y1]=pos(st),nx=cnx[st],[x2,y2]=pos(nx),u=cused.has(st);x.globalAlpha=u?1:.35;
+    if(nx===st){x.strokeStyle=u?ac:mu;x.lineWidth=2;x.beginPath();x.arc(x1+(x1-cx)/R*26,y1+(y1-cy)/R*26,10,0,7);x.stroke();}
+    else{const d=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/d,uy=(y2-y1)/d;arrow(x,x1+ux*20,y1+uy*20,x2-ux*22,y2-uy*22,u?ac:mu,2,9);}
+    x.globalAlpha=1;}
+  for(let st=0;st<N;st++){const [x1,y1]=pos(st),u=cused.has(st);x.fillStyle=css('--panel')||'#fff';x.strokeStyle=u?ink:mu;x.lineWidth=u?2:1;x.beginPath();x.arc(x1,y1,19,0,7);x.fill();x.stroke();
+    x.font=`700 12px ${css('--mono')}`;x.fillStyle=u?ink:mu;x.textAlign='center';x.fillText(bits(st),x1,y1+4);x.textAlign='left';}
+  text(x,'状态转移图（灰色 = 没用到的状态）',8,16,mu,11);
+  /* timing */
+  const [y,W2,H2]=fit($('cTim'));const C=10,x0=56,cw=(W2-x0-10)/C,rows=cb+1,rh=(H2-30)/rows;
+  let st=cst0;const hist=[];for(let k=0;k<=C;k++){hist.push(st);st=cnx[st];}
+  y.font=`600 12px ${css('--mono')}`;
+  for(let r=0;r<rows;r++){const yb=20+r*rh+rh*.8,yt=20+r*rh+rh*.2;y.fillStyle=mu;y.fillText(r===0?'CLK':'Q'+(cb-r),6,(yb+yt)/2+4);
+    y.strokeStyle=r===0?mu:ac;y.lineWidth=2;y.beginPath();
+    for(let k=0;k<C;k++){const xa=x0+k*cw,xb=xa+cw;
+      if(r===0){y.moveTo(xa,yb);y.lineTo(xa,yt);y.lineTo(xa+cw/2,yt);y.lineTo(xa+cw/2,yb);y.lineTo(xb,yb);}
+      else{const b=cb-r,v=hist[k]>>b&1,pv=k?hist[k-1]>>b&1:v;const yy=v?yt:yb;if(k===0)y.moveTo(xa,yy);else{y.lineTo(xa,pv?yt:yb);y.lineTo(xa,yy);}y.lineTo(xb,yy);}}
+    y.stroke();}
+  y.strokeStyle=css('--grid');y.setLineDash([3,3]);for(let k=0;k<=C;k++){y.beginPath();y.moveTo(x0+k*cw,14);y.lineTo(x0+k*cw,H2-12);y.stroke();}y.setLineDash([]);
+  y.font=`11px ${css('--mono')}`;y.fillStyle=ink;y.textAlign='center';for(let k=0;k<C;k++)y.fillText(hist[k],x0+k*cw+cw/2,H2-2);y.textAlign='left';
+  text(y,'上升沿（虚线）之后 Q 才变；底下数字 = 每个周期的状态（十进制）',x0,12,mu,11);
+}
+document.querySelectorAll('#lab5 [data-b]').forEach(b=>b.addEventListener('click',()=>{cb=+b.dataset.b;setSeq('up');Lab.draw(5);}));
+document.querySelectorAll('#lab5 [data-ff]').forEach(b=>b.addEventListener('click',()=>{cff=b.dataset.ff;Lab.draw(5);}));
+document.querySelectorAll('#lab5 [data-s]').forEach(b=>b.addEventListener('click',()=>{setSeq(b.dataset.s);Lab.draw(5);}));
+Lab.add(5,lab5,{cSt:240,cTim:170});
 Lab.start();
 </script>
 </body></html>
