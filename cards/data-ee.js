@@ -70,4 +70,39 @@ D('EE-DF','数字基础：进制、Gray 码、逻辑门、布尔代数','2ff2027
 - 复杂度数门的个数`],
 ['fix',r`讲义 p.4 和 p.6 各有什么笔误？`,r`p.4「1×2² + 0×2¹ + **5**×2⁰」应为 1×2⁰；p.6「6 is 0110, and of **0** is 1001」应为「of **9**」。`],
 ]);
+D('EE-DCS','数字电路合成：标准式、卡诺图、德摩根、NAND','d62115f8c992494b836d1c6b5eaf6469',[
+['q',r`怎样从任意真值表写出一个一定正确的电路？`,r`每个 T = 1 的行写一个最小项（变量 0 取反、1 原样），全部 OR 起来 = 标准与或式。最小项只在自己那一行为 1，所以 OR 起来正好在这些行为 1。`],
+['q',r`什么是 minterm、sum of products、canonical SOP？`,r`- minterm：每个输入变量都出现一次的乘积项，对应真值表一行
+- SOP：乘积项的 OR（一层 AND + 一层 OR）
+- canonical SOP：全部由最小项组成，和真值表信息相同`],
+['q',r`三取二报警的标准式和最简式？门输入数各多少？`,r`$T=\bar A.B.C+A.\bar B.C+A.B.\bar C+A.B.C$：反相 3 + AND 12 + OR 4 = 19。最简 $T=B.C+A.C+A.B$：AND 6 + OR 3 = 9。`],
+['q',r`化简的核心规则是什么？用带伞例子解释。`,r`$A.B+A.\bar B=A$。下雨且热或下雨且不热都带伞 = 只要下雨就带伞，热不热无关，B 被消掉。`],
+['q',r`$D=A.B.C+A.\bar B.C+A.B.\bar C$ 怎么化简？关键技巧？`,r`$A.B.C$ 要用两次：$X=X+X$ 复制一份 → $A.(B+\bar B).C+A.B.(C+\bar C)=A.C+A.B$。`],
+['q',r`卡诺图的列为什么按 00, 01, 11, 10 排？`,r`Gray 码：相邻列只差一个变量，所以相邻的两个 1 正好能用 $A.B+A.\bar B=A$ 合并。左右边（4 变量还有上下边）也只差一位，所以也相邻。`],
+['q',r`卡诺图画圈有哪些规则？`,r`- 只圈 1，矩形，边长 1、2、4（格数 $2^n$）
+- 越大越好，可以重叠，可以绕过边缘
+- 不能斜着、不能 L 形
+- 每个 1 至少在一个圈里
+圈 2 格消 1 个变量，4 格消 2 个，8 格消 3 个。`],
+['q',r`什么是质蕴含项 prime implicant？怎么从圈读出乘积项？`,r`只圈 1、且不能再扩大的圈。圈里一直是 1 的变量写原样，一直是 0 的写取反，有变化的扔掉。`],
+['q',r`3 变量 $\Sigma m(0,1,4,5,7)$ 的最简式？`,r`AB = 00 和 10 两列隔着边相邻 → $\bar B$；再加 AB = 11、10 的 C = 1 → $A.C$。$T=\bar B+A.C$。`],
+['q',r`L1 的四输入例子化简结果？门输入数？`,r`$T=C.D+A.B$（CD = 11 整行、AB = 11 整列）。43 → 6。`],
+['q',r`德摩根定律？用防盗窗例子解释。`,r`$\overline{A.B}=\bar A+\bar B$，$\overline{A+B}=\bar A.\bar B$。安全 = 楼上关 AND 楼下关；不安全 = 楼上没关 OR 楼下没关。拿进取反线时每个变量取反，AND ↔ OR 互换。`],
+['q',r`化简 $X=\overline{A+\bar B+\bar C}$。`,r`德摩根：$\bar A.\bar{\bar B}.\bar{\bar C}=\bar A.B.C$。`],
+['q',r`只用 NAND 怎么做 NOT、AND、OR？`,r`- NOT：两输入并联 $\overline{A.A}=\bar A$
+- AND：NAND 后再接 NAND 反相器
+- OR：A、B 先各自取反再 NAND：$\overline{\bar A.\bar B}=A+B$`],
+['q',r`$T=A.B+C.D$ 怎样改成全 NAND？`,r`$T=\overline{\overline{A.B}.\overline{C.D}}$ = (A NAND B) NAND (C NAND D)。与或电路的 AND、OR 全部换成 NAND 即可。`],
+['q',r`为什么实际电路常用 NAND / NOR？`,r`制造上比 AND / OR 更便宜、更简单；只用一种就能搭出任何电路（阿波罗 11 号制导计算机全用 NOR）。`],
+['q',r`XOR 和 XNOR 的与或式？为什么卡诺图化简不了 XOR？`,r`$A\oplus B=\bar A.B+A.\bar B$；$\overline{A\oplus B}=A.B+\bar A.\bar B$。XOR 的 1 是棋盘格，没有任何两个相邻，圈不起来。`],
+['err',r`卡诺图和德摩根最常见的错误？`,r`- 列写成 00, 01, 10, 11
+- 忘了边缘 / 四角相邻
+- 圈不够大、斜着圈
+- 最小项把 0 写成原变量
+- 德摩根只取反变量、没把 AND / OR 互换`],
+['fix',r`DCS 课件里有哪几处笔误？`,r`- DCS-2 p.13 行标签应为 (B=0, B=1)
+- DCS-3 p.21 四输入例子来自 Lecture 1，不是 lecture 4
+- DCS-4 p.5「expression for C̄」应为 S̄
+- DCS-4 p.13–14「is all inputs」应为 if`],
+]);
 })();
