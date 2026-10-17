@@ -28,6 +28,7 @@
 .prog{height:6px;border-radius:3px;background:var(--grid);overflow:hidden}.prog i{display:block;height:100%;background:var(--accent);transition:width .2s}
 .done{text-align:center;padding:30px 10px;color:var(--muted)}
 .done b{display:block;font-size:22px;color:var(--ink);margin-bottom:6px}
+code{font:12.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--soft,rgba(127,127,127,.12));padding:1px 5px;border-radius:4px}
 a.golink{font-size:13px;color:var(--accent);text-decoration:none}
 .small{font-size:12px;color:var(--muted)}
 .list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto;font-size:13px}
@@ -68,10 +69,10 @@ let S={};try{S=JSON.parse(localStorage.getItem('eee-cards-v1')||'{}');}catch(e){
 const save=()=>{try{localStorage.setItem('eee-cards-v1',JSON.stringify(S));}catch(e){}};
 const qp=new URLSearchParams(location.search);
 let fc=qp.get('c')||'',fl=qp.get('l')||'',mode=qp.get('m')||'due',queue=[],pos=0,shown=false,sessionN=0;
-function mk(s){/* tiny markup: **b**, lines starting with "- " become list items, \n -> <br> */
+function mk(s){/* tiny markup: **b**, ‹code›, lines starting with "- " become list items, \n -> <br> */
   const lines=s.split('\n');let out='',inList=false;
   lines.forEach(l=>{const li=/^\s*-\s+/.test(l);if(li&&!inList){out+='<ul>';inList=true;}if(!li&&inList){out+='</ul>';inList=false;}
-    const t=l.replace(/^\s*-\s+/,'').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');out+=li?`<li>${t}</li>`:(t?t+'<br>':'');});
+    const t=l.replace(/^\s*-\s+/,'').replace(/‹(.+?)›/g,(m,c)=>'<code>'+c.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');out+=li?`<li>${t}</li>`:(t?t+'<br>':'');});
   if(inList)out+='</ul>';return out.replace(/<br>$/,'');}
 function math(el){if(window.renderMathInElement){try{renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}catch(e){}}}
 function pool(){return ALL.filter(c=>(!fc||c.c===fc)&&(!fl||c.l===fl));}
