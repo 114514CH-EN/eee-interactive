@@ -18,8 +18,8 @@ table.mini td.o{font-weight:700}
 <header>
   <div class="tag">ELECTRICAL ENGINEERING 1 · DIGITAL FUNDAMENTALS</div>
   <h1>数字基础实验室</h1>
-  <p>三个实验对应一年级 EE 的 Digital Fundamentals：二进制 / 十进制 / 十六进制互换、Gray 码编码盘为什么不会误读、布尔表达式的真值表、等价判断与化简收益（门输入数和延迟）。预设就是讲义例子和 Student examples。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 进制转换</a><a href="#lab2">实验 2 Gray 码编码盘</a><a href="#lab3">实验 3 布尔表达式</a></nav>
+  <p>四个实验对应一年级 EE 的 Digital Fundamentals 和 Digital Circuit Synthesis：二进制 / 十进制 / 十六进制互换、Gray 码编码盘为什么不会误读、布尔表达式的真值表、等价判断（含德摩根、NAND 改写）与化简收益、2–4 变量卡诺图。预设就是讲义例子和 Student examples。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 进制转换</a><a href="#lab2">实验 2 Gray 码编码盘</a><a href="#lab3">实验 3 布尔表达式</a><a href="#lab4">实验 4 卡诺图</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -57,7 +57,7 @@ table.mini td.o{font-weight:700}
   <h2>写两个表达式：真值表逐行比较，顺便算化简省了多少门</h2>
   <p class="lead">写法：变量用大写字母；与 = <code>.</code> 或 <code>*</code>（也可以直接相邻 <code>AB</code>）；或 = <code>+</code>；非 = 后缀 <code>'</code>（<code>A'</code>、<code>(A+B)'</code>）或前缀 <code>~</code>。AND 优先于 OR。<strong>复杂度</strong> = 所有门的输入数之和（相同的子表达式只算一次，不加括号的连续同种运算算一个多输入门）；<strong>延迟</strong> = 从输入到输出最多经过几个门 × τ。</p>
   <div class="btns" role="group" aria-label="预设">
-    <button data-e="A.(A+A')+B|A+B">讲义 p.18 化简</button><button data-e="A+A.B|A">吸收律 p.21</button><button data-e="A.(B+C)|A.B+A.C">AND 对 OR 分配</button><button data-e="A+B.C|(A+B).(A+C)">OR 对 AND 分配</button><button data-e="A.(B'+C')|">防盗报警 p.11</button><button data-e="A+B.C|(A+B).C">优先级陷阱</button><button data-e="A+A.A'+B|A+B">题 7.1</button><button data-e="(A.B'+B')+A|A+B'">题 7.2</button><button data-e="(A+B').(B+C)|A.B'+B.C">题 5.1 vs 5.2</button></div>
+    <button data-e="A.(A+A')+B|A+B">讲义 p.18 化简</button><button data-e="A+A.B|A">吸收律 p.21</button><button data-e="A.(B+C)|A.B+A.C">AND 对 OR 分配</button><button data-e="A+B.C|(A+B).(A+C)">OR 对 AND 分配</button><button data-e="A.(B'+C')|">防盗报警 p.11</button><button data-e="A+B.C|(A+B).C">优先级陷阱</button><button data-e="A+A.A'+B|A+B">题 7.1</button><button data-e="(A.B'+B')+A|A+B'">题 7.2</button><button data-e="(A+B').(B+C)|A.B'+B.C">题 5.1 vs 5.2</button><button data-e="(A.B)'|A'+B'">德摩根 ①</button><button data-e="(A+B)'|A'.B'">德摩根 ②</button><button data-e="(A+B'+C')'|A'.B.C">DCS4 p.7</button><button data-e="((A.(A+B'))'+(B+C)')'|A.B+A.C">DCS4 p.8–11</button><button data-e="((A.B)'.(C.D)')'|A.B+C.D">SOP → 全 NAND</button><button data-e="A'.B+A.B'|A^B">XOR</button></div>
   <div class="controls">
     <div class="ctl"><label for="e1">表达式 1</label><input id="e1" type="text" value="A.(A+A')+B" autocomplete="off" spellcheck="false"><span></span></div>
     <div class="ctl"><label for="e2">表达式 2（可留空）</label><input id="e2" type="text" value="A+B" autocomplete="off" spellcheck="false"><span></span></div>
@@ -66,6 +66,18 @@ table.mini td.o{font-weight:700}
   <div class="read"><div><small>表达式 1</small><b class="expr" id="r1"></b></div><div><small>表达式 2</small><b class="expr" id="r2"></b></div><div><small>是否等价</small><b id="rEq"></b></div><div><small>复杂度 / 延迟</small><b id="rC" style="font-size:15px"></b></div></div>
   <div class="scroll"><table class="mini" id="tt"></table></div>
   <p class="note"><strong>证明等价的两种办法：</strong>① 真值表逐行比较（这里自动做）；② 用代数规则一步步化。单变量规则：A.1=A，A.0=0，A.A=A，A.A̅=0，A+0=A，A+1=1，A+A=A，A+A̅=1，A̿=A。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 卡诺图（Digital Circuit Synthesis L2–L3）</div>
+  <h2>点格子填 1，程序画出最大的圈并写出最简与或式</h2>
+  <p class="lead">布局和课件一样：列是 A（2 变量）或 AB，行是 B（2 变量）、C 或 CD；AB、CD 按 Gray 码 00, 01, 11, 10 排，所以相邻格只差一个变量，左右边（4 变量还有上下边）也相邻。圈的边长只能是 1、2、4，越大越好；可以重叠。下面同时给出「每个 1 一个最小项」的标准与或式和化简结果的门输入数（按 DCS L1 的数法）。</p>
+  <div class="btns" role="group" aria-label="变量数"><button data-n="2">2 变量</button><button data-n="3">3 变量</button><button data-n="4">4 变量</button><button id="kClr">清空</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-k="2|0,1,2">L2 子系统故障</button><button data-k="3|3,5,6,7">L1/L3 三取二报警</button><button data-k="3|0,1,4,5,7">L3 第二例（环绕）</button><button data-k="4|3,7,11,12,13,14,15">L1/L3 四输入例子</button><button data-k="4|0,2,8,10">四个角</button><button data-k="3|1,2,4,7">XOR 棋盘（圈不起来）</button></div>
+  <div class="stage"><canvas id="kc" class="click" height="300" aria-label="可点击的卡诺图"></canvas>
+    <div style="display:flex;flex-direction:column;gap:8px;min-width:0"><small style="color:var(--muted)">最简与或式</small><p class="expr" id="kMin" style="margin:0"></p><small style="color:var(--muted)">圈（质蕴含项）</small><p id="kPI" style="margin:0;font-family:var(--mono);font-size:13px;line-height:1.8"></p><small style="color:var(--muted)">标准与或式（每个 1 一个最小项）</small><p id="kCan" style="margin:0;font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere"></p></div></div>
+  <div class="read"><div><small>最小项</small><b id="kSig" style="font-size:14px"></b></div><div><small>标准式 门输入数</small><b id="kC0" style="font-size:15px"></b></div><div><small>化简后 门输入数</small><b id="kC1" style="font-size:15px"></b></div><div><small>节省</small><b id="kSave"></b></div></div>
+  <p class="note"><strong>读圈的规则：</strong>圈里<strong>不变</strong>的变量留下（1 写原变量，0 写取反），变化的变量消掉。每把圈扩大一倍，就少一个变量，这正是 $A.B+A.\bar B=A$ 的图形版本。对角线不能圈：XOR 那种棋盘格一个都合并不了。</p>
 </section>
 </div>
 
@@ -202,6 +214,77 @@ function lab3(){
 ['e1','e2'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
 document.querySelectorAll('#lab3 [data-e]').forEach(bt=>bt.addEventListener('click',()=>{const [a,b]=bt.dataset.e.split('|');$('e1').value=a;$('e2').value=b;Lab.draw(3);}));
 Lab.add(3,lab3,{});
+
+/* ---------- Lab 4: Karnaugh map ---------- */
+const GC=[0,1,3,2];let kn=3,kv=new Array(16).fill(0);
+const KV='ABCD';
+function kLayout(){ /* returns {cols:[{bits,label}],rows:[...],colVars,rowVars,idx(c,r)} */
+  if(kn===2)return {cv:'A',rv:'B',cols:[0,1],rows:[0,1],cl:['0','1'],rl:['0','1'],idx:(c,r)=>c*2+r};
+  if(kn===3)return {cv:'AB',rv:'C',cols:GC,rows:[0,1],cl:['00','01','11','10'],rl:['0','1'],idx:(c,r)=>c*2+r};
+  return {cv:'AB',rv:'CD',cols:GC,rows:GC,cl:['00','01','11','10'],rl:['00','01','11','10'],idx:(c,r)=>c*4+r};}
+function cubes(){ /* all implicants as {m:mask(fixed bits),v:value} */
+  const N=1<<kn,out=[];
+  for(let m=0;m<N;m++)for(let v=0;v<N;v++){if(v&~m)continue;let ok=true,any=false;
+    for(let x=0;x<N;x++)if((x&m)===v){if(!kv[x]){ok=false;break;}any=true;}
+    if(ok&&any)out.push({m,v});}
+  return out.filter(a=>!out.some(b=>b!==a&&(b.m&a.m)===b.m&&b.m!==a.m&&(a.v&b.m)===b.v));}
+const covers=(c,x)=>(x&c.m)===c.v;
+const lits=c=>{let n=0;for(let b=0;b<kn;b++)if(c.m>>b&1)n++;return n;};
+function cover(P){const ones=[];for(let x=0;x<1<<kn;x++)if(kv[x])ones.push(x);if(!ones.length)return [];
+  let best=null;const n=P.length;
+  if(n<=18){for(let s=1;s<1<<n;s++){const sel=P.filter((_,i)=>s>>i&1);if(best&&sel.length>best.length)continue;
+      if(!ones.every(x=>sel.some(c=>covers(c,x))))continue;
+      const cost=sel.length*100+sel.reduce((a,c)=>a+lits(c),0),bc=best?best.length*100+best.reduce((a,c)=>a+lits(c),0):1e9;if(cost<bc)best=sel;}}
+  else{best=[];let left=ones.slice();while(left.length){let bc=null,bn=-1;P.forEach(c=>{const k=left.filter(x=>covers(c,x)).length;if(k>bn){bn=k;bc=c;}});best.push(bc);left=left.filter(x=>!covers(bc,x));}}
+  return best;}
+function termH(c){if(c.m===0)return '1';const p=[];for(let i=0;i<kn;i++){const b=kn-1-i;if(c.m>>b&1)p.push(c.v>>b&1?KV[i]:`<span class="ov">${KV[i]}</span>`);}return p.join('.');}
+function costOf(terms){/* DCS L1 counting: inverter input per complemented literal, AND inputs for terms with >=2 literals, OR inputs = #terms if >1 */
+  let inv=0,and=0;terms.forEach(c=>{let l=0;for(let b=0;b<kn;b++)if(c.m>>b&1){l++;if(!(c.v>>b&1))inv++;}if(l>=2)and+=l;});const or=terms.length>1?terms.length:0;return {inv,and,or,t:inv+and+or};}
+function lab4(){
+  pressGroup('#lab4 [data-n]',b=>+b.dataset.n===kn);
+  const L=kLayout(),P=cubes(),S=cover(P),N=1<<kn,full=(1<<kn)-1;
+  const [x,W,H]=fit($('kc'));const mu=css('--muted'),ink=css('--ink'),ln=css('--line'),ac=css('--accent');
+  const nc=L.cols.length,nr=L.rows.length,cs=Math.min(62,(W-90)/nc,(H-70)/nr),x0=Math.max(60,(W-cs*nc)/2+10),y0=48;
+  x.font=`600 13px ${css('--mono')}`;x.fillStyle=mu;x.textAlign='center';
+  L.cl.forEach((t,i)=>x.fillText(t,x0+cs*(i+.5),y0-10));L.rl.forEach((t,j)=>{x.textAlign='right';x.fillText(t,x0-10,y0+cs*(j+.5)+5);x.textAlign='center';});
+  x.strokeStyle=mu;x.lineWidth=1;x.beginPath();x.moveTo(x0-34,y0-34);x.lineTo(x0,y0);x.stroke();
+  x.textAlign='left';x.fillText(L.cv,x0-14,y0-26);x.textAlign='right';x.fillText(L.rv,x0-22,y0-4);x.textAlign='left';
+  for(let i=0;i<nc;i++)for(let j=0;j<nr;j++){const id=L.idx(L.cols[i],L.rows[j]),px=x0+i*cs,py=y0+j*cs;
+    x.fillStyle=kv[id]?css('--shade'):'transparent';x.fillRect(px,py,cs,cs);x.strokeStyle=ln;x.lineWidth=1;x.strokeRect(px,py,cs,cs);
+    x.font=`700 ${Math.round(cs*.36)}px ${css('--mono')}`;x.fillStyle=kv[id]?ink:mu;x.textAlign='center';x.fillText(kv[id]?'1':'0',px+cs/2,py+cs/2+cs*.13);
+    x.font=`10px ${css('--mono')}`;x.fillStyle=mu;x.fillText('m'+id,px+cs-12,py+11);x.textAlign='left';}
+  const PAL=[ac,css('--red'),css('--blue'),css('--amp'),css('--purple'),css('--green'),css('--volt')];
+  const segs=(set,n)=>{ /* set of positions -> list of [start,len,wrapL,wrapR] */
+    const on=[...Array(n)].map((_,i)=>set.has(i));if(on.every(Boolean))return [[0,n,0,0]];
+    if(on[0]&&on[n-1]){let a=0;while(on[a])a++;let b=n-1;while(on[b])b--;return [[0,a,1,0],[b+1,n-1-b,0,1]];}
+    const s0=on.indexOf(true);let l=0;while(on[s0+l])l++;return [[s0,l,0,0]];};
+  S.forEach((c,k)=>{const cols=new Set(),rows=new Set();
+    for(let i=0;i<nc;i++)for(let j=0;j<nr;j++)if(covers(c,L.idx(L.cols[i],L.rows[j]))){cols.add(i);rows.add(j);}
+    const col=PAL[k%PAL.length],pad=4+k*3;x.strokeStyle=col;x.lineWidth=2.6;
+    segs(cols,nc).forEach(([cs0,cl,wl,wr])=>segs(rows,nr).forEach(([rs0,rl,ul,dr])=>{
+      let ax=x0+cs0*cs+pad,ay=y0+rs0*cs+pad,aw=cl*cs-2*pad,ah=rl*cs-2*pad;
+      if(wl){ax-=pad+10;aw+=pad+10;}if(wr){aw+=pad+10;}if(ul){ay-=pad+10;ah+=pad+10;}if(dr){ah+=pad+10;}
+      x.beginPath();x.roundRect?x.roundRect(ax,ay,aw,ah,10):x.rect(ax,ay,aw,ah);x.stroke();}));
+    });
+  const ones=[];for(let i=0;i<N;i++)if(kv[i])ones.push(i);
+  $('kSig').textContent=ones.length?`Σm(${ones.join(', ')})`:'—';
+  $('kMin').innerHTML=!ones.length?'T = 0':ones.length===N?'T = 1':'T = '+S.map(termH).join(' + ');
+  $('kPI').innerHTML=P.map(c=>{const k=S.indexOf(c);return `<span style="color:${k>=0?PAL[k%PAL.length]:mu}">${termH(c)}</span>${k>=0?'':'（多余）'}`;}).join('　')||'—';
+  const can=ones.map(v=>({m:full,v}));$('kCan').innerHTML=ones.length?'T = '+can.map(termH).join(' + '):'—';
+  const c0=costOf(can),c1=costOf(ones.length===N?[]:S);
+  const f=c=>`${c.t}（反相 ${c.inv} · 与 ${c.and} · 或 ${c.or}）`;
+  $('kC0').textContent=ones.length?f(c0):'—';$('kC1').textContent=ones.length?f(c1):'—';
+  $('kSave').textContent=ones.length&&c0.t?Math.round(100*(1-c1.t/c0.t))+'%':'—';
+}
+$('kc').addEventListener('click',ev=>{const L=kLayout(),r=$('kc').getBoundingClientRect(),W=r.width,H=+$('kc').dataset.h||300;
+  const nc=L.cols.length,nr=L.rows.length,cs=Math.min(62,(W-90)/nc,(H-70)/nr),x0=Math.max(60,(W-cs*nc)/2+10),y0=48;
+  const i=Math.floor((ev.clientX-r.left-x0)/cs),j=Math.floor((ev.clientY-r.top-y0)/cs);
+  if(i>=0&&i<nc&&j>=0&&j<nr){const id=L.idx(L.cols[i],L.rows[j]);kv[id]^=1;Lab.draw(4);}});
+document.querySelectorAll('#lab4 [data-n]').forEach(b=>b.addEventListener('click',()=>{kn=+b.dataset.n;kv.fill(0);Lab.draw(4);}));
+$('kClr').addEventListener('click',()=>{kv.fill(0);Lab.draw(4);});
+document.querySelectorAll('#lab4 [data-k]').forEach(b=>b.addEventListener('click',()=>{const [n,l]=b.dataset.k.split('|');kn=+n;kv.fill(0);l.split(',').forEach(v=>kv[+v]=1);Lab.draw(4);}));
+[3,5,6,7].forEach(v=>kv[v]=1);
+Lab.add(4,lab4,{kc:280});
 Lab.start();
 </script>
 </body></html>
