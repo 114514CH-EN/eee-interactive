@@ -1,0 +1,157 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>网络定理实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>table.mx{border-collapse:collapse;font-family:var(--mono);font-size:14px;margin:6px 0}table.mx td{padding:3px 10px;text-align:right}table.mx td.br{border-left:2px solid var(--ink)}table.mx td.bl{border-right:2px solid var(--ink)}.ctl input[type=number]{width:100%}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · NETWORK THEOREMS</div>
+  <h1>网络定理实验室</h1>
+  <p>三个实验对应一年级 EE 的 Network Theorems：叠加原理（一次只开一个源）、戴维宁 / 诺顿等效（接任何负载都和原电路一样）、节点电压法（按检查法写电导矩阵）。数字就是课上的例子；惠斯通电桥的戴维宁等效在「放大器与电桥实验室」实验 4。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 叠加原理</a><a href="#lab2">实验 2 戴维宁 / 诺顿</a><a href="#lab3">实验 3 节点电压法</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 叠加原理（Lecture 3）</div>
+  <h2>两个电源一起作用 = 各自单独作用的结果相加</h2>
+  <p class="lead">电路：V<sub>a</sub> — R<sub>a</sub> — 节点 X — R<sub>b</sub> — V<sub>b</sub>，X 经 R<sub>x</sub> 接地。点按钮关掉某个电压源（换成短路导线），看 V<sub>x</sub> 的两部分怎样相加。</p>
+  <div class="btns" role="group" aria-label="开关"><button data-s="both">两个源都开</button><button data-s="a">只开 V<sub>a</sub>（V<sub>b</sub> 短路）</button><button data-s="b">只开 V<sub>b</sub>（V<sub>a</sub> 短路）</button><button id="sReset">课上例子</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sVa">V<sub>a</sub> (V)</label><input id="sVa" type="number" step="any" value="10"></div>
+    <div class="ctl"><label for="sRa">R<sub>a</sub> (kΩ)</label><input id="sRa" type="number" step="any" value="2"></div>
+    <div class="ctl"><label for="sRx">R<sub>x</sub> (kΩ)</label><input id="sRx" type="number" step="any" value="2"></div>
+    <div class="ctl"><label for="sRb">R<sub>b</sub> (kΩ)</label><input id="sRb" type="number" step="any" value="4"></div>
+    <div class="ctl"><label for="sVb">V<sub>b</sub> (V)</label><input id="sVb" type="number" step="any" value="12"></div>
+  </div>
+  <div class="stage even"><canvas id="sc" height="230" aria-label="电路"></canvas><canvas id="sb" height="230" aria-label="叠加柱状图"></canvas></div>
+  <div class="read"><div><small>只有 V<sub>a</sub>：V<sub>x</sub>′</small><b id="sX1"></b></div><div><small>只有 V<sub>b</sub>：V<sub>x</sub>″</small><b id="sX2"></b></div><div><small>相加 V<sub>x</sub>′ + V<sub>x</sub>″</small><b id="sXs"></b></div><div><small>两个源一起（直接用 KCL 算）</small><b id="sXt"></b></div></div>
+  <p class="note"><strong>关掉一个源：</strong>电压源 → 短路（V = 0 就是一根导线）；电流源 → 开路（I = 0 就是断开）。只对线性电路成立；<strong>功率不能叠加</strong>（P ∝ V²）。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 戴维宁与诺顿等效（Lecture 3）</div>
+  <h2>从 A、B 两端看进去，复杂电路 = 一个电压源串一个电阻</h2>
+  <p class="lead">原电路：V<sub>s</sub> 经 R<sub>1</sub> 到节点 X，X 经 R<sub>2</sub> 接地，再经 R<sub>3</sub> 到端口 A（B 接地）。改负载 R<sub>L</sub>，比较原电路和戴维宁等效给出的端口电压、电流：永远一样。右图是端口的 V–I 直线（截距就是 V<sub>TH</sub> 和 I<sub>N</sub>）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-t="10,2,3,4">课上例子（10 V，2 / 3 / 4 kΩ）</button><button data-r="0.001">R<sub>L</sub> ≈ 0（短路 → I<sub>N</sub>）</button><button data-r="1e6">R<sub>L</sub> → ∞（开路 → V<sub>TH</sub>）</button><button data-r="5.2">R<sub>L</sub> = R<sub>TH</sub>（最大功率）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="tVs">V<sub>s</sub> (V)</label><input id="tVs" type="number" step="any" value="10"></div>
+    <div class="ctl"><label for="tR1">R<sub>1</sub> (kΩ)</label><input id="tR1" type="number" step="any" value="2"></div>
+    <div class="ctl"><label for="tR2">R<sub>2</sub> (kΩ)</label><input id="tR2" type="number" step="any" value="3"></div>
+    <div class="ctl"><label for="tR3">R<sub>3</sub> (kΩ)</label><input id="tR3" type="number" step="any" value="4"></div>
+    <div class="ctl"><label for="tRL">负载 R<sub>L</sub> (kΩ，对数)</label><input id="tRL" type="range" min="-2" max="3" step="0.01" value="0.716"><output id="tRLO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="tc" height="240" aria-label="原电路与等效电路"></canvas><canvas id="tv" height="240" aria-label="端口 V–I 特性"></canvas></div>
+  <div class="read"><div><small>V<sub>TH</sub>（开路电压）</small><b id="tVth"></b></div><div><small>R<sub>TH</sub> = R<sub>N</sub>（关掉源后看进去）</small><b id="tRth"></b></div><div><small>I<sub>N</sub>（短路电流）= V<sub>TH</sub>/R<sub>TH</sub></small><b id="tIn"></b></div><div><small>接 R<sub>L</sub>：原电路 / 等效电路</small><b id="tCmp" style="font-size:14px"></b></div></div>
+  <p class="note"><strong>步骤：</strong>① 端口开路求 V<sub>TH</sub>（R<sub>3</sub> 没电流，V<sub>TH</sub> = X 点电压）；② 关掉所有独立源求 R<sub>TH</sub> = R<sub>3</sub> + R<sub>1</sub>∥R<sub>2</sub>；③ 诺顿：端口短路求 I<sub>N</sub>，R<sub>N</sub> = R<sub>TH</sub>。三者满足 V<sub>TH</sub> = I<sub>N</sub>R<sub>TH</sub>，可以互相检查。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 节点电压法（Lecture 5）</div>
+  <h2>按检查法写电导矩阵 G，解 GV = I</h2>
+  <p class="lead">课上例子：50 V — 10 Ω — 节点 2 — 20 Ω — 节点 3 — 30 Ω — 100 V，节点 2 经 15 Ω 接地，节点 3 经 25 Ω 接地（I<sub>1</sub> 流过它）。把电压源和串联电阻换成诺顿电流源（V/R 并 R），矩阵就能直接看出来。</p>
+  <div class="controls">
+    <div class="ctl"><label for="nV1">左电源 (V)</label><input id="nV1" type="number" step="any" value="50"></div>
+    <div class="ctl"><label for="nRa">10 Ω 处</label><input id="nRa" type="number" step="any" value="10"></div>
+    <div class="ctl"><label for="nRb">15 Ω 处</label><input id="nRb" type="number" step="any" value="15"></div>
+    <div class="ctl"><label for="nRc">20 Ω 处</label><input id="nRc" type="number" step="any" value="20"></div>
+    <div class="ctl"><label for="nRd">25 Ω 处</label><input id="nRd" type="number" step="any" value="25"></div>
+    <div class="ctl"><label for="nRe">30 Ω 处</label><input id="nRe" type="number" step="any" value="30"></div>
+    <div class="ctl"><label for="nV2">右电源 (V)</label><input id="nV2" type="number" step="any" value="100"></div>
+  </div>
+  <div class="stage even"><canvas id="nc" height="220" aria-label="节点电路"></canvas><div id="nm" style="min-width:0;overflow-x:auto"></div></div>
+  <div class="read"><div><small>V<sub>2</sub></small><b id="nV2o"></b></div><div><small>V<sub>3</sub></small><b id="nV3o"></b></div><div><small>I<sub>1</sub> = V<sub>3</sub>/25 Ω</small><b id="nI"></b></div><div><small>检查：节点 3 KCL 残差</small><b id="nChk"></b></div></div>
+  <p class="note"><strong>检查法：</strong>对角 G<sub>kk</sub> = 接在节点 k 上所有电导之和（正）；非对角 G<sub>kj</sub> = −（节点 k、j 之间的电导）；右边 I<sub>k</sub> = 流进节点 k 的源电流。网孔法完全对偶：对角是网孔电阻之和，非对角是 −共享电阻，右边是网孔里电压源的代数和。</p>
+</section>
+</div>
+
+<script>
+const num=id=>{const v=parseFloat($(id).value);return isFinite(v)?v:0;};
+const par=(a,b)=>a*b/(a+b);
+function res(x,x0,y0,x1,y1,col){const L=Math.hypot(x1-x0,y1-y0),ux=(x1-x0)/L,uy=(y1-y0)/L,nx=-uy,ny=ux,a=L*0.25,b=L*0.75,n=6;
+  x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(x0,y0);x.lineTo(x0+ux*a,y0+uy*a);for(let i=1;i<=n;i++){const t=a+(b-a)*(i-.5)/n,s=(i%2?1:-1)*6;x.lineTo(x0+ux*t+nx*s,y0+uy*t+ny*s);}x.lineTo(x0+ux*b,y0+uy*b);x.lineTo(x1,y1);x.stroke();}
+function wire(x,pts,col,dash){x.strokeStyle=col;x.lineWidth=2;if(dash)x.setLineDash([5,4]);x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke();x.setLineDash([]);}
+function vsrc(x,cx,cy,col,on,lbl){x.strokeStyle=on?col:css('--muted');x.lineWidth=2;if(!on){x.beginPath();x.moveTo(cx,cy-18);x.lineTo(cx,cy+18);x.stroke();label(x,'短路',cx+6,cy+4,css('--muted'),11);return;}
+  x.beginPath();x.arc(cx,cy,16,0,7);x.stroke();label(x,'+',cx-4,cy-4,col,12);label(x,'−',cx-4,cy+13,col,12);if(lbl)label(x,lbl,cx-16-x.measureText(lbl).width-6,cy+4,col,12);}
+function gnd(x,cx,cy){x.strokeStyle=css('--muted');x.lineWidth=2;x.beginPath();x.moveTo(cx-10,cy);x.lineTo(cx+10,cy);x.moveTo(cx-6,cy+4);x.lineTo(cx+6,cy+4);x.moveTo(cx-2,cy+8);x.lineTo(cx+2,cy+8);x.stroke();}
+
+/* ---------- Lab 1 ---------- */
+let sm='both';
+function sx(Va,Ra,Rx,Rb,Vb){return (Va/Ra+Vb/Rb)/(1/Ra+1/Rx+1/Rb);}
+function lab1(){
+  pressGroup('#lab1 [data-s]',b=>b.dataset.s===sm);
+  const Va=num('sVa'),Ra=num('sRa'),Rx=num('sRx'),Rb=num('sRb'),Vb=num('sVb');
+  const x1=sx(Va,Ra,Rx,Rb,0),x2=sx(0,Ra,Rx,Rb,Vb),xt=sx(Va,Ra,Rx,Rb,Vb);
+  $('sX1').textContent=fmt(x1,4)+' V';$('sX2').textContent=fmt(x2,4)+' V';$('sXs').textContent=fmt(x1+x2,4)+' V';$('sXt').textContent=fmt(xt,4)+' V';
+  const [x,W,H]=fit($('sc'));const s=Math.min(W/420,1),X=v=>v*s+(W-420*s)/2;const ink=css('--ink'),am=css('--amp');
+  const top=50,bot=180;
+  vsrc(x,X(40),115,css('--blue'),sm!=='b','V_a');wire(x,[[X(40),99],[X(40),top],[X(70),top]],ink);res(x,X(70),top,X(170),top,am);label(x,'R_a',X(110),top-12,am,12);
+  wire(x,[[X(170),top],[X(250),top]],ink);res(x,X(250),top,X(350),top,am);label(x,'R_b',X(290),top-12,am,12);wire(x,[[X(350),top],[X(380),top],[X(380),99]],ink);
+  vsrc(x,X(380),115,css('--red'),sm!=='a','');label(x,'V_b',X(400),119,css('--red'),12);
+  res(x,X(210),top,X(210),bot,am);label(x,'R_x',X(220),120,am,12);wire(x,[[X(40),131],[X(40),bot],[X(380),bot],[X(380),131]],ink);
+  x.fillStyle=ink;x.beginPath();x.arc(X(210),top,4,0,7);x.fill();label(x,'X',X(204),top-10,ink,13);
+  const v=sm==='a'?x1:sm==='b'?x2:xt;text(x,'V_x = '+fmt(v,4)+' V',X(210),bot+30,css('--accent'),13,'center');
+  const [y,W2,H2]=fit($('sb'));const m=Math.max(Math.abs(x1),Math.abs(x2),Math.abs(xt),0.1)*1.2;
+  const a=axes(y,W2,H2,{x0:0,x1:3,y0:Math.min(0,x1,x2,xt)*1.2,y1:m,xt:[],yt:[0,m/1.2],yf:v=>fmt(v,3)+' V',title:'叠加：V_x′ + V_x″ = V_x',pl:50});
+  const bar=(i,b0,h,col,lbl)=>{y.fillStyle=col;y.globalAlpha=.85;y.fillRect(a.X(i+.2),a.Y(Math.max(b0,b0+h)),a.X(i+.8)-a.X(i+.2),Math.abs(a.Y(b0)-a.Y(b0+h)));y.globalAlpha=1;text(y,lbl,a.X(i+.5),H2-10,css('--muted'),11,'center');};
+  bar(0,0,x1,css('--blue'),'只有 V_a');bar(1,0,x2,css('--red'),'只有 V_b');bar(2,0,x1,css('--blue'),'');bar(2,x1,x2,css('--red'),'两个一起');
+}
+document.querySelectorAll('#lab1 [data-s]').forEach(b=>b.addEventListener('click',()=>{sm=b.dataset.s;Lab.draw(1);}));
+['sVa','sRa','sRx','sRb','sVb'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+$('sReset').addEventListener('click',()=>{[['sVa',10],['sRa',2],['sRx',2],['sRb',4],['sVb',12]].forEach(([k,v])=>$(k).value=v);sm='both';Lab.draw(1);});
+Lab.add(1,lab1,{sc:220,sb:220});
+
+/* ---------- Lab 2 ---------- */
+function lab2(){
+  const Vs=num('tVs'),R1=num('tR1'),R2=num('tR2'),R3=num('tR3'),RL=10**num('tRL');$('tRLO').textContent=fmt(RL,3)+' kΩ';
+  const Vth=Vs*R2/(R1+R2),Rth=R3+par(R1,R2),In=Vth/Rth;
+  /* original circuit with load: node X */
+  const Vx=(Vs/R1)/(1/R1+1/R2+1/(R3+RL)),IL=Vx/(R3+RL),VL=IL*RL;const IL2=Vth/(Rth+RL),VL2=IL2*RL;
+  $('tVth').textContent=fmt(Vth,4)+' V';$('tRth').textContent=fmt(Rth,4)+' kΩ';$('tIn').textContent=fmt(In,4)+' mA';
+  $('tCmp').textContent=`${fmt(VL,4)} V, ${fmt(IL,4)} mA / ${fmt(VL2,4)} V, ${fmt(IL2,4)} mA`;
+  const [x,W,H]=fit($('tc'));const s=Math.min(W/430,1),X=v=>v*s+(W-430*s)/2;const ink=css('--ink'),am=css('--amp'),mu=css('--muted');
+  let t=40,b=110;vsrc(x,X(30),75,css('--blue'),true,'');wire(x,[[X(30),59],[X(30),t],[X(50),t]],ink);res(x,X(50),t,X(110),t,am);label(x,'R1',X(72),t-10,am,11);
+  wire(x,[[X(110),t],[X(130),t]],ink);res(x,X(130),t,X(130),b,am);label(x,'R2',X(136),80,am,11);res(x,X(130),t,X(200),t,am);label(x,'R3',X(155),t-10,am,11);
+  wire(x,[[X(200),t],[X(215),t]],ink);wire(x,[[X(30),91],[X(30),b],[X(215),b]],ink);
+  x.fillStyle=ink;x.beginPath();x.arc(X(215),t,3,0,7);x.arc(X(215),b,3,0,7);x.fill();label(x,'A',X(208),t-8,ink,12);label(x,'B',X(208),b+16,ink,12);text(x,'原电路',X(110),b+34,mu,12,'center');
+  t=150;b=215;vsrc(x,X(260),182,css('--accent'),true,'');wire(x,[[X(260),166],[X(260),t],[X(285),t]],ink);res(x,X(285),t,X(365),t,am);label(x,'R_TH',X(312),t-10,am,11);
+  wire(x,[[X(365),t],[X(390),t]],ink);wire(x,[[X(260),198],[X(260),b],[X(390),b]],ink);res(x,X(390),t,X(390),b,css('--red'));label(x,'R_L',X(398),186,css('--red'),11);
+  text(x,'V_TH = '+fmt(Vth,3)+' V',X(252),b+20,css('--accent'),11,'right');text(x,'戴维宁等效',X(330),b+20,mu,12,'center');
+  label(x,'R_L',X(252),80,css('--red'),11);wire(x,[[X(215),40],[X(245),40]],css('--red'),true);wire(x,[[X(215),110],[X(245),110]],css('--red'),true);res(x,X(245),40,X(245),110,css('--red'));
+  const [y,W2,H2]=fit($('tv'));const Im=In*1.15,Vm=Vth*1.15||1;
+  const a=axes(y,W2,H2,{x0:0,x1:Im||1,y0:0,y1:Vm,xt:[0,In/2,In].map(v=>+v.toPrecision(3)),yt:[0,Vth/2,Vth].map(v=>+v.toPrecision(3)),title:'端口 V（V）– I（mA）：V = V_TH − I·R_TH',pl:44});
+  plot(y,a.X,a.Y,i=>Vth-i*Rth,0,In,css('--accent'),2.6,2);
+  plot(y,a.X,a.Y,i=>i*RL,0,Math.min(Im,Vm/RL),css('--red'),1.4,2);
+  y.fillStyle=css('--red');y.beginPath();y.arc(a.X(IL),a.Y(VL),6,0,7);y.fill();
+  label(y,'V_TH',a.X(0)+4,a.Y(Vth)-4,css('--accent'),11);label(y,'I_N',a.X(In)-20,a.Y(0)-6,css('--accent'),11);text(y,'红线：负载 V = I·R_L',W2-8,30,css('--red'),11,'right');
+}
+['tVs','tR1','tR2','tR3','tRL'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-t]').forEach(b=>b.addEventListener('click',()=>{b.dataset.t.split(',').forEach((v,i)=>$(['tVs','tR1','tR2','tR3'][i]).value=v);Lab.draw(2);}));
+document.querySelectorAll('#lab2 [data-r]').forEach(b=>b.addEventListener('click',()=>{const r=+b.dataset.r;$('tRL').value=Math.max(-2,Math.min(3,Math.log10(r===5.2?(num('tR3')+par(num('tR1'),num('tR2'))):r)));Lab.draw(2);}));
+Lab.add(2,lab2,{tc:240,tv:220});
+
+/* ---------- Lab 3 ---------- */
+function lab3(){
+  const V1=num('nV1'),Ra=num('nRa'),Rb=num('nRb'),Rc=num('nRc'),Rd=num('nRd'),Re=num('nRe'),V2=num('nV2');
+  const G11=1/Ra+1/Rb+1/Rc,G12=-1/Rc,G22=1/Rc+1/Rd+1/Re,I1s=V1/Ra,I2s=V2/Re,det=G11*G22-G12*G12;
+  const v2=(I1s*G22-G12*I2s)/det,v3=(G11*I2s-G12*I1s)/det;
+  $('nV2o').textContent=fmt(v2,4)+' V';$('nV3o').textContent=fmt(v3,4)+' V';$('nI').textContent=fmt(v3/Rd,4)+' A';
+  {const r=(V2-v3)/Re-(v3-v2)/Rc-v3/Rd;$('nChk').textContent=(Math.abs(r)<1e-9?'0':fmt(r,3))+' A ✓';}
+  const f=v=>fmt(v,4);
+  $('nm').innerHTML=`<div style="display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:14px;flex-wrap:wrap"><table class="mx" style="border-left:2px solid var(--ink);border-right:2px solid var(--ink)"><tr><td>${f(G11)}</td><td>${f(G12)}</td></tr><tr><td>${f(G12)}</td><td>${f(G22)}</td></tr></table><table class="mx" style="border-left:2px solid var(--ink);border-right:2px solid var(--ink)"><tr><td>V₂</td></tr><tr><td>V₃</td></tr></table><span>=</span><table class="mx" style="border-left:2px solid var(--ink);border-right:2px solid var(--ink)"><tr><td>${f(I1s)}</td></tr><tr><td>${f(I2s)}</td></tr></table></div>
+  <p style="font-size:13px;color:var(--muted);margin:4px 0;line-height:1.7">G₁₁ = 1/${Ra} + 1/${Rb} + 1/${Rc}（节点 2 上所有电导）<br>G₂₂ = 1/${Rc} + 1/${Rd} + 1/${Re}<br>G₁₂ = G₂₁ = −1/${Rc}（节点 2、3 之间）<br>I₂ = ${V1}/${Ra}，I₃ = ${V2}/${Re}（电压源换成诺顿电流源）</p>`;
+  const [x,W,H]=fit($('nc'));const s=Math.min(W/430,1),X=v=>v*s+(W-430*s)/2;const ink=css('--ink'),am=css('--amp');const t=50,b=170;
+  vsrc(x,X(30),110,css('--blue'),true,'');label(x,V1+' V',X(4),150,css('--blue'),11);wire(x,[[X(30),94],[X(30),t],[X(50),t]],ink);res(x,X(50),t,X(130),t,am);label(x,Ra+'Ω',X(80),t-10,am,11);
+  res(x,X(130),t,X(250),t,am);label(x,Rc+'Ω',X(180),t-10,am,11);res(x,X(250),t,X(370),t,am);label(x,Re+'Ω',X(300),t-10,am,11);
+  wire(x,[[X(370),t],[X(400),t],[X(400),94]],ink);vsrc(x,X(400),110,css('--red'),true,'');label(x,V2+' V',X(390),150,css('--red'),11);
+  res(x,X(130),t,X(130),b,am);label(x,Rb+'Ω',X(136),115,am,11);res(x,X(250),t,X(250),b,am);label(x,Rd+'Ω',X(256),115,am,11);
+  wire(x,[[X(30),126],[X(30),b],[X(400),b],[X(400),126]],ink);gnd(x,X(215),b+4);
+  x.fillStyle=ink;[[130,t],[250,t]].forEach(([u,v])=>{x.beginPath();x.arc(X(u),v,4,0,7);x.fill();});
+  label(x,'V₂ = '+fmt(v2,4),X(100),t-26,css('--accent'),12);label(x,'V₃ = '+fmt(v3,4),X(222),t-26,css('--accent'),12);label(x,'I₁ ↓',X(262),140,css('--red'),12);
+}
+['nV1','nRa','nRb','nRc','nRd','nRe','nV2'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+Lab.add(3,lab3,{nc:210});
+Lab.start();
+</script>
+</body></html>

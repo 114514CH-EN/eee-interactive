@@ -14,6 +14,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [信息与编码实验室](https://114514ch-en.github.io/eee-interactive/coding-lab/) | Communication Systems Week 1 / 3 | 熵、Huffman / Fano / Shannon、分贝 |
 | [同步状态机实验室](https://114514ch-en.github.io/eee-interactive/fsm-lab/) | DEEM · DE ①② | 布尔函数的几种写法、Moore vs Mealy、用 X 触发器实现 Y、编码分配 |
 | [异步状态机实验室](https://114514ch-en.github.io/eee-interactive/afsm-lab/) | DEEM · DE ③ | 继电器河道闸门、竞争与虚拟状态、门级 AFSM 触发器（静态 / 本质冒险） |
+| [网络定理实验室](https://114514ch-en.github.io/eee-interactive/network-lab/) | EE1 · Network Theorems | 叠加原理、戴维宁 / 诺顿等效、节点电压法 |
 | [放大器与电桥实验室](https://114514ch-en.github.io/eee-interactive/amp-lab/) | EE1 · Voltage Amplifiers / Network Theorems | 加载效应、负反馈、运放四种接法与削顶、惠斯通电桥 |
 | [数字基础实验室](https://114514ch-en.github.io/eee-interactive/digital-lab/) | EE1 · Digital Fundamentals / Circuit Synthesis | 进制转换、Gray 码编码盘、布尔表达式与德摩根、2–4 变量卡诺图 |
 | [交流功率实验室](https://114514ch-en.github.io/eee-interactive/acpower-lab/) | EE1 · AC Power | 瞬时功率 p = vi、功率三角形与功率因数校正、最大功率传输、三相功率 |
