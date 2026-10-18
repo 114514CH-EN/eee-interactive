@@ -1,0 +1,133 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>傅里叶实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.ctl select{width:100%}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
+  <h1>傅里叶实验室</h1>
+  <p>三个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 傅里叶级数</div>
+  <h2>周期信号 = 直流 + 基波 + 各次谐波；跳变越陡，高次谐波越多</h2>
+  <p class="lead">选波形和谐波数 N。左边虚线是目标波形，蓝线是前 N 次谐波之和；右边是单边幅度谱 A<sub>n</sub>（已用到的标蓝）。读数里的「功率占比」用帕塞瓦尔定理：A₀² + ΣA<sub>n</sub>²/2 除以总平均功率。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-s="sq,1">方波：只有基波</button><button data-s="sq,9">方波：到 9 次</button><button data-s="sq,51">方波：到 51 次（吉布斯）</button><button data-s="tri,5">三角波：到 5 次</button><button data-s="saw,15">锯齿波：到 15 次</button><button data-s="pul,25">占空比 25% 脉冲</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sW">波形</label><select id="sW"><option value="sq">方波 ±1</option><option value="tri">三角波（峰值 1）</option><option value="saw">锯齿波 −1…1</option><option value="pul">脉冲串（高 1，占空比 d）</option></select><span></span></div>
+    <div class="ctl"><label for="sN">最高谐波次数 N</label><input id="sN" type="range" min="1" max="51" step="1" value="9"><output id="sNO"></output></div>
+    <div class="ctl"><label for="sD">占空比 d（脉冲串）</label><input id="sD" type="range" min="0.05" max="0.95" step="0.05" value="0.25"><output id="sDO"></output></div>
+  </div>
+  <div class="stage"><canvas id="syn" height="270" aria-label="级数合成"></canvas><canvas id="spec" height="270" aria-label="线谱"></canvas></div>
+  <div class="read"><div><small>系数</small><b id="sF" style="font-size:14px"></b></div><div><small>前 N 次的功率占比</small><b id="sP"></b></div><div><small>最大值（吉布斯过冲）</small><b id="sM"></b></div><div><small>用到的非零项数</small><b id="sK"></b></div></div>
+  <p class="note"><strong>为什么三角波收敛快、方波收敛慢：</strong>三角波连续，系数按 1/n² 衰减；方波有跳变，系数只按 1/n 衰减，高次谐波还很大。跳变处的过冲约为跳变量的 9%，项数再多也不消失，只是越来越窄。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 矩形脉冲的傅里叶变换</div>
+  <h2>时域越窄，频域越宽；时移只改相位，不改幅度</h2>
+  <p class="lead">高度 1、宽 τ 的矩形脉冲，中心在 t₀。X(f) = τ·sinc(fτ)·e<sup>−j2πft₀</sup>（sinc(x) = sin(πx)/(πx)）。上图是 |X(f)|，下图是相位：t₀ ≠ 0 时相位是一条斜率 −2πt₀ 的直线（跨过零点时跳 180°）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-r="1,0">τ = 1，居中</button><button data-r="0.25,0">τ = 0.25：频谱宽 4 倍</button><button data-r="2,0">τ = 2：频谱窄一半</button><button data-r="1,0.5">τ = 1，延迟 0.5</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="rT">宽度 τ</label><input id="rT" type="range" min="0.1" max="3" step="0.05" value="1"><output id="rTO"></output></div>
+    <div class="ctl"><label for="rD">延迟 t₀</label><input id="rD" type="range" min="-1" max="1" step="0.05" value="0"><output id="rDO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="rt" height="260" aria-label="时域脉冲"></canvas><canvas id="rf" height="260" aria-label="频谱"></canvas></div>
+  <div class="read"><div><small>X(0) = 面积 τ</small><b id="r0"></b></div><div><small>主瓣第一零点 1/τ</small><b id="rZ"></b></div><div><small>主瓣宽 × 脉宽</small><b id="rP"></b></div><div><small>相位斜率 −2πt₀</small><b id="rS"></b></div></div>
+  <p class="note"><strong>工程意义：</strong>数据脉冲越短（比特率越高），占用的带宽越大，约为 1/τ。这就是「时宽 × 带宽 ≈ 常数」。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 采样与混叠</div>
+  <h2>采样后频谱在 k·f<sub>s</sub> 处无限复制；f<sub>s</sub> &lt; 2f 时复制品闯进基带</h2>
+  <p class="lead">左边：灰线是原信号，红点是采样值，蓝 / 橙线是从这些点能唯一还原出的、频率在 0…f<sub>s</sub>/2 内的正弦。右边：采样后的频谱，绿色是能还原的基带 0…f<sub>s</sub>/2，灰色竖线是复制品 k·f<sub>s</sub> ± f。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-a="1,10">1 kHz，f<sub>s</sub> = 10 kHz</button><button data-a="1,2.5">f<sub>s</sub> = 2.5 kHz（刚够）</button><button data-a="1,1.7">f<sub>s</sub> = 1.7 kHz → 0.7 kHz</button><button data-a="1,1">f<sub>s</sub> = f → 看起来是直流</button><button data-a="3,4">3 kHz 用 4 kHz 采 → 1 kHz</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="aF">信号频率 f</label><input id="aF" type="range" min="0.1" max="5" step="0.05" value="1"><output id="aFO"></output></div>
+    <div class="ctl"><label for="aS">采样率 f<sub>s</sub></label><input id="aS" type="range" min="0.5" max="10" step="0.05" value="1.7"><output id="aSO"></output></div>
+  </div>
+  <div class="stage"><canvas id="at" height="260" aria-label="采样时域"></canvas><canvas id="af" height="260" aria-label="采样频谱"></canvas></div>
+  <div class="read"><div><small>奈奎斯特频率 f<sub>s</sub>/2</small><b id="aN"></b></div><div><small>是否满足 f<sub>s</sub> ≥ 2f</small><b id="aOK"></b></div><div><small>看到的频率 |f − k·f<sub>s</sub>|</small><b id="aA"></b></div><div><small>每周期采样点数</small><b id="aP"></b></div></div>
+  <p class="note"><strong>为什么混叠不可逆：</strong>1 kHz 和 0.7 kHz 的正弦在 1.7 kHz 采样下得到完全相同的一串数，采完就分不出来了。所以 ADC 前面一定要有抗混叠低通滤波器，先把 f<sub>s</sub>/2 以上的成分滤掉。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+/* ---------- Lab 1 ---------- */
+const WF={
+  sq:{f:t=>((t%1)+1)%1<0.5?1:-1,c:n=>n%2?{a:0,b:4/(Math.PI*n)}:{a:0,b:0},a0:()=>0,P:()=>1,txt:'b_n = 4/(nπ)，n 奇'},
+  tri:{f:t=>{const u=((t%1)+1)%1;return u<0.5?1-4*u:-3+4*u;},c:n=>n%2?{a:8/(Math.PI*Math.PI*n*n),b:0}:{a:0,b:0},a0:()=>0,P:()=>1/3,txt:'a_n = 8/(π²n²)，n 奇'},
+  saw:{f:t=>{const u=((t%1)+1.5)%1;return 2*u-1;},c:n=>({a:0,b:2*(n%2?1:-1)/(Math.PI*n)}),a0:()=>0,P:()=>1/3,txt:'b_n = 2(−1)ⁿ⁺¹/(nπ)'},
+  pul:{f:(t,d)=>{const u=((t%1)+1.5)%1-0.5;return Math.abs(u)<d/2?1:0;},c:(n,d)=>({a:2*Math.sin(Math.PI*n*d)/(Math.PI*n),b:0}),a0:d=>d,P:d=>d,txt:'a₀ = d，a_n = 2 sin(nπd)/(nπ)'}};
+function lab1(){
+  const w=$('sW').value,N=val('sN'),d=val('sD'),W=WF[w];$('sNO').textContent=N;$('sDO').textContent=Math.round(d*100)+' %';
+  pressGroup('#lab1 [data-s]',b=>b.dataset.s===`${w},${N}`);
+  const cs=[];for(let n=1;n<=N;n++)cs.push(W.c(n,d));const a0=W.a0(d);
+  const S=t=>{let y=a0;cs.forEach((c,i)=>{const n=i+1;y+=c.a*Math.cos(2*Math.PI*n*t)+c.b*Math.sin(2*Math.PI*n*t);});return y;};
+  let pw=a0*a0,k=0;cs.forEach(c=>{const A2=c.a*c.a+c.b*c.b;pw+=A2/2;if(A2>1e-12)k++;});
+  let mx=-9;for(let i=0;i<=2000;i++){const v=S(-1+2*i/2000);if(v>mx)mx=v;}
+  $('sF').textContent=W.txt;$('sP').textContent=(100*pw/W.P(d)).toFixed(2)+' %';$('sM').textContent=fmt(mx,3);$('sK').textContent=k+(a0?' + 直流':'');
+  const [x,Wd,H]=fit($('syn'));const a=axes(x,Wd,H,{x0:-1,x1:1,y0:w==='pul'?-0.4:-1.4,y1:1.4,xt:[-1,-0.5,0,0.5,1],xf:v=>v+'T',yt:w==='pul'?[0,0.5,1]:[-1,0,1],title:'目标（虚线）与前 N 次谐波之和',pl:36});
+  x.setLineDash([5,4]);plot(x,a.X,a.Y,t=>W.f(t,d),-1,1,css('--muted'),1.2,2000);x.setLineDash([]);
+  if(N<=7)cs.forEach((c,i)=>{const n=i+1;if(c.a||c.b)plot(x,a.X,a.Y,t=>c.a*Math.cos(2*Math.PI*n*t)+c.b*Math.sin(2*Math.PI*n*t)+(i===0?0:0),-1,1,css('--grid'),1,400);});
+  plot(x,a.X,a.Y,S,-1,1,css('--blue'),2.4,1200);
+  const [y,W2,H2]=fit($('spec'));const M=Math.max(25,N);const amax=Math.max(Math.abs(a0),...Array.from({length:M},(_,i)=>{const c=W.c(i+1,d);return Math.hypot(c.a,c.b);}))*1.15;
+  const b=axes(y,W2,H2,{x0:-0.5,x1:M+0.5,y0:0,y1:amax,xt:[0,5,10,15,20,25].filter(v=>v<=M),yt:[0,amax/2.3,amax/1.15].map(v=>+v.toPrecision(2)),title:'单边幅度谱 A_n',pl:40});
+  const bw=Math.max(2,(b.X(1)-b.X(0))*0.6);
+  for(let n=0;n<=M;n++){const A=n===0?Math.abs(a0):Math.hypot(W.c(n,d).a,W.c(n,d).b);if(A<1e-9)continue;y.fillStyle=n<=N?css('--blue'):css('--grid');y.fillRect(b.X(n)-bw/2,b.Y(A),bw,b.Y(0)-b.Y(A));}
+}
+['sW','sN','sD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-s]').forEach(b=>b.addEventListener('click',()=>{const [w,n]=b.dataset.s.split(',');$('sW').value=w;$('sN').value=n;Lab.draw(1);}));
+Lab.add(1,lab1,{syn:250,spec:250});
+
+/* ---------- Lab 2 ---------- */
+const sinc=x=>Math.abs(x)<1e-9?1:Math.sin(Math.PI*x)/(Math.PI*x);
+function lab2(){
+  const tau=val('rT'),t0=val('rD');$('rTO').textContent=tau;$('rDO').textContent=t0;
+  pressGroup('#lab2 [data-r]',b=>b.dataset.r===`${tau},${t0}`);
+  $('r0').textContent=fmt(tau,3);$('rZ').textContent=fmt(1/tau,3);$('rP').textContent='(2/τ) × τ = 2';$('rS').textContent=fmt(-2*Math.PI*t0,3)+' rad / 单位 f';
+  const [x,W,H]=fit($('rt'));const a=axes(x,W,H,{x0:-2.5,x1:2.5,y0:-0.15,y1:1.3,xt:[-2,-1,0,1,2],yt:[0,1],title:'x(t) = rect((t − t₀)/τ)',pl:30});
+  x.fillStyle=css('--blue');x.globalAlpha=.2;x.fillRect(a.X(t0-tau/2),a.Y(1),a.X(t0+tau/2)-a.X(t0-tau/2),a.Y(0)-a.Y(1));x.globalAlpha=1;
+  plot(x,a.X,a.Y,t=>Math.abs(t-t0)<=tau/2?1:0,-2.5,2.5,css('--blue'),2.4,1500);
+  const [y,W2,H2]=fit($('rf'));const top=H2*0.6;const fm=6;
+  const b=axes(y,W2,top,{x0:-fm,x1:fm,y0:0,y1:Math.max(tau,0.5)*1.12,xt:[-6,-4,-2,0,2,4,6],yt:[0,tau],yf:v=>fmt(v,2),title:'|X(f)| = τ|sinc(fτ)|',pl:40,pb:18});
+  plot(y,b.X,b.Y,f=>tau*Math.abs(sinc(f*tau)),-fm,fm,css('--amp'),2.4,1200);
+  y.setLineDash([4,4]);y.strokeStyle=css('--red');[1/tau,-1/tau].forEach(z=>{if(Math.abs(z)<fm){y.beginPath();y.moveTo(b.X(z),b.pt);y.lineTo(b.X(z),top-b.pb);y.stroke();}});y.setLineDash([]);
+  y.save();y.translate(0,top);const c=axes(y,W2,H2-top,{x0:-fm,x1:fm,y0:-Math.PI*1.1,y1:Math.PI*1.1,xt:[],yt:[-Math.PI,0,Math.PI],yf:v=>v>0?'π':v<0?'−π':'0',title:'相位 ∠X(f)',pl:40,pt:16,pb:8});
+  y.fillStyle=css('--purple');for(let i=0;i<=600;i++){const f=-fm+2*fm*i/600,s=sinc(f*tau);if(Math.abs(s)<1e-3)continue;let ph=-2*Math.PI*f*t0+(s<0?Math.PI:0);ph=Math.atan2(Math.sin(ph),Math.cos(ph));y.fillRect(c.X(f)-1,c.Y(ph)-1,2,2);}
+  y.restore();
+}
+['rT','rD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-r]').forEach(b=>b.addEventListener('click',()=>{const [t,d]=b.dataset.r.split(',');$('rT').value=t;$('rD').value=d;Lab.draw(2);}));
+Lab.add(2,lab2,{rt:230,rf:230});
+
+/* ---------- Lab 3 ---------- */
+function lab3(){
+  const f=val('aF'),fs=val('aS');$('aFO').textContent=f+' kHz';$('aSO').textContent=fs+' kHz';
+  pressGroup('#lab3 [data-a]',b=>b.dataset.a===`${f},${fs}`);
+  const k=Math.round(f/fs),fa=f-k*fs,ok=fs>=2*f,seen=Math.abs(fa),sg=fa<0?-1:1;
+  $('aN').textContent=fmt(fs/2,3)+' kHz';$('aOK').textContent=ok?'是（'+fmt(fs/f,3)+' 倍）':'否 → 混叠';$('aA').textContent=fmt(seen,3)+' kHz';$('aP').textContent=fmt(fs/f,3);
+  const [x,W,H]=fit($('at'));const T=4;const a=axes(x,W,H,{x0:0,x1:T,y0:-1.3,y1:1.4,xt:[0,1,2,3,4],xf:v=>v+' ms',yt:[-1,0,1],title:ok?'采样后能还原原信号':'采样点被误认为一个更低频的正弦',pl:30});
+  plot(x,a.X,a.Y,t=>Math.sin(2*Math.PI*f*t),0,T,css('--grid'),1.6,1200);
+  plot(x,a.X,a.Y,t=>sg*Math.sin(2*Math.PI*seen*t),0,T,ok?css('--blue'):css('--amp'),2.2,1200);
+  x.fillStyle=css('--red');for(let t=0;t<=T+1e-9;t+=1/fs){x.beginPath();x.arc(a.X(t),a.Y(Math.sin(2*Math.PI*f*t)),3.5,0,7);x.fill();}
+  const [y,W2,H2]=fit($('af'));const fm=Math.max(2.3*fs,1.3*f);const b=axes(y,W2,H2,{x0:0,x1:fm,y0:0,y1:1.3,xt:[0,fs/2,fs,2*fs].filter(v=>v<=fm).map(v=>+v.toFixed(2)),xf:v=>v+'',yt:[],title:'采样后的频谱（kHz）',pl:16,xl:'kHz'});
+  y.fillStyle=css('--green');y.globalAlpha=.12;y.fillRect(b.X(0),b.pt,b.X(fs/2)-b.X(0),H2-b.pt-b.pb);y.globalAlpha=1;
+  const line=(fr,col,w,h)=>{if(fr<0||fr>fm)return;y.strokeStyle=col;y.lineWidth=w;y.beginPath();y.moveTo(b.X(fr),b.Y(0));y.lineTo(b.X(fr),b.Y(h));y.stroke();};
+  for(let m=1;m*fs-f<=fm;m++){line(m*fs-f,css('--muted'),1.6,0.7);line(m*fs+f,css('--muted'),1.6,0.7);}
+  line(f,css('--blue'),3,1);line(seen,ok?css('--blue'):css('--amp'),3,1);
+  text(y,'基带',b.X(fs/4),b.pt+12,css('--green'),11,'center');text(y,'原信号 f',b.X(f)+4,b.Y(1)-4,css('--blue'),11);
+  if(!ok)text(y,'混叠 '+fmt(seen,3),b.X(seen)+4,b.Y(1)+14,css('--amp'),11);
+}
+['aF','aS'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-a]').forEach(b=>b.addEventListener('click',()=>{const [f,s]=b.dataset.a.split(',');$('aF').value=f;$('aS').value=s;Lab.draw(3);}));
+Lab.add(3,lab3,{at:240,af:240});
+Lab.start();
+</script>
+</body></html>
