@@ -1,0 +1,225 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ALU 与微控制器实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ctl select{width:100%}
+.ops{display:flex;flex-wrap:wrap;gap:6px}
+.ops button{font-family:var(--mono);font-size:12px}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · PROGRAMMABLE &amp; COMPUTATIONAL CIRCUITS</div>
+  <h1>ALU 与微控制器实验室</h1>
+  <p>四个实验对应一年级 EE 的 Programmable and Computational Circuits 和 Lab 2（Arduino）：4 位补码转盘、74382 式 4 位 ALU（加减法、按位逻辑、C / V 标志）、硬件 PWM 发生器（计数器 + 比较器）、光敏电阻分压 + ADC 读数。预设就是课上例子和实验步骤。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 补码转盘</a><a href="#lab2">实验 2 4 位 ALU</a><a href="#lab3">实验 3 硬件 PWM</a><a href="#lab4">实验 4 光敏电阻 + ADC</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 2 的补码（Lecture 2）</div>
+  <h2>16 个编码排成一圈：加 1 就顺时针走一格，越过红线就是有符号溢出</h2>
+  <p class="lead">外圈是 4 位编码，圈内大字是补码值（最高位权重 −8），灰色小字是无符号值。红色箭头是你选的数，虚线箭头是它的相反数（取反加 1）。右边逐步算出取反加 1 和 8 位符号扩展。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-c="6">+6 = 0110</button><button data-c="-6">−6 = 1010</button><button data-c="-3">−3（Quick check）</button><button data-c="-4">1100 = ?</button><button data-c="-8">−8：没有 +8</button><button data-c="0">0</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="cV">补码值</label><input id="cV" type="range" min="-8" max="7" step="1" value="-6"><output id="cVO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="wheel" height="300" aria-label="4 位补码转盘"></canvas><canvas id="neg" height="300" aria-label="取反加一步骤"></canvas></div>
+  <div class="read"><div><small>4 位编码</small><b id="cB"></b></div><div><small>当成无符号 / 补码</small><b id="cU"></b></div><div><small>相反数（取反加 1）</small><b id="cN"></b></div><div><small>8 位符号扩展</small><b id="cE"></b></div></div>
+  <p class="note"><strong>为什么加法器不用改：</strong>在这一圈上，「加 B」就是顺时针走 B 格，不管你把编码读成无符号还是补码，走到的格子都一样。区别只在于哪里算「溢出」：无符号越过 1111→0000（蓝线，C = 1），补码越过 0111→1000（红线，V = 1）。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 4 位 ALU（Lecture 1、5、6）</div>
+  <h2>四个全加器串成一条进位链；减法 = B 各位取反 + C<sub>in</sub> = 1</h2>
+  <p class="lead">操作码 S₂S₁S₀ 选择 8 种运算（74382 的功能表）。算术运算时下面画出每一位的全加器：上面是输入位（减法时被 XOR 翻转的那一路标成橙色），箭头是进位。C = 最高位的进位输出；V = 最高位的进位输入 ≠ 进位输出。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-a="5,1,1">讲义：A=0101，B=0001，B MINUS A</button><button data-a="5,1,3">讲义：A PLUS B</button><button data-a="10,8,3">1010 + 1000：C、V 都溢出</button><button data-a="1,15,3">0001 + 1111：无符号溢出</button><button data-a="4,2,2">4 − 2（取反加 1）</button><button data-a="7,1,3">7 + 1：只有 V</button></div>
+  <div class="ops" role="group" aria-label="操作码"><button data-s="0">000 CLEAR</button><button data-s="1">001 B MINUS A</button><button data-s="2">010 A MINUS B</button><button data-s="3">011 A PLUS B</button><button data-s="4">100 A XOR B</button><button data-s="5">101 A AND B</button><button data-s="6">110 A OR B</button><button data-s="7">111 SET</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="aA">A</label><input id="aA" type="range" min="0" max="15" step="1" value="5"><output id="aAO"></output></div>
+    <div class="ctl"><label for="aB">B</label><input id="aB" type="range" min="0" max="15" step="1" value="1"><output id="aBO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="alu" height="250" aria-label="4 位 ALU 进位链"></canvas></div>
+  <div class="read"><div><small>F</small><b id="aF"></b></div><div><small>F 当无符号 / 补码</small><b id="aFv"></b></div><div><small>C 标志（无符号溢出）</small><b id="aC"></b></div><div><small>V 标志（补码溢出）</small><b id="aV"></b></div></div>
+  <p class="note"><strong>减法时 C 的含义：</strong>A − B 做的是 A + B̄ + 1，C = 1 表示「没有借位」（A ≥ B 当无符号看）。判断补码结果对不对只看 V；判断无符号加法对不对只看 C。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 硬件 PWM（Lecture 7 + Lab 2 Activity 4）</div>
+  <h2>计数器一直 0→255 循环，比较器只看「计数 &lt; 比较值」</h2>
+  <p class="lead">处理器只往比较寄存器写一次数（analogWrite 的第二个参数），之后计数器和比较器自己运行。上图：锯齿是计数值，橙线是比较值；下图：输出引脚，红虚线是平均电压。圆点是此刻的计数。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-p="64">analogWrite(13, 64)：25%</button><button data-p="128">128：50%</button><button data-p="192">192：75%</button><button data-p="0">0：一直关</button><button data-p="255">255：一直开</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="pV">比较值 / analogWrite 值</label><input id="pV" type="range" min="0" max="255" step="1" value="64"><output id="pVO"></output></div>
+    <div class="ctl"><label for="pRun">动画</label><select id="pRun"><option value="1">运行</option><option value="0">暂停</option></select><span></span></div>
+  </div>
+  <div class="stage"><canvas id="pw" height="280" aria-label="PWM 波形"></canvas><canvas id="led" height="280" aria-label="LED 平均亮度"></canvas></div>
+  <div class="read"><div><small>占空比 = 值 / 255</small><b id="pD"></b></div><div><small>平均电压（5 V）</small><b id="pA"></b></div><div><small>此刻计数 / 输出</small><b id="pN"></b></div><div><small>处理器要做的事</small><b style="font-size:14px">写一次寄存器</b></div></div>
+  <p class="note"><strong>为什么平均值有用：</strong>LED、电机都跟不上这么快的开关，只感受到时间平均。Lab 2 用 64 / 128 / 192 对应 25 / 50 / 75%；旧笔记写的 63 / 127 / 191 也差不多（都约等于 值/255）。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 光敏电阻 + ADC（Lab 2 Activity 5）</div>
+  <h2>光越暗 → 光敏电阻越大 → A0 电压越低 → analogRead 越小</h2>
+  <p class="lead">5 V — 光敏电阻 — A0 — 固定电阻 — GND 组成分压器。analogRead 把 0–5 V 变成 0–1023。曲线是读数随光敏电阻变化，绿色横线是 Activity 5b「自动灯」的阈值：读数低于它就点亮 LED。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-l="3,3,500">实验室灯光（≈ 1 kΩ）</button><button data-l="4.7,3,500">手指遮住（≈ 50 kΩ）</button><button data-l="6,3,500">全黑（≈ 1 MΩ）</button><button data-l="4.7,4,500">固定电阻换成 10 kΩ</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="lR">光敏电阻 R<sub>LDR</sub></label><input id="lR" type="range" min="2" max="6" step="0.05" value="3"><output id="lRO"></output></div>
+    <div class="ctl"><label for="lF">固定电阻 R<sub>f</sub></label><input id="lF" type="range" min="2" max="5" step="0.5" value="3"><output id="lFO"></output></div>
+    <div class="ctl"><label for="lT">点灯阈值</label><input id="lT" type="range" min="0" max="1023" step="1" value="500"><output id="lTO"></output></div>
+  </div>
+  <div class="stage"><canvas id="adc" height="260" aria-label="ADC 读数曲线"></canvas><canvas id="ckt" height="260" aria-label="分压电路"></canvas></div>
+  <div class="read"><div><small>A0 电压</small><b id="lV"></b></div><div><small>analogRead(A0)</small><b id="lN"></b></div><div><small>一个 LSB</small><b>5 V / 1024 ≈ 4.9 mV</b></div><div><small>自动灯 LED</small><b id="lL"></b></div></div>
+  <p class="note"><strong>固定电阻怎么选：</strong>R<sub>f</sub> 取「亮」和「暗」两种 R<sub>LDR</sub> 的几何平均附近时，两种情况的读数差最大。R<sub>f</sub> = 1 kΩ 时，灯光下读数已经在中间，遮住后掉得很明显；R<sub>f</sub> 太大，两种情况都接近 1023，就分不出来了。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+const bin=(v,n=4)=>(v>>>0).toString(2).padStart(n,'0').slice(-n);
+const sgn4=u=>u>=8?u-16:u;
+const OPS=['CLEAR','B MINUS A','A MINUS B','A PLUS B','A XOR B','A AND B','A OR B','SET'];
+
+/* ---------- Lab 1: 2's complement wheel ---------- */
+function lab1(){
+  const v=val('cV'),u=v&15,n=(-v)&15,nv=sgn4(n);
+  $('cVO').textContent=(v>0?'+':'')+v;
+  pressGroup('#lab1 [data-c]',b=>+b.dataset.c===v);
+  $('cB').textContent=bin(u);$('cU').textContent=`${u} / ${v}`;
+  $('cN').textContent=v===-8?'1000（−8 没有 +8，取反加 1 还是自己）':`${bin(n)} = ${nv>0?'+':''}${nv}`;
+  $('cE').textContent=(v<0?'1111':'0000')+' '+bin(u);
+  const [x,W,H]=fit($('wheel'));const cx=W/2,cy=H/2+4,R=Math.min(W,H)/2-34;
+  const ang=k=>-Math.PI/2+k*2*Math.PI/16;
+  x.strokeStyle=css('--line');x.lineWidth=1.5;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+  for(let k=0;k<16;k++){const a=ang(k),px=cx+Math.cos(a)*R,py=cy+Math.sin(a)*R,s=sgn4(k);
+    const on=k===u,neg=k===n&&v!==0&&v!==-8;
+    x.fillStyle=on?css('--red'):neg?css('--purple'):css('--panel')||'#fff';x.strokeStyle=on?css('--red'):css('--line');
+    x.beginPath();x.arc(px,py,15,0,7);x.fill();x.stroke();
+    x.font=`600 13px ${css('--mono')}`;x.fillStyle=on||neg?'#fff':(s<0?css('--red'):css('--ink'));x.textAlign='center';x.fillText(String(s),px,py+4.5);
+    const ox=cx+Math.cos(a)*(R+26),oy=cy+Math.sin(a)*(R+24);x.font=`11px ${css('--mono')}`;x.fillStyle=css('--muted');x.fillText(bin(k),ox,oy+4);
+    const ix=cx+Math.cos(a)*(R-30),iy=cy+Math.sin(a)*(R-30);x.font=`10px ${css('--mono')}`;x.fillText(String(k),ix,iy+3);x.textAlign='left';}
+  const cut=(k,col,t)=>{const a=(ang(k)+ang(k+1))/2;x.strokeStyle=col;x.lineWidth=3;x.beginPath();x.moveTo(cx+Math.cos(a)*(R-46),cy+Math.sin(a)*(R-46));x.lineTo(cx+Math.cos(a)*(R+12),cy+Math.sin(a)*(R+12));x.stroke();
+    text(x,t,cx+Math.cos(a)*(R-62),cy+Math.sin(a)*(R-62)+4,col,11,'center');};
+  cut(7,css('--red'),'V');cut(15,css('--blue'),'C');
+  arrow(x,cx,cy,cx+Math.cos(ang(u))*(R-20),cy+Math.sin(ang(u))*(R-20),css('--red'),2.6,10);
+  if(v!==0&&v!==-8){x.setLineDash([5,4]);arrow(x,cx,cy,cx+Math.cos(ang(n))*(R-20),cy+Math.sin(ang(n))*(R-20),css('--purple'),1.8,9);x.setLineDash([]);}
+  text(x,'顺时针 = +1',8,16,css('--muted'),11);
+  /* right: weights and negation */
+  const [y,W2,H2]=fit($('neg'));const bits=bin(u).split('').map(Number),wt=[-8,4,2,1];const cw=Math.min(52,(W2-20)/4),x0=(W2-cw*4)/2;
+  text(y,'权重',x0-4,22,css('--muted'),11,'right');
+  wt.forEach((w,i)=>{text(y,String(w),x0+cw*i+cw/2,22,i===0?css('--red'):css('--muted'),12,'center');
+    y.fillStyle=bits[i]?css('--blue'):'transparent';y.strokeStyle=css('--line');y.fillRect(x0+cw*i+3,30,cw-6,30);y.strokeRect(x0+cw*i+3,30,cw-6,30);
+    label(y,String(bits[i]),x0+cw*i+cw/2-4,51,bits[i]?'#fff':css('--ink'),15);});
+  const terms=bits.map((b,i)=>b?String(wt[i]):'').filter(Boolean);
+  text(y,'= '+(terms.length?terms.join(' + ').replace(/\+ -/g,'− '):'0')+' = '+v,W2/2,80,css('--ink'),13,'center');
+  const rows=[['取反',bin((~u)&15)],['+1',bin(n)+(v===-8?'  (又回到 −8)':'  = '+nv)],['8 位扩展',(v<0?'1111':'0000')+' '+bin(u)]];
+  const vx=Math.max(x0,78);rows.forEach(([k,s],i)=>{text(y,k,vx-8,118+i*34,css('--muted'),12,'right');label(y,s,vx,118+i*34,i===1?css('--purple'):css('--ink'),14);});
+  text(y,'扩展：把最高位复制到新的位',W2/2,H2-12,css('--muted'),11,'center');
+}
+$('cV').addEventListener('input',()=>Lab.draw(1));
+document.querySelectorAll('#lab1 [data-c]').forEach(b=>b.addEventListener('click',()=>{$('cV').value=b.dataset.c;Lab.draw(1);}));
+Lab.add(1,lab1,{wheel:280,neg:280});
+
+/* ---------- Lab 2: 4-bit ALU ---------- */
+let op=1;
+function alu(A,B,s){
+  if(s===0)return {F:0};if(s===7)return {F:15};
+  if(s>=4)return {F:s===4?A^B:s===5?A&B:A|B};
+  let X=A,Y=B,cin=0;if(s===1){X=B;Y=(~A)&15;cin=1;}else if(s===2){X=A;Y=(~B)&15;cin=1;}else{X=A;Y=B;}
+  const c=[cin],sum=[];for(let i=0;i<4;i++){const a=(X>>i)&1,b=(Y>>i)&1,t=a+b+c[i];sum.push(t&1);c.push(t>>1);}
+  const F=sum.reduce((acc,b,i)=>acc|(b<<i),0);return {F,X,Y,c,flip:s===1?'A':s===2?'B':'',C:c[4],V:c[3]^c[4]};}
+function lab2(){
+  const A=val('aA'),B=val('aB');$('aAO').textContent=`${bin(A)}（${A} / ${sgn4(A)}）`;$('aBO').textContent=`${bin(B)}（${B} / ${sgn4(B)}）`;
+  pressGroup('#lab2 [data-s]',b=>+b.dataset.s===op);pressGroup('#lab2 [data-a]',b=>b.dataset.a===`${A},${B},${op}`);
+  const r=alu(A,B,op),ar=op>=1&&op<=3;
+  $('aF').textContent=bin(r.F);$('aFv').textContent=`${r.F} / ${sgn4(r.F)}`;
+  if(ar){const ideal=op===1?sgn4(B)-sgn4(A):op===2?sgn4(A)-sgn4(B):sgn4(A)+sgn4(B),uid=op===1?B-A:op===2?A-B:A+B;
+    $('aC').textContent=r.C+(op===3?(r.C?'（无符号应为 '+uid+'，装不下）':'（无符号正确）'):(r.C?'（没有借位）':'（有借位）'));
+    $('aV').textContent=r.V+(r.V?'（补码应为 '+ideal+'，超出 −8…7）':'（补码正确）');}
+  else{$('aC').textContent='—（逻辑运算不设）';$('aV').textContent='—';}
+  const [x,W,H]=fit($('alu'));const cw=Math.min(150,(W-80)/4),x0=(W-cw*4)/2+10;const ink=css('--ink'),mu=css('--muted');
+  text(x,`S = ${bin(op,3)}  ${OPS[op]}`,8,16,css('--accent'),13);
+  for(let j=0;j<4;j++){const i=3-j,bx=x0+cw*j+14,bw=cw-28,by=88,bh=56;
+    x.strokeStyle=ink;x.lineWidth=1.6;x.strokeRect(bx,by,bw,bh);
+    const ai=(A>>i)&1,bi=(B>>i)&1;
+    if(ar){const xi=(r.X>>i)&1,yi=(r.Y>>i)&1;const fl=r.flip;
+      const l1=op===1?`B${i}=${xi}`:`A${i}=${xi}`,l2=op===1?`Ā${i}=${yi}`:op===2?`B̄${i}=${yi}`:`B${i}=${yi}`;
+      label(x,l1,bx+2,by-30,ink,12);label(x,l2,bx+bw/2+2,by-30,fl?css('--amp'):ink,12);
+      arrow(x,bx+bw*0.25,by-24,bx+bw*0.25,by-2,mu,1.4,7);arrow(x,bx+bw*0.75,by-24,bx+bw*0.75,by-2,fl?css('--amp'):mu,1.4,7);
+      label(x,'FA',bx+bw/2-9,by+bh/2+5,mu,13);
+      const ci=r.c[i],co=r.c[i+1];
+      /* carry in from the right */
+      x.strokeStyle=ci?css('--red'):css('--grid');x.lineWidth=ci?2.4:1.4;x.beginPath();x.moveTo(bx+bw+28,by+bh/2);x.lineTo(bx+bw,by+bh/2);x.stroke();
+      label(x,`c${i}=${ci}`,bx+bw+2,by+bh/2-6,ci?css('--red'):mu,10);
+      if(j===0){x.strokeStyle=co?css('--red'):css('--grid');x.lineWidth=co?2.4:1.4;x.beginPath();x.moveTo(bx,by+bh/2);x.lineTo(bx-26,by+bh/2);x.stroke();label(x,`C=${co}`,bx-40,by+bh/2-8,co?css('--red'):mu,11);}
+      if(j===3)label(x,`C_in=${r.c[0]}`,bx+bw+4,by+bh/2+16,r.c[0]?css('--red'):mu,10);
+    }else{label(x,`A${i}=${ai}`,bx+2,by-30,ink,12);label(x,`B${i}=${bi}`,bx+bw/2+2,by-30,ink,12);
+      const g=op===0?'0':op===7?'1':op===4?'XOR':op===5?'AND':'OR';label(x,g,bx+bw/2-x.measureText(g).width/2,by+bh/2+5,mu,13);}
+    const fi=(r.F>>i)&1;arrow(x,bx+bw/2,by+bh+2,bx+bw/2,by+bh+28,fi?css('--blue'):mu,1.6,8);label(x,`F${i}=${fi}`,bx+bw/2-22,by+bh+46,fi?css('--blue'):ink,13);}
+  if(ar)text(x,`V = c3 ⊕ c4 = ${r.c[3]} ⊕ ${r.c[4]} = ${r.V}`,W-8,H-8,r.V?css('--red'):mu,12,'right');
+}
+document.querySelectorAll('#lab2 [data-s]').forEach(b=>b.addEventListener('click',()=>{op=+b.dataset.s;Lab.draw(2);}));
+document.querySelectorAll('#lab2 [data-a]').forEach(b=>b.addEventListener('click',()=>{const [a,c,s]=b.dataset.a.split(',').map(Number);$('aA').value=a;$('aB').value=c;op=s;Lab.draw(2);}));
+['aA','aB'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+Lab.add(2,lab2,{alu:230});
+
+/* ---------- Lab 3: hardware PWM ---------- */
+let pt=0;
+function lab3(){
+  const v=val('pV'),d=v/255,on=$('pRun').value==='1';$('pVO').textContent=v;
+  pressGroup('#lab3 [data-p]',b=>+b.dataset.p===v);
+  $('pD').textContent=(d*100).toFixed(1)+' %';$('pA').textContent=(5*d).toFixed(2)+' V';
+  const cnt=Math.floor(pt)%256,out=v===255||cnt<v?1:0;$('pN').textContent=`${cnt} / ${out?'HIGH':'LOW'}`;
+  const [x,W,H]=fit($('pw'));const P=3,top=H*0.52;
+  const a=axes(x,W,top,{x0:0,x1:P*256,y0:0,y1:280,xt:[0,256,512,768],xf:v=>v/256+'T',yt:[0,v,255],title:'计数器（锯齿）与比较值',pl:40});
+  x.strokeStyle=css('--muted');x.lineWidth=1.6;x.beginPath();for(let k=0;k<P;k++){x.moveTo(a.X(k*256),a.Y(0));x.lineTo(a.X(k*256+255),a.Y(255));x.lineTo(a.X(k*256+256),a.Y(0));}x.stroke();
+  x.strokeStyle=css('--amp');x.lineWidth=2.2;x.beginPath();x.moveTo(a.X(0),a.Y(v));x.lineTo(a.X(P*256),a.Y(v));x.stroke();
+  const tt=pt%(P*256);x.fillStyle=css('--red');x.beginPath();x.arc(a.X(tt),a.Y(tt%256),5,0,7);x.fill();
+  x.save();x.translate(0,top);const b=axes(x,W,H-top,{x0:0,x1:P*256,y0:-0.5,y1:6,xt:[],yt:[0,5],yf:v=>v+' V',pl:40,pt:16,pb:10,zero:false});
+  text(x,'输出引脚（计数 < 比较值 时为 5 V）',40,10,css('--muted'),11);
+  x.strokeStyle=css('--blue');x.lineWidth=2.4;x.beginPath();for(let k=0;k<P;k++){const s=k*256,hi=v>=255?256:v;
+    if(k===0)x.moveTo(b.X(s),b.Y(hi>0?5:0));else x.lineTo(b.X(s),b.Y(hi>0?5:0));
+    x.lineTo(b.X(s+hi),b.Y(hi>0?5:0));x.lineTo(b.X(s+hi),b.Y(0));x.lineTo(b.X(s+256),b.Y(0));}x.stroke();
+  x.setLineDash([6,4]);x.strokeStyle=css('--red');x.lineWidth=1.6;x.beginPath();x.moveTo(b.X(0),b.Y(5*d));x.lineTo(b.X(P*256),b.Y(5*d));x.stroke();x.setLineDash([]);
+  text(x,'平均 '+(5*d).toFixed(2)+' V',W-14,b.Y(5*d)-5,css('--red'),11,'right');
+  x.fillStyle=css('--red');x.beginPath();x.arc(b.X(tt),b.Y(out?5:0),4,0,7);x.fill();x.restore();
+  const [y,W2,H2]=fit($('led'));const cx=W2/2,cy=H2/2-10,r=Math.min(W2,H2)/4;
+  const g=y.createRadialGradient(cx,cy,2,cx,cy,r*2);g.addColorStop(0,`rgba(239,68,68,${0.15+0.85*d})`);g.addColorStop(1,'rgba(239,68,68,0)');
+  y.fillStyle=g;y.beginPath();y.arc(cx,cy,r*2,0,7);y.fill();y.fillStyle=`rgba(220,38,38,${0.15+0.85*d})`;y.strokeStyle=css('--line');y.beginPath();y.arc(cx,cy,r*0.7,0,7);y.fill();y.stroke();
+  text(y,'人眼看到的平均亮度',cx,H2-30,css('--muted'),11,'center');text(y,`analogWrite(13, ${v})`,cx,H2-12,css('--ink'),12,'center');
+}
+$('pV').addEventListener('input',()=>Lab.draw(3));$('pRun').addEventListener('change',()=>{Lab.draw(3);Lab.anims.forEach(a=>Lab.kick(a));});
+document.querySelectorAll('#lab3 [data-p]').forEach(b=>b.addEventListener('click',()=>{$('pV').value=b.dataset.p;Lab.draw(3);}));
+Lab.add(3,lab3,{pw:250,led:250});
+Lab.anim(3,$('pw'),dt=>{pt=(pt+dt*160)%(3*256);Lab.draw(3);},()=>$('pRun').value==='1'&&!REDUCE);
+
+/* ---------- Lab 4: LDR divider + ADC ---------- */
+const ohm=r=>r>=1e6?(r/1e6).toPrecision(3)+' MΩ':r>=1e3?(+(r/1e3).toPrecision(3))+' kΩ':Math.round(r)+' Ω';
+const rd=(Rl,Rf)=>{const V=5*Rf/(Rf+Rl);return {V,N:Math.min(1023,Math.floor(V/5*1024))};};
+function lab4(){
+  const Rl=10**val('lR'),Rf=10**val('lF'),th=val('lT');
+  $('lRO').textContent=ohm(Rl);$('lFO').textContent=ohm(Rf);$('lTO').textContent=th;
+  pressGroup('#lab4 [data-l]',b=>b.dataset.l===`${val('lR')},${val('lF')},${th}`);
+  const {V,N}=rd(Rl,Rf),led=N<th;$('lV').textContent=V.toFixed(3)+' V';$('lN').textContent=N;$('lL').textContent=led?'亮（太暗了）':'灭';
+  const [x,W,H]=fit($('adc'));const a=axes(x,W,H,{x0:2,x1:6,y0:0,y1:1100,xt:[2,3,4,5,6],xf:v=>ohm(10**v),yt:[0,256,512,768,1023],title:'analogRead(A0) 随 R_LDR（对数轴）',pl:44,pr:26});
+  x.fillStyle=css('--green');x.globalAlpha=.08;x.fillRect(a.pl,a.Y(th),W-a.pl-a.pr,a.Y(0)-a.Y(th));x.globalAlpha=1;
+  x.setLineDash([5,4]);plot(x,a.X,a.Y,()=>th,2,6,css('--green'),1.4,2);x.setLineDash([]);text(x,'低于阈值 → 点灯',a.X(6)-4,a.Y(th)+14,css('--green'),11,'right');
+  [2,3,4,5].forEach(e=>{if(Math.abs(e-Math.log10(Rf))<0.01)return;x.globalAlpha=.35;plot(x,a.X,a.Y,s=>rd(10**s,10**e).N,2,6,css('--muted'),1,200);x.globalAlpha=1;});
+  plot(x,a.X,a.Y,s=>rd(10**s,Rf).N,2,6,css('--blue'),2.6,300);
+  x.fillStyle=led?css('--green'):css('--red');x.beginPath();x.arc(a.X(Math.log10(Rl)),a.Y(N),6,0,7);x.fill();
+  text(x,'灰线：其他 R_f',a.X(2)+6,a.Y(1023)+16,css('--muted'),11);
+  const [y,W2,H2]=fit($('ckt'));const cx=W2/2;const ink=css('--ink');
+  const box=(y0,t,c)=>{y.strokeStyle=c;y.lineWidth=2;y.strokeRect(cx-14,y0,28,56);text(y,t,cx+22,y0+32,c,12);};
+  text(y,'5 V',cx,18,css('--amp'),13,'center');y.strokeStyle=ink;y.lineWidth=2;y.beginPath();y.moveTo(cx,24);y.lineTo(cx,44);y.stroke();
+  box(44,'LDR '+ohm(Rl),css('--purple'));y.beginPath();y.moveTo(cx,100);y.lineTo(cx,148);y.stroke();
+  y.fillStyle=ink;y.beginPath();y.arc(cx,124,4,0,7);y.fill();y.beginPath();y.moveTo(cx,124);y.lineTo(cx-40,124);y.stroke();text(y,'A0',cx-46,128,css('--accent'),13,'right');text(y,V.toFixed(2)+' V',cx-46,144,css('--accent'),11,'right');
+  box(148,'R_f '+ohm(Rf),ink);y.beginPath();y.moveTo(cx,204);y.lineTo(cx,224);y.stroke();y.beginPath();y.moveTo(cx-12,224);y.lineTo(cx+12,224);y.moveTo(cx-7,229);y.lineTo(cx+7,229);y.stroke();
+  text(y,'V_A0 = 5·R_f /(R_f + R_LDR)',cx,H2-8,css('--muted'),11,'center');
+}
+['lR','lF','lT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-l]').forEach(b=>b.addEventListener('click',()=>{b.dataset.l.split(',').forEach((v,i)=>$(['lR','lF','lT'][i]).value=v);Lab.draw(4);}));
+Lab.add(4,lab4,{adc:240,ckt:240});
+Lab.start();
+</script>
+</body></html>
