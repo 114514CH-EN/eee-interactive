@@ -1,0 +1,163 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>滤波与谐振实验室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.ctl select{width:100%}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · COMMUNICATIONS CIRCUITS</div>
+  <h1>滤波与谐振实验室</h1>
+  <p>三个实验对应一年级 EE 的 Communications Circuits：一阶 RC / RL 低通与高通（Bode 图 + 相量图）、串联 RLC 谐振（f₀、Q、带宽、电压放大）、RLC 与弹簧–质量的三种阻尼。预设包括课上例子和模拟考题。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 一阶滤波器</a><a href="#lab2">实验 2 串联谐振</a><a href="#lab3">实验 3 阻尼</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 一阶滤波器（Lecture 2–3）</div>
+  <h2>本质是分压器：电抗随频率变，输出跟着变</h2>
+  <p class="lead">选电路类型、元件值和信号频率。左边是 Bode 图（实线是真实响应，虚线是两条渐近线，交点就是 f<sub>c</sub>），右边是相量图：输入电压 = 串联元件上的电压 + 输出电压，两者始终垂直。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-f="rcl,3,-7,3.2">RC 低通 1 kΩ / 100 nF（f<sub>c</sub> = 1.59 kHz）</button><button data-f="rch,3,-7,3.2">同样元件做高通</button><button data-f="rll,2,-2,3.2">RL 低通 100 Ω / 10 mH</button><button data-f="rlh,2,-2,3.2">RL 高通 100 Ω / 10 mH</button><button data-f="rcl,3,-6.658,3">模拟考：1 kΩ + 220 nF @ 1 kHz</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="fT">电路</label><select id="fT"><option value="rcl">RC 低通（R 串，C 到地）</option><option value="rch">RC 高通（C 串，R 到地）</option><option value="rll">RL 低通（L 串，R 到地）</option><option value="rlh">RL 高通（R 串，L 到地）</option></select><span></span></div>
+    <div class="ctl"><label for="fR">R</label><input id="fR" type="range" min="1" max="5" step="0.01" value="3"><output id="fRO"></output></div>
+    <div class="ctl"><label for="fX" id="fXl">C</label><input id="fX" type="range" min="-9" max="-5" step="0.001" value="-7"><output id="fXO"></output></div>
+    <div class="ctl"><label for="fF">信号频率 f</label><input id="fF" type="range" min="0" max="6" step="0.01" value="3.2"><output id="fFO"></output></div>
+  </div>
+  <div class="stage"><canvas id="bode" height="300" aria-label="Bode 图"></canvas><canvas id="ph1" height="300" aria-label="相量图"></canvas></div>
+  <div class="read"><div><small>截止频率 f<sub>c</sub></small><b id="fC"></b></div><div><small>f / f<sub>c</sub></small><b id="fRat"></b></div><div><small>增益 |H|（dB）</small><b id="fG"></b></div><div><small>相位</small><b id="fP"></b></div><div><small>串联支路 |Z| = √(R² + X²)</small><b id="fZ"></b></div></div>
+  <p class="note"><strong>三个区域：</strong>通带里 |H| ≈ 1、相位 ≈ 0；f = f<sub>c</sub> 时 |H| = 0.707（−3 dB，功率减半），相位 ∓45°；阻带里每十倍频降 20 dB（每倍频 6 dB），相位趋向 ∓90°（低通滞后、高通超前）。RC 和 RL 只是 f<sub>c</sub> 公式不同：1/(2πRC) 与 R/(2πL)。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 串联 RLC 谐振（Lecture 4–5）</div>
+  <h2>X<sub>L</sub> = X<sub>C</sub> 时电抗抵消，只剩 R：电流最大，L、C 上的电压是电源的 Q 倍</h2>
+  <p class="lead">电源 1 V。左边是电流幅值随频率（对数轴），绿色区域是 −3 dB 带宽；右边是此刻的电压相量：V<sub>L</sub> 向上、V<sub>C</sub> 向下，V<sub>R</sub> 与电流同相，三者相加等于电源。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-r="2,-2,-8,0">Quick check：10 mH、10 nF、100 Ω</button><button data-r="1.278,-4,-9.513,0">模拟考：909 kHz 收音机，Q = 30.1</button><button data-r="3,-2,-8,0">同一 L、C，R = 1 kΩ（Q = 1）</button><button data-r="1,-2,-8,0">R = 10 Ω（Q = 100）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="rR">R</label><input id="rR" type="range" min="0" max="4" step="0.001" value="2"><output id="rRO"></output></div>
+    <div class="ctl"><label for="rL">L</label><input id="rL" type="range" min="-6" max="0" step="0.001" value="-2"><output id="rLO"></output></div>
+    <div class="ctl"><label for="rC">C</label><input id="rC" type="range" min="-12" max="-5" step="0.001" value="-8"><output id="rCO"></output></div>
+    <div class="ctl"><label for="rF">信号频率（在 f₀ 附近扫）</label><input id="rF" type="range" min="-1" max="1" step="0.002" value="0"><output id="rFO"></output></div>
+  </div>
+  <div class="stage"><canvas id="res" height="290" aria-label="谐振曲线"></canvas><canvas id="ph2" height="290" aria-label="RLC 相量图"></canvas></div>
+  <div class="read"><div><small>f₀ = 1 / 2π√(LC)</small><b id="rF0"></b></div><div><small>Q = (1/R)√(L/C)</small><b id="rQ"></b></div><div><small>带宽 f₀ / Q（f₁ … f₂）</small><b id="rBW" style="font-size:15px"></b></div><div><small>此刻 |I| / |V<sub>L</sub>| / |V<sub>C</sub>|</small><b id="rI" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>为什么 Q 是电压放大倍数：</strong>谐振时 I = V<sub>s</sub>/R，V<sub>L</sub> = I·ω₀L = V<sub>s</sub>·ω₀L/R = Q·V<sub>s</sub>。V<sub>L</sub> 和 V<sub>C</sub> 一样大但反向，在电源两端看不到它们——这就是收音机用很小的天线电压也能在 LC 上得到大信号的原因。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 阻尼（Lecture 6）</div>
+  <h2>同一个方程：q̈ + γq̇ + ω₀²q = 0，γ²/4 和 ω₀² 比大小</h2>
+  <p class="lead">L = 10 mH、C = 10 nF（ω₀ = 10⁵ rad/s，T₀ = 62.8 µs）的电容先充到 1 V 再接通。只改 R，看放电是振荡、刚好不振荡还是慢慢爬回零。灰线是临界阻尼，用来比较。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-d="1.3">轻阻尼 R = 20 Ω（高 Q）</button><button data-d="2.699">R = 500 Ω</button><button data-d="3.301">临界 R = 2√(L/C) = 2 kΩ</button><button data-d="4">重阻尼 R = 10 kΩ</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="dR">R</label><input id="dR" type="range" min="0.5" max="4.5" step="0.001" value="2.699"><output id="dRO"></output></div>
+  </div>
+  <div class="stage"><canvas id="damp" height="270" aria-label="自由响应"></canvas><canvas id="mech" height="270" aria-label="机械类比"></canvas></div>
+  <div class="read"><div><small>γ = R/L</small><b id="dG"></b></div><div><small>γ²/4 与 ω₀²</small><b id="dC" style="font-size:15px"></b></div><div><small>情况</small><b id="dK" style="font-size:15px"></b></div><div><small>Q = ω₀L/R</small><b id="dQ"></b></div></div>
+  <p class="note"><strong>工程上要什么：</strong>汽车减震器接近临界阻尼——不来回弹，又最快回到平衡；重阻尼虽然不振荡，但回得慢（像泡在油里的弹簧）。对应关系：L ↔ m，1/C ↔ k，R ↔ b，q ↔ x。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+const eng=(v,u,d=3)=>{const a=Math.abs(v);const P=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];for(const [s,p] of P)if(a>=s*0.9995)return (+(v/s).toPrecision(d))+' '+p+u;return (+v.toPrecision(d))+' '+u;};
+const fq=v=>eng(v,'Hz');
+function phasorAx(x,W,H,pad=26){return {cx:pad,cy:H/2,s:Math.min((W-2*pad),(H-2*pad))};}
+
+/* ---------- Lab 1 ---------- */
+function lab1(){
+  const t=$('fT').value,R=10**val('fR'),X=10**val('fX'),f=10**val('fF'),isC=t[1]==='c',low=t[2]==='l';
+  $('fXl').textContent=isC?'C':'L';$('fX').min=isC?-9:-4;$('fX').max=isC?-5:0;
+  $('fRO').textContent=eng(R,'Ω');$('fXO').textContent=eng(10**val('fX'),isC?'F':'H');$('fFO').textContent=fq(f);
+  pressGroup('#lab1 [data-f]',b=>b.dataset.f===`${t},${val('fR')},${val('fX')},${val('fF')}`);
+  const fc=isC?1/(2*Math.PI*R*X):R/(2*Math.PI*X),u=f/fc;
+  const H=v=>low?{re:1/(1+v*v),im:-v/(1+v*v)}:{re:v*v/(1+v*v),im:v/(1+v*v)};
+  const h=H(u),mag=Math.hypot(h.re,h.im),ph=Math.atan2(h.im,h.re)*180/Math.PI,Xs=isC?1/(2*Math.PI*f*X):2*Math.PI*f*X;
+  $('fC').textContent=fq(fc);$('fRat').textContent=fmt(u,3);$('fG').textContent=`${fmt(mag,3)}（${(20*Math.log10(mag)).toFixed(1)} dB）`;$('fP').textContent=(ph>0?'+':'')+ph.toFixed(1)+'°';
+  $('fZ').textContent=eng(Math.hypot(R,Xs),'Ω')+`（X = ${eng(Xs,'Ω')}）`;
+  const [x,W,Hh]=fit($('bode'));const top=Hh*0.56;const l0=Math.log10(fc)-3,l1=Math.log10(fc)+3;
+  const xt=[];for(let k=Math.ceil(l0);k<=Math.floor(l1);k++)xt.push(k);
+  const a=axes(x,W,top,{x0:l0,x1:l1,y0:-65,y1:6,xt,xf:v=>fq(10**v),yt:[0,-20,-40,-60],yf:v=>v+' dB',title:(low?'低通':'高通')+' |H| (dB)',pl:50,pb:20});
+  x.setLineDash([5,4]);x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();
+  if(low){x.moveTo(a.X(l0),a.Y(0));x.lineTo(a.X(Math.log10(fc)),a.Y(0));x.lineTo(a.X(l1),a.Y(-60));}else{x.moveTo(a.X(l0),a.Y(-60));x.lineTo(a.X(Math.log10(fc)),a.Y(0));x.lineTo(a.X(l1),a.Y(0));}x.stroke();x.setLineDash([]);
+  plot(x,a.X,a.Y,l=>{const g=H(10**l/fc);return 20*Math.log10(Math.hypot(g.re,g.im));},l0,l1,css('--blue'),2.6,300);
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(Math.log10(f)),a.Y(Math.max(-65,20*Math.log10(mag))),5,0,7);x.fill();
+  text(x,low?'−20 dB/dec':'+20 dB/dec',low?a.X(l1)-6:a.X(l0)+6,a.Y(-45),css('--muted'),11,low?'right':'left');
+  x.save();x.translate(0,top);const b=axes(x,W,Hh-top,{x0:l0,x1:l1,y0:low?-95:-5,y1:low?5:95,xt,xf:()=>'',yt:low?[0,-45,-90]:[0,45,90],yf:v=>v+'°',title:'相位',pl:50,pt:18,pb:10});
+  plot(x,b.X,b.Y,l=>{const g=H(10**l/fc);return Math.atan2(g.im,g.re)*180/Math.PI;},l0,l1,css('--amp'),2.4,300);
+  x.fillStyle=css('--red');x.beginPath();x.arc(b.X(Math.log10(f)),b.Y(ph),5,0,7);x.fill();x.restore();
+  /* phasor: Vin=1 along x; Vout = h; Vseries = 1-h */
+  const [y,W2,H2]=fit($('ph1'));const s=Math.min(W2-40,(H2-60)*2),ox=(W2-s)/2,oy=H2/2+(low?-s/4+10:s/4-10);
+  const P=(re,im)=>[ox+re*s,oy-im*s];
+  y.strokeStyle=css('--grid');y.setLineDash([3,4]);y.beginPath();y.arc(ox+s/2,oy,s/2,low?0:Math.PI,low?Math.PI:2*Math.PI);y.stroke();y.setLineDash([]);
+  arrow(y,...P(0,0),...P(1,0),css('--ink'),2.4,10);text(y,'V_in',ox+s/2,oy+(low?-8:18),css('--ink'),12,'center');
+  arrow(y,...P(0,0),...P(h.re,h.im),css('--blue'),2.6,10);
+  arrow(y,...P(h.re,h.im),...P(1,0),css('--amp'),2.2,10);
+  const vo=P(h.re,h.im);text(y,'V_out',vo[0]+(h.re<0.5?-6:6),vo[1]+(low?16:-8),css('--blue'),12,h.re<0.5?'right':'left');
+  const vs=P((1+h.re)/2,h.im/2);text(y,'V_'+(isC?(low?'R':'C'):(low?'L':'R')),vs[0]+8,vs[1]+(low?12:-4),css('--amp'),12);
+  text(y,`相位 ${(ph>0?'+':'')+ph.toFixed(0)}°：输出${low?'滞后':'超前'}输入`,W2/2,H2-8,css('--muted'),11,'center');
+}
+['fT','fR','fX','fF'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-f]').forEach(b=>b.addEventListener('click',()=>{const [t,r,xx,f]=b.dataset.f.split(',');$('fT').value=t;Lab.draw(1);$('fR').value=r;$('fX').value=xx;$('fF').value=f;Lab.draw(1);}));
+Lab.add(1,lab1,{bode:270,ph1:270});
+
+/* ---------- Lab 2 ---------- */
+function lab2(){
+  const R=10**val('rR'),L=10**val('rL'),C=10**val('rC'),u=val('rF');
+  $('rRO').textContent=eng(R,'Ω');$('rLO').textContent=eng(L,'H');$('rCO').textContent=eng(C,'F');
+  pressGroup('#lab2 [data-r]',b=>b.dataset.r===`${val('rR')},${val('rL')},${val('rC')},${u}`);
+  const f0=1/(2*Math.PI*Math.sqrt(L*C)),Q=Math.sqrt(L/C)/R,bw=f0/Q,sp=Math.min(0.5,Math.max(0.01,1.3/Q)),rf=u*sp,f=f0*10**rf;$('rFO').textContent=fq(f);
+  const Ir=f=>{const w=2*Math.PI*f,X=w*L-1/(w*C);return {re:R/(R*R+X*X),im:-X/(R*R+X*X),w};};
+  const f1=f0*(Math.sqrt(1+1/(4*Q*Q))-1/(2*Q)),f2=f0*(Math.sqrt(1+1/(4*Q*Q))+1/(2*Q));
+  $('rF0').textContent=fq(f0);$('rQ').textContent=fmt(Q,3);$('rBW').textContent=`${fq(bw)}（${fq(f1)} … ${fq(f2)}）`;
+  const i=Ir(f),I=Math.hypot(i.re,i.im),VL=I*i.w*L,VC=I/(i.w*C);$('rI').textContent=`${eng(I,'A')} / ${fmt(VL,3)} V / ${fmt(VC,3)} V`;
+  const [x,W,H]=fit($('res'));const Im=1/R;
+  const a=axes(x,W,H,{x0:-sp,x1:sp,y0:0,y1:Im*1.12,xt:[-sp,-sp/2,0,sp/2,sp],xf:v=>fq(f0*10**v),yt:[0,Im/Math.SQRT2,Im],yf:v=>eng(v,'A',2),title:'|I|（V_s = 1 V）',pl:58});
+  const l1=Math.log10(f1/f0),l2=Math.log10(f2/f0);x.fillStyle=css('--green');x.globalAlpha=.12;x.fillRect(a.X(Math.max(-sp,l1)),a.pt,a.X(Math.min(sp,l2))-a.X(Math.max(-sp,l1)),H-a.pt-a.pb);x.globalAlpha=1;
+  plot(x,a.X,a.Y,l=>{const k=Ir(f0*10**l);return Math.hypot(k.re,k.im);},-sp,sp,css('--blue'),2.6,500);
+  x.setLineDash([4,4]);plot(x,a.X,a.Y,()=>Im/Math.SQRT2,-sp,sp,css('--muted'),1,2);x.setLineDash([]);
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(rf),a.Y(I),5,0,7);x.fill();
+  text(x,'−3 dB 带宽',a.X(0),a.Y(Im/Math.SQRT2)+16,css('--green'),11,'center');
+  /* phasors relative to current direction (current angle) */
+  const [y,W2,H2]=fit($('ph2'));const cx=W2/2,cy=H2/2;const sc=(Math.min(W2,H2)/2-30)/Math.max(1,VL,VC);
+  const th=Math.atan2(i.im,i.re),rot=(m,ang)=>[cx+m*sc*Math.cos(ang),cy-m*sc*Math.sin(ang)];
+  const VR=I*R;const pR=rot(VR,th),pL=rot(VL,th+Math.PI/2),pC=rot(VC,th-Math.PI/2);
+  arrow(y,cx,cy,...pL,css('--red'),2.4,10);arrow(y,cx,cy,...pC,css('--purple'),2.4,10);arrow(y,cx,cy,...pR,css('--amp'),2.6,10);
+  arrow(y,cx,cy,cx+sc,cy,css('--ink'),1.6,8);
+  text(y,'V_L',pL[0]+6,pL[1],css('--red'),12);text(y,'V_C',pC[0]+6,pC[1]+10,css('--purple'),12);text(y,'V_R',pR[0]+6,pR[1]-6,css('--amp'),12);text(y,'V_s',cx+sc+4,cy+14,css('--ink'),11);
+  text(y,f<f0*0.999?'f < f₀：X_C > X_L，电容性，电流超前':f>f0*1.001?'f > f₀：X_L > X_C，电感性，电流滞后':'f = f₀：V_L、V_C 抵消，纯电阻',W2/2,H2-8,css('--muted'),11,'center');
+}
+['rR','rL','rC','rF'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-r]').forEach(b=>b.addEventListener('click',()=>{b.dataset.r.split(',').forEach((v,k)=>$(['rR','rL','rC','rF'][k]).value=v);Lab.draw(2);}));
+Lab.add(2,lab2,{res:260,ph2:260});
+
+/* ---------- Lab 3 ---------- */
+function resp(R,L,C,t){const g=R/L,w0=1/Math.sqrt(L*C),a=g/2;
+  if(Math.abs(a-w0)/w0<1e-3)return (1+a*t)*Math.exp(-a*t);
+  if(a<w0){const wd=Math.sqrt(w0*w0-a*a);return Math.exp(-a*t)*(Math.cos(wd*t)+a/wd*Math.sin(wd*t));}
+  const s=Math.sqrt(a*a-w0*w0),r1=-a+s,r2=-a-s;return (r2*Math.exp(r1*t)-r1*Math.exp(r2*t))/(r2-r1);}
+function lab3(){
+  const R=10**val('dR'),L=10e-3,C=10e-9,w0=1/Math.sqrt(L*C),g=R/L,T0=2*Math.PI/w0;
+  $('dRO').textContent=eng(R,'Ω');pressGroup('#lab3 [data-d]',b=>+b.dataset.d===val('dR'));
+  const r=g*g/4/(w0*w0);$('dG').textContent=g.toExponential(2).replace('e+','×10^')+' s⁻¹';$('dC').textContent=`γ²/4 = ${fmt(r,3)} ω₀²`;
+  const kind=r<0.98?'轻阻尼（振荡衰减）':r<1.02?'临界阻尼':'重阻尼（不振荡、慢）';$('dK').textContent=kind;$('dQ').textContent=fmt(w0*L/R,3);
+  const col=r<0.98?css('--blue'):r<1.02?css('--green'):css('--amp');
+  const [x,W,H]=fit($('damp'));const tm=3*T0;
+  const a=axes(x,W,H,{x0:0,x1:tm,y0:-1.05,y1:1.08,xt:[0,T0,2*T0,3*T0],xf:v=>Math.round(v/T0)+'T₀',yt:[-1,0,1],yf:v=>v+' V',title:'电容电压 v_C(t)（初值 1 V）',pl:44});
+  plot(x,a.X,a.Y,t=>resp(2000,L,C,t),0,tm,css('--grid'),1.6,300);
+  plot(x,a.X,a.Y,t=>resp(R,L,C,t),0,tm,col,2.6,600);
+  if(r<0.98){x.setLineDash([4,4]);plot(x,a.X,a.Y,t=>Math.exp(-g/2*t),0,tm,css('--muted'),1,200);plot(x,a.X,a.Y,t=>-Math.exp(-g/2*t),0,tm,css('--muted'),1,200);x.setLineDash([]);text(x,'包络 e^(−γt/2)',a.X(tm)-4,a.Y(Math.exp(-g/2*tm))-6,css('--muted'),11,'right');}
+  /* mechanical analogy: spring-mass-damper drawing at a moving phase */
+  const [y,W2,H2]=fit($('mech'));const ink=css('--ink');
+  const rows=[['电感 L','质量 m'],['1 / C','弹簧常数 k'],['电阻 R','阻尼系数 b'],['电荷 q','位移 x'],['γ = R/L','γ = b/m'],['ω₀² = 1/LC','ω₀² = k/m']];
+  text(y,'电气',W2*0.3,22,css('--blue'),13,'center');text(y,'机械',W2*0.72,22,css('--amp'),13,'center');
+  rows.forEach(([e,m],k)=>{const yy=50+k*((H2-80)/rows.length);text(y,e,W2*0.3,yy,ink,12,'center');text(y,'↔',W2*0.51,yy,css('--muted'),12,'center');text(y,m,W2*0.72,yy,ink,12,'center');});
+  text(y,kind,W2/2,H2-10,col,12,'center');
+}
+$('dR').addEventListener('input',()=>Lab.draw(3));
+document.querySelectorAll('#lab3 [data-d]').forEach(b=>b.addEventListener('click',()=>{$('dR').value=b.dataset.d;Lab.draw(3);}));
+Lab.add(3,lab3,{damp:250,mech:250});
+Lab.start();
+</script>
+</body></html>
