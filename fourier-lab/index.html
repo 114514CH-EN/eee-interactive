@@ -9,8 +9,8 @@
 <header>
   <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
   <h1>傅里叶实验室</h1>
-  <p>三个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a></nav>
+  <p>四个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -54,6 +54,21 @@
   <div class="stage"><canvas id="at" height="260" aria-label="采样时域"></canvas><canvas id="af" height="260" aria-label="采样频谱"></canvas></div>
   <div class="read"><div><small>奈奎斯特频率 f<sub>s</sub>/2</small><b id="aN"></b></div><div><small>是否满足 f<sub>s</sub> ≥ 2f</small><b id="aOK"></b></div><div><small>看到的频率 |f − k·f<sub>s</sub>|</small><b id="aA"></b></div><div><small>每周期采样点数</small><b id="aP"></b></div></div>
   <p class="note"><strong>为什么混叠不可逆：</strong>1 kHz 和 0.7 kHz 的正弦在 1.7 kHz 采样下得到完全相同的一串数，采完就分不出来了。所以 ADC 前面一定要有抗混叠低通滤波器，先把 f<sub>s</sub>/2 以上的成分滤掉。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 傅里叶系数从哪里来（Maths Part B · Week 4）</div>
+  <h2>乘以 cos nx（或 sin nx）再在一个周期上积分，只剩下 a<sub>n</sub>（或 b<sub>n</sub>）</h2>
+  <p class="lead">左边：虚线是周期函数 f(x)，蓝线是到第 N 次谐波的部分和。右边：被积函数 f(x)·cos nx（或 sin nx）在一个周期上的图像，绿色是正面积、红色是负面积，二者相减 ÷ π 就是系数。拖 n 看正交性：频率不匹配的部分正负抵消。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-fz="sqE">讲义方波（偶）</button><button data-fz="sqO">讲义方波（奇）</button><button data-fz="q3">Tut Q3：2x</button><button data-fz="q4">Tut Q4：0 / x</button><button data-fz="q5">Tut Q5：cos x / 0</button><button data-fz="q6">Tut Q6：x²</button><button data-fz="q7">Tut Q7：7 − 3x/π</button><button data-fz="q8">Tut Q8：截断 |sin x|</button><button data-fz="ex1">例题：2016/17 Q3a</button><button data-fz="ex3">例题：|sin x|</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="zN">部分和最高次数 N</label><input id="zN" type="range" min="1" max="40" step="1" value="5"><output id="zNO"></output></div>
+    <div class="ctl"><label for="zn">检查第 n 个系数</label><input id="zn" type="range" min="0" max="10" step="1" value="1"><output id="znO"></output></div>
+    <div class="ctl"><label for="zt">乘以</label><select id="zt"><option value="c">cos nx → aₙ</option><option value="s">sin nx → bₙ</option></select><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="zs" height="270" aria-label="函数与部分和"></canvas><canvas id="zi" height="270" aria-label="被积函数与面积"></canvas></div>
+  <div class="read"><div><small>a₀/2（平均值）</small><b id="z0"></b></div><div><small>当前系数</small><b id="zc"></b></div><div><small>a₁…a₅</small><b id="za" style="font-size:12px"></b></div><div><small>b₁…b₅</small><b id="zb" style="font-size:12px"></b></div></div>
+  <p class="note" id="zf"></p>
 </section>
 </div>
 
@@ -128,6 +143,51 @@ function lab3(){
 ['aF','aS'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
 document.querySelectorAll('#lab3 [data-a]').forEach(b=>b.addEventListener('click',()=>{const [f,s]=b.dataset.a.split(',');$('aF').value=f;$('aS').value=s;Lab.draw(3);}));
 Lab.add(3,lab3,{at:240,af:240});
+/* ---------- Lab 4: coefficients by integration ---------- */
+const PI=Math.PI;
+const FZ={
+  sqE:{x0:-PI,f:x=>Math.abs(x)<=PI/2?4:0,t:'讲义：f = 4（|x| ≤ π/2），否则 0。偶函数 → 只有 cos：f = 2 + (8/π)(cos x − ⅓cos 3x + ⅕cos 5x − …)'},
+  sqO:{x0:-PI,f:x=>x>0?4:0,t:'讲义：f = 0（−π<x<0），4（0<x<π）。只是左右平移了 π/2，却只剩 sin：f = 2 + (8/π)(sin x + ⅓sin 3x + ⅕sin 5x + …)'},
+  q3:{x0:0,f:x=>2*x,t:'Tutorial Q3：f = 2x，0 ≤ x < 2π。aₙ = 0，bₙ = −4/n：f = 2π − 4(sin x + ½sin 2x + ⅓sin 3x + …)'},
+  q4:{x0:-PI,f:x=>x>0?x:0,t:'Tutorial Q4：f = π/4 + Σ[(cos nπ − 1)/(πn²)·cos nx + (−1)ⁿ⁺¹/n·sin nx]'},
+  q5:{x0:-PI,f:x=>x<0?Math.cos(x):0,t:'Tutorial Q5：a₁ = ½，其余 aₙ = 0；bₙ = −2n/(π(n²−1))（n 偶），n 奇为 0'},
+  q6:{x0:0,f:x=>x*x,t:'Tutorial Q6：f = 4π²/3 + Σ(4/n²)cos nx − Σ(4π/n)sin nx'},
+  q7:{x0:-PI,f:x=>7-3*x/PI,t:'Tutorial Q7：a₀/2 = 7，aₙ = 0，bₙ = 6(−1)ⁿ/(nπ)：f = 7 − (6/π)(sin x − ½sin 2x + ⅓sin 3x − …)'},
+  q8:{x0:-PI,f:x=>Math.abs(x)<=PI/2?Math.abs(Math.sin(x)):0,t:'Tutorial Q8：偶函数，bₙ = 0；a₀/2 = 1/π，a₁ = 1/π，n 偶 aₙ = −2/(π(n²−1))；n 奇 aₙ = −1/π, +1/(3π), −1/(3π), +1/(5π)…（官方答案这里写错了）'},
+  ex1:{x0:-3*PI/4,f:x=>x< -PI/4?-2:4,t:'2016/17 Q3a：f = −2（−3π/4…−π/4），4（−π/4…5π/4）。a₀/2 = 5/2，a₂ = 6/π，b₁ = 6√2/π，b₃ = −2√2/π，b₅ = −6√2/(5π)'},
+  ex3:{x0:-PI,f:x=>Math.abs(Math.sin(x)),t:'2010：f = |sin x|。实际周期是 π，所以只有偶次谐波：f = 2/π − (4/π)(⅓cos 2x + 1/15·cos 4x + 1/35·cos 6x + …)'}};
+let fz='sqE',zCache={};
+function zCoef(key){if(zCache[key])return zCache[key];const F=FZ[key],M=8192,h=2*PI/M,a=[],b=[];
+  for(let n=0;n<=40;n++){let sa=0,sb=0;for(let i=0;i<M;i++){const x=F.x0+(i+0.5)*h,v=F.f(x);sa+=v*Math.cos(n*x);sb+=v*Math.sin(n*x);}a.push(sa*h/PI);b.push(sb*h/PI);}
+  return zCache[key]={a,b};}
+const zPer=(F,x)=>F.f(F.x0+(((x-F.x0)%(2*PI))+2*PI)%(2*PI));
+function lab4(){
+  const F=FZ[fz],N=val('zN'),n=val('zn'),tp=$('zt').value,C=zCoef(fz);$('zNO').textContent=N;$('znO').textContent=n;
+  pressGroup('#lab4 [data-fz]',b=>b.dataset.fz===fz);
+  const S=x=>{let y=C.a[0]/2;for(let k=1;k<=N;k++)y+=C.a[k]*Math.cos(k*x)+C.b[k]*Math.sin(k*x);return y;};
+  const r=v=>Math.abs(v)<5e-4?'0':(+v.toFixed(3)).toString();
+  $('z0').textContent=r(C.a[0]/2);$('za').textContent=C.a.slice(1,6).map(r).join(', ');$('zb').textContent=C.b.slice(1,6).map(r).join(', ');
+  const cv=tp==='c'?C.a[n]:C.b[n];$('zc').textContent=(tp==='c'?'a':'b')+n+' = '+r(cv)+(Math.abs(cv)>5e-4?`（×π = ${r(cv*PI)}）`:'');
+  $('zf').innerHTML='<strong>答案：</strong>'+F.t;
+  let lo=1e9,hi=-1e9;for(let i=0;i<=800;i++){const v=zPer(F,-2*PI+4*PI*i/800);lo=Math.min(lo,v);hi=Math.max(hi,v);}
+  const pad=(hi-lo)*0.25+0.3,y0=lo-pad,y1=hi+pad,xt=[-2*PI,-PI,0,PI,2*PI],xf=v=>({'-6.283':'−2π','-3.142':'−π','0.000':'0','3.142':'π','6.283':'2π'})[v.toFixed(3)]||'';
+  const [x,W,H]=fit($('zs'));const a=axes(x,W,H,{x0:-2*PI,x1:2*PI,y0,y1,xt,xf,yt:[],title:`f(x)（虚线）与部分和 S_N（N = ${N}）`,pl:14});
+  x.setLineDash([5,4]);plot(x,a.X,a.Y,t=>zPer(F,t),-2*PI,2*PI,css('--muted'),1.4,2400);x.setLineDash([]);
+  plot(x,a.X,a.Y,S,-2*PI,2*PI,css('--blue'),2.4,1600);
+  x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();x.moveTo(a.pl,a.Y(0));x.lineTo(W-a.pr,a.Y(0));x.stroke();
+  /* integrand over defining period */
+  const g=t=>F.f(t)*(tp==='c'?Math.cos(n*t):Math.sin(n*t)),xa=F.x0,xb=F.x0+2*PI;let gl=0,gh=0;for(let i=0;i<=800;i++){const v=g(xa+2*PI*i/800);gl=Math.min(gl,v);gh=Math.max(gh,v);}
+  const gp=(gh-gl)*0.15+0.2;const [y,W2,H2]=fit($('zi'));
+  const b=axes(y,W2,H2,{x0:xa,x1:xb,y0:gl-gp,y1:gh+gp,xt:[xa,xa+PI,xb],xf:v=>{const q=v/PI;const m={'-1':'−π','0':'0','1':'π','2':'2π','-0.75':'−3π/4','0.25':'π/4','1.25':'5π/4'};return m[(+q.toFixed(2)).toString()]||v.toFixed(2);},yt:[],title:`f(x)·${tp==='c'?'cos':'sin'} ${n}x，一个周期上的面积 = π·${tp==='c'?'a':'b'}${n}`,pl:14});
+  const M=600,dx=2*PI/M;for(let i=0;i<M;i++){const t=xa+(i+0.5)*dx,v=g(t);y.fillStyle=v>=0?css('--green'):css('--red');y.globalAlpha=.35;y.fillRect(b.X(t-dx/2),Math.min(b.Y(v),b.Y(0)),Math.max(b.X(t+dx/2)-b.X(t-dx/2),1),Math.abs(b.Y(v)-b.Y(0)));}y.globalAlpha=1;
+  y.strokeStyle=css('--muted');y.lineWidth=1;y.beginPath();y.moveTo(b.pl,b.Y(0));y.lineTo(W2-b.pr,b.Y(0));y.stroke();
+  plot(y,b.X,b.Y,g,xa,xb,css('--ink'),2,1600);
+  let pos=0,neg=0;for(let i=0;i<4096;i++){const v=g(xa+(i+0.5)*2*PI/4096)*2*PI/4096;if(v>0)pos+=v;else neg-=v;}
+  text(y,`绿 ${pos.toFixed(3)} − 红 ${neg.toFixed(3)} = ${(pos-neg).toFixed(3)}`,W2-b.pr,b.pt+14,css('--ink'),12,'right');
+}
+['zN','zn','zt'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-fz]').forEach(b=>b.addEventListener('click',()=>{fz=b.dataset.fz;Lab.draw(4);}));
+Lab.add(4,lab4,{zs:240,zi:240});
 Lab.start();
 </script>
 </body></html>

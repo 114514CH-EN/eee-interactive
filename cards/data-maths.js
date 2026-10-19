@@ -1,4 +1,4 @@
-/* Engineering Maths 2 cards (MA = Probability, MB = Laplace). [kind, question, answer] */
+/* Engineering Maths 2 cards (MA = Probability, MB = Laplace + Fourier). [kind, question, answer] */
 window.CARDS=window.CARDS||[];
 (function(){const r=String.raw,N='https://app.notion.com/p/';
 const D=(c,l,t,id,arr)=>arr.forEach((x,i)=>window.CARDS.push({id:l+'-'+(i+1),c,l,t,u:N+id,k:x[0],q:x[1],a:x[2]}));
@@ -49,6 +49,20 @@ D('MA','MA3','中心极限定理与假设检验','3eb202737d7a8118be04f4228ea350
 - 「接受 H₀」说成「证明了 H₀」`],
 ]);
 
+D('MA','MA4','马尔可夫过程与 PageRank','3eb202737d7a81a5990ade814bc3a826',[
+['q',r`马尔可夫模型由哪三样东西确定？$a_{n,m}$ 是什么意思？`,r`状态数 N、初始概率向量 $P^0$、转移矩阵 A。$a_{n,m}=P(x_t=m\mid x_{t-1}=n)$：从 n 走到 m 的概率，**每一行加起来是 1**。`],
+['q',r`什么是马尔可夫性（Markov property）？`,r`下一步只取决于当前状态，和更早走过哪些状态无关（无记忆）。`],
+['q',r`序列概率怎么算？讲义 $x=113231$ 的答案？`,r`$P(x|M)=P^0(x_1)\,a_{x_1x_2}\cdots a_{x_{J-1}x_J}$。$0.3\times0.2\times0.1\times0.2\times0.6\times0.5=0.00036$。`],
+['q',r`状态概率怎样一步步更新？矩阵形式？`,r`$P^{k+1}(m)=\sum_nP^k(n)\,a_{n,m}$（所有能走到 m 的路加起来）。矩阵：$P^{k+1}=A^TP^k=(A^T)^{k+1}P^0$——注意是**转置**。`],
+['q',r`PageRank 是什么？讲义 5 个网页的 PageRank？`,r`稳态 $P=A^TP$：$A^T$ 特征值 1 的特征向量，归一化使和为 1。讲义：$[5/22,\ 5/22,\ 0,\ 5/22,\ 7/22]$，网页 3 没有入链所以是 0。`],
+['q',r`怎样从观测到的序列估计 $P^0$ 和 A？`,r`$P^0$：各状态作为**第一个**符号出现的频率。$a_{n,m}=\dfrac{n\to m\ \text{的次数}}{\text{从 n 出发的总次数}}$。Tutorial Q3：$P^0=[4/6,2/6]$，两行都是 $[0.625,0.375]$。`],
+['q',r`Tutorial Q2：aabacb 来自 X 还是 Y？`,r`似然 $P(s|X)=0.00135$、$P(s|Y)=0.00002$；先验 3/4、1/4。后验 $P(X|s)\approx0.995$ → X。`],
+['err',r`马尔可夫这一周最常见的错误？`,r`- 用 A 乘 $P^k$（应该用 $A^T$），或把行、列的含义搞反
+- 序列概率漏乘起点 $P^0(x_1)$
+- 稳态向量忘了归一化（和为 1）
+- 估计 A 时用「总转移数」做分母，而不是「从该状态出发的次数」`],
+]);
+
 D('MB','MB1','拉普拉斯变换 1','3eb202737d7a818c815af26ec67a07b3',[
 ['q',r`写出拉普拉斯变换的定义和七个必背变换。`,r`$\bar y(s)=\int_0^\infty e^{-st}y(t)\,dt$
 $a\to a/s$，$t^n\to n!/s^{n+1}$，$e^{at}\to1/(s-a)$，$\sin kt\to k/(s^2+k^2)$，$\cos kt\to s/(s^2+k^2)$，$\sinh kt\to k/(s^2-k^2)$，$\cosh kt\to s/(s^2-k^2)$`],
@@ -86,5 +100,20 @@ D('MB','MB3','拉普拉斯变换 3：卷积与传递函数','3eb202737d7a81169b2
 - $\frac{1}{3s-1}$ 要先提出 $\frac13$
 - 求 G 时不要先代入具体输入`],
 ['fix',r`讲义第 34 页 y(1) 的计算有什么错？`,r`写成 $\frac12(1.26+4.08+4.43)$，中间应为减号：$\frac12(1.26-4.08+4.43)=0.806$。`],
+]);
+D('MB','MB4','傅里叶级数 1','3eb202737d7a81849207d1de04fcf8e9',[
+['q',r`写出周期 2π 的傅里叶级数和三个系数公式。`,r`$f(x)=\dfrac{a_0}{2}+\sum_{n=1}^\infty(a_n\cos nx+b_n\sin nx)$
+$a_n=\dfrac1\pi\int_{-\pi}^{\pi}f\cos nx\,dx$（n = 0 也适用），$b_n=\dfrac1\pi\int_{-\pi}^{\pi}f\sin nx\,dx$`],
+['q',r`三个正交性积分？`,r`$\int_{-\pi}^{\pi}\sin nx\sin mx\,dx$、$\int\cos nx\cos mx\,dx$：$n=m$ 时为 π，$n\ne m$ 时为 0；$\int\sin nx\cos mx\,dx=0$（任何 n、m）。`],
+['q',r`为什么常数项写成 $a_0/2$？它代表什么？`,r`n = 0 时 $\int_{-\pi}^{\pi}\cos^2 0\,dx=2\pi$ 而不是 π，用同一个 $a_n$ 公式会多一倍，所以除以 2。$a_0/2$ = 一个周期上的**平均值**。`],
+['q',r`讲义方波（$|x|\le\pi/2$ 时为 4，否则 0）的傅里叶级数？`,r`$2+\dfrac8\pi\left(\cos x-\frac13\cos3x+\frac15\cos5x-\cdots\right)$：$a_n=\dfrac{8}{n\pi}\sin\dfrac{n\pi}{2}$，$b_n=0$。偶函数 → 只有 cos；只有奇次谐波。`],
+['q',r`傅里叶级数在函数跳变点取什么值？`,r`跳变两侧的平均值。Tutorial Q2 在 x = 4：$(4+(-2))/2=1$。`],
+['q',r`偶函数、奇函数的傅里叶级数各有什么特点？`,r`偶 $f(x)=f(-x)$：只有 cos（$b_n=0$）。奇 $f(x)=-f(-x)$：只有 sin（$a_n=0$，包括 $a_0$）。方波平移 π/2 就从「只有 cos」变成「平均值 + 只有 sin」。`],
+['q',r`$f(x)=2x$，$0\le x<2\pi$ 的傅里叶级数？`,r`$a_0/2=2\pi$，$a_n=0$，$b_n=-4/n$：$f=2\pi-4\left(\sin x+\frac12\sin2x+\frac13\sin3x+\cdots\right)$。`],
+['err',r`算傅里叶系数最常见的错误？`,r`- 分段函数只积了一段，或上下限写错（必须积**一整个周期**）
+- $\sin n\pi=0$、$\cos n\pi=(-1)^n$、$\sin(n\pi/2)$ 循环 1, 0, −1, 0 记错
+- 忘了常数项是 $a_0/2$
+- $\cos x\cos nx$ 这类题 n = 1 要单独算（分母 $n-1=0$）`],
+['fix',r`Tutorial Q8 的官方答案哪里错了？`,r`奇次项系数应为 $a_3=-\frac1\pi$、$a_5=+\frac{1}{3\pi}$、$a_7=-\frac{1}{3\pi}$、$a_9=+\frac{1}{5\pi}$…，答案页写成 $-\frac1\pi(\cos3x-\frac12\cos5x+\frac13\cos7x-\frac14\cos9x)$。偶次项和 $a_0$、$a_1$ 正确。`],
 ]);
 })();
