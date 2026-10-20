@@ -1,0 +1,394 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EE1 实验课实验室</title>
+<meta name="description" content="把一年级 EE 的四次实验课搬到网页上：分压器、示波器读数、电容相移（Lab 1），热敏电阻温度计（Lab 3），LED 限流电阻与机器人蛇（Lab 5）。元件值和步骤都按实验讲义。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="EE1 实验课实验室"><meta property="og:description" content="把一年级 EE 的四次实验课搬到网页上：分压器、示波器读数、电容相移（Lab 1），热敏电阻温度计（Lab 3），LED 限流电阻与机器人蛇（Lab 5）。元件值和步骤都按实验讲义。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/bench-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ctl select{width:100%}
+#ga{cursor:crosshair;touch-action:none}
+.rec{max-height:220px;overflow:auto}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ELECTRICAL ENGINEERING 1 · LAB SESSIONS</div>
+  <h1>EE1 实验课实验室</h1>
+  <p>把一年级 EE 的实验课搬到网页上：分压器、示波器读数、电容相移（Lab 1），热敏电阻温度计（Lab 3），LED 限流电阻与机器人蛇（Lab 5）。元件值和步骤都按实验讲义，预设按钮就是讲义里的那一步，进实验室前先在这里把要看到的现象过一遍。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 分压器</a><a href="#lab2">实验 2 示波器</a><a href="#lab3">实验 3 电容相移</a><a href="#lab4">实验 4 热敏电阻</a><a href="#lab5">实验 5 LED 限流</a><a href="#lab6">实验 6 机器人蛇</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · Lab 1 Experiment 1 · Voltage Divider</div>
+  <h2>分压器：两条直线的斜率，一条是 1/(R₁+R₂)，一条是 R₂/(R₁+R₂)</h2>
+  <p class="lead">讲义 Figure 1：1.0 kΩ 在上、1.8 kΩ 在下，输出取 1.8 kΩ 两端（A–B）。改 V<sub>in</sub> 记一组读数，两张图都是过原点的直线。再在 A–B 之间接一个负载，看输出电压被「拉低」多少：这就是输出电阻 R<sub>out</sub> = R₁∥R₂ 的意思。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-d="5,1,1.8,0">讲义：5 V，1.0k / 1.8k</button><button data-d="10,1,1.8,0">V<sub>in</sub> = 10 V</button><button data-d="5,1,1.8,47">A–B 接 47 kΩ（几乎不影响）</button><button data-d="5,1,1.8,1">A–B 接 1 kΩ（明显拉低）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="dV">V<sub>in</sub> (V)</label><input id="dV" type="range" min="0" max="10" step="0.1" value="5"><output id="dVO"></output></div>
+    <div class="ctl"><label for="dR1">R₁ (kΩ)</label><input id="dR1" type="range" min="0.1" max="10" step="0.1" value="1"><output id="dR1O"></output></div>
+    <div class="ctl"><label for="dR2">R₂ (kΩ)</label><input id="dR2" type="range" min="0.1" max="10" step="0.1" value="1.8"><output id="dR2O"></output></div>
+    <div class="ctl"><label for="dRL">A–B 负载</label><select id="dRL"><option value="0">不接</option><option value="47">47 kΩ</option><option value="10">10 kΩ</option><option value="1.8">1.8 kΩ</option><option value="1">1 kΩ</option></select><span></span></div>
+  </div>
+  <div class="btns" role="group" aria-label="图像"><button data-g="vv" aria-pressed="true">图：V<sub>out</sub> – V<sub>in</sub></button><button data-g="iv">图：总电流 I – V<sub>in</sub></button></div>
+  <div class="stage even"><canvas id="dc" height="250" aria-label="分压器电路及各处电压电流"></canvas><canvas id="dg" height="250" aria-label="输出电压或电流随输入电压"></canvas></div>
+  <div class="read"><div><small>V<sub>out</sub> = V<sub>AB</sub></small><b id="dVo"></b></div><div><small>总电流 I = V<sub>in</sub>/(R₁+R₂)</small><b id="dI"></b></div><div><small>V<sub>out</sub>–V<sub>in</sub> 斜率</small><b id="dK"></b></div><div><small>输入电阻 R<sub>in</sub>（I–V 斜率的倒数）</small><b id="dRin"></b></div><div><small>输出电阻 R<sub>out</sub> = R₁∥R₂</small><b id="dRout"></b></div></div>
+  <p class="note"><strong>讲义问题 9–10：</strong>「总电流–总电压」的斜率是 1/(R₁+R₂) = 1/2.8 kΩ ≈ 0.357 mA/V；「输出–输入」的斜率就是分压比 R₂/(R₁+R₂) = 0.643。实测点不会完全在直线上：电阻有 ±5% 容差、万用表有读数误差，但仍是直线，斜率略有偏差。<strong>负载效应：</strong>A–B 端口等效为 0.643 V<sub>in</sub> 串 R<sub>out</sub> = 643 Ω，负载 R<sub>L</sub> 拿到 R<sub>L</sub>/(R<sub>L</sub>+R<sub>out</sub>) 的开路电压；47 kΩ 只掉 1.3%，1 kΩ 掉 39%。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Lab 1 Experiment 2 · Exploring Sinusoidal Waveforms</div>
+  <h2>示波器：一格代表多少，波形为什么跑、为什么不见了</h2>
+  <p class="lead">函数发生器输出 1 kHz、有效值 1.0 V 的正弦波，接 CH1。按讲义第 5–11 步依次点预设：改时基、加直流偏置、切 AC 耦合、探头 10x 与通道 10x 是否匹配、触发电平超出波形范围。屏幕 10 × 8 格，「1▸」是 CH1 的零电平，右边「◂T」是触发电平。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-s="3,1,0,1,1,DC,1,1,0,0">第 1 步：1 ms/div，1 V/div</button><button data-s="3,1,0,2,1,DC,1,1,0,0">第 5 步：时基改 2 ms</button><button data-s="3,1,1,1,1,DC,1,1,0,0">第 6 步：+1 V 直流偏置</button><button data-s="3,1,1,1,1,AC,1,1,0,0">第 7 步：AC 耦合</button><button data-s="3,1,0,1,1,DC,10,1,0,0">第 8 步：探头拨到 10x</button><button data-s="3,1,0,1,1,DC,10,10,0,0">第 9 步：通道也设 10x</button><button data-s="3,1,0,1,1,DC,1,1,0,2">第 11 步：触发电平 2 V</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sF">频率 f</label><input id="sF" type="range" min="2" max="4" step="0.01" value="3"><output id="sFO"></output></div>
+    <div class="ctl"><label for="sV">有效值 V<sub>rms</sub> (V)</label><input id="sV" type="range" min="0.1" max="3" step="0.1" value="1"><output id="sVO"></output></div>
+    <div class="ctl"><label for="sDC">发生器直流偏置 (V)</label><input id="sDC" type="range" min="-3" max="3" step="0.5" value="0"><output id="sDCO"></output></div>
+    <div class="ctl"><label for="sT">时基 (ms/div)</label><select id="sT"><option>0.1</option><option>0.2</option><option>0.5</option><option selected>1</option><option>2</option><option>5</option></select><span></span></div>
+    <div class="ctl"><label for="sVd">CH1 (V/div)</label><select id="sVd"><option>0.1</option><option>0.2</option><option>0.5</option><option selected>1</option><option>2</option><option>5</option></select><span></span></div>
+    <div class="ctl"><label for="sCp">耦合</label><select id="sCp"><option value="DC">DC</option><option value="AC">AC</option></select><span></span></div>
+    <div class="ctl"><label for="sPr">探头红色拨杆</label><select id="sPr"><option value="1">1x</option><option value="10">10x</option></select><span></span></div>
+    <div class="ctl"><label for="sCh">通道衰减设置</label><select id="sCh"><option value="1">1x</option><option value="10">10x</option></select><span></span></div>
+    <div class="ctl"><label for="sOff">显示垂直偏移 (V)</label><input id="sOff" type="range" min="-4" max="4" step="0.5" value="0"><output id="sOffO"></output></div>
+    <div class="ctl"><label for="sTl">触发电平 (V)</label><input id="sTl" type="range" min="-4" max="4" step="0.1" value="0"><output id="sTlO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="sc" height="300" aria-label="示波器屏幕"></canvas></div>
+  <div class="read"><div><small>周期 T = 1/f（屏上几格）</small><b id="sP" style="font-size:15px"></b></div><div><small>峰值 V<sub>p</sub> = √2·V<sub>rms</sub></small><b id="sPk"></b></div><div><small>峰峰值 V<sub>pp</sub>（屏上几格）</small><b id="sPP" style="font-size:15px"></b></div><div><small>屏幕显示的峰值</small><b id="sDisp" style="font-size:15px"></b></div><div><small>触发</small><b id="sTr" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>答案对照：</strong>(4) T = 1/f = 1 ms；(5i) 时基 1 → 2 ms/div，相邻峰在屏上的距离从 1 格变成 0.5 格；(5ii/iii) V<sub>p</sub> = √2 × 1.0 = 1.41 V，V<sub>pp</sub> = 2.83 V。(6) 直流偏置让整条波形上移 1 V；(7) AC 耦合在通道入口串了一个电容，把直流挡掉，波形回到以 0 为中心；显示偏移只是挪画面，不改信号。(8) 探头 10x 把信号衰减 10 倍，屏幕读数变成 1/10；(9) 通道也设 10x，示波器把读数乘回 10，又对了，<strong>两边必须一致</strong>。(11) 触发电平必须落在波形的最小值和最大值之间，示波器才每次都从同一点开始画，画面才静止。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · Lab 1 Experiment 3 · The Capacitor in a Circuit</div>
+  <h2>电容的阻抗 1/(ωC) 随频率变小：输出变小，并且越来越滞后</h2>
+  <p class="lead">讲义 Expt 3 用 47 kΩ 和 1 nF，输入 5 V 峰值正弦波，CH1 看输入、CH2 看输出。讲义里 Figure 3 没有附图，这里按最常见的接法把输出取在电容两端（RC 低通），也可以切到电阻两端（高通）比较。量两条波形<strong>正向过零点</strong>之间的时间差 Δt，相位 = 360° × Δt/T。点「记录这一点」就像往 Excel 表里填一行。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-c="3,47,1,C">讲义：1 kHz，47 kΩ，1 nF</button><button data-c="3.53,47,1,C">f = f<sub>c</sub> ≈ 3.39 kHz</button><button data-c="4.3,47,1,C">20 kHz：明显变小、接近 −90°</button><button data-c="3,47,1,R">同一电路，输出取电阻（高通）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="cF">频率 f</label><input id="cF" type="range" min="2" max="5" step="0.01" value="3"><output id="cFO"></output></div>
+    <div class="ctl"><label for="cR">R</label><select id="cR"><option value="1">1 kΩ</option><option value="4.7">4.7 kΩ</option><option value="10">10 kΩ</option><option value="47" selected>47 kΩ</option><option value="100">100 kΩ</option></select><span></span></div>
+    <div class="ctl"><label for="cC">C</label><select id="cC"><option value="0.47">0.47 nF</option><option value="1" selected>1 nF</option><option value="2.2">2.2 nF</option><option value="10">10 nF</option></select><span></span></div>
+    <div class="ctl"><label for="cO">输出取在</label><select id="cO"><option value="C">电容两端（低通）</option><option value="R">电阻两端（高通）</option></select><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="cs" height="260" aria-label="双通道示波器：输入与输出"></canvas><canvas id="cb" height="260" aria-label="幅值比与相位随频率"></canvas></div>
+  <div class="read"><div><small>X<sub>C</sub> = 1/(2πfC)</small><b id="cX"></b></div><div><small>转折频率 f<sub>c</sub> = 1/(2πRC)</small><b id="cFc"></b></div><div><small>输出峰值 / 增益</small><b id="cVo" style="font-size:15px"></b></div><div><small>Δt（正 = 输出滞后）</small><b id="cDt"></b></div><div><small>相位 = 360°·Δt/T</small><b id="cPh"></b></div></div>
+  <div class="btns"><button id="cRec" class="play">记录这一点</button><button id="cSw">一键扫频 100 Hz – 100 kHz</button><button id="cClr">清空记录</button></div>
+  <div class="scroll rec"><table class="mini" id="cTab"><thead><tr><th>f</th><th>V<sub>in</sub> 峰值</th><th>V<sub>out</sub> 峰值</th><th>V<sub>out</sub>/V<sub>in</sub></th><th>Δt</th><th>相位滞后</th></tr></thead><tbody></tbody></table></div>
+  <p class="note"><strong>为什么：</strong>R 和 C 串联分压，V<sub>out</sub>/V<sub>in</sub> = X<sub>C</sub>/(R + X<sub>C</sub>)（复数）= 1/(1 + jωRC)。低频时 X<sub>C</sub> ≫ R，电容几乎「开路」，输出≈输入；f = f<sub>c</sub> 时 |H| = 1/√2 = 0.707、滞后 45°；高频时电容几乎「短路」，输出趋于 0、滞后趋于 90°。讲义 1 kHz 时 X<sub>C</sub> = 159 kΩ，所以输出约 4.79 V、滞后约 16°（Δt ≈ 45 µs）。<strong>量 Δt 用过零点</strong>：那里斜率最大，时间读得最准。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · Lab 3 · Thermistor Temperature Sensor</div>
+  <h2>热敏电阻温度计：分压器 + 同相放大器，再把公式倒过来算温度</h2>
+  <p class="lead">讲义 Figure 1：+15 V 经 R₁ = 22 kΩ 和热敏电阻 R<sub>T</sub> 分压得到 V₊，TL071 接成同相放大器，R₂ = R₃ = 4.7 kΩ，增益 1 + R₃/R₂ = 2。R<sub>T</sub> 用讲义的拟合 R(T) = 13.743 e<sup>−0.039T</sup> kΩ。拖温度看 V<sub>out</sub> 怎么变；在右边输入你实测的 V<sub>out</sub>，用公式 (3) 倒推 R<sub>T</sub> 和温度。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-h="22,15,4.7">实验室约 22 °C</button><button data-h="25,15,4.7">25 °C（R₂₅ 参考点）</button><button data-h="37,15,4.7">用手指捏住（35–40 °C）</button><button data-h="0,15,4.7">冰水 0 °C</button><button data-h="22,15,22">R₃ 换 22 kΩ：输出饱和</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="hT">温度 T (°C)</label><input id="hT" type="range" min="0" max="90" step="0.5" value="22"><output id="hTO"></output></div>
+    <div class="ctl"><label for="hV">电源 V<sub>cc</sub> (±V)</label><input id="hV" type="range" min="5" max="15" step="0.5" value="15"><output id="hVO"></output></div>
+    <div class="ctl"><label for="hR3">R₃（反馈）</label><select id="hR3"><option value="4.7" selected>4.7 kΩ（讲义）</option><option value="10">10 kΩ</option><option value="22">22 kΩ</option><option value="47">47 kΩ</option></select><span></span></div>
+    <div class="ctl"><label for="hM">你测到的 V<sub>out</sub> (V)</label><input id="hM" type="number" step="0.01" min="0" max="15" placeholder="例如 6.29"><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="hc" height="260" aria-label="热敏电阻测温电路"></canvas><canvas id="hg" height="260" aria-label="输出电压和热敏电阻阻值随温度"></canvas></div>
+  <div class="read"><div><small>R<sub>T</sub> = 13.743 e<sup>−0.039T</sup> kΩ</small><b id="hRT"></b></div><div><small>V₊ / V₋（有负反馈时相等）</small><b id="hVp" style="font-size:15px"></b></div><div><small>V<sub>out</sub></small><b id="hVo"></b></div><div><small>灵敏度 dV<sub>out</sub>/dT</small><b id="hS"></b></div><div><small>自热 P = V<sub>T</sub>²/R<sub>T</sub>，ΔT = P/(4.5 mW/K)</small><b id="hSH" style="font-size:15px"></b></div><div><small>由 V<sub>out</sub> 倒推（公式 3）</small><b id="hInv" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>两个功能块：</strong>分压器给出 V₊ = V<sub>cc</sub>·R<sub>T</sub>/(R₁+R<sub>T</sub>)，同相放大器乘上 (R₂+R₃)/R₂，合起来就是公式 (1)。倒过来：R<sub>T</sub> = R₁ / [ (V<sub>cc</sub>/V<sub>out</sub>)·(R₂+R₃)/R₂ − 1 ]，再由 T = ln(13.743/R<sub>T</sub>)/0.039 得温度。温度升高 → R<sub>T</sub> 变小（NTC）→ V<sub>out</sub> 下降。拟合式在 25 °C 给 5.17 kΩ，和标称 R₂₅ = 5 kΩ 差 3%，在 ±10% 容差内。<strong>排错：</strong>若 V₊ ≠ V₋，说明没有负反馈或输出已经饱和（接近电源电压）。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · LED Data Sheet Activity · Robot Snake Activity 1</div>
+  <h2>LED 为什么一定要串电阻：负载线和二极管曲线的交点</h2>
+  <p class="lead">LED 两端电压几乎固定（数据表 V<sub>F</sub>），电流却随电压指数上升，所以必须用串联电阻限流：I = (V<sub>s</sub> − V<sub>F</sub>)/R。左图蓝线是 LED 的 I–V 曲线，橙线是电阻的负载线，交点就是工作点；右边对照 Kingbright DLA/DLC 数据表的绝对最大额定值。最后一个预设是机器人蛇的红外信标：5 V 经两个 39 Ω 并联。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-l="0,5,150">红 LED，5 V，150 Ω</button><button data-l="1,5,150">绿 LED，5 V，150 Ω</button><button data-l="0,9,330">9 V 电池 + 330 Ω</button><button data-l="0,5,22">只串 22 Ω（过流）</button><button data-l="5,5,19.5">机器人蛇 IR 信标：5 V，39 Ω∥39 Ω</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="lC">LED</label><select id="lC"><option value="0">高效红 HER（…ID）</option><option value="1">绿 Green（…GD）</option><option value="2">黄 Yellow（…YD）</option><option value="3">超亮红 SRD</option><option value="4">超亮绿 SGD</option><option value="5">红外 IR（蛇的信标）</option></select><span></span></div>
+    <div class="ctl"><label for="lV">电源 V<sub>s</sub> (V)</label><input id="lV" type="range" min="0" max="12" step="0.1" value="5"><output id="lVO"></output></div>
+    <div class="ctl"><label for="lR">串联电阻 R (Ω)</label><input id="lR" type="range" min="10" max="1000" step="0.5" value="150"><output id="lRO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="lg" height="260" aria-label="LED 曲线与负载线"></canvas><canvas id="lb" height="260" aria-label="LED 亮度与额定值对照"></canvas></div>
+  <div class="read"><div><small>电流 I</small><b id="lI"></b></div><div><small>V<sub>LED</sub> / V<sub>R</sub>（相加 = V<sub>s</sub>）</small><b id="lVV" style="font-size:15px"></b></div><div><small>P<sub>LED</sub> / P<sub>R</sub></small><b id="lP" style="font-size:15px"></b></div><div><small>按数据表 V<sub>F</sub> 设计 20 mA</small><b id="lD" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>读数据表：</strong>V<sub>F</sub> 是在 I<sub>F</sub> = 20 mA 下测的（红 2.0 V，绿 2.2 V，最大 2.5 V）；绝对最大额定值是直流 25–30 mA、功耗 100–105 mW、反向 5 V，超过就可能烧坏。<strong>机器人蛇 Activity 1：</strong>量出两只 39 Ω 上的电压 V<sub>R</sub> 和 LED 上约 1.5 V，相加应等于 5 V（KVL），电流 = V<sub>R</sub>/19.5 Ω ≈ 0.18 A。用两个电阻并联就是为了让红外信标电流更大、发得更远。红外 LED 不在这份数据表里，图中曲线只是示意。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · Lab 5 · The Robot Snake</div>
+  <h2>机器人蛇：RC 放电时间 → 归一化阴影差 → 左右轮速度</h2>
+  <p class="lead">每只「眼睛」是一个光敏三极管并联 0.1 µF 电容。Arduino 先把电容充到 5 V，再测它放电到 2.1 V（逻辑低门限）用了多久：光越强，三极管电阻越小，放电越快，t = R<sub>pt</sub>C·ln(5/2.1)。然后算 nshade = t<sub>R</sub>/(t<sub>L</sub>+t<sub>R</sub>) − 0.5，按讲义代码给左右轮速度。<strong>点场地任意位置放信标</strong>，按「运行」看它追光。</p>
+  <div class="btns" role="group" aria-label="信标位置"><button data-b="0.25,0.25">信标在左上</button><button data-b="1.3,0.8">信标在右下</button><button data-b="0.7,0.9">信标在身后</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="gS">灵敏度系数</label><select id="gS"><option value="500">500</option><option value="1000" selected>1000（讲义）</option><option value="2000">2000</option></select><span></span></div>
+    <div class="ctl"><label for="gA">环境光</label><input id="gA" type="range" min="0" max="1" step="0.05" value="0.15"><output id="gAO"></output></div>
+  </div>
+  <div class="btns"><button id="gRun" class="play">▶ 运行</button><button id="gRst">重置位置</button><button id="gCL" aria-pressed="false">用手遮住左眼</button><button id="gCR" aria-pressed="false">用手遮住右眼</button></div>
+  <div class="stage even"><canvas id="ga" height="300" aria-label="机器人场地，点击放置信标"></canvas><canvas id="gw" height="300" aria-label="两只眼睛引脚上的放电波形"></canvas></div>
+  <div class="read"><div><small>t<sub>Left</sub> / t<sub>Right</sub></small><b id="gT" style="font-size:15px"></b></div><div><small>nshade = t<sub>R</sub>/(t<sub>L</sub>+t<sub>R</sub>) − 0.5</small><b id="gN"></b></div><div><small>speedLeft / speedRight</small><b id="gSp" style="font-size:15px"></b></div><div><small>动作</small><b id="gAct" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>代码逻辑（Activity 4）：</strong>nshade &gt; 0 说明右眼更暗（放电更慢），于是 speedLeft = 200 − nshade × 1000、右轮全速 200，左轮慢、车向左转，朝亮处走；nshade &lt; 0 则反过来减右轮。constrain 把速度限制在 ±200。系数越大，同样的 nshade 造成的速度差越大，转向越猛，也就是<strong>系数越大越灵敏</strong>（太大会左右摆动）。用的是比值而不是绝对时间，所以整体变亮变暗不影响方向。信标在身后时两只眼睛都看不到它，nshade ≈ 0，车只会直走，碰到墙弹回来才「看见」。这里三极管电阻与光强的关系是示意值。</p>
+</section>
+</div>
+
+<script>
+const SI=(v,u,d=3)=>{if(!isFinite(v))return '∞ '+u;if(Math.abs(v)<1e-12)return '0 '+u;const a=Math.abs(v);const P=[[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n']];for(const [s,p] of P){if(a>=s*0.9995||s===1e-9)return (+(v/s).toPrecision(d))+' '+p+u;}return '0 '+u;};
+const val=id=>+$(id).value;
+const same=(a,b)=>a===b||(a!==''&&b!==''&&+a===+b);
+function presets(n,attr,ids,after){
+  document.querySelectorAll(`#lab${n} [data-${attr}]`).forEach(b=>b.addEventListener('click',()=>{b.dataset[attr].split(',').forEach((v,i)=>$(ids[i]).value=v);if(after)after();Lab.draw(n);}));
+  ids.forEach(id=>$(id).addEventListener($(id).tagName==='SELECT'?'change':'input',()=>{if(after)after();Lab.draw(n);}));}
+const pressP=(n,attr,ids)=>pressGroup(`#lab${n} [data-${attr}]`,b=>b.dataset[attr].split(',').every((v,i)=>same(v,$(ids[i]).value)));
+/* schematic primitives */
+function wr(x,pts,col,lw=2){x.strokeStyle=col||css('--volt');x.lineWidth=lw;x.lineCap='round';x.lineJoin='round';x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke();}
+function resV(x,cx,y0,y1,col,h=46){const m=(y0+y1)/2;h=Math.min(h,(y1-y0)*.7);wr(x,[[cx,y0],[cx,m-h/2]]);wr(x,[[cx,m+h/2],[cx,y1]]);
+  x.fillStyle=css('--panel');x.fillRect(cx-8,m-h/2,16,h);x.strokeStyle=col||css('--volt');x.lineWidth=2;x.strokeRect(cx-8,m-h/2,16,h);return m;}
+function resH(x,y,x0,x1,col,w=46){const m=(x0+x1)/2;w=Math.min(w,(x1-x0)*.7);wr(x,[[x0,y],[m-w/2,y]]);wr(x,[[m+w/2,y],[x1,y]]);
+  x.fillStyle=css('--panel');x.fillRect(m-w/2,y-8,w,16);x.strokeStyle=col||css('--volt');x.lineWidth=2;x.strokeRect(m-w/2,y-8,w,16);return m;}
+function dot(x,px,py,col){x.fillStyle=col||css('--volt');x.beginPath();x.arc(px,py,3.5,0,7);x.fill();}
+function term(x,px,py){x.fillStyle=css('--panel');x.strokeStyle=css('--volt');x.lineWidth=2;x.beginPath();x.arc(px,py,4.5,0,7);x.fill();x.stroke();}
+function gnd(x,px,py){wr(x,[[px,py-6],[px,py]]);wr(x,[[px-10,py],[px+10,py]]);wr(x,[[px-6,py+4],[px+6,py+4]]);wr(x,[[px-2,py+8],[px+2,py+8]]);}
+/* oscilloscope screen: x in divisions 0..10, y in divisions -4..4 */
+function scope(x,W,H,o={}){const nx=10,ny=8,pl=o.pl??6,pr=o.pr??6,pt=o.pt??24,pb=o.pb??8,gw=W-pl-pr,gh=H-pt-pb,dx=gw/nx,dy=gh/ny;
+  x.fillStyle=css('--bg');x.fillRect(pl,pt,gw,gh);x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();
+  for(let i=0;i<=nx;i++){x.moveTo(pl+i*dx,pt);x.lineTo(pl+i*dx,pt+gh);}for(let j=0;j<=ny;j++){x.moveTo(pl,pt+j*dy);x.lineTo(pl+gw,pt+j*dy);}x.stroke();
+  x.strokeStyle=css('--line');x.beginPath();x.moveTo(pl,pt+gh/2);x.lineTo(pl+gw,pt+gh/2);x.moveTo(pl+gw/2,pt);x.lineTo(pl+gw/2,pt+gh);
+  for(let k=1;k<nx*5;k++){const px=pl+k*dx/5;x.moveTo(px,pt+gh/2-3);x.lineTo(px,pt+gh/2+3);}for(let k=1;k<ny*5;k++){const py=pt+k*dy/5;x.moveTo(pl+gw/2-3,py);x.lineTo(pl+gw/2+3,py);}x.stroke();
+  return {X:d=>pl+d*dx,Y:d=>pt+gh/2-d*dy,pl,pt,gw,gh,dx,dy,clip(){x.save();x.beginPath();x.rect(pl,pt,gw,gh);x.clip();}};}
+const nice=v=>{const e=Math.floor(Math.log10(v)),m=v/10**e;return +([1,1.5,2,2.5,3,4,5,6,8,10].find(q=>q>=m-1e-9)*10**e).toPrecision(3);};
+const seq125=v=>{const e=Math.floor(Math.log10(v)),m=v/10**e;return (m<=1.001?1:m<=2.001?2:m<=5.001?5:10)*10**e;};
+
+/* ---------- Lab 1: voltage divider ---------- */
+let gMode='vv';
+function lab1(){
+  const Vin=val('dV'),R1=val('dR1')*1e3,R2=val('dR2')*1e3,RLk=+$('dRL').value,RL=RLk>0?RLk*1e3:Infinity,ld=isFinite(RL);
+  $('dVO').textContent=Vin.toFixed(1)+' V';$('dR1O').textContent=SI(R1,'Ω');$('dR2O').textContent=SI(R2,'Ω');
+  pressP(1,'d',['dV','dR1','dR2','dRL']);pressGroup('#lab1 [data-g]',b=>b.dataset.g===gMode);
+  const R2e=ld?R2*RL/(R2+RL):R2,Rin=R1+R2e,I=Vin/Rin,Vo=I*R2e,VR1=I*R1,k=R2e/Rin,k0=R2/(R1+R2),Rout=R1*R2/(R1+R2),I2=Vo/R2,IL=ld?Vo/RL:0;
+  $('dVo').textContent=fmt(Vo,3)+' V';$('dI').textContent=SI(I,'A');$('dK').textContent=fmt(k,3)+(ld?`（空载 ${fmt(k0,3)}）`:'');
+  $('dRin').textContent=SI(Rin,'Ω');$('dRout').textContent=SI(Rout,'Ω');
+  /* circuit */
+  const [x,W,H]=fit($('dc'));const yT=34,yB=H-30,yA=(yT+yB)/2+4,xL=30,xc=Math.max(120,W*0.36),xA=W-26,xRL=Math.min(xc+(xA-xc)*0.55,xA-60);
+  wr(x,[[xL,yT],[xc,yT]]);wr(x,[[xL,yB],[xA,yB]]);wr(x,[[xc,yA],[xA,yA]]);
+  const m1=resV(x,xc,yT,yA,css('--amp')),m2=resV(x,xc,yA,yB,css('--blue'));
+  if(ld){resV(x,xRL,yA,yB,css('--purple'));dot(x,xRL,yA);dot(x,xRL,yB);label(x,'R_L '+SI(RL,'Ω'),xRL+13,(yA+yB)/2-4,css('--purple'),11);label(x,SI(IL,'A'),xRL+13,(yA+yB)/2+12,css('--purple'),11,'400');}
+  dot(x,xc,yA);dot(x,xc,yB);term(x,xL,yT);term(x,xL,yB);term(x,xA,yA);term(x,xA,yB);
+  label(x,'R₁ '+SI(R1,'Ω'),xc+14,m1-4,css('--amp'),12);label(x,fmt(VR1,3)+' V',xc+14,m1+13,css('--amp'),12,'400');
+  label(x,'R₂ '+SI(R2,'Ω'),xc+14,m2-4,css('--blue'),12);label(x,fmt(Vo,3)+' V',xc+14,m2+13,css('--blue'),12,'400');
+  arrow(x,xc-20,yT+12,xc-20,yT+40,css('--accent'),2,8);label(x,'I',xc-34,yT+30,css('--accent'),12);text(x,SI(I,'A'),xc-28,yT+48,css('--accent'),11,'right');
+  label(x,'+',xL-4,yT-10,css('--muted'),12);label(x,'V_in',xL+8,(yT+yB)/2-4,css('--ink'),13);label(x,fmt(Vin,3)+' V',xL+8,(yT+yB)/2+12,css('--muted'),12,'400');
+  label(x,'A',xA-4,yA-12,css('--ink'),12);label(x,'B',xA-4,yB+18,css('--ink'),12);label(x,'V_out',xA-46,yA+28,css('--blue'),12);label(x,fmt(Vo,3)+' V',xA-46,yA+44,css('--blue'),12,'400');
+  /* graph */
+  const [y,W2,H2]=fit($('dg'));
+  if(gMode==='vv'){const a=axes(y,W2,H2,{x0:0,x1:10,y0:0,y1:10,xt:[0,2,4,6,8,10],yt:[0,2,4,6,8,10],title:'V_out 与 V_R1 随 V_in（V）',pl:30,xl:'V_in (V)'});
+    if(ld){y.setLineDash([5,4]);plot(y,a.X,a.Y,v=>k0*v,0,10,css('--muted'),1.4,2);y.setLineDash([]);text(y,'空载',a.X(10)-4,a.Y(k0*10)-6,css('--muted'),11,'right');}
+    plot(y,a.X,a.Y,v=>(1-k)*v,0,10,css('--amp'),2,2);plot(y,a.X,a.Y,v=>k*v,0,10,css('--blue'),2.6,2);
+    text(y,'V_out，斜率 '+fmt(k,3),a.X(10)-4,a.Y(k*10)+16,css('--blue'),11,'right');text(y,'V_R1',a.X(10)-4,a.Y((1-k)*10)-6,css('--amp'),11,'right');
+    [[Vo,css('--blue')],[VR1,css('--amp')]].forEach(([v,c])=>{y.fillStyle=c;y.beginPath();y.arc(a.X(Vin),a.Y(v),5,0,7);y.fill();});}
+  else{const Imax=10/Rin*1e3,top=+(seq125(Imax*1.05)).toPrecision(2);const a=axes(y,W2,H2,{x0:0,x1:10,y0:0,y1:top,xt:[0,2,4,6,8,10],yt:[0,top/2,top],yf:v=>fmt(v,3),title:'总电流 I (mA) 随 V_in',pl:40,xl:'V_in (V)'});
+    plot(y,a.X,a.Y,v=>v/Rin*1e3,0,10,css('--accent'),2.6,2);text(y,'斜率 1/R_in = '+fmt(1e3/Rin,3)+' mA/V',a.X(0)+8,a.pt+14,css('--accent'),11);
+    y.fillStyle=css('--accent');y.beginPath();y.arc(a.X(Vin),a.Y(I*1e3),5,0,7);y.fill();}
+}
+presets(1,'d',['dV','dR1','dR2','dRL']);
+document.querySelectorAll('#lab1 [data-g]').forEach(b=>b.addEventListener('click',()=>{gMode=b.dataset.g;Lab.draw(1);}));
+Lab.add(1,lab1,{dc:220,dg:220});
+
+/* ---------- Lab 2: oscilloscope ---------- */
+const S2=['sF','sV','sDC','sT','sVd','sCp','sPr','sCh','sOff','sTl'];
+function lab2(){
+  const f=+(10**val('sF')).toPrecision(3),Vr=val('sV'),dc=val('sDC'),td=val('sT')*1e-3,Vd=val('sVd'),ac=$('sCp').value==='AC',pr=val('sPr'),ch=val('sCh'),off=val('sOff'),tl=val('sTl');
+  $('sFO').textContent=SI(f,'Hz');$('sVO').textContent=Vr.toFixed(1)+' V';$('sDCO').textContent=dc+' V';$('sOffO').textContent=off+' V';$('sTlO').textContent=tl.toFixed(1)+' V';
+  pressP(2,'s',S2);
+  const Vp=Math.SQRT2*Vr,k=(pr===10?0.1:1)*(ch===10?10:1),dcd=(ac?0:dc)*k,Vpd=Vp*k,lo=dcd-Vpd,hi=dcd+Vpd,trig=tl>lo&&tl<hi,T=1/f;
+  $('sP').textContent=`${SI(T,'s')}（${fmt(T/td,3)} 格）`;$('sPk').textContent=fmt(Vp,3)+' V';$('sPP').textContent=`${fmt(2*Vp,3)} V（${fmt(2*Vpd/Vd,3)} 格）`;
+  $('sDisp').textContent=fmt(Vpd,3)+' V'+(Math.abs(k-1)>1e-9?(k<1?'（读数只有 1/10！）':'（读数大了 10 倍！）'):'（= 真实值）');
+  $('sTr').textContent=trig?'✓ 稳定：电平在波形范围内':`✗ 不稳定：电平不在 ${fmt(lo,3)} … ${fmt(hi,3)} V 之间`;$('sTr').style.color=trig?css('--green'):css('--red');
+  const [x,W,H]=fit($('sc'));const S=scope(x,W,H,{pr:30});const th0=trig?Math.asin((tl-dcd)/Vpd):0;
+  const v=(th,d)=>(dcd+Vpd*Math.sin(th+2*Math.PI*f*(d-5)*td)+off)/Vd;
+  S.clip();
+  plot(x,S.X,S.Y,()=>0,0,10,css('--amp'),1.6,2);
+  if(trig)plot(x,S.X,S.Y,d=>v(th0,d),0,10,css('--red'),2.4,600);
+  else{x.globalAlpha=.4;[0,1.3,2.6,3.9,5.2].forEach(p=>plot(x,S.X,S.Y,d=>v(p,d),0,10,css('--red'),1.8,600));x.globalAlpha=1;}
+  x.restore();
+  /* markers */
+  const zy=S.Y(Math.max(-4,Math.min(4,off/Vd)));label(x,'1▸',S.pl+2,zy+4,css('--red'),11);
+  const ty=S.Y(Math.max(-4,Math.min(4,(tl+off)/Vd)));label(x,'◂T',S.pl+S.gw+3,ty+4,css('--accent'),11);
+  x.strokeStyle=css('--accent');x.setLineDash([3,4]);x.beginPath();x.moveTo(S.pl,S.Y((tl+off)/Vd));x.lineTo(S.pl+S.gw,S.Y((tl+off)/Vd));x.globalAlpha=.6;x.stroke();x.globalAlpha=1;x.setLineDash([]);
+  label(x,'▾T',S.X(5)-6,S.pt-2,css('--accent'),10);
+  text(x,`CH1 ${Vd} V/div · ${val('sT')} ms/div · ${ac?'AC':'DC'} · 探头 ${pr}x / 通道 ${ch}x`,S.pl,15,css('--muted'),12);
+  text(x,'CH2（未接）',S.pl+S.gw-4,S.Y(0)-5,css('--amp'),10,'right');
+  if(!trig)text(x,'未触发：每次扫描起点不同，波形在屏上左右乱跑',S.X(5),S.pt+18,css('--red'),12,'center');
+  if(hi/Vd+off/Vd>4.02||lo/Vd+off/Vd<-4.02)text(x,'波形超出屏幕，调大 V/div',S.X(5),S.pt+S.gh-8,css('--muted'),11,'center');
+}
+presets(2,'s',S2);
+Lab.add(2,lab2,{sc:250});
+
+/* ---------- Lab 3: capacitor in a circuit ---------- */
+const S3=['cF','cR','cC','cO'];let rec=[],recKey='';
+function cCalc(f){const R=val('cR')*1e3,C=val('cC')*1e-9,w=2*Math.PI*f,X=w*R*C,hp=$('cO').value==='R';
+  const g=hp?X/Math.hypot(1,X):1/Math.hypot(1,X),ph=hp?Math.atan(1/X):-Math.atan(X);return {R,C,w,g,ph,dt:-ph/w,hp};}
+function lab3(){
+  const f=+(10**val('cF')).toPrecision(3),c=cCalc(f),Vin=5,Vo=Vin*c.g,T=1/f,fc=1/(2*Math.PI*c.R*c.C);
+  $('cFO').textContent=SI(f,'Hz');pressP(3,'c',S3);
+  const key=['cR','cC','cO'].map(i=>$(i).value).join();if(key!==recKey){rec=[];recKey=key;}
+  $('cX').textContent=SI(1/(c.w*c.C),'Ω');$('cFc').textContent=SI(fc,'Hz');$('cVo').textContent=`${fmt(Vo,3)} V / ${fmt(c.g,3)}（${fmt(20*Math.log10(c.g),3)} dB）`;
+  $('cDt').textContent=SI(c.dt,'s');$('cPh').textContent=(c.ph<=0?'滞后 ':'超前 ')+(Math.abs(c.ph)*180/Math.PI).toFixed(1)+'°';
+  /* scope */
+  const [x,W,H]=fit($('cs'));const S=scope(x,W,H);const td=seq125(T*0.2),V1=2,V2=Math.max(seq125(Vo/3.5),0.01);
+  const t=d=>(d-2)*td;
+  S.clip();plot(x,S.X,S.Y,d=>Vin*Math.sin(c.w*t(d))/V1,0,10,css('--blue'),2.2,700);plot(x,S.X,S.Y,d=>Vo*Math.sin(c.w*t(d)+c.ph)/V2,0,10,css('--amp'),2.4,700);
+  const x0=S.X(2),x1=S.X(2+c.dt/td);x.strokeStyle=css('--muted');x.setLineDash([4,4]);x.lineWidth=1;x.beginPath();x.moveTo(x0,S.pt);x.lineTo(x0,S.pt+S.gh);x.moveTo(x1,S.pt);x.lineTo(x1,S.pt+S.gh);x.stroke();x.setLineDash([]);x.restore();
+  if(Math.abs(x1-x0)>6){const yy=S.pt+14;arrow(x,x0,yy,x1,yy,css('--accent'),1.6,7);arrow(x,x1,yy,x0,yy,css('--accent'),1.6,7);}
+  text(x,'Δt = '+SI(c.dt,'s'),Math.max(x0,x1)+6,S.pt+18,css('--accent'),11);
+  text(x,`CH1 输入 ${V1} V/div`,S.pl,15,css('--blue'),11);text(x,`CH2 输出 ${SI(V2,'V')}/div · ${SI(td,'s')}/div`,S.pl+S.gw,15,css('--amp'),11,'right');
+  /* bode-style plot */
+  const [y,W2,H2]=fit($('cb'));const a=axes(y,W2,H2,{x0:2,x1:5,y0:0,y1:1.05,xt:[2,3,4,5],xf:v=>['100 Hz','1 kHz','10 kHz','100 kHz'][v-2],yt:[0,0.25,0.5,0.707,1],title:'蓝：V_out/V_in　橙虚：相位（右轴）',pl:40,pr:36,xl:''});
+  const Yp=ph=>a.Y((ph*180/Math.PI+90)/180);
+  y.fillStyle=css('--muted');y.font=`11px ${css('--mono')}`;[['+90°',Math.PI/2],['0°',0],['−90°',-Math.PI/2]].forEach(([s,p])=>y.fillText(s,W2-a.pr+3,Yp(p)+4));
+  const lf=Math.log10(fc);if(lf>2&&lf<5){y.strokeStyle=css('--muted');y.setLineDash([3,4]);y.beginPath();y.moveTo(a.X(lf),a.pt);y.lineTo(a.X(lf),H2-a.pb);y.stroke();y.setLineDash([]);text(y,'f_c',a.X(lf)+4,H2-a.pb-6,css('--muted'),11);}
+  plot(y,a.X,a.Y,u=>cCalc(10**u).g,2,5,css('--blue'),2.4,300);y.setLineDash([6,4]);y.strokeStyle=css('--amp');plot(y,a.X,u=>Yp(u),u=>cCalc(10**u).ph,2,5,css('--amp'),2,300);y.setLineDash([]);
+  rec.forEach(r=>{const u=Math.log10(r.f);y.strokeStyle=css('--blue');y.lineWidth=1.6;y.beginPath();y.arc(a.X(u),a.Y(r.g),4.5,0,7);y.stroke();y.strokeStyle=css('--amp');y.beginPath();y.arc(a.X(u),Yp(r.ph),4.5,0,7);y.stroke();});
+  const u=Math.log10(f);y.fillStyle=css('--blue');y.beginPath();y.arc(a.X(u),a.Y(c.g),5.5,0,7);y.fill();y.fillStyle=css('--amp');y.beginPath();y.arc(a.X(u),Yp(c.ph),5.5,0,7);y.fill();
+  /* table */
+  $('cTab').tBodies[0].innerHTML=rec.length?rec.map(r=>`<tr><td>${SI(r.f,'Hz')}</td><td>5 V</td><td>${fmt(5*r.g,3)} V</td><td>${fmt(r.g,3)}</td><td>${SI(r.dt,'s')}</td><td>${(-r.ph*180/Math.PI).toFixed(1)}°</td></tr>`).join(''):'<tr><td colspan="6" style="color:var(--muted)">还没有记录。调好频率后点「记录这一点」，或一键扫频。</td></tr>';
+}
+function addRec(f){const c=cCalc(f);rec=rec.filter(r=>r.f!==f);rec.push({f,g:c.g,ph:c.ph,dt:c.dt});rec.sort((a,b)=>a.f-b.f);}
+presets(3,'c',S3);
+$('cRec').addEventListener('click',()=>{addRec(+(10**val('cF')).toPrecision(3));Lab.draw(3);});
+$('cSw').addEventListener('click',()=>{[100,200,500,1e3,2e3,5e3,1e4,2e4,5e4,1e5].forEach(addRec);Lab.draw(3);});
+$('cClr').addEventListener('click',()=>{rec=[];Lab.draw(3);});
+Lab.add(3,lab3,{cs:220,cb:220});
+
+/* ---------- Lab 4: thermistor ---------- */
+const S4=['hT','hV','hR3'],R1t=22e3,R2t=4.7e3,RTf=T=>13.743e3*Math.exp(-0.039*T);
+function lab4(){
+  const T=val('hT'),Vcc=val('hV'),R3=val('hR3')*1e3,G=1+R3/R2t,RT=RTf(T),Vp=Vcc*RT/(R1t+RT),Vsat=Vcc-1.5,Vi=G*Vp,sat=Vi>Vsat,Vo=sat?Vsat:Vi,Vm=Vo/G;
+  $('hTO').textContent=T.toFixed(1)+' °C';$('hVO').textContent='±'+Vcc+' V';pressP(4,'h',S4);
+  const out=t=>Math.min(G*Vcc*RTf(t)/(R1t+RTf(t)),Vsat),sens=(out(T+0.5)-out(T-0.5));
+  const P=Vp*Vp/RT;
+  $('hRT').textContent=SI(RT,'Ω');$('hVp').textContent=`${fmt(Vp,4)} V / ${fmt(Vm,4)} V`+(sat?' ✗ 不相等':'');$('hVp').style.color=sat?css('--red'):'';
+  $('hVo').textContent=fmt(Vo,4)+' V'+(sat?'（饱和）':'');$('hVo').style.color=sat?css('--red'):'';
+  $('hS').textContent=(sens*1e3).toFixed(0)+' mV/°C';$('hSH').textContent=`${SI(P,'W')} → ${fmt(P/4.5e-3,2)} K`;
+  const mv=$('hM').value.trim(),useM=mv!==''&&isFinite(+mv)&&+mv>0,Vmeas=useM?+mv:Vo,Vpm=Vmeas/G,RTm=Vpm<Vcc?R1t*Vpm/(Vcc-Vpm):NaN,Tm=Math.log(13.743e3/RTm)/0.039;
+  $('hInv').textContent=(isFinite(RTm)&&RTm>0)?`${useM?'你的读数':'当前 V_out'} → R_T = ${SI(RTm,'Ω')}，T ≈ ${fmt(Tm,3)} °C`+(!useM&&sat?'（饱和时算不准）':''):'读数超出范围';
+  /* circuit */
+  const [x,W,H]=fit($('hc'));const xD=Math.max(48,W*0.11),yT=26,yG=H-20,cy=H*0.46,yP=cy-14,opL=Math.max(xD+70,W*0.40),opR=opL+64,xm=opL-22,yN=cy+58,xo=Math.min(W-34,opR+46);
+  wr(x,[[xD,yP],[opL,yP]]);dot(x,xD,yP);
+  const mR1=resV(x,xD,yT,yP,css('--volt'),40),mRT=resV(x,xD,yP,yG-6,css('--red'),40);
+  wr(x,[[xD-14,mRT+18],[xD+14,mRT-18]],css('--red'),1.6);gnd(x,xD,yG);
+  label(x,'+'+Vcc+' V',xD-18,yT-8,css('--muted'),11);
+  label(x,'R₁ 22k',xD+14,mR1+4,css('--muted'),11);label(x,'R_T',xD+14,mRT-4,css('--red'),12);label(x,SI(RT,'Ω'),xD+14,mRT+12,css('--red'),11,'400');
+  x.strokeStyle=css('--volt');x.lineWidth=2;x.beginPath();x.moveTo(opL,cy-36);x.lineTo(opL,cy+36);x.lineTo(opR,cy);x.closePath();x.fillStyle=css('--panel');x.fill();x.stroke();
+  label(x,'+',opL+5,yP+5,css('--ink'),13);label(x,'−',opL+5,cy+18,css('--ink'),13);
+  wr(x,[[xm,cy+14],[opL,cy+14]]);wr(x,[[xm,cy+14],[xm,yN]]);dot(x,xm,yN);
+  resH(x,yN,xm,xo,css('--volt'),40);wr(x,[[xo,yN],[xo,cy]]);wr(x,[[opR,cy],[W-10,cy]]);dot(x,xo,cy);term(x,W-12,cy);
+  resV(x,xm,yN,yG-6,css('--volt'),34);gnd(x,xm,yG);
+  label(x,'R₃ '+SI(R3,'Ω'),(xm+xo)/2-24,yN-14,css('--muted'),11);label(x,'R₂ 4.7k',xm+12,(yN+yG)/2+4,css('--muted'),11);
+  label(x,'V₊ '+fmt(Vp,3)+' V',xD+14,yP-8,css('--accent'),11);if(xm-xD>110)label(x,'V₋ '+fmt(Vm,3),xm-60,cy+30,sat?css('--red'):css('--accent'),11);
+  label(x,'V_out',xo-6,cy-22,css('--blue'),12);label(x,fmt(Vo,3)+' V',xo-6,cy-8,sat?css('--red'):css('--blue'),12,'400');
+  /* graph */
+  const [y,W2,H2]=fit($('hg'));const a=axes(y,W2,H2,{x0:0,x1:90,y0:0,y1:15,xt:[0,20,40,60,80],yt:[0,5,10,15],title:'蓝：V_out (V)　红虚：R_T (kΩ，同刻度)',pl:30,xl:'T (°C)'});
+  y.setLineDash([3,4]);plot(y,a.X,a.Y,()=>Vsat,0,90,css('--muted'),1,2);y.setLineDash([]);text(y,'饱和 ≈ V_cc − 1.5 V',a.X(90)-4,a.Y(Vsat)-4,css('--muted'),10,'right');
+  y.setLineDash([6,4]);plot(y,a.X,a.Y,t=>RTf(t)/1e3,0,90,css('--red'),1.8,200);y.setLineDash([]);
+  plot(y,a.X,a.Y,out,0,90,css('--blue'),2.6,300);
+  y.fillStyle=css('--red');y.beginPath();y.arc(a.X(T),a.Y(RT/1e3),4.5,0,7);y.fill();y.fillStyle=css('--blue');y.beginPath();y.arc(a.X(T),a.Y(Vo),6,0,7);y.fill();
+  if(useM&&isFinite(Tm)&&Tm>=0&&Tm<=90){y.strokeStyle=css('--accent');y.setLineDash([4,3]);y.lineWidth=1.4;y.beginPath();y.moveTo(a.pl,a.Y(Vmeas));y.lineTo(a.X(Tm),a.Y(Vmeas));y.lineTo(a.X(Tm),H2-a.pb);y.stroke();y.setLineDash([]);text(y,fmt(Tm,3)+' °C',a.X(Tm)+4,H2-a.pb-6,css('--accent'),11);}
+}
+presets(4,'h',S4);$('hM').addEventListener('input',()=>Lab.draw(4));
+Lab.add(4,lab4,{hc:220,hg:220});
+
+/* ---------- Lab 5: LED + series resistor ---------- */
+const LEDS=[
+  {n:'高效红',vf:2.0,vmx:2.5,imax:0.030,pmax:0.105,col:'#e3342f',iref:0.02,nvt:0.05,rs:5},
+  {n:'绿',vf:2.2,vmx:2.5,imax:0.025,pmax:0.105,col:'#2fb34a',iref:0.02,nvt:0.05,rs:5},
+  {n:'黄',vf:2.1,vmx:2.5,imax:0.030,pmax:0.105,col:'#f0b400',iref:0.02,nvt:0.05,rs:5},
+  {n:'超亮红',vf:1.85,vmx:2.5,imax:0.030,pmax:0.100,col:'#ff2416',iref:0.02,nvt:0.05,rs:5},
+  {n:'超亮绿',vf:2.2,vmx:2.5,imax:0.025,pmax:0.105,col:'#3ad15a',iref:0.02,nvt:0.05,rs:5},
+  {n:'红外 IR',vf:1.45,vmx:NaN,imax:NaN,pmax:NaN,col:'#8a5bd6',iref:0.1,nvt:0.035,rs:0.5,ir:true}];
+const Vd=(L,i)=>L.vf+L.nvt*Math.log(i/L.iref)+L.rs*(i-L.iref);
+function ledOp(L,Vs,R){let lo=1e-12,hi=Vs/R;if(hi<=lo||Vs-lo*R-Vd(L,lo)<=0)return 0;for(let k=0;k<80;k++){const m=Math.sqrt(lo*hi);if(Vs-m*R-Vd(L,m)>0)lo=m;else hi=m;}return (lo+hi)/2;}
+const S5=['lC','lV','lR'];
+function lab5(){
+  const L=LEDS[val('lC')],Vs=val('lV'),R=val('lR');
+  $('lVO').textContent=Vs.toFixed(1)+' V';$('lRO').textContent=SI(R,'Ω');pressP(5,'l',S5);
+  const I=ledOp(L,Vs,R),VL=I>0?Vd(L,I):Vs,VR=I*R,PL=VL*I,PR=I*I*R;
+  const over=!L.ir&&(I>L.imax||PL>L.pmax);
+  $('lI').textContent=SI(I,'A');$('lI').style.color=over?css('--red'):'';$('lVV').textContent=`${fmt(VL,3)} V / ${fmt(VR,3)} V`;$('lP').textContent=`${SI(PL,'W')} / ${SI(PR,'W')}`;
+  const Rd=(Vs-L.vf)/0.02;$('lD').textContent=L.ir?'红外管没有这份数据表':Vs<=L.vf?`V_s 小于 V_F = ${L.vf} V，点不亮`:`R = (${Vs.toFixed(1)} − ${L.vf}) / 20 mA = ${fmt(Rd,4)} Ω`;
+  /* I-V */
+  const [x,W,H]=fit($('lg'));const isc=Vs/R,ytop=L.ir?Math.max(0.25,Math.min(isc,0.3)):Math.max(0.04,Math.min(Math.max(I*1.4,0.04),0.12)),ytopR=nice(ytop),xmax=Math.max(3,Math.ceil(Vs));
+  const a=axes(x,W,H,{x0:0,x1:xmax,y0:0,y1:ytopR,xt:Array.from({length:xmax+1},(_,i)=>i).filter(v=>xmax<=6||v%2===0),yt:[0,ytopR/2,ytopR],yf:v=>fmt(v*1e3,3),title:'I (mA) – V',pl:40,xl:'V (V)'});
+  if(!L.ir){x.setLineDash([4,4]);plot(x,a.X,a.Y,()=>L.imax,0,xmax,css('--red'),1.2,2);x.setLineDash([]);text(x,'额定 '+L.imax*1e3+' mA',a.X(0)+6,a.Y(L.imax)-4,css('--red'),10);}
+  x.strokeStyle=css('--blue');x.lineWidth=2.6;x.beginPath();let st=false;for(let k=0;k<=300;k++){const i=ytopR*1.2*k/300+1e-7,v=Vd(L,i);if(v<0||v>xmax){st=false;continue;}const px=a.X(v),py=a.Y(i);st?x.lineTo(px,py):x.moveTo(px,py);st=true;}x.stroke();
+  x.save();x.beginPath();x.rect(a.pl,a.pt,W-a.pl-a.pr,H-a.pt-a.pb);x.clip();plot(x,a.X,a.Y,v=>(Vs-v)/R,0,Vs,css('--amp'),2.2,2);x.restore();
+  text(x,'LED',a.X(Math.min(Vd(L,ytopR*0.9),xmax))-6,a.pt+14,css('--blue'),11,'right');
+  text(x,'负载线 (V_s − V)/R',a.X(Vs)-4,a.Y(0)-8,css('--amp'),11,'right');
+  if(I>0){x.fillStyle=css('--red');x.beginPath();x.arc(a.X(VL),a.Y(Math.min(I,ytopR)),6,0,7);x.fill();}
+  /* glow + rating bars */
+  const [y,W2,H2]=fit($('lb'));const cx=W2/2,cyy=62,br=L.ir?0:Math.min(I/0.02,1.6);
+  if(br>0){const g=y.createRadialGradient(cx,cyy,4,cx,cyy,30+30*br);g.addColorStop(0,L.col);g.addColorStop(1,'rgba(0,0,0,0)');y.globalAlpha=Math.min(1,0.25+0.6*br);y.fillStyle=g;y.beginPath();y.arc(cx,cyy,30+30*br,0,7);y.fill();y.globalAlpha=1;}
+  y.fillStyle=L.col;y.globalAlpha=L.ir?0.5:0.35+0.65*Math.min(br,1);y.beginPath();y.arc(cx,cyy,16,Math.PI,0);y.lineTo(cx+16,cyy+18);y.lineTo(cx-16,cyy+18);y.closePath();y.fill();y.globalAlpha=1;
+  y.strokeStyle=css('--volt');y.lineWidth=1.5;y.stroke();
+  text(y,L.ir?'红外：肉眼看不见（手机摄像头往往能拍到）':over?'⚠ 超过绝对最大额定值，LED 会损坏':I<1e-4?'几乎不亮':'正常发光',cx,cyy+40,over?css('--red'):css('--muted'),12,'center');
+  const bars=L.ir?[['电流 I（满格 200 mA）',I,0.2,'mA',1e3,'这只红外管没有数据表，不判断是否超额',false]]:[['电流 / 额定直流电流',I,L.imax,'mA',1e3,'',true],['LED 功耗 / 额定功耗',PL,L.pmax,'mW',1e3,'',true]];
+  bars.push(['电阻功耗 / ¼ W',PR,0.25,'mW',1e3,R<25&&R>15?'两只 39 Ω 并联时每只分一半：'+(PR/2*1e3).toPrecision(3)+' mW':'',true]);
+  const bx=16,bw=W2-32;bars.forEach(([n,v,mx,u,s,hint,judge],i)=>{const by=cyy+62+i*44,fr=v/mx,bad=judge&&fr>1;
+    y.fillStyle=css('--grid');y.fillRect(bx,by,bw,12);y.fillStyle=bad?css('--red'):css('--accent');y.fillRect(bx,by,bw*Math.min(fr,1),12);
+    text(y,`${n}：${+(v*s).toPrecision(3)} ${u}`+(judge?`（${(fr*100).toFixed(0)}%）`:''),bx,by-5,bad?css('--red'):css('--ink'),11);if(hint)text(y,hint,bx+bw,by+26,css('--muted'),10,'right');});
+}
+presets(5,'l',S5);
+Lab.add(5,lab5,{lg:220,lb:220});
+
+/* ---------- Lab 6: robot snake ---------- */
+const bot={x:0.5,y:0.75,h:-Math.PI/2,trail:[]},bcn={x:0.25,y:0.25},cov={L:false,R:false};let running=false,arrived=false,aspect=1.6;
+const Cs=0.1e-6,LN=Math.log(5/2.1);
+function eyes(){const out={};[['L',-1],['R',1]].forEach(([k,s])=>{const ex=bot.x+0.04*Math.cos(bot.h+s*0.6),ey=bot.y+0.04*Math.sin(bot.h+s*0.6),dir=bot.h+s*Math.PI/4,
+  d=Math.hypot(bcn.x-ex,bcn.y-ey),ang=Math.atan2(bcn.y-ey,bcn.x-ex)-dir,c=Math.max(0,Math.cos(ang));
+  let Lx=val('gA')+2*Math.pow(c,1.5)/(1+(d/0.3)**2);if(cov[k])Lx*=0.03;const R=100e3/(Lx+0.01);out[k]={x:ex,y:ey,dir,L:Lx,R,t:R*Cs*LN};});return out;}
+function ctrl(e){const sens=val('gS'),nd=e.R.t/(e.L.t+e.R.t)-0.5,cl=v=>Math.max(-200,Math.min(200,Math.trunc(v)));let sl,sr;
+  if(nd>0){sl=cl(200-nd*sens);sr=200;}else{sr=cl(200+nd*sens);sl=200;}return {nd,sl,sr};}
+function step6(dt){dt=Math.min(dt,0.05);const e=eyes(),c=ctrl(e),vmax=0.22,b=0.09,vl=c.sl/200*vmax,vr=c.sr/200*vmax,v=(vl+vr)/2;
+  bot.h-=(vr-vl)/b*dt;bot.x+=v*Math.cos(bot.h)*dt;bot.y+=v*Math.sin(bot.h)*dt;
+  if(bot.x<0.05||bot.x>aspect-0.05){bot.x=Math.max(0.05,Math.min(aspect-0.05,bot.x));bot.h=Math.PI-bot.h;}if(bot.y<0.05||bot.y>0.95){bot.y=Math.max(0.05,Math.min(0.95,bot.y));bot.h=-bot.h;}
+  bot.trail.push([bot.x,bot.y]);if(bot.trail.length>400)bot.trail.shift();
+  if(Math.hypot(bcn.x-bot.x,bcn.y-bot.y)<0.07){running=false;arrived=true;setRun();}
+  Lab.draw(6);}
+function setRun(){$('gRun').textContent=running?'❚❚ 暂停':'▶ 运行';$('gRun').setAttribute('aria-pressed',running);}
+function lab6(){
+  $('gAO').textContent=val('gA').toFixed(2);
+  pressGroup('#lab6 [data-b]',b=>{const [u,v]=b.dataset.b.split(',').map(Number);return Math.abs(u-bcn.x)<1e-6&&Math.abs(v-bcn.y)<1e-6;});
+  $('gCL').setAttribute('aria-pressed',cov.L);$('gCR').setAttribute('aria-pressed',cov.R);
+  const e=eyes(),c=ctrl(e);
+  $('gT').textContent=`${+(e.L.t*1e3).toPrecision(3)} ms / ${+(e.R.t*1e3).toPrecision(3)} ms`;$('gN').textContent=(c.nd>=0?'+':'')+c.nd.toFixed(3);$('gSp').textContent=`${c.sl} / ${c.sr}`;
+  $('gAct').textContent=arrived?'已到达信标':c.sl<c.sr-1?(c.sl<0?'原地左转（左轮反转）':'向左转'):c.sr<c.sl-1?(c.sr<0?'原地右转（右轮反转）':'向右转'):'直行';
+  /* arena */
+  const [x,W,H]=fit($('ga'));aspect=W/H;const s=H,P=(u,v)=>[u*s,v*s];
+  if(bcn.x>aspect-0.03)bcn.x=aspect-0.05;if(bot.x>aspect-0.05)bot.x=aspect-0.05;
+  x.fillStyle=css('--bg');x.fillRect(0,0,W,H);x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(0.5,0.5,W-1,H-1);
+  const [bx,by]=P(bcn.x,bcn.y);[60,40,22].forEach((r,i)=>{x.fillStyle=css('--purple');x.globalAlpha=0.07+i*0.06;x.beginPath();x.arc(bx,by,r,0,7);x.fill();});x.globalAlpha=1;
+  x.fillStyle=css('--purple');x.beginPath();x.arc(bx,by,7,0,7);x.fill();text(x,'IR 信标',bx,by-14,css('--purple'),11,'center');
+  if(bot.trail.length>1){x.strokeStyle=css('--accent');x.globalAlpha=.45;x.lineWidth=2;x.beginPath();bot.trail.forEach((p,i)=>{const [u,v]=P(p[0],p[1]);i?x.lineTo(u,v):x.moveTo(u,v);});x.stroke();x.globalAlpha=1;}
+  const [rx,ry]=P(bot.x,bot.y),r=0.045*s;x.save();x.translate(rx,ry);x.rotate(bot.h);
+  x.fillStyle=css('--volt');[[-1],[1]].forEach(([q])=>x.fillRect(-r*0.6,q*r-4*(q>0?0:1)-(q>0?0:0),r*1.2,4));
+  x.fillStyle=css('--panel');x.strokeStyle=css('--volt');x.lineWidth=2;x.beginPath();x.arc(0,0,r,0,7);x.fill();x.stroke();
+  x.fillStyle=css('--muted');x.beginPath();x.moveTo(r*0.75,0);x.lineTo(r*0.35,-r*0.25);x.lineTo(r*0.35,r*0.25);x.closePath();x.fill();x.restore();
+  ['L','R'].forEach(k=>{const E=e[k],[ex,ey]=P(E.x,E.y),col=k==='L'?css('--blue'):css('--amp');
+    x.strokeStyle=col;x.globalAlpha=.5;x.lineWidth=1.2;x.beginPath();x.moveTo(ex,ey);x.lineTo(ex+40*Math.cos(E.dir-0.35),ey+40*Math.sin(E.dir-0.35));x.moveTo(ex,ey);x.lineTo(ex+40*Math.cos(E.dir+0.35),ey+40*Math.sin(E.dir+0.35));x.stroke();x.globalAlpha=1;
+    x.fillStyle=cov[k]?css('--muted'):col;x.beginPath();x.arc(ex,ey,4.5,0,7);x.fill();});
+  text(x,arrived?'到达！点场地换个位置再运行':'点场地放信标',8,16,css('--muted'),11);
+  /* decay scope: 10 ms/div, 2 V/div, ground 2 div below centre */
+  const [y,W2,H2]=fit($('gw'));const S=scope(y,W2,H2,{pr:40});const tv=d=>d*10e-3,yv=v=>v/2-2;
+  S.clip();y.setLineDash([5,4]);plot(y,S.X,S.Y,()=>yv(2.1),0,10,css('--muted'),1.2,2);y.setLineDash([]);
+  [['L',css('--blue')],['R',css('--amp')]].forEach(([k,col])=>{const tau=e[k].R*Cs;plot(y,S.X,S.Y,d=>{const t=tv(d);return yv(t<1e-3?5:5*Math.exp(-(t-1e-3)/tau));},0,10,col,2.2,800);
+    const td=1e-3+e[k].t,xd=td/10e-3;if(xd<=10){y.strokeStyle=col;y.lineWidth=1;y.setLineDash([2,3]);y.beginPath();y.moveTo(S.X(xd),S.pt);y.lineTo(S.X(xd),S.pt+S.gh);y.stroke();y.setLineDash([]);}});
+  y.restore();
+  text(y,'2.1 V',S.pl+S.gw+4,S.Y(yv(2.1))+4,css('--muted'),10);text(y,'0 V',S.pl+S.gw+4,S.Y(yv(0))+4,css('--muted'),10);text(y,'5 V',S.pl+S.gw+4,S.Y(yv(5))+4,css('--muted'),10);
+  text(y,'引脚电压 · 10 ms/div · 2 V/div　蓝 左眼　橙 右眼',S.pl,15,css('--muted'),11);
+  ['L','R'].forEach((k,i)=>{if(1e-3+e[k].t>0.1)text(y,(k==='L'?'左':'右')+'眼放电超过 100 ms，超出屏幕',S.pl+6,S.pt+S.gh-8-i*14,k==='L'?css('--blue'):css('--amp'),11);});
+}
+$('gA').addEventListener('input',()=>Lab.draw(6));$('gS').addEventListener('change',()=>Lab.draw(6));
+$('gRun').addEventListener('click',()=>{running=!running;if(running)arrived=false;setRun();Lab.kick(anim6);});
+$('gRst').addEventListener('click',()=>{running=false;arrived=false;setRun();Object.assign(bot,{x:aspect/2,y:0.75,h:-Math.PI/2,trail:[]});Lab.draw(6);});
+$('gCL').addEventListener('click',()=>{cov.L=!cov.L;Lab.draw(6);});$('gCR').addEventListener('click',()=>{cov.R=!cov.R;Lab.draw(6);});
+document.querySelectorAll('#lab6 [data-b]').forEach(b=>b.addEventListener('click',()=>{const [u,v]=b.dataset.b.split(',').map(Number);bcn.x=Math.min(u,aspect-0.05);bcn.y=v;arrived=false;Lab.draw(6);}));
+$('ga').addEventListener('pointerdown',ev=>{const r=$('ga').getBoundingClientRect();bcn.x=(ev.clientX-r.left)/r.height;bcn.y=Math.max(0.04,Math.min(0.96,(ev.clientY-r.top)/r.height));arrived=false;Lab.draw(6);});
+Lab.add(6,lab6,{ga:230,gw:230});
+const anim6=Lab.anim(6,$('ga'),step6,()=>running);
+Lab.start();
+</script>
+</body></html>

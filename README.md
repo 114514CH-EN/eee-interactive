@@ -22,6 +22,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [滤波与谐振实验室](https://114514ch-en.github.io/eee-interactive/filter-lab/) | EE1 · Communications Circuits | RC / RL 低通高通 Bode 图与相量图、串联 RLC 谐振、三种阻尼 |
 | [傅里叶实验室](https://114514ch-en.github.io/eee-interactive/fourier-lab/) | EE1 Fourier / Maths Part B | 级数合成与吉布斯现象、rect ⟷ sinc 与线性相位、采样与混叠、傅里叶系数怎么来（正交性） |
 | [电机与变压器实验室](https://114514ch-en.github.io/eee-interactive/machines-lab/) | EE1 · Electrical Machines | 直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波 |
+| [EE1 实验课实验室](https://114514ch-en.github.io/eee-interactive/bench-lab/) | EE1 · Lab 1 / 3 / 5 | 分压器与负载效应、示波器读数（耦合 / 探头 / 触发）、RC 相移记录表、热敏电阻温度计与反推、LED 负载线与额定值、机器人蛇追光 |
 | [复习卡片](https://114514ch-en.github.io/eee-interactive/cards/) | Year 1 EE + Year 2 全部 | 自测题、易错点、勘误卡片，间隔重复（`?c=DE&l=DE5` 只看某一讲） |
 | [电路模拟器](https://114514ch-en.github.io/eee-interactive/circuit-sim/) | 模拟器 | 自己画电路：RC / RLC 瞬态、整流滤波、交流 RL、频率响应（Bode 图） |
 | [逻辑模拟器](https://114514ch-en.github.io/eee-interactive/logic-sim/) | 模拟器 | 门电路 + 触发器 + 逻辑分析仪 + 真值表：冒险、计数器、步进电机、SR 锁存器、防盗报警、化简对比 |
