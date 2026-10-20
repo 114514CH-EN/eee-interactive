@@ -18,6 +18,7 @@ GROUPS = [
      ['logic-lab', 'fsm-lab', 'afsm-lab', 'ac-phase-lab', 'power-lab']),
     ('Year 2 · 工程数学 2', 'ENGINEERING MATHEMATICS 2 · PART A / PART B', ['prob-lab', 'laplace-lab', 'fourier-lab']),
     ('Year 2 · 通信系统', 'COMMUNICATION SYSTEMS', ['coding-lab', 'comms-lab']),
+    ('Year 2 · 多学科系统与软件工程', 'MSSE · PYTHON · SYSML', ['msse-lab']),
     ('Year 1 · 电气工程 EE1', 'ELECTRICAL ENGINEERING 1',
      ['network-lab', 'amp-lab', 'digital-lab', 'acpower-lab', 'alu-lab', 'filter-lab', 'machines-lab', 'bench-lab']),
 ]
@@ -36,6 +37,7 @@ BLURB = {
     'laplace-lab': ('Part B · Week 1–3', 's 平面极点与响应、第二平移定理、卷积'),
     'fourier-lab': ('Part B · Week 4 / EE1 Fourier', '级数合成与吉布斯现象、rect ⟷ sinc、采样与混叠、系数积分与正交性'),
     'coding-lab': ('Week 1 / 3', '熵、Huffman / Fano / Shannon、分贝'),
+    'msse-lab': ('Python Lecture 1–2 / Module Overview', '切片、Python 2 vs 3 除法、列表推导式、浏览器里逐行跑 Python、Vee 模型'),
     'comms-lab': ('Week 3 + Useful Equations', '前缀码解码、分组编码、信道容量、链路预算、量化噪声、误码率、滤波器'),
     'network-lab': ('Network Theorems', '叠加原理、戴维宁 / 诺顿等效、节点电压法'),
     'amp-lab': ('Voltage Amplifiers', '加载效应、负反馈、运放四种接法与削顶、惠斯通电桥'),
@@ -62,6 +64,7 @@ KEYWORDS = {
     'laplace-lab': 'laplace 拉氏 极点 pole s 平面 阶跃 冲激 heaviside 卷积 convolution 传递函数',
     'fourier-lab': 'fourier 傅立叶 频谱 spectrum 吉布斯 gibbs 采样 sampling 混叠 aliasing 正交 orthogonality sinc',
     'coding-lab': '熵 entropy 霍夫曼 huffman 香农 shannon fano 分贝 db 编码',
+    'msse-lab': 'python 切片 slice 下标 index 除法 division 整除 floor 类型 type 列表推导式 list comprehension 循环 loop 别名 alias 字典 dict 异常 exception try except pyodide 逐行 trace vee 模型 验证 verification 确认 validation sysml 系统工程',
     'comms-lab': '前缀码 prefix 解码 decode 误码 信道容量 channel capacity shannon 带宽 snr 信噪比 天线 antenna friis 自由空间 路径损耗 链路预算 link budget 双径 量化 quantisation sqnr pcm 采样 nyquist 高斯 gaussian 误码率 ber 门限 butterworth chebyshev 滤波器',
     'network-lab': '叠加 superposition 戴维南 戴维宁 thevenin 诺顿 norton 节点 nodal 电导矩阵',
     'amp-lab': '放大器 amplifier 运放 op-amp 反馈 feedback 加载 loading 电桥 bridge 应变片',

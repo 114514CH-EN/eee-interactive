@@ -1,0 +1,441 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Python 与系统工程实验室</title>
+<meta name="description" content="MSSE 的五个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名和异常）、Vee 模型的验证与确认。讲义里 Python 2 写法和笔误都标出来了。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的五个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名和异常）、Vee 模型的验证与确认。讲义里 Python 2 写法和笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ctl select,.ctl input[type=text]{width:100%}
+.code{font:13px/1.6 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 0;margin:0;overflow-x:auto;white-space:pre;counter-reset:ln}
+.code div{padding:0 12px 0 44px;position:relative;min-height:1.6em}
+.code div::before{counter-increment:ln;content:counter(ln);position:absolute;left:0;width:30px;text-align:right;color:var(--muted);opacity:.7}
+.code div.cur{background:var(--fillA)}
+.code div.cur::after{content:'▶';position:absolute;left:33px;color:var(--amp);font-size:10px}
+.code div.err{background:rgba(196,58,49,.18)}
+.code div.hi{background:var(--fillB)}
+textarea{width:100%;min-height:190px;font:13px/1.6 var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;resize:vertical;tab-size:4}
+textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{font:13px/1.5 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0;min-height:60px;max-height:200px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.out .e{color:var(--red)}
+.vars{font:13px var(--mono);width:100%;border-collapse:collapse}
+.vars td,.vars th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.vars th{font:500 12px var(--body);color:var(--muted)}
+.vars tr.fr td{font:600 12px var(--body);color:var(--accent);background:var(--bg)}
+.vars tr.chg td:nth-child(2){color:var(--amp);font-weight:600}
+.oid{display:inline-block;font:600 11px var(--mono);border-radius:5px;padding:0 5px;margin-right:6px;color:var(--panel)}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.status{font-size:13px;color:var(--muted);margin:0}
+.steps{font:14px/1.9 var(--mono);margin:0;padding-left:0;list-style:none}
+.steps li{overflow-wrap:anywhere}
+.steps li::before{content:'→ ';color:var(--muted)}
+.steps li:first-child::before{content:''}
+.steps .last{color:var(--accent);font-weight:600}
+.steps .err{color:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips code{font:13px var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.info h3{font:600 17px var(--display);margin:0 0 4px}
+.info p{margin:4px 0;font-size:14px}
+.info .lbl{font:12px var(--mono);color:var(--accent);letter-spacing:.06em}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">MULTIDISCIPLINARY SYSTEMS AND SOFTWARE ENGINEERING · PYTHON · SYSML</div>
+  <h1>Python 与系统工程实验室</h1>
+  <p>对应 MSSE 的 Python 两讲（Basics 1 / 2）和课程概览里的系统开发流程。实验 1–3 纯网页即时运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · Lecture 1 String operations · Lecture 2 Sequences: Lists</div>
+  <h2>切片的下标指的是元素之间的「缝」：[a:b] 取 b − a 个</h2>
+  <p class="lead">把下标想成元素之间的刻度：0 在第一个元素左边，len 在最后一个右边，负数从右往左数。<code>s[a:b]</code> 取刻度 a 到 b 之间的元素（含 a 不含 b）；<code>s[i]</code> 取刻度 i 右边那一个。第三个数 step 是步长，负数就倒着走。输入任意字符串或列表试试。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-s="'Hello'|2">'Hello'[2]</button><button data-s="'Hello'|1:2">'Hello'[1:2]（讲义写成 'el'）</button><button data-s="'Hello'|-1">word[-1]</button><button data-s="['spam', 'eggs', 100, 1234, 4]|:2">a[:2]</button><button data-s="'Python'|::-1">[::-1] 反转</button><button data-s="'Python'|1::2">[1::2] 隔一个</button><button data-s="'Python'|-3:">[-3:] 最后三个</button><button data-s="'Hello'|5">'Hello'[5] 越界</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sSeq">序列</label><input id="sSeq" type="text" value="'Hello'" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="sIdx">[ … ] 里写</label><input id="sIdx" type="text" value="1:2" spellcheck="false"><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="sc" height="230" aria-label="序列的下标刻度与选中的元素"></canvas></div>
+  <div class="read"><div><small>表达式</small><b id="sExpr" style="font-size:15px"></b></div><div><small>结果</small><b id="sRes" style="font-size:15px"></b></div><div><small>等价的下标 range(start, stop, step)</small><b id="sRng" style="font-size:15px"></b></div><div><small>取到的个数</small><b id="sN"></b></div></div>
+  <p class="note"><strong>讲义勘误：</strong>Lecture 1 写 <code>'Hello'[1:2] → 'el'</code>，实际是 <code>'e'</code>（只取刻度 1–2 之间的一个），想要 'el' 得写 <code>[1:3]</code>。<strong>切片不会越界报错</strong>：<code>'Hello'[1:100]</code> 照样返回 'ello'，但单个下标 <code>'Hello'[5]</code> 会 IndexError。字符串和元组不可变，<code>word[0] = 'J'</code> 会 TypeError；列表可以改，也可以给切片赋值，如 <code>a[0:2] = [1, 12]</code>。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Lecture 1 Basic Datatypes / Real numbers</div>
+  <h2>同一个算式，Python 2 和 Python 3 的答案不一样</h2>
+  <p class="lead">讲义 Real numbers 那页把 <code>7 / 3 * 1.2 + 3 / 2</code> 一步步算成 3.4——那是 <strong>Python 2</strong> 的规则：两个整数相除做整除。你们实验用的是 <strong>Python 3</strong>：<code>/</code> 永远得到 float，整除要写 <code>//</code>。下面按 Python 的优先级和从左到右的顺序，一步只算一个运算，两种规则并排。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-e="7 / 3 * 1.2 + 3 / 2">讲义：7 / 3 * 1.2 + 3 / 2</button><button data-e="5 / 2">5 / 2（讲义说答案 2）</button><button data-e="-7 // 2">-7 // 2</button><button data-e="-7 % 2">-7 % 2</button><button data-e="2 ** 100">2 ** 100</button><button data-e="0.1 + 0.2">0.1 + 0.2</button><button data-e="-2 ** 2">-2 ** 2</button><button data-e="2 ** -1 + 1 / 2.0">2 ** -1 + 1 / 2.0</button></div>
+  <div class="controls"><div class="ctl"><label for="eIn">算式</label><input id="eIn" type="text" value="7 / 3 * 1.2 + 3 / 2" spellcheck="false" aria-describedby="eHelp"><span></span></div></div>
+  <p class="status" id="eHelp">支持整数、小数、括号和 + − * / // % **。</p>
+  <div class="two"><div><div class="tag">PYTHON 3（你们用的）</div><ol class="steps" id="e3"></ol></div><div><div class="tag">PYTHON 2（讲义那页的规则）</div><ol class="steps" id="e2"></ol></div></div>
+  <p class="note"><strong>记住四条：</strong>① 3 里 <code>/</code> 是真除法，<code>//</code> 是向下取整（往 −∞ 取，所以 <code>-7 // 2 = -4</code>），<code>%</code> 的符号跟除数一致（<code>-7 % 2 = 1</code>），总有 <code>a == (a // b) * b + a % b</code>。② int 和 float 混算结果是 float，「逐个运算符」转换。③ <code>**</code> 比负号优先，<code>-2 ** 2 = -4</code>；而且右结合。④ Python 的 int 没有位数上限（<code>2 ** 100</code> 精确），float 是双精度，<code>0.1 + 0.2 ≠ 0.3</code>。讲义的 <code>z = 5 / 2  # Answer is 2</code> 在 Python 3 里是 2.5。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · Lecture 2 List comprehensions</div>
+  <h2>列表推导式 = 一个 for 循环 + append，按顺序展开就看懂了</h2>
+  <p class="lead">推导式 <code>[表达式 for … in … if …]</code> 的 for 和 if 从左到右就是循环从外到内的嵌套顺序。左边是等价的普通循环，点「下一步」一轮一轮地走，右表记录每轮的变量、条件和加进结果的值。可以改 vec 的值。</p>
+  <div class="btns" role="group" aria-label="推导式"><button data-c="0">[3*x for x in vec]</button><button data-c="1">… if x &gt; 3</button><button data-c="2">[x*y for x in vec1 for y in vec2]</button><button data-c="3">[x+y …]（讲义写错的那条）</button><button data-c="4">[vec1[i]*vec2[i] for i in range(len(vec1))]</button><button data-c="5">{x: x**2 for x in vec}</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="cV">vec</label><input id="cV" type="text" value="[2, 4, 6]" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="cV1">vec1</label><input id="cV1" type="text" value="[2, 4, 6]" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="cV2">vec2</label><input id="cV2" type="text" value="[4, 3, -9]" spellcheck="false"><span></span></div>
+  </div>
+  <div class="btns"><button id="cNext" class="play">下一步</button><button id="cPlay">▶ 自动</button><button id="cAll">全部跑完</button><button id="cReset">重来</button></div>
+  <div class="two"><div><pre class="code" id="cSrc"></pre><pre class="code" id="cLoop" style="margin-top:10px"></pre></div><div class="scroll"><table class="mini" id="cTab"><thead></thead><tbody></tbody></table></div></div>
+  <div class="read"><div><small>result</small><b id="cRes" style="font-size:15px"></b></div><div><small>循环轮数 / 加入个数</small><b id="cCnt"></b></div></div>
+  <p class="note"><strong>讲义勘误：</strong><code>[{x: x**2} for x in vec}</code> 括号不配对，原意大概是字典推导式 <code>{x: x**2 for x in vec}</code>（或者得到一列单元素字典 <code>[{x: x**2} for x in vec]</code>）；<code>[x+y for x in vec1 and y in vec2]</code> 不是合法写法，它给出的结果 [6, 5, −7, 8, 7, −5, 10, 9, −3] 对应的是 <code>[x+y for x in vec1 for y in vec2]</code>。另外 Lecture 2 的 <code>print '4 is'</code>、<code>raw_input</code>、<code>tel.has_key('njc')</code>、<code>raise IOError, '…'</code> 都是 Python 2，在 3 里分别写 <code>print('4 is')</code>、<code>input</code>、<code>'njc' in tel</code>、<code>raise OSError('…')</code>。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · Lecture 2 Control flow / Functions / Sequences / Exceptions</div>
+  <h2>在浏览器里逐行执行真正的 Python 3：看变量怎么变</h2>
+  <p class="lead">选一个讲义里的例子（已改成 Python 3）或自己写，点「运行并记录」。程序跑完后可以前后拖动：<span style="color:var(--amp)">▶</span> 是<strong>即将执行</strong>的那一行，右边是此刻每一层函数里的变量（刚变过的标橙色）。同色的小方块 <span class="oid" style="background:var(--purple)">L1</span> 表示<strong>同一个对象</strong>——两个名字指向同一个列表就是「别名」。程序要用 <code>input()</code> 时依次从「输入」框里取。</p>
+  <div class="btns" role="group" aria-label="例子"><button data-p="prime">for … else 找素数</button><button data-p="fib">Fibonacci 与多重赋值</button><button data-p="alias">列表、别名与复制</button><button data-p="dict">字典与 del</button><button data-p="tryex">try / except 读数字</button><button data-p="lambda">lambda 闭包</button><button data-p="py2">讲义原样（Python 2）</button></div>
+  <textarea id="pSrc" spellcheck="false" aria-label="Python 代码"></textarea>
+  <div class="controls"><div class="ctl"><label for="pIn">输入（逗号分隔）</label><input id="pIn" type="text" value="" spellcheck="false"><span></span></div></div>
+  <div class="btns"><button id="pRun" class="play">运行并记录</button><button id="pFirst" aria-label="第一步">⏮</button><button id="pPrev" aria-label="上一步">◀</button><button id="pNext" aria-label="下一步">▶</button><button id="pLast" aria-label="最后一步">⏭</button><button id="pAuto">自动播放</button></div>
+  <div class="ctl" style="grid-template-columns:auto 1fr auto"><label for="pStep">步</label><input id="pStep" type="range" min="0" max="0" value="0" disabled><output id="pStepO">—</output></div>
+  <p class="status" id="pStat" aria-live="polite">还没运行。第一次点「运行并记录」会下载 Python（约 10 MB），之后就快了。</p>
+  <div class="two"><pre class="code" id="pView" aria-label="执行位置"></pre><div><table class="vars" id="pVars"><thead><tr><th>名字</th><th>值</th><th>类型</th></tr></thead><tbody></tbody></table><div class="tag" style="margin-top:10px">输出</div><pre class="out" id="pOut"></pre></div></div>
+  <p class="note"><strong>看点：</strong>「for … else」的 else 只在循环<strong>没被 break</strong> 时执行；讲义里 <code>n/x</code> 在 Python 3 会打印 2.0，改成了 <code>n//x</code>。「别名」例子里 <code>a = b = [1, 2]</code> 之后改 b，a 也变，因为它们是同一个对象；<code>a[:]</code> 才是复制。「try / except」里 <code>int('abc')</code> 抛 ValueError，直接跳到 except，try 里剩下的行不执行。最后一个是讲义第一讲的原代码 <code>print x</code>，Python 3 直接 SyntaxError。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · Module Overview · System development lifecycle / “Vee” process</div>
+  <h2>Vee 模型：左边一层层分解设计，右边一层层对着设计去测</h2>
+  <p class="lead">讲义：Vee 过程把开发看成「设计」和「测试」两条腿，中间用验证（verification）和确认（validation）连起来保证质量。左腿自顶向下（top-down，分解），底部写代码，右腿自底向上（bottom-up，组装）测试；每个测试阶段对照的是<strong>同一高度</strong>的设计文档。点任意一格看它做什么，例子是一个联网的智能温控器。</p>
+  <div class="btns" role="group" aria-label="阶段"><button data-v="0">用户需求</button><button data-v="1">系统需求</button><button data-v="2">架构设计</button><button data-v="3">模块设计</button><button data-v="4">编码实现</button><button data-v="5">单元测试</button><button data-v="6">集成测试</button><button data-v="7">系统测试</button><button data-v="8">验收测试</button></div>
+  <div class="stage even"><canvas id="vc" height="300" aria-label="Vee 模型，点击阶段查看说明" style="cursor:pointer"></canvas><div class="info" id="vInfo"></div></div>
+  <p class="note"><strong>两个容易混的词：</strong>verification 问「我们是不是<strong>把东西做对了</strong>」（符合规格书，右腿下面三层主要在做这个）；validation 问「我们是不是<strong>做了对的东西</strong>」（真的满足用户需要，最上面的验收测试）。越早发现的错误越便宜：需求错了要到最后的验收才暴露，整条 V 都要返工。课程后半段的 SysML 就是左腿用的建模语言：需求图、块定义图 / 内部块图（结构）、活动图 / 状态机图（行为）。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------- Lab 1: indexing and slicing ---------- */
+function parseSeq(t){t=t.trim();if(/^(['"]).*\1$/s.test(t))return {str:true,items:[...t.slice(1,-1)]};
+  if(t.startsWith('[')&&t.endsWith(']')){const s=t.slice(1,-1),out=[];let cur='',q=null;for(const ch of s){if(q){cur+=ch;if(ch===q)q=null;}else if(ch==="'"||ch==='"'){q=ch;cur+=ch;}else if(ch===','){out.push(cur.trim());cur='';}else cur+=ch;}if(cur.trim())out.push(cur.trim());return {str:false,items:out};}
+  return {str:true,items:[...t]};}
+function parseIdx(t){const parts=t.split(':');if(parts.length>3)throw '下标里最多两个冒号';const num=p=>{p=p.trim();if(p==='')return null;if(!/^[+-]?\d+$/.test(p))throw `「${p}」不是整数`;return parseInt(p,10);};
+  return parts.length===1?{single:num(parts[0])}:{start:num(parts[0]),stop:num(parts[1]),step:parts.length===3?num(parts[2]):null};}
+function sliceIdx(n,a,b,c){const step=c===null?1:c;if(step===0)throw 'ValueError: slice step cannot be zero';
+  const fix=(v,def,lo,hi)=>{if(v===null)return def;if(v<0){v+=n;if(v<lo)v=lo;}else if(v>hi)v=hi;return v;};
+  let start,stop;if(step>0){start=fix(a,0,0,n);stop=fix(b,n,0,n);}else{start=fix(a,n-1,-1,n-1);stop=fix(b,-1,-1,n-1);}
+  const idx=[];if(step>0)for(let i=start;i<stop;i+=step)idx.push(i);else for(let i=start;i>stop;i+=step)idx.push(i);return {start,stop,step,idx};}
+const reprItem=(s,ch)=>s?ch:ch;
+function lab1(){
+  const q=$('sSeq').value,ix=$('sIdx').value;pressGroup('#lab1 [data-s]',b=>b.dataset.s===q+'|'+ix);
+  const S=parseSeq(q),n=S.items.length;let err=null,sel=[],info=null,single=null;
+  try{const p=parseIdx(ix);if('single' in p){if(p.single===null)throw 'SyntaxError: 下标不能为空';const i=p.single<0?p.single+n:p.single;if(i<0||i>=n)throw `IndexError: ${S.str?'string':'list'} index out of range`;sel=[i];single=p.single;}
+    else{info=sliceIdx(n,p.start,p.stop,p.step);sel=info.idx;}}catch(e){err=String(e);}
+  $('sExpr').textContent=`${q.trim()}[${ix}]`;
+  const res=err?err:single!==null?(S.str?`'${S.items[sel[0]]}'`:S.items[sel[0]]):(S.str?`'${sel.map(i=>S.items[i]).join('')}'`:`[${sel.map(i=>S.items[i]).join(', ')}]`);
+  $('sRes').textContent=res;$('sRes').style.color=err?css('--red'):'';
+  $('sRng').textContent=err?'—':info?`range(${info.start}, ${info.stop}, ${info.step}) → [${info.idx.join(', ')}]`:`单个下标 ${single}${single<0?` → ${single} + ${n} = ${sel[0]}`:''}`;
+  $('sN').textContent=err?'—':sel.length;
+  /* drawing */
+  const [x,W,H]=fit($('sc'));const show=Math.min(n,24),cw=Math.min(56,(W-60)/Math.max(show,1)),x0=(W-cw*show)/2,yc=96,ch=44;
+  if(n>24)text(x,`（只画前 24 个，共 ${n} 个）`,8,16,css('--muted'),11);
+  text(x,'正向',x0-10,yc-ch/2-12,css('--blue'),11,'right');text(x,'负向',x0-10,yc+ch/2+26,css('--amp'),11,'right');
+  for(let i=0;i<show;i++){const px=x0+i*cw,k=sel.indexOf(i);x.fillStyle=k>=0?(err?css('--fillA'):css('--fillB')):css('--bg');x.fillRect(px+1,yc-ch/2,cw-2,ch);
+    x.strokeStyle=k>=0?css('--blue'):css('--line');x.lineWidth=k>=0?2:1;x.strokeRect(px+1,yc-ch/2,cw-2,ch);
+    const t=S.items[i];x.font=`600 ${Math.min(18,cw*0.42)}px ${css('--mono')}`;x.fillStyle=css('--ink');x.textAlign='center';x.fillText(t.length*cw*0.3>cw*1.6?t.slice(0,4)+'…':t,px+cw/2,yc+6);
+    if(k>=0&&sel.length>1){x.font=`10px ${css('--mono')}`;x.fillStyle=css('--accent');x.fillText('#'+(k+1),px+cw/2,yc+ch/2-4);}x.textAlign='left';}
+  /* boundary ticks */
+  for(let i=0;i<=show;i++){const px=x0+i*cw;x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();x.moveTo(px,yc-ch/2-12);x.lineTo(px,yc-ch/2);x.moveTo(px,yc+ch/2);x.lineTo(px,yc+ch/2+12);x.stroke();
+    x.font=`11px ${css('--mono')}`;x.textAlign='center';x.fillStyle=css('--blue');x.fillText(String(i),px,yc-ch/2-16);x.fillStyle=css('--amp');if(i<n)x.fillText(String(i-n),px,yc+ch/2+26);x.textAlign='left';}
+  /* slice markers / path */
+  if(!err&&info){const st=info.step,bx=i=>x0+Math.max(0,Math.min(show,i))*cw;
+    const ga=st>0?info.start:info.start+1,gb=st>0?info.stop:info.stop+1;  /* boundary positions of start/stop */
+    [[ga,'start',css('--green')],[gb,'stop',css('--red')]].forEach(([g,nm,c],j)=>{const px=bx(g);x.strokeStyle=c;x.lineWidth=2.4;x.beginPath();x.moveTo(px,yc-ch/2-28);x.lineTo(px,yc+ch/2+34);x.stroke();text(x,nm,px+(j?4:-4),yc-ch/2-32,c,11,j?'left':'right');});
+    if(sel.length>1){x.strokeStyle=css('--accent');x.lineWidth=1.6;for(let k=0;k<sel.length-1&&k<40;k++){const a1=x0+sel[k]*cw+cw/2,a2=x0+sel[k+1]*cw+cw/2;if(sel[k]>=show||sel[k+1]>=show)break;const yy=yc+ch/2+66,h=Math.min(24,Math.abs(a2-a1)/3);x.beginPath();x.moveTo(a1,yy);x.quadraticCurveTo((a1+a2)/2,yy+h,a2,yy);x.stroke();arrow(x,a2-(a2-a1)*0.02,yy+1,a2,yy,css('--accent'),1.6,7);}
+      text(x,`step = ${st}`,x0,yc+ch/2+96,css('--accent'),11);}}
+  if(!err&&single!==null){const px=x0+sel[0]*cw;arrow(x,px+cw/2,yc-ch/2-46,px+cw/2,yc-ch/2-4,css('--accent'),2,8);}
+  if(err)text(x,err,W/2,H-12,css('--red'),13,'center');
+}
+['sSeq','sIdx'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-s]').forEach(b=>b.addEventListener('click',()=>{const [s,i]=b.dataset.s.split('|');$('sSeq').value=s;$('sIdx').value=i;Lab.draw(1);}));
+Lab.add(1,lab1,{sc:210});
+
+/* ---------- Lab 2: step-by-step arithmetic, Python 2 vs 3 ---------- */
+function tokenize(s){const T=[];let i=0;while(i<s.length){const c=s[i];if(/\s/.test(c)){i++;continue;}
+  const m=/^(\d+\.\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?|\d+[eE][+-]?\d+|\d+)/.exec(s.slice(i));
+  if(m){const t=m[1];T.push(/[.eE]/.test(t)?{t:'num',v:{k:'float',v:parseFloat(t)}}:{t:'num',v:{k:'int',v:BigInt(t)}});i+=t.length;continue;}
+  const op=['**','//','+','-','*','/','%','(',')'].find(o=>s.startsWith(o,i));if(!op)throw `SyntaxError: 不认识的字符「${c}」`;T.push({t:'op',v:op});i+=op.length;}return T;}
+function parse(s){const T=tokenize(s);let p=0;const peek=()=>T[p],eat=v=>{if(T[p]&&T[p].v===v){p++;return true;}return false;};
+  const atom=()=>{const t=T[p];if(!t)throw 'SyntaxError: 算式不完整';if(t.t==='num'){p++;return {t:'num',v:t.v};}if(eat('(')){const e=expr();if(!eat(')'))throw 'SyntaxError: 缺右括号';e.par=true;return e;}throw `SyntaxError: 这里不该是「${t.v}」`;};
+  const power=()=>{const a=atom();if(eat('**')){const b=factor();return {t:'bin',op:'**',l:a,r:b};}return a;};
+  const factor=()=>{if(eat('-')){const e=factor();if(e.t==='num'&&!e.par)return {t:'num',v:e.v.k==='int'?{k:'int',v:-e.v.v}:{k:'float',v:-e.v.v}};return {t:'neg',e};}if(eat('+'))return factor();return power();};
+  const term=()=>{let a=factor();for(;;){const t=peek();if(t&&t.t==='op'&&['*','/','//','%'].includes(t.v)){p++;a={t:'bin',op:t.v,l:a,r:factor()};}else return a;}};
+  const expr=()=>{let a=term();for(;;){const t=peek();if(t&&t.t==='op'&&(t.v==='+'||t.v==='-')){p++;a={t:'bin',op:t.v,l:a,r:term()};}else return a;}};
+  const e=expr();if(p<T.length)throw `SyntaxError: 多余的「${T[p].v}」`;return e;}
+function fnum(x){if(x.k==='int')return x.v.toString();const v=x.v;if(Number.isNaN(v))return 'nan';if(!isFinite(v))return v>0?'inf':'-inf';
+  const a=Math.abs(v);if(a!==0&&(a>=1e16||a<1e-4)){let s=v.toExponential();if(!/\./.test(s.split('e')[0])&&false)s=s;return s.replace(/e([+-])(\d)$/,'e$10$2');}
+  if(Number.isInteger(v))return v.toFixed(1);return String(v);}
+const F=x=>x.k==='int'?Number(x.v):x.v;
+function apply(op,a,b,py2){const ii=a.k==='int'&&b.k==='int',zero=b.k==='int'?b.v===0n:b.v===0;
+  if((op==='/'||op==='//'||op==='%')&&zero)throw `ZeroDivisionError: ${b.k==='int'&&a.k==='int'?'integer ':''}division${op==='%'?' or modulo':''} by zero`;
+  const fdiv=(p,q)=>{let r=p/q;if(p%q!==0n&&((p<0n)!==(q<0n)))r-=1n;return r;};
+  switch(op){case '+':return ii?{k:'int',v:a.v+b.v}:{k:'float',v:F(a)+F(b)};case '-':return ii?{k:'int',v:a.v-b.v}:{k:'float',v:F(a)-F(b)};case '*':return ii?{k:'int',v:a.v*b.v}:{k:'float',v:F(a)*F(b)};
+    case '/':return ii&&py2?{k:'int',v:fdiv(a.v,b.v)}:{k:'float',v:F(a)/F(b)};
+    case '//':return ii?{k:'int',v:fdiv(a.v,b.v)}:{k:'float',v:Math.floor(F(a)/F(b))};
+    case '%':if(ii){let r=a.v%b.v;if(r!==0n&&((r<0n)!==(b.v<0n)))r+=b.v;return {k:'int',v:r};}{const p=F(a),q=F(b);let r=p%q;if(r!==0&&((r<0)!==(q<0)))r+=q;return {k:'float',v:r};}
+    case '**':if(ii&&b.v>=0n){if(b.v>5000n)throw '指数太大，这里不算';return {k:'int',v:a.v**b.v};}
+      {const p=F(a),q=F(b);if(p===0&&q<0)throw 'ZeroDivisionError: 0.0 cannot be raised to a negative power';if(p<0&&!Number.isInteger(q))throw py2?'ValueError: negative number cannot be raised to a fractional power':'结果是复数（Python 3 返回 complex，这里不展开）';return {k:'float',v:Math.pow(p,q)};}}}
+const PREC={'+':1,'-':1,'*':2,'/':2,'//':2,'%':2,'**':4};
+function show(n){if(n.t==='num'){const s=fnum(n.v);return n.par?'('+s+')':s;}let s;
+  if(n.t==='neg')s='-'+show(n.e);else s=`${show(n.l)} ${n.op} ${show(n.r)}`;return n.par?'('+s+')':s;}
+function stepOnce(n,py2){/* returns [newNode, done?] evaluating the first reducible node in post-order */
+  if(n.t==='num')return null;
+  if(n.t==='neg'){if(n.e.t!=='num'){const r=stepOnce(n.e,py2);if(r.t!=='num')return {...n,e:r};n={...n,e:r};}const v=n.e.v;return {t:'num',v:v.k==='int'?{k:'int',v:-v.v}:{k:'float',v:-v.v}};}
+  if(n.l.t!=='num')return {...n,l:stepOnce(n.l,py2)};if(n.r.t!=='num')return {...n,r:stepOnce(n.r,py2)};
+  return {t:'num',v:apply(n.op,n.l.v,n.r.v,py2)};}
+function trace(src,py2){const out=[];let n;try{n=parse(src);}catch(e){return {steps:[],err:String(e)};}
+  out.push(show(n));try{let k=0;while(n.t!=='num'&&k++<200){n=stepOnce(n,py2);out.push(show(n));}}catch(e){return {steps:out,err:String(e)};}
+  return {steps:out,err:null,type:n.v.k};}
+function lab2(){
+  const src=$('eIn').value;pressGroup('#lab2 [data-e]',b=>b.dataset.e===src.trim());
+  [['e3',false],['e2',true]].forEach(([id,py2])=>{const r=trace(src,py2);
+    $(id).innerHTML=r.steps.map((s,i)=>`<li class="${i===r.steps.length-1&&!r.err?'last':''}">${esc(s)}</li>`).join('')+(r.err?`<li class="err">${esc(r.err)}</li>`:`<li style="color:var(--muted);font-size:12px">类型：${r.type}</li>`);});
+}
+$('eIn').addEventListener('input',()=>Lab.draw(2));
+document.querySelectorAll('#lab2 [data-e]').forEach(b=>b.addEventListener('click',()=>{$('eIn').value=b.dataset.e;Lab.draw(2);}));
+Lab.add(2,lab2);
+
+/* ---------- Lab 3: list comprehensions ---------- */
+const pyl=a=>'['+a.join(', ')+']';
+const COMP=[
+  {src:'[3*x for x in vec]',loop:['result = []','for x in vec:','    result.append(3*x)'],uses:['vec'],
+   gen:V=>V.vec.map(x=>({env:{x},ok:true,val:3*x,lines:[1,2]})),cols:['x']},
+  {src:'[3*x for x in vec if x > 3]',loop:['result = []','for x in vec:','    if x > 3:','        result.append(3*x)'],uses:['vec'],
+   gen:V=>V.vec.map(x=>({env:{x},ok:x>3,val:3*x,lines:x>3?[1,2,3]:[1,2],cond:`${x} > 3`})),cols:['x']},
+  {src:'[x*y for x in vec1 for y in vec2]',loop:['result = []','for x in vec1:','    for y in vec2:','        result.append(x*y)'],uses:['vec1','vec2'],
+   gen:V=>V.vec1.flatMap(x=>V.vec2.map(y=>({env:{x,y},ok:true,val:x*y,lines:[1,2,3]}))),cols:['x','y']},
+  {src:'[x+y for x in vec1 for y in vec2]',loop:['result = []','for x in vec1:','    for y in vec2:','        result.append(x+y)'],uses:['vec1','vec2'],
+   gen:V=>V.vec1.flatMap(x=>V.vec2.map(y=>({env:{x,y},ok:true,val:x+y,lines:[1,2,3]}))),cols:['x','y']},
+  {src:'[vec1[i]*vec2[i] for i in range(len(vec1))]',loop:['result = []','for i in range(len(vec1)):','    result.append(vec1[i]*vec2[i])'],uses:['vec1','vec2'],
+   gen:V=>V.vec1.map((a,i)=>{const b=V.vec2[i];return {env:{i},ok:true,val:b===undefined?'IndexError':a*b,lines:[1,2],note:`${a}*${b===undefined?'?':b}`};}),cols:['i']},
+  {src:'{x: x**2 for x in vec}',loop:['result = {}','for x in vec:','    result[x] = x**2'],uses:['vec'],dict:true,
+   gen:V=>V.vec.map(x=>({env:{x},ok:true,val:`${x}: ${x**2}`,key:x,lines:[1,2]})),cols:['x']}];
+let cSel=0,cK=0,cPlaying=false;
+function cVals(){const p=id=>{const m=$(id).value.match(/-?\d+(?:\.\d+)?/g)||[];return m.map(Number);};return {vec:p('cV'),vec1:p('cV1'),vec2:p('cV2')};}
+function lab3(){
+  const C=COMP[cSel],V=cVals(),it=C.gen(V);cK=Math.min(cK,it.length);
+  pressGroup('#lab3 [data-c]',b=>+b.dataset.c===cSel);
+  ['cV','cV1','cV2'].forEach((id,i)=>$(id).closest('.ctl').style.opacity=C.uses.includes(['vec','vec1','vec2'][i])?1:0.4);
+  $('cSrc').innerHTML=`<div class="hi">result = ${esc(C.src)}</div>`;
+  const cur=cK>0?it[cK-1]:null;
+  $('cLoop').innerHTML=C.loop.map((l,i)=>`<div class="${cur&&cur.lines.includes(i)?(i===cur.lines[cur.lines.length-1]?'cur':'hi'):''}">${esc(l)}</div>`).join('');
+  const head=`<tr><th>轮</th>${C.cols.map(c=>`<th>${c}</th>`).join('')}${C.src.includes(' if ')?'<th>条件</th>':''}<th>加入</th></tr>`;$('cTab').tHead.innerHTML=head;
+  $('cTab').tBodies[0].innerHTML=it.slice(0,cK).map((r,k)=>`<tr${k===cK-1?' style="background:var(--fillA)"':''}><td>${k+1}</td>${C.cols.map(c=>`<td>${r.env[c]}</td>`).join('')}${C.src.includes(' if ')?`<td style="color:${r.ok?'var(--green)':'var(--red)'}">${r.cond} → ${r.ok?'True':'False'}</td>`:''}<td>${r.ok?esc(String(r.val)):'—'}</td></tr>`).join('')||`<tr><td colspan="5" style="color:var(--muted)">点「下一步」开始</td></tr>`;
+  const got=it.slice(0,cK).filter(r=>r.ok);let res;
+  if(C.dict){const m=new Map();got.forEach(r=>m.set(r.key,r.val));res='{'+[...m.values()].join(', ')+'}';}else res=pyl(got.map(r=>r.val));
+  $('cRes').textContent=res+(cK<it.length?'　…':'');$('cCnt').textContent=`${cK} / ${it.length} 轮，加入 ${got.length} 个`;
+  $('cPlay').textContent=cPlaying?'❚❚ 暂停':'▶ 自动';$('cPlay').setAttribute('aria-pressed',cPlaying);
+}
+let cAcc=0;const cAnim=Lab.anim(3,$('cLoop'),dt=>{cAcc+=dt;if(cAcc<0.7)return;cAcc=0;const n=COMP[cSel].gen(cVals()).length;if(cK<n)cK++;if(cK>=n)cPlaying=false;Lab.draw(3);},()=>cPlaying);
+$('cNext').addEventListener('click',()=>{cK++;Lab.draw(3);});$('cAll').addEventListener('click',()=>{cK=1e9;cPlaying=false;Lab.draw(3);});$('cReset').addEventListener('click',()=>{cK=0;cPlaying=false;Lab.draw(3);});
+$('cPlay').addEventListener('click',()=>{cPlaying=!cPlaying;if(cPlaying&&cK>=COMP[cSel].gen(cVals()).length)cK=0;cAcc=1;Lab.draw(3);Lab.kick(cAnim);});
+['cV','cV1','cV2'].forEach(id=>$(id).addEventListener('input',()=>{cK=0;Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-c]').forEach(b=>b.addEventListener('click',()=>{cSel=+b.dataset.c;cK=0;cPlaying=false;Lab.draw(3);}));
+Lab.add(3,lab3);
+
+/* ---------- Lab 4: step through real Python (Pyodide) ---------- */
+const PROGS={
+prime:{src:`for n in range(2, 10):
+    for x in range(2, n):
+        if n % x == 0:
+            print(n, 'equals', x, '*', n // x)
+            break
+    else:
+        # 循环没被 break：找不到因数
+        print(n, 'is prime')`,inp:''},
+fib:{src:`def fib(n):
+    """Print a Fibonacci series up to n."""
+    a, b = 0, 1
+    while b < n:
+        print(b, end=' ')
+        a, b = b, a + b
+
+fib(50)`,inp:''},
+alias:{src:`a = b = [1, 2]      # 两个名字，一个列表
+b.append(3)         # 改 b ……
+print(a)            # …… a 也变了
+c = a[:]            # 切片得到一个新列表
+c.append(4)
+print(a, c)
+t = (1, 2)
+u = t, (3, 4)       # 元组可以嵌套
+a[0:2] = [9, 9]     # 列表可以给切片赋值
+del a[0]
+print(a, b, u)`,inp:''},
+dict:{src:`tel = {'njc': 7042, 'pra': 7018}
+tel['asd'] = 7000
+del tel['njc']
+print(list(tel.keys()))
+print('njc' in tel)          # 讲义里的 has_key 是 Python 2
+squares = {x: x**2 for x in [2, 4, 6]}
+print(squares[4])`,inp:''},
+tryex:{src:`while True:
+    try:
+        x = int(input("Please enter a number: "))
+        break
+    except ValueError:
+        print("Not a valid number")
+print('got', x, 'doubled is', 2 * x)`,inp:'abc, 3.5, 42'},
+lambda:{src:`def make_incrementor(n):
+    return lambda x: x + n
+
+f = make_incrementor(42)
+print(f(0))
+print(f(1))
+g = make_incrementor(-1)
+print(g(f(0)))`,inp:''},
+py2:{src:`x = 34 - 23            # A comment.
+y = "Hello"            # Another one.
+z = 3.45
+if z == 3.45 or y == "Hello":
+    x = x + 1
+    y = y + " World"   # String concat.
+print x
+print y`,inp:''}};
+const TRACER=`
+import sys, io, json, builtins
+def __run(src, inputs):
+    steps=[]; out=io.StringIO(); inp=list(inputs); ids={}; keep=[]
+    def fake_input(prompt=''):
+        out.write(str(prompt))
+        if not inp: raise EOFError('输入框里没有更多输入了')
+        v=inp.pop(0); out.write(v+'\\n'); return v
+    def fake_print(*a, sep=' ', end='\\n', file=None, flush=False):
+        out.write(sep.join(str(v) for v in a)+end)
+    g={'__name__':'__main__','input':fake_input,'print':fake_print}
+    def oid(v):
+        k=id(v)
+        if k not in ids: ids[k]=len(ids)+1; keep.append(v)
+        return ids[k]
+    def show(v):
+        t=type(v).__name__
+        if callable(v) and hasattr(v,'__name__'): return ('<function '+v.__name__+'>' if t=='function' else '<'+t+' '+v.__name__+'>'), t, 0
+        try: r=repr(v)
+        except Exception: r='<?>'
+        if len(r)>80: r=r[:77]+'...'
+        mut = isinstance(v,(list,dict,set,tuple))
+        return r, t, (oid(v) if mut else 0)
+    def snap(frame):
+        fr=[]; f=frame
+        while f is not None and f.f_code.co_filename=='<程序>':
+            loc=f.f_locals if f.f_code.co_name!='<module>' else f.f_globals
+            vs=[[k]+list(show(v)) for k,v in loc.items() if not k.startswith('__') and k not in ('input','print') and type(v).__name__!='module']
+            fr.append({'name':f.f_code.co_name,'vars':vs}); f=f.f_back
+        return fr[::-1]
+    def tracer(frame, event, arg):
+        if frame.f_code.co_filename!='<程序>': return None
+        if len(steps)>=600: raise RuntimeError('超过 600 步，停下了（死循环？）')
+        if event in ('line','return','exception'):
+            st={'line':frame.f_lineno,'ev':event,'frames':snap(frame),'out':out.getvalue()}
+            if event=='return': st['ret']=show(arg)[0]
+            if event=='exception': st['exc']=arg[0].__name__+': '+str(arg[1])
+            steps.append(st)
+        return tracer
+    err=None; eline=None
+    try:
+        code=compile(src,'<程序>','exec')
+    except SyntaxError as e:
+        return json.dumps({'steps':[],'err':'SyntaxError: '+str(e.msg),'eline':e.lineno,'out':''})
+    sys.settrace(tracer)
+    try:
+        exec(code,g)
+    except BaseException as e:
+        tb=e.__traceback__; ln=None
+        while tb is not None:
+            if tb.tb_frame.f_code.co_filename=='<程序>': ln=tb.tb_lineno
+            tb=tb.tb_next
+        err=type(e).__name__+': '+str(e); eline=ln
+    finally:
+        sys.settrace(None)
+    return json.dumps({'steps':steps,'err':err,'eline':eline,'out':out.getvalue()})
+`;
+let py=null,pyLoading=null,run=null,pK=0,pAuto=false,pSrcRan='';
+const PYO='https://cdn.jsdelivr.net/npm/pyodide@0.29.4/';
+function loadPy(){if(pyLoading)return pyLoading;$('pStat').textContent='正在下载并启动 Python 3（约 10 MB，只需一次）…';
+  pyLoading=new Promise((res,rej)=>{const s=document.createElement('script');s.src=PYO+'pyodide.js';s.onload=res;s.onerror=()=>rej(new Error('脚本下载失败'));document.head.appendChild(s);})
+    .then(()=>loadPyodide({indexURL:PYO})).then(p=>{py=p;py.runPython(TRACER);return p;}).catch(e=>{pyLoading=null;throw e;});return pyLoading;}
+async function pRunNow(){const src=$('pSrc').value,inputs=$('pIn').value.split(',').map(s=>s.trim()).filter(s=>s!=='');
+  $('pRun').disabled=true;try{await loadPy();$('pStat').textContent='运行中…';
+    const r=JSON.parse(py.globals.get('__run')(src,py.toPy(inputs)));run=r;pSrcRan=src;pK=0;pAuto=false;
+    $('pStep').max=Math.max(0,r.steps.length-1);$('pStep').disabled=!r.steps.length;
+    $('pStat').textContent=r.err?`程序在第 ${r.eline??'?'} 行出错：${r.err}（共记录 ${r.steps.length} 步）`:`运行完毕，共 ${r.steps.length} 步。用 ◀ ▶ 或拖动滑块逐步看。`;
+  }catch(e){$('pStat').textContent='Python 加载失败：'+e.message+'。请检查网络后重试。';}finally{$('pRun').disabled=false;}Lab.draw(4);}
+const OIDC=['--purple','--blue','--amp','--green','--red','--accent'];
+function lab4(){
+  pressGroup('#lab4 [data-p]',b=>PROGS[b.dataset.p].src===$('pSrc').value&&PROGS[b.dataset.p].inp===$('pIn').value);
+  const stale=run&&pSrcRan!==$('pSrc').value;
+  const lines=(run&&!stale?pSrcRan:$('pSrc').value).split('\n');const st=run&&!stale&&run.steps.length?run.steps[Math.min(pK,run.steps.length-1)]:null;
+  const last=run&&!stale&&pK>=run.steps.length-1;
+  $('pView').innerHTML=lines.map((l,i)=>{let c='';if(st&&st.line===i+1)c=st.ev==='exception'?'err':'cur';if(run&&!stale&&!run.steps.length&&run.eline===i+1)c='err';if(last&&run.err&&run.eline===i+1)c='err';return `<div class="${c}">${esc(l)||' '}</div>`;}).join('');
+  $('pStepO').textContent=st?`${pK+1} / ${run.steps.length}`:'—';$('pStep').value=pK;
+  let rows='';if(st){const prev=pK>0?run.steps[pK-1]:null;const pv={};if(prev)prev.frames.forEach(f=>f.vars.forEach(v=>pv[f.name+'.'+v[0]]=v[1]));
+    st.frames.forEach(f=>{rows+=`<tr class="fr"><td colspan="3">${f.name==='<module>'?'全局（模块）':'函数 '+esc(f.name)+'()'}</td></tr>`;
+      f.vars.forEach(([k,r,t,o])=>{const ch=prev&&pv[f.name+'.'+k]!==r;rows+=`<tr class="${ch?'chg':''}"><td>${esc(k)}</td><td>${o?`<span class="oid" style="background:var(${OIDC[(o-1)%OIDC.length]})">${t[0].toUpperCase()}${o}</span>`:''}${esc(r)}</td><td>${t}</td></tr>`;});
+      if(!f.vars.length)rows+='<tr><td colspan="3" style="color:var(--muted)">（还没有变量）</td></tr>';});
+    if(st.ev==='return')rows+=`<tr><td colspan="3" style="color:var(--accent)">${st.frames.length>1?'函数返回 '+esc(st.ret):'程序结束'}</td></tr>`;
+    if(st.ev==='exception')rows+=`<tr><td colspan="3" style="color:var(--red)">抛出 ${esc(st.exc)}</td></tr>`;}
+  else rows=`<tr><td colspan="3" style="color:var(--muted)">${stale?'代码改过了，重新「运行并记录」':'运行后这里显示变量'}</td></tr>`;
+  $('pVars').tBodies[0].innerHTML=rows;
+  const outTxt=st?(last?run.out:st.out):(run&&!stale?run.out:'');$('pOut').innerHTML=esc(outTxt)+(last&&run.err||(run&&!stale&&!run.steps.length&&run.err)?`<span class="e">${esc((run.eline?`第 ${run.eline} 行 `:'')+run.err)}</span>`:'');
+  $('pAuto').textContent=pAuto?'❚❚ 暂停':'自动播放';$('pAuto').setAttribute('aria-pressed',pAuto);
+}
+const pGo=k=>{if(!run||!run.steps.length)return;pK=Math.max(0,Math.min(run.steps.length-1,k));Lab.draw(4);};
+$('pRun').addEventListener('click',pRunNow);
+$('pFirst').addEventListener('click',()=>pGo(0));$('pPrev').addEventListener('click',()=>pGo(pK-1));$('pNext').addEventListener('click',()=>pGo(pK+1));$('pLast').addEventListener('click',()=>pGo(1e9));
+$('pStep').addEventListener('input',()=>pGo(+$('pStep').value));
+let pAcc=0;const pAnim=Lab.anim(4,$('pView'),dt=>{pAcc+=dt;if(pAcc<0.45)return;pAcc=0;if(!run||pK>=run.steps.length-1){pAuto=false;Lab.draw(4);return;}pK++;Lab.draw(4);},()=>pAuto);
+$('pAuto').addEventListener('click',()=>{if(!run||!run.steps.length)return;pAuto=!pAuto;if(pAuto&&pK>=run.steps.length-1)pK=0;pAcc=1;Lab.draw(4);Lab.kick(pAnim);});
+$('pSrc').addEventListener('input',()=>Lab.draw(4));$('pIn').addEventListener('input',()=>Lab.draw(4));
+$('pSrc').addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText('    ',s,t.selectionEnd,'end');Lab.draw(4);}});
+document.querySelectorAll('#lab4 [data-p]').forEach(b=>b.addEventListener('click',()=>{const P=PROGS[b.dataset.p];$('pSrc').value=P.src;$('pIn').value=P.inp;pAuto=false;Lab.draw(4);}));
+$('pSrc').value=PROGS.prime.src;
+Lab.add(4,lab4);
+
+/* ---------- Lab 5: Vee model ---------- */
+const VEE=[
+ {n:'用户需求',e:'Stakeholder requirements',side:'L',lv:0,pair:8,d:'弄清楚用户到底要什么，用他们的话写下来，还没有任何技术方案。',ex:'「冬天回家时房间要已经暖和；温度稳定在设定值 ±0.5 °C；能用手机改设定。」',sys:'SysML 用例图、需求图'},
+ {n:'系统需求',e:'System requirements / specification',side:'L',lv:1,pair:7,d:'把用户需求翻译成可测量的系统规格：功能、性能、接口、约束。',ex:'「测温分辨率 0.1 °C；每 10 s 采样一次；Wi-Fi 断线时仍按本地时间表运行；待机功耗 < 1 W。」',sys:'SysML 需求图（每条需求有编号，后面要追溯到测试）'},
+ {n:'架构设计',e:'Architecture (top-down decomposition)',side:'L',lv:2,pair:6,d:'把系统拆成子系统，定义它们之间的接口——讲义里的 top-down：从大图景逐层分解。',ex:'温度传感器模块、控制器（树莓派 + Python）、锅炉继电器、云端 / 手机 App；规定传感器→控制器的数据格式。',sys:'块定义图 bdd（有哪些块）、内部块图 ibd（块之间怎么连）'},
+ {n:'模块设计',e:'Detailed / module design',side:'L',lv:3,pair:5,d:'每个模块里具体有哪些函数、类、数据结构，输入输出是什么。',ex:'read_temperature() 返回 float °C；class Thermostat 有 setpoint 属性和 update(temp) 方法，用滞回控制开关锅炉。',sys:'活动图、状态机图（如加热 / 待机两状态）'},
+ {n:'编码实现',e:'Implementation',side:'B',lv:4,pair:-1,d:'按模块设计写代码。Vee 的最底部，也是唯一真正「造东西」的一步。',ex:'用 Python 写 thermostat.py；def、class、try/except 处理传感器读不到数的情况。',sys:'—'},
+ {n:'单元测试',e:'Unit test — verification',side:'R',lv:3,pair:3,d:'对照模块设计，单独测每个函数 / 类，边界值、异常输入都要测。',ex:'assert c_to_f(100) == 212；给 update() 喂 19.4 °C（设定 20 °C，滞回 0.5）应该开锅炉；传感器返回 None 时不应崩溃。',sys:'—'},
+ {n:'集成测试',e:'Integration test — verification',side:'R',lv:2,pair:2,d:'把模块按架构接起来（bottom-up 组装），专测接口：数据格式、时序、通信。',ex:'传感器 + 控制器 + 继电器接在一起，看数据单位是否一致（°C 还是 °F？）、断网时是否按架构规定降级运行。',sys:'—'},
+ {n:'系统测试',e:'System test — verification',side:'R',lv:1,pair:1,d:'整机对照系统规格逐条测试，每条需求编号都要有对应的测试结果。',ex:'把整机放进温控箱，测分辨率、采样周期、稳态误差、待机功耗，逐条打勾。',sys:'需求图里的 verify 关系把需求和测试用例连起来'},
+ {n:'验收测试',e:'Acceptance test — validation',side:'R',lv:0,pair:0,d:'让真实用户在真实环境里用，回答「这是不是他们要的东西」。',ex:'几户人家试用一个冬天；可能发现规格全部达标，但用户觉得 App 设定太麻烦——这只有 validation 能发现。',sys:'—'}];
+let vSel=2;const vRects=[];
+function lab5(){
+  pressGroup('#lab5 [data-v]',b=>+b.dataset.v===vSel);
+  const [x,W,H]=fit($('vc'));vRects.length=0;const bw=Math.min(120,W*0.2),bh=34,top=30,dy=(H-top-bh-20)/4,cx=W/2;
+  const mg=4,sx=(W-2*mg-2*bw-12)/6,pos=i=>{const s=VEE[i];if(s.side==='B')return [cx-bw/2,top+4*dy];return s.side==='L'?[mg+s.lv*sx,top+s.lv*dy]:[W-mg-bw-s.lv*sx,top+s.lv*dy];};
+  /* V outline */
+  x.strokeStyle=css('--line');x.lineWidth=14;x.lineCap='round';x.globalAlpha=.6;x.beginPath();const p0=pos(0),p4=pos(4),p8=pos(8);x.moveTo(p0[0]+bw/2,p0[1]+bh/2);x.lineTo(p4[0]+bw/2,p4[1]+bh/2);x.lineTo(p8[0]+bw/2,p8[1]+bh/2);x.stroke();x.globalAlpha=1;
+  /* pair links */
+  for(let i=0;i<4;i++){const a=pos(i),b=pos(VEE[i].pair),on=vSel===i||vSel===VEE[i].pair;x.strokeStyle=on?css('--accent'):css('--grid');x.lineWidth=on?2:1;x.setLineDash([5,4]);x.beginPath();x.moveTo(a[0]+bw,a[1]+bh/2);x.lineTo(b[0],b[1]+bh/2);x.stroke();x.setLineDash([]);
+    if(on&&b[0]-a[0]-bw>110){const mx=(a[0]+bw+b[0])/2;text(x,i===0?'validation 确认':'verification 验证',mx,a[1]+bh/2-6,css('--accent'),11,'center');}}
+  VEE.forEach((s,i)=>{const [px,py]=pos(i),on=vSel===i,pr=vSel>=0&&VEE[vSel].pair===i;
+    x.fillStyle=on?css('--accent'):pr?css('--fillB'):css('--panel');x.strokeStyle=on||pr?css('--accent'):css('--line');x.lineWidth=1.5;x.beginPath();x.roundRect?x.roundRect(px,py,bw,bh,8):x.rect(px,py,bw,bh);x.fill();x.stroke();
+    x.fillStyle=on?css('--panel'):css('--ink');x.font=`600 ${bw<100?12:13}px ${css('--body')}`;x.textAlign='center';x.fillText(s.n,px+bw/2,py+bh/2+5);x.textAlign='left';vRects.push([px,py,bw,bh]);});
+  text(x,'↓ 自顶向下：分解设计',8,16,css('--blue'),11);text(x,'自底向上：组装测试 ↑',W-8,16,css('--amp'),11,'right');
+  const s=VEE[vSel];$('vInfo').innerHTML=`<div class="lbl">${esc(s.e)}</div><h3>${s.n}</h3><p>${s.d}</p><p><strong>温控器例子：</strong>${s.ex}</p>${s.pair>=0?`<p><strong>${s.side==='L'?'对应的测试':'对照的设计'}：</strong>${VEE[s.pair].n}${s.lv===0?'（validation）':'（verification）'}</p>`:''}<p style="color:var(--muted)"><strong>SysML：</strong>${s.sys}</p>`;
+}
+$('vc').addEventListener('click',ev=>{const r=$('vc').getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;const i=vRects.findIndex(([px,py,w,h])=>mx>=px&&mx<=px+w&&my>=py&&my<=py+h);if(i>=0){vSel=i;Lab.draw(5);}});
+document.querySelectorAll('#lab5 [data-v]').forEach(b=>b.addEventListener('click',()=>{vSel=+b.dataset.v;Lab.draw(5);}));
+Lab.add(5,lab5,{vc:260});
+Lab.start();
+</script>
+</body></html>
