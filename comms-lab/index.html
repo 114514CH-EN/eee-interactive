@@ -1,0 +1,366 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>通信链路实验室</title>
+<meta name="description" content="通信系统的七个实验：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算（自由空间与地面双径）、量化噪声 SQNR、高斯噪声中的误码率、Butterworth 与 Chebyshev 滤波器。公式全部来自课程的 Useful Equations。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="通信链路实验室"><meta property="og:description" content="通信系统的七个实验：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算（自由空间与地面双径）、量化噪声 SQNR、高斯噪声中的误码率、Butterworth 与 Chebyshev 滤波器。公式全部来自课程的 Useful Equations。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/comms-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>
+.ctl select{width:100%}
+.bitrow{display:flex;flex-wrap:wrap;gap:10px 4px;align-items:flex-end;min-height:56px}
+.seg{display:inline-flex;flex-direction:column;align-items:center;gap:2px;border-bottom:3px solid var(--c);padding:0 1px 3px}
+.seg>b{font:600 14px var(--mono);color:var(--c)}
+.seg>span{display:flex;gap:2px}
+.bit{min-width:24px;padding:2px 3px;font:600 15px var(--mono);border-radius:5px;line-height:1.4}
+.bit.fl{background:var(--red);border-color:var(--red);color:var(--panel)}
+.msg{font:15px var(--mono);overflow-wrap:anywhere;margin:0}
+.msg i{font-style:normal;color:var(--red);text-decoration:underline}
+.parses{font:13px var(--mono);color:var(--muted);columns:3 120px;margin:0;padding-left:18px}
+#kIn{width:100%}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">COMMUNICATION SYSTEMS (LI) · FOR AEROSPACE A (LH)</div>
+  <h1>通信链路实验室</h1>
+  <p>沿着讲义的「通信系统通用模型」走一遍：信源编码 → 信道容量 → 无线传播 → 模拟信号数字化 → 噪声里判决 → 滤波。实验 1–2 接着 Week 3 的信源编码讲；实验 3–7 的公式都来自课程的 <em>Useful Equations</em>，后面几周才会细讲，可以当预习。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 前缀码解码</a><a href="#lab2">实验 2 分组编码逼近熵</a><a href="#lab3">实验 3 信道容量</a><a href="#lab4">实验 4 无线链路预算</a><a href="#lab5">实验 5 量化噪声</a><a href="#lab6">实验 6 噪声中的误码</a><a href="#lab7">实验 7 Butterworth / Chebyshev</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · Week 3 · Huffman Coding Tutorial Question / Further Thoughts</div>
+  <h2>收到一串比特，怎么切开？前缀码只有一种切法</h2>
+  <p class="lead">讲义 Tutorial：码表 A=0、B=10、C=110、D=111，收到 00100111010，能唯一解码吗？任何码字都不是别的码字的前缀，所以从左往右读，凑够一个码字就切一刀，不会切错。<strong>点任意一个比特把它翻转</strong>，模拟信道误码，看变长码会怎样「失步」。再换成讲义里那个「打破熵极限」的码 A=0、B=1、C=00、D=01，看 0001 有几种读法。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-k="huff|00100111010">Tutorial：Huffman，00100111010</button><button data-k="bad|0001">A=0 B=1 C=00 D=01，收到 0001</button><button data-k="fixed|0000010011">定长 2 位码：0000010011</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="kC">码表</label><select id="kC"><option value="huff">Huffman：A=0 B=10 C=110 D=111</option><option value="fixed">定长：A=00 B=01 C=10 D=11</option><option value="bad">非唯一可译：A=0 B=1 C=00 D=01</option></select><span></span></div>
+    <div class="ctl"><label for="kIn">收到的比特</label><input id="kIn" type="text" inputmode="numeric" value="00100111010" spellcheck="false" aria-label="收到的比特串，只能是 0 和 1"><span></span></div>
+  </div>
+  <div class="btns"><button id="kRnd" class="play">随机发一条 12 个符号的消息</button><button id="kUndo">撤销所有翻转</button></div>
+  <div class="bitrow" id="kBits" aria-live="polite"></div>
+  <p class="msg" id="kMsg"></p>
+  <ul class="parses" id="kPar"></ul>
+  <div class="read"><div><small>平均码长 L̄ = Σ p·ℓ</small><b id="kL"></b></div><div><small>信源熵 H（0.55 / 0.3 / 0.1 / 0.05）</small><b>1.544 bit</b></div><div><small>效率 H / L̄</small><b id="kE"></b></div><div><small>这一串</small><b id="kS" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>Tutorial 答案：</strong>00100111010 = 0|0|10|0|111|0|10 = AABADAB，唯一。<strong>问题：</strong>一个比特错了，后面的切点全跟着错（误码传播），甚至解出的符号个数都变了；定长码错一位只坏一个符号。<strong>好处：</strong>平均 1.6 bit/符号，比定长的 2 bit 省 20%，离熵 1.544 只差一点。A=0 B=1 C=00 D=01 平均只要 1.15 bit，看起来低于熵，但 0001 有好几种读法，根本没法用——任何看似打破熵极限的码都是这样。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Week 3 · Source Coding: Further Thoughts</div>
+  <h2>把几个符号打包再编码：平均码长从上方逼近熵</h2>
+  <p class="lead">单个符号编码时每个码字至少 1 bit，信源很偏时浪费很大（比如 0.9 / 0.1 的二元信源熵只有 0.469 bit，单独编码却要 1 bit）。把 n 个符号当成一个「大符号」做 Huffman，平均每个原符号的比特数 L̄<sub>n</sub>/n 落在 H 和 H + 1/n 之间，n 越大越接近熵。这不是打破熵极限，只是换了个统计模型。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-b="0">讲义 A–D：0.55 / 0.3 / 0.1 / 0.05</button><button data-b="1">二元 0.9 / 0.1</button><button data-b="2">二元 0.7 / 0.3</button><button data-b="3">四个等概率</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="bN">打包长度 n</label><input id="bN" type="range" min="1" max="4" step="1" value="2"><output id="bNO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="bc" height="260" aria-label="每个符号平均比特数随打包长度"></canvas><div class="scroll"><table class="mini" id="bTab"><thead><tr><th>分组</th><th>概率</th><th>Huffman 码字</th></tr></thead><tbody></tbody></table></div></div>
+  <div class="read"><div><small>熵 H</small><b id="bH"></b></div><div><small>n = 1：L̄₁</small><b id="bL1"></b></div><div><small>当前 n：L̄<sub>n</sub>/n</small><b id="bLn"></b></div><div><small>效率 H/(L̄<sub>n</sub>/n)</small><b id="bE"></b></div></div>
+  <p class="note"><strong>为什么有上界 H + 1/n：</strong>对 n 个符号的分组，最优码满足 nH ≤ L̄<sub>n</sub> &lt; nH + 1（多出来的不到 1 bit 来自码长必须是整数），除以 n 就得到每个原符号的界。均匀分布时 H = 2 bit 正好是整数，n = 1 就已经 100%。真实文本里相邻符号还不独立（q 后面几乎总是 u），zip 之类的压缩利用的就是这种相关性。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · Generic Models & Channel Capacity · Useful Equations</div>
+  <h2>香农容量 C = B log₂(1 + S/N)：带宽是线性的，信噪比是对数的</h2>
+  <p class="lead">C 是在带宽 B、信噪比 S/N 下能做到<strong>无差错</strong>传输的最高比特率。左图固定 B 看 S/N：高信噪比时每多 3 dB 只多 1 bit/s/Hz。右图固定信号功率 S 和噪声谱密度 N₀（N = N₀B）只加带宽：噪声也跟着变大，容量趋于上限 1.44·S/N₀。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-q="3.49,30">电话线：3.1 kHz，30 dB</button><button data-q="7.3,25">Wi-Fi 信道：20 MHz，25 dB</button><button data-q="6,0">S/N = 0 dB：C = B</button><button data-q="6,-10">深空：1 MHz，−10 dB</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="qB">带宽 B</label><input id="qB" type="range" min="2" max="8" step="0.01" value="3.49"><output id="qBO"></output></div>
+    <div class="ctl"><label for="qS">S/N (dB)</label><input id="qS" type="range" min="-10" max="50" step="0.5" value="30"><output id="qSO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="qa" height="250" aria-label="频谱效率随信噪比"></canvas><canvas id="qb" height="250" aria-label="固定功率下容量随带宽"></canvas></div>
+  <div class="read"><div><small>S/N（倍数）</small><b id="qR"></b></div><div><small>容量 C</small><b id="qC"></b></div><div><small>频谱效率 C/B</small><b id="qE"></b></div><div><small>带宽翻倍（N₀ 不变）/ S/N 翻倍</small><b id="qD" style="font-size:15px"></b></div><div><small>带宽无限大时的上限 S/(N₀ ln2)</small><b id="qInf"></b></div></div>
+  <p class="note"><strong>换底：</strong>计算器没有 log₂ 时用 C = B·log₁₀(1+S/N)/log₁₀2（讲义写法）。<strong>记两个数：</strong>S/N = 0 dB 时 C = B；S/N 很大时 C ≈ B × S/N(dB)/3.01。电话线 3.1 kHz、30 dB：C = 3100 × log₂1001 ≈ 30.9 kbit/s，这就是老式拨号调制解调器卡在 ~33.6 kbit/s 附近的原因。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · Wireless: Antennas & Propagation · Useful Equations</div>
+  <h2>链路预算：自由空间每十倍距离掉 20 dB，贴地传播掉 40 dB</h2>
+  <p class="lead">自由空间 P<sub>r</sub> = P<sub>t</sub>G<sub>t</sub>G<sub>r</sub>(λ/4πd)²；在导电地面上方，直射波和地面反射波干涉，远处变成 P<sub>r</sub> = P<sub>t</sub>G<sub>t</sub>G<sub>r</sub>(h<sub>t</sub>h<sub>r</sub>/d²)²。用 dB 写就是一路加减。蓝线自由空间，橙线是地面双径的精确干涉（细线）和讲义近似（粗虚线），两者在 d ≫ 4πh<sub>t</sub>h<sub>r</sub>/λ 后重合。绿线是接收灵敏度。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-w="20,2,2,9.38,2,2,1.5,-90">Wi-Fi 2.4 GHz，100 m</button><button data-w="43,15,0,8.95,3.48,30,1.5,-105">手机基站约 900 MHz，3 km</button><button data-w="50,40,35,10.08,7.56,10,1,-120">卫星 12 GHz，36 000 km</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="wP">发射 P<sub>t</sub> (dBm)</label><input id="wP" type="range" min="-10" max="60" step="1" value="20"><output id="wPO"></output></div>
+    <div class="ctl"><label for="wG">发射天线 G<sub>t</sub> (dBi)</label><input id="wG" type="range" min="0" max="45" step="1" value="2"><output id="wGO"></output></div>
+    <div class="ctl"><label for="wR">接收天线 G<sub>r</sub> (dBi)</label><input id="wR" type="range" min="0" max="45" step="1" value="2"><output id="wRO"></output></div>
+    <div class="ctl"><label for="wF">频率 f</label><input id="wF" type="range" min="7" max="10.6" step="0.01" value="9.38"><output id="wFO"></output></div>
+    <div class="ctl"><label for="wD">距离 d</label><input id="wD" type="range" min="0" max="8" step="0.01" value="2"><output id="wDO"></output></div>
+    <div class="ctl"><label for="wH1">发射高度 h<sub>t</sub> (m)</label><input id="wH1" type="range" min="1" max="100" step="0.5" value="2"><output id="wH1O"></output></div>
+    <div class="ctl"><label for="wH2">接收高度 h<sub>r</sub> (m)</label><input id="wH2" type="range" min="0.5" max="20" step="0.5" value="1.5"><output id="wH2O"></output></div>
+    <div class="ctl"><label for="wS">接收灵敏度 (dBm)</label><input id="wS" type="range" min="-130" max="-40" step="1" value="-90"><output id="wSO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="wc" height="280" aria-label="接收功率随距离"></canvas></div>
+  <div class="read"><div><small>波长 λ = c/f</small><b id="wL"></b></div><div><small>自由空间路径损耗 20log(4πd/λ)</small><b id="wFS"></b></div><div><small>P<sub>r</sub>：自由空间 / 地面双径</small><b id="wPr" style="font-size:15px"></b></div><div><small>余量（自由空间 − 灵敏度）</small><b id="wM"></b></div><div><small>最远距离：自由空间 / 双径</small><b id="wMax" style="font-size:15px"></b></div><div><small>转折距离 4πh<sub>t</sub>h<sub>r</sub>/λ；接收口径 A = Gλ²/4π</small><b id="wX" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>为什么频率高损耗大：</strong>不是空气「吸收」得多，而是同样增益的天线在高频时口径 A = Gλ²/4π 更小，接住的能量更少（理想天线 D = 4πA/λ²）。<strong>地面双径：</strong>远处直射波和反射波几乎等长、反射又反相，二者几乎抵消，所以按 1/d⁴ 衰减，而且和频率无关；把天线架高（h<sub>t</sub>h<sub>r</sub> 变大）比加功率有效得多——这就是基站要上铁塔的原因。卫星预设里 d = 36 000 km，自由空间损耗约 205 dB，要靠两端的大锅天线补回来。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · Transmitting Analogue Signals by Digital Methods · Useful Equations</div>
+  <h2>量化噪声：每多 1 bit，SQNR 多 6 dB</h2>
+  <p class="lead">先按 f<sub>s</sub> &gt; 2F<sub>max</sub> 采样，再把 −A/2 … A/2 等分成 N = 2<sup>p</sup> 级，每个样本取最近的一级。蓝线是原信号，橙色台阶是量化后的样本，下面红线是量化误差（最大 ±Δ/2）。满幅正弦的 SQNR = 3N²/2，即 6.02p + 1.76 dB；信号比满幅小多少 dB，SQNR 就少多少 dB。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-z="3,0,8">3 bit 粗量化</button><button data-z="8,0,8">电话 PCM：8 kHz × 8 bit</button><button data-z="16,0,44.1">CD：44.1 kHz × 16 bit</button><button data-z="8,-20,8">8 bit 但信号小 20 dB</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="zP">位数 p</label><input id="zP" type="range" min="1" max="16" step="1" value="3"><output id="zPO"></output></div>
+    <div class="ctl"><label for="zL">信号电平（相对满幅）</label><input id="zL" type="range" min="-40" max="0" step="1" value="0"><output id="zLO"></output></div>
+    <div class="ctl"><label for="zF">采样率 f<sub>s</sub></label><select id="zF"><option value="8">8 kHz（电话，F<sub>max</sub> 3.4 kHz）</option><option value="44.1">44.1 kHz（CD，F<sub>max</sub> 20 kHz）</option><option value="48">48 kHz（数字音频）</option></select><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="zc" height="300" aria-label="量化波形与误差"></canvas></div>
+  <div class="read"><div><small>量化级数 N = 2<sup>p</sup> / 级间距 Δ = A/N</small><b id="zN" style="font-size:15px"></b></div><div><small>SQNR 公式 6.02p + 1.76 + 电平</small><b id="zT"></b></div><div><small>SQNR 实测（大量样本）</small><b id="zM"></b></div><div><small>比特率 f<sub>s</sub> × p</small><b id="zR"></b></div></div>
+  <p class="note"><strong>公式从哪来：</strong>误差在 ±Δ/2 内均匀分布，功率 Δ²/12；满幅正弦功率 (A/2)²/2 = A²/8；相除并代入 Δ = A/N 得 3N²/2，取 10log₁₀ 就是 1.76 + 6.02p。p = 1 或信号很小时误差不再「均匀」，实测会偏离公式。电话 8 kHz × 8 bit = 64 kbit/s，正好是一路数字电话（PCM）的速率。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · The Effect of Noise · Useful Equations</div>
+  <h2>噪声里判 0 还是 1：误码率就是高斯尾巴的面积</h2>
+  <p class="lead">发送电平（单极性 0 / A 或双极性 ±A）加上标准差 σ 的高斯噪声，接收端和门限 V<sub>th</sub> 比较。把门限归一化成 x<sub>th</sub> = (V<sub>th</sub> − 电平)/σ，错判概率 = 1 − Φ(x<sub>th</sub>)，就是阴影面积。点「发 2000 个比特」看实际数出的错误和理论是否一致。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-e="uni,1,0.25,0.5">单极性 0/1 V，σ = 0.25，门限 0.5</button><button data-e="uni,1,0.25,0.7">门限偏高到 0.7</button><button data-e="pol,1,0.25,0">双极性 ±1 V，同样噪声</button><button data-e="uni,1,0.5,0.5">噪声加倍 σ = 0.5</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="eM">信号</label><select id="eM"><option value="uni">单极性 0 / A</option><option value="pol">双极性 −A / +A</option></select><span></span></div>
+    <div class="ctl"><label for="eA">A (V)</label><input id="eA" type="range" min="0.2" max="2" step="0.05" value="1"><output id="eAO"></output></div>
+    <div class="ctl"><label for="eS">噪声 σ (V)</label><input id="eS" type="range" min="0.05" max="1" step="0.01" value="0.25"><output id="eSO"></output></div>
+    <div class="ctl"><label for="eT">门限 V<sub>th</sub> (V)</label><input id="eT" type="range" min="-2" max="2" step="0.01" value="0.5"><output id="eTO"></output></div>
+  </div>
+  <div class="btns"><button id="eRun" class="play">发 2000 个比特</button><button id="eOpt">门限放到最佳（中点）</button></div>
+  <div class="stage even"><canvas id="ep" height="260" aria-label="两种电平的噪声分布与门限"></canvas><canvas id="es" height="260" aria-label="接收样本散点"></canvas></div>
+  <div class="read"><div><small>发 0 判成 1：1 − Φ(x<sub>th</sub>)</small><b id="e0" style="font-size:15px"></b></div><div><small>发 1 判成 0</small><b id="e1" style="font-size:15px"></b></div><div><small>总误码率（等概率）</small><b id="eP"></b></div><div><small>实测（2000 bit）</small><b id="eSim" style="font-size:15px"></b></div><div><small>电平间距 / σ</small><b id="eQ"></b></div></div>
+  <p class="note"><strong>怎么查表：</strong>单极性 0/1 V、σ = 0.25 V、门限 0.5 V：x<sub>th</sub> = (0.5 − 0)/0.25 = 2，P = 1 − Φ(2) = 0.0228；两边对称，总误码率也是 0.0228。门限偏离中点时，一边的尾巴缩小、另一边涨得更快，总和变大。双极性 ±1 V 的间距是 2 V，相当于 x<sub>th</sub> = 4，误码率降到 3×10⁻⁵——代价是平均功率更大。真正决定误码率的是「电平间距 ÷ 噪声」。</p>
+</section>
+
+<section class="panel" id="lab7">
+  <div class="tag">实验 7 · Digital and Analogue Filters · Useful Equations</div>
+  <h2>Butterworth 通带最平，Chebyshev 用通带波纹换更陡的过渡带</h2>
+  <p class="lead">Butterworth：|T|² = 1/[1 + (ω/ω<sub>c</sub>)<sup>2n</sup>]，通带没有起伏，ω<sub>c</sub> 处 −3 dB。Chebyshev：|T|² = 1/[1 + ε²C<sub>n</sub>²(ω/ω<sub>p</sub>)]，通带在 1 和 1/(1+ε²) 之间波动 n 次，换来过渡带更陡。设一个阻带指标，看两种各需要几阶。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-f="4,1,2,40">4 阶，1 dB 波纹，2ω<sub>c</sub> 处要 40 dB</button><button data-f="1,1,2,40">1 阶（就是 RC 低通）</button><button data-f="8,0.5,1.5,60">8 阶，0.5 dB，1.5ω<sub>c</sub> 处 60 dB</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="fN">阶数 n</label><input id="fN" type="range" min="1" max="10" step="1" value="4"><output id="fNO"></output></div>
+    <div class="ctl"><label for="fR">Chebyshev 通带波纹 (dB)</label><input id="fR" type="range" min="0.1" max="3" step="0.1" value="1"><output id="fRO"></output></div>
+    <div class="ctl"><label for="fS">阻带边缘 ω<sub>s</sub>/ω<sub>c</sub></label><input id="fS" type="range" min="1.1" max="5" step="0.1" value="2"><output id="fSO"></output></div>
+    <div class="ctl"><label for="fA">阻带要求衰减 (dB)</label><input id="fA" type="range" min="10" max="80" step="1" value="40"><output id="fAO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="fd" height="260" aria-label="dB 幅频响应（对数频率）"></canvas><canvas id="fl" height="260" aria-label="通带附近线性幅值"></canvas></div>
+  <div class="read"><div><small>ε = √(10<sup>波纹/10</sup> − 1)</small><b id="fE"></b></div><div><small>ω<sub>s</sub> 处衰减：Butterworth / Chebyshev</small><b id="fAt" style="font-size:15px"></b></div><div><small>满足指标的最小阶数：Butterworth / Chebyshev</small><b id="fMin" style="font-size:15px"></b></div><div><small>远处斜率</small><b id="fSl" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>远处都是 −20n dB/十倍频：</strong>n 阶滤波器在 ω ≫ ω<sub>c</sub> 时都按 1/ω<sup>n</sup> 衰减，Chebyshev 的优势在过渡带——同样阶数下，远处它比 Butterworth 多出约 20log(2<sup>n−1</sup>ε) 的衰减（ε 小时可能反而不如 Butterworth）。阶数公式：Butterworth n ≥ log(10<sup>A/10</sup> − 1)/(2 log(ω<sub>s</sub>/ω<sub>c</sub>))，Chebyshev n ≥ cosh⁻¹(√(10<sup>A/10</sup> − 1)/ε)/cosh⁻¹(ω<sub>s</sub>/ω<sub>p</sub>)。</p>
+</section>
+</div>
+
+<script>
+const SI=(v,u,d=3)=>{if(!isFinite(v))return '∞ '+u;if(Math.abs(v)<1e-15)return '0 '+u;const a=Math.abs(v);const P=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];for(const [s,p] of P){if(a>=s*0.9995||s===1e-12)return (+(v/s).toPrecision(d))+' '+p+u;}return '0 '+u;};
+const val=id=>+$(id).value;
+const same=(a,b)=>a===b||(a!==''&&b!==''&&+a===+b);
+function presets(n,attr,ids,after){
+  document.querySelectorAll(`#lab${n} [data-${attr}]`).forEach(b=>b.addEventListener('click',()=>{b.dataset[attr].split(',').forEach((v,i)=>$(ids[i]).value=v);if(after)after();Lab.draw(n);}));
+  ids.forEach(id=>$(id).addEventListener($(id).tagName==='SELECT'?'change':'input',()=>{if(after)after();Lab.draw(n);}));}
+const pressP=(n,attr,ids)=>pressGroup(`#lab${n} [data-${attr}]`,b=>b.dataset[attr].split(',').every((v,i)=>same(v,$(ids[i]).value)));
+const LOG2=Math.log2;
+function rng(seed){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const gauss=r=>{let u=0;while(u===0)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+function erfc(z){const t=1/(1+0.5*Math.abs(z));const a=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277)))))))));return z>=0?a:2-a;}
+const Qf=x=>0.5*erfc(x/Math.SQRT2);   /* Q(x) = 1 − Φ(x) */
+const sci=p=>p<=0?'0':p>=1e-3?(+p.toPrecision(3)).toString():p.toExponential(2).replace('e-','×10⁻').replace(/⁻(\d+)/,(m,d)=>'⁻'+[...d].map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]).join(''));
+/* Huffman code lengths (and codewords) for a probability list */
+function huffman(p){const n=p.length;if(n===1)return {len:[1],code:['0']};let nodes=p.map((q,i)=>({q,m:[i]}));const code=Array(n).fill('');
+  while(nodes.length>1){nodes.sort((a,b)=>b.q-a.q);const b=nodes.pop(),a=nodes.pop();a.m.forEach(i=>code[i]='0'+code[i]);b.m.forEach(i=>code[i]='1'+code[i]);nodes.push({q:a.q+b.q,m:a.m.concat(b.m)});}
+  return {len:code.map(c=>c.length),code};}
+
+/* ---------- Lab 1: decoding ---------- */
+const PA={A:0.55,B:0.3,C:0.1,D:0.05};
+const CODES={huff:{A:'0',B:'10',C:'110',D:'111'},fixed:{A:'00',B:'01',C:'10',D:'11'},bad:{A:'0',B:'1',C:'00',D:'01'}};
+const SCOL={A:'--blue',B:'--amp',C:'--purple',D:'--green'};
+let kOrig='00100111010',kFlip=new Set(),kSent='AABADAB';   /* kSent: original symbols if we generated / know them */
+function prefixDecode(bits,code){const inv={};for(const s in code)inv[code[s]]=s;const segs=[];let buf='',st=0;
+  for(let i=0;i<bits.length;i++){buf+=bits[i];if(inv[buf]){segs.push({s:inv[buf],a:st,b:i+1});buf='';st=i+1;}}return {segs,rest:[st,bits.length]};}
+function allParses(bits,code,cap=40){const out=[];let count=0;const ent=Object.entries(code);
+  const memo=new Map();const cnt=i=>{if(i===bits.length)return 1;if(memo.has(i))return memo.get(i);let c=0;for(const [,w] of ent)if(bits.startsWith(w,i))c+=cnt(i+w.length);memo.set(i,c);return c;};
+  count=cnt(0);const dfs=(i,acc,segs)=>{if(out.length>=cap)return;if(i===bits.length){out.push({str:acc,segs:segs.slice()});return;}
+    for(const [s,w] of ent)if(bits.startsWith(w,i)){segs.push({s,a:i,b:i+w.length});dfs(i+w.length,acc+s,segs);segs.pop();}};dfs(0,'',[]);return {out,count};}
+function lab1(){
+  const ck=$('kC').value,code=CODES[ck];let bits=$('kIn').value.replace(/[^01]/g,'');
+  pressGroup('#lab1 [data-k]',b=>b.dataset.k===ck+'|'+kOrig&&kFlip.size===0);
+  const cur=[...bits].map((c,i)=>kFlip.has(i)?(c==='0'?'1':'0'):c).join('');
+  let segs,rest=null,parses=null;
+  if(ck==='bad'){parses=allParses(cur,code);segs=parses.out.length?parses.out[0].segs:[];if(!parses.out.length)rest=[0,cur.length];}
+  else{const r=prefixDecode(cur,code);segs=r.segs;if(r.rest[0]<r.rest[1])rest=r.rest;}
+  /* bit row */
+  const mk=(i)=>`<button class="bit${kFlip.has(i)?' fl':''}" data-i="${i}" aria-label="第 ${i+1} 位 ${cur[i]}，点击翻转">${cur[i]}</button>`;
+  let h='';segs.forEach(g=>{h+=`<span class="seg" style="--c:var(${SCOL[g.s]})"><b>${g.s}</b><span>`;for(let i=g.a;i<g.b;i++)h+=mk(i);h+='</span></span>';});
+  if(rest){h+=`<span class="seg" style="--c:var(--red)"><b>?</b><span>`;for(let i=rest[0];i<rest[1];i++)h+=mk(i);h+='</span></span>';}
+  $('kBits').innerHTML=h||'<span style="color:var(--muted)">（没有比特）</span>';
+  const dec=segs.map(g=>g.s).join('');
+  let m='解码结果：<b>'+(dec||'—')+'</b>'+(rest?`　<i>末尾 ${cur.slice(rest[0],rest[1])} 凑不成码字</i>`:'');
+  if(kSent!==null&&ck!=='bad'){let cmp='';const L=Math.max(kSent.length,dec.length);let bad=0;for(let i=0;i<L;i++){const a=dec[i]||'∅';if(a!==kSent[i]){bad++;cmp+=`<i>${a}</i>`;}else cmp+=a;}
+    m+=`<br>原消息：　<b>${kSent}</b><br>对照：　　${cmp}　（${kFlip.size} 个比特错 → ${bad} 个符号错${dec.length!==kSent.length?'，连符号个数都变了':''}）`;}
+  $('kMsg').innerHTML=m;
+  $('kPar').innerHTML=parses?(parses.count>1?`<li style="list-style:none;margin-left:-18px;color:var(--red)">共有 ${parses.count} 种读法，无法唯一解码：</li>`:parses.count===1?'<li style="list-style:none;margin-left:-18px">只有 1 种读法：</li>':'<li style="list-style:none;margin-left:-18px">没有任何读法</li>')+parses.out.map(o=>`<li>${o.str}</li>`).join('')+(parses.count>parses.out.length?'<li>…</li>':''):'';
+  const L=Object.keys(PA).reduce((s,k)=>s+PA[k]*code[k].length,0);
+  $('kL').textContent=fmt(L,3)+' bit';$('kE').textContent=(1.5443/L*100).toFixed(1)+' %'+(L<1.5443?'（>100%？不可能！）':'');$('kE').style.color=L<1.5443?css('--red'):'';
+  $('kS').textContent=`${cur.length} bit → ${dec.length} 个符号`+(dec.length?`，${fmt(cur.length/dec.length,3)} bit/符号`:'');
+}
+function kSet(ck,bits,sent){$('kC').value=ck;$('kIn').value=bits;kOrig=bits;kFlip=new Set();kSent=sent;Lab.draw(1);}
+document.querySelectorAll('#lab1 [data-k]').forEach(b=>b.addEventListener('click',()=>{const [ck,bits]=b.dataset.k.split('|');kSet(ck,bits,ck==='bad'?null:prefixDecode(bits,CODES[ck]).segs.map(g=>g.s).join(''));}));
+$('kC').addEventListener('change',()=>{const ck=$('kC').value;if(kSent&&ck!=='bad'){const bits=[...kSent].map(s=>CODES[ck][s]).join('');kSet(ck,bits,kSent);}else{kFlip=new Set();Lab.draw(1);}});
+$('kIn').addEventListener('input',()=>{kOrig=$('kIn').value.replace(/[^01]/g,'');kFlip=new Set();kSent=null;Lab.draw(1);});
+$('kBits').addEventListener('click',ev=>{const b=ev.target.closest('.bit');if(!b)return;const i=+b.dataset.i;kFlip.has(i)?kFlip.delete(i):kFlip.add(i);Lab.draw(1);});
+$('kUndo').addEventListener('click',()=>{kFlip=new Set();Lab.draw(1);});
+let kSeed=7;$('kRnd').addEventListener('click',()=>{const r=rng(kSeed++);let s='';for(let i=0;i<12;i++){const u=r();s+=u<0.55?'A':u<0.85?'B':u<0.95?'C':'D';}
+  const ck=$('kC').value==='bad'?'huff':$('kC').value;kSet(ck,[...s].map(c=>CODES[ck][c]).join(''),s);});
+Lab.add(1,lab1);
+
+/* ---------- Lab 2: block coding ---------- */
+const SRC=[{n:['A','B','C','D'],p:[0.55,0.3,0.1,0.05]},{n:['0','1'],p:[0.9,0.1]},{n:['0','1'],p:[0.7,0.3]},{n:['A','B','C','D'],p:[0.25,0.25,0.25,0.25]}];
+let bSrc=0;const bCache={};
+function blockStats(si,n){const k=si+'/'+n;if(bCache[k])return bCache[k];const S=SRC[si];let blocks=[{s:'',p:1}];
+  for(let i=0;i<n;i++){const nb=[];blocks.forEach(b=>S.p.forEach((q,j)=>nb.push({s:b.s+S.n[j],p:b.p*q})));blocks=nb;}
+  const hf=huffman(blocks.map(b=>b.p));const L=blocks.reduce((s,b,i)=>s+b.p*hf.len[i],0);const Ls=blocks.reduce((s,b)=>s+b.p*Math.ceil(-LOG2(b.p)-1e-12),0);
+  return bCache[k]={blocks,hf,L,Ls};}
+function lab2(){
+  const S=SRC[bSrc],nmax=S.p.length===2?8:4;$('bN').max=nmax;const n=Math.min(val('bN'),nmax);$('bN').value=n;$('bNO').textContent=n;
+  pressGroup('#lab2 [data-b]',b=>+b.dataset.b===bSrc);
+  const H=S.p.reduce((s,q)=>s-q*LOG2(q),0),st=blockStats(bSrc,n),Ln=st.L/n,L1=blockStats(bSrc,1).L;
+  $('bH').textContent=fmt(H,4)+' bit';$('bL1').textContent=fmt(L1,4)+' bit';$('bLn').textContent=fmt(Ln,4)+' bit';$('bE').textContent=(H/Ln*100).toFixed(1)+' %';
+  const [x,W,Hc]=fit($('bc'));const ymax=Math.max(1.05*Math.max(L1,H+1),H+0.2);
+  const a=axes(x,W,Hc,{x0:0.5,x1:nmax+0.5,y0:0,y1:ymax,xt:Array.from({length:nmax},(_,i)=>i+1),yt:[0,+(ymax/2).toPrecision(2),+ymax.toPrecision(2)],title:'每个原符号的平均比特数　蓝 Huffman　橙 Shannon（⌈−log₂p⌉）',pl:36,pt:30,xl:'打包长度 n'});
+  x.fillStyle=css('--fillB');x.beginPath();for(let k=1;k<=nmax;k++)x.lineTo(a.X(k),a.Y(H+1/k));for(let k=nmax;k>=1;k--)x.lineTo(a.X(k),a.Y(H));x.closePath();x.fill();
+  plot(x,a.X,a.Y,()=>H,0.5,nmax+0.5,css('--red'),1.8,2);text(x,'熵 H = '+fmt(H,3),a.X(nmax+0.5)-4,a.Y(H)+14,css('--red'),11,'right');
+  x.setLineDash([4,4]);plot(x,a.X,a.Y,k=>H+1/k,1,nmax,css('--muted'),1.2,60);x.setLineDash([]);text(x,'上界 H + 1/n',a.X(Math.min(2,nmax)),a.Y(H+0.5)-8,css('--muted'),11,'center');
+  const bw=Math.min(28,(a.X(2)-a.X(1))*0.32);
+  for(let k=1;k<=nmax;k++){const s=blockStats(bSrc,k),v=s.L/k,v2=s.Ls/k;
+    x.fillStyle=css('--blue');x.globalAlpha=k===n?1:0.45;x.fillRect(a.X(k)-bw,a.Y(v),bw,a.Y(0)-a.Y(v));x.fillStyle=css('--amp');x.fillRect(a.X(k),a.Y(v2),bw,a.Y(0)-a.Y(v2));x.globalAlpha=1;
+    if(k===n)text(x,fmt(v,3),a.X(k)-bw/2,a.Y(v)-4,css('--blue'),11,'center');}
+  /* table: top blocks */
+  const idx=st.blocks.map((b,i)=>i).sort((i,j)=>st.blocks[j].p-st.blocks[i].p),show=idx.slice(0,10);
+  $('bTab').tBodies[0].innerHTML=show.map(i=>`<tr><td>${st.blocks[i].s}</td><td>${+st.blocks[i].p.toPrecision(3)}</td><td>${st.hf.code[i]}</td></tr>`).join('')+(idx.length>10?`<tr><td colspan="3" style="color:var(--muted)">…共 ${idx.length} 个分组，只列概率最大的 10 个</td></tr>`:'');
+}
+$('bN').addEventListener('input',()=>Lab.draw(2));
+document.querySelectorAll('#lab2 [data-b]').forEach(b=>b.addEventListener('click',()=>{bSrc=+b.dataset.b;Lab.draw(2);}));
+Lab.add(2,lab2,{bc:220});
+
+/* ---------- Lab 3: Shannon capacity ---------- */
+const S3=['qB','qS'];
+function lab3(){
+  const B=+(10**val('qB')).toPrecision(3),sdb=val('qS'),snr=10**(sdb/10),C=B*LOG2(1+snr),S_N0=snr*B,Cinf=S_N0/Math.LN2;
+  $('qBO').textContent=SI(B,'Hz');$('qSO').textContent=sdb+' dB';pressP(3,'q',S3);
+  $('qR').textContent=fmt(snr,4);$('qC').textContent=SI(C,'bit/s');$('qE').textContent=fmt(C/B,3)+' bit/s/Hz';
+  $('qD').textContent=`${SI(2*B*LOG2(1+snr/2),'bit/s')} / ${SI(B*LOG2(1+2*snr),'bit/s')}`;$('qInf').textContent=SI(Cinf,'bit/s');
+  const [x,W,H]=fit($('qa'));const a=axes(x,W,H,{x0:-10,x1:50,y0:0,y1:17,xt:[-10,0,10,20,30,40,50],yt:[0,4,8,12,16],title:'C/B (bit/s/Hz) – S/N (dB)',pl:30,xl:'S/N (dB)'});
+  x.setLineDash([4,4]);plot(x,a.X,a.Y,d=>d/10*LOG2(10),3,50,css('--muted'),1.2,2);x.setLineDash([]);text(x,'≈ S/N(dB)/3',a.X(48),a.Y(48/10*LOG2(10))+16,css('--muted'),11,'right');
+  plot(x,a.X,a.Y,d=>LOG2(1+10**(d/10)),-10,50,css('--blue'),2.6,300);
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(sdb),a.Y(C/B),6,0,7);x.fill();
+  /* C vs B with S/N0 fixed */
+  const [y,W2,H2]=fit($('qb'));const u0=2,u1=8,Cmax=Cinf*1.12;
+  const b=axes(y,W2,H2,{x0:u0,x1:u1,y0:0,y1:Cmax,xt:W2<420?[2,4,6,8]:[2,3,4,5,6,7,8],xf:v=>SI(10**v,'Hz',1).replace(' ',''),yt:[0,Cinf/2,Cinf],yf:v=>SI(v,'b/s',2),title:'S 和 N₀ 不变，只加带宽',pl:62,pr:26,xl:''});
+  y.setLineDash([5,4]);plot(y,b.X,b.Y,()=>Cinf,u0,u1,css('--red'),1.4,2);y.setLineDash([]);text(y,'上限 1.44 S/N₀',b.X(u0)+6,b.Y(Cinf)-5,css('--red'),11);
+  plot(y,b.X,b.Y,u=>{const Bb=10**u;return Bb*LOG2(1+S_N0/Bb);},u0,u1,css('--accent'),2.6,300);
+  y.fillStyle=css('--red');y.beginPath();y.arc(b.X(Math.log10(B)),b.Y(C),6,0,7);y.fill();
+}
+presets(3,'q',S3);
+Lab.add(3,lab3,{qa:220,qb:220});
+
+/* ---------- Lab 4: link budget ---------- */
+const S4=['wP','wG','wR','wF','wD','wH1','wH2','wS'];
+const fmtD=d=>d>=1e3?(+(d/1e3).toPrecision(3))+' km':(+d.toPrecision(3))+' m';
+function lab4(){
+  const Pt=val('wP'),Gt=val('wG'),Gr=val('wR'),f=+(10**val('wF')).toPrecision(3),d=+(10**val('wD')).toPrecision(3),ht=val('wH1'),hr=val('wH2'),Sens=val('wS'),lam=3e8/f,EIRP=Pt+Gt+Gr;
+  $('wPO').textContent=Pt+' dBm';$('wGO').textContent=Gt+' dBi';$('wRO').textContent=Gr+' dBi';$('wFO').textContent=SI(f,'Hz');$('wDO').textContent=fmtD(d);$('wH1O').textContent=ht+' m';$('wH2O').textContent=hr+' m';$('wSO').textContent=Sens+' dBm';
+  pressP(4,'w',S4);
+  const fs=D=>EIRP+20*Math.log10(lam/(4*Math.PI*D)),tr=D=>EIRP+20*Math.log10(ht*hr/(D*D)),tre=D=>fs(D)+10*Math.log10(Math.max(4*Math.sin(2*Math.PI*ht*hr/(lam*D))**2,1e-30)),dc=4*Math.PI*ht*hr/lam;
+  const FSPL=20*Math.log10(4*Math.PI*d/lam),dmf=lam/(4*Math.PI)*10**((EIRP-Sens)/20),dmt=Math.sqrt(ht*hr)*10**((EIRP-Sens)/40);
+  $('wL').textContent=SI(lam,'m');$('wFS').textContent=FSPL.toFixed(1)+' dB';
+  $('wPr').textContent=`${fs(d).toFixed(1)} dBm / `+(d>dc?tr(d).toFixed(1)+' dBm':'近似不适用（d 小于转折距离）');
+  $('wM').textContent=(fs(d)-Sens).toFixed(1)+' dB';$('wM').style.color=fs(d)<Sens?css('--red'):css('--green');
+  $('wMax').textContent=`${fmtD(dmf)} / ${dmt>dc?fmtD(dmt):'—'}`;
+  const Ae=10**(Gr/10)*lam*lam/(4*Math.PI);$('wX').textContent=`${fmtD(dc)}；A = `+(Ae<1?(+(Ae*1e4).toPrecision(3))+' cm²':(+Ae.toPrecision(3))+' m²');
+  const [x,W,H]=fit($('wc'));const u0=0,u1=8;let ymax=-1e9,ymin=1e9;for(let u=u0;u<=u1;u+=0.05){const D=10**u;ymax=Math.max(ymax,fs(D));ymin=Math.min(ymin,fs(D));}
+  ymin=Math.min(ymin,Sens);ymax=Math.max(ymax,Sens);const y1=Math.ceil((ymax+5)/20)*20,y0=Math.max(Math.floor((ymin-30)/20)*20,y1-260);
+  const yt=[];for(let v=y0;v<=y1;v+=y1-y0>160?40:20)yt.push(v);
+  const a=axes(x,W,H,{x0:u0,x1:u1,y0,y1,xt:W<560?[0,2,4,6,8]:[0,1,2,3,4,5,6,7,8],xf:v=>['1 m','10 m','100 m','1 km','10 km','100 km','1000 km','10⁴ km','10⁵ km'][v],yt,title:'接收功率 P_r (dBm) – 距离 d（对数）',pl:44,pr:30});
+  x.save();x.beginPath();x.rect(a.pl,a.pt,W-a.pl-a.pr,H-a.pt-a.pb);x.clip();
+  plot(x,a.X,a.Y,()=>Sens,u0,u1,css('--green'),1.6,2);
+  plot(x,a.X,a.Y,u=>tre(10**u),u0,u1,css('--amp'),1,1600);
+  x.setLineDash([7,4]);plot(x,a.X,a.Y,u=>10**u>dc*0.5?tr(10**u):NaN,u0,u1,css('--amp'),2.4,300);x.setLineDash([]);
+  plot(x,a.X,a.Y,u=>fs(10**u),u0,u1,css('--blue'),2.6,300);
+  const lc=Math.log10(dc);if(lc>u0&&lc<u1){x.strokeStyle=css('--muted');x.setLineDash([3,4]);x.lineWidth=1;x.beginPath();x.moveTo(a.X(lc),a.pt);x.lineTo(a.X(lc),H-a.pb);x.stroke();x.setLineDash([]);text(x,'4πh_th_r/λ',a.X(lc)+4,H-a.pb-6,css('--muted'),11);}
+  const ud=Math.log10(d);x.fillStyle=css('--blue');x.beginPath();x.arc(a.X(ud),a.Y(fs(d)),6,0,7);x.fill();if(d>dc){x.fillStyle=css('--amp');x.beginPath();x.arc(a.X(ud),a.Y(tr(d)),5,0,7);x.fill();}
+  x.restore();
+  if(W>=560)text(x,'蓝：自由空间（−20 dB/十倍）　橙：地面双径（−40 dB/十倍）　绿：灵敏度',W-a.pr,14,css('--muted'),11,'right');
+}
+presets(4,'w',S4);
+Lab.add(4,lab4,{wc:250});
+
+/* ---------- Lab 5: quantisation ---------- */
+const S5=['zP','zL','zF'];
+function quant(v,p){const N=2**p,D=1/N;let k=Math.floor(v/D);k=Math.max(-N/2,Math.min(N/2-1,k));return (k+0.5)*D;}   /* full scale −0.5 … 0.5 (A = 1) */
+function lab5(){
+  const p=val('zP'),Ldb=val('zL'),fsk=val('zF'),amp=0.5*10**(Ldb/20),N=2**p;
+  $('zPO').textContent=p+' bit';$('zLO').textContent=Ldb+' dB';pressP(5,'z',S5);
+  let ps=0,pe=0;const M=20000;for(let k=0;k<M;k++){const v=amp*Math.sin(2*Math.PI*(k+0.37)/M*7.0001);ps+=v*v;const e=quant(v,p)-v;pe+=e*e;}
+  const meas=10*Math.log10(ps/pe),th=6.02*p+1.76+Ldb;
+  $('zN').textContent=`${N} 级 / A/${N}`;$('zT').textContent=th.toFixed(2)+' dB';$('zM').textContent=meas.toFixed(2)+' dB';
+  $('zR').textContent=SI(fsk*1e3*p,'bit/s');
+  const [x,W,H]=fit($('zc'));const top=H*0.68,ns=32;
+  const a=axes(x,W,top,{x0:0,x1:2,y0:-0.55,y1:0.55,xt:[0,0.5,1,1.5,2],xf:v=>v+'T',yt:p<=3?Array.from({length:N+1},(_,i)=>-0.5+i/N):[-0.5,0,0.5],yf:v=>(+v.toFixed(3)).toString(),title:'信号（满幅 ±A/2，A = 1）与量化样本（每周期 '+ns/2+' 个样本）',pl:46,pb:22});
+  x.strokeStyle=css('--amp');x.lineWidth=2;x.beginPath();for(let k=0;k<=ns;k++){const t=k/ns*2,q=quant(amp*Math.sin(2*Math.PI*t),p),X0=a.X(t),X1=a.X(Math.min(2,t+2/ns));k?x.lineTo(X0,a.Y(q)):x.moveTo(X0,a.Y(q));x.lineTo(X1,a.Y(q));}x.stroke();
+  plot(x,a.X,a.Y,t=>amp*Math.sin(2*Math.PI*t),0,2,css('--blue'),2,300);
+  for(let k=0;k<ns;k++){const t=k/ns*2;x.fillStyle=css('--amp');x.beginPath();x.arc(a.X(t),a.Y(quant(amp*Math.sin(2*Math.PI*t),p)),3,0,7);x.fill();}
+  /* error strip */
+  const y0=top+6,hh=H-y0-6,D=1/N,ys=v=>y0+hh/2-v/(D)*hh*0.9;
+  x.fillStyle=css('--bg');x.fillRect(a.pl,y0,W-a.pl-a.pr,hh);x.strokeStyle=css('--grid');x.beginPath();[-0.5,0,0.5].forEach(v=>{x.moveTo(a.pl,ys(v*D));x.lineTo(W-a.pr,ys(v*D));});x.stroke();
+  x.fillStyle=css('--muted');x.font=`11px ${css('--mono')}`;x.fillText('+Δ/2',a.pl-40,ys(0.5*D)+4);x.fillText('−Δ/2',a.pl-40,ys(-0.5*D)+4);
+  x.strokeStyle=css('--red');x.lineWidth=1.6;x.beginPath();for(let i=0;i<=600;i++){const t=i/600*2,v=amp*Math.sin(2*Math.PI*t),e=quant(v,p)-v,X=a.X(t);i?x.lineTo(X,ys(e)):x.moveTo(X,ys(e));}x.stroke();
+  text(x,'量化误差（连续量化，纵轴 ±Δ/2）',a.pl+4,y0+12,css('--red'),11);
+}
+presets(5,'z',S5);
+Lab.add(5,lab5,{zc:260});
+
+/* ---------- Lab 6: errors in Gaussian noise ---------- */
+const S6=['eM','eA','eS','eT'];let eSim=null;
+function eLevels(){const A=val('eA');return $('eM').value==='pol'?[-A,A]:[0,A];}
+function lab6(){
+  const [l0,l1]=eLevels(),s=val('eS'),th=val('eT');
+  $('eAO').textContent=val('eA').toFixed(2)+' V';$('eSO').textContent=s.toFixed(2)+' V';$('eTO').textContent=th.toFixed(2)+' V';pressP(6,'e',S6);
+  const x0=(th-l0)/s,x1=(l1-th)/s,p0=Qf(x0),p1=Qf(x1),pe=(p0+p1)/2;
+  $('e0').textContent=`x_th = ${fmt(x0,3)} → ${sci(p0)}`;$('e1').textContent=`x = ${fmt(x1,3)} → ${sci(p1)}`;$('eP').textContent=sci(pe);$('eQ').textContent=fmt((l1-l0)/s,3);
+  const key=[l0,l1,s,th].join();if(eSim&&eSim.key!==key)eSim=null;
+  $('eSim').textContent=eSim?`${eSim.err} / 2000 = ${sci(eSim.err/2000)}`:'点「发 2000 个比特」';
+  const lo=Math.min(l0-4*s,th-0.2),hi=Math.max(l1+4*s,th+0.2),pk=1/(s*Math.sqrt(2*Math.PI)),g=(v,m)=>pk*Math.exp(-0.5*((v-m)/s)**2);
+  const [x,W,H]=fit($('ep'));const a=axes(x,W,H,{x0:lo,x1:hi,y0:0,y1:pk*1.15,xt:[l0,l1,th].sort((p,q)=>p-q).filter((v,i,ar)=>!i||Math.abs(v-ar[i-1])>(hi-lo)*0.06),xf:v=>fmt(v,2),yt:[],title:'两种电平的接收电压分布',pl:12,xl:'V'});
+  const shade=(m,from,to,col)=>{x.fillStyle=col;x.beginPath();x.moveTo(a.X(from),a.Y(0));for(let i=0;i<=200;i++){const v=from+(to-from)*i/200;x.lineTo(a.X(v),a.Y(g(v,m)));}x.lineTo(a.X(to),a.Y(0));x.closePath();x.fill();};
+  shade(l0,th,hi,css('--fillB'));shade(l1,lo,th,css('--fillA'));
+  plot(x,a.X,a.Y,v=>g(v,l0),lo,hi,css('--blue'),2.4,300);plot(x,a.X,a.Y,v=>g(v,l1),lo,hi,css('--amp'),2.4,300);
+  x.strokeStyle=css('--red');x.lineWidth=2;x.beginPath();x.moveTo(a.X(th),a.pt);x.lineTo(a.X(th),H-a.pb);x.stroke();text(x,'V_th',a.X(th)+4,a.pt+12,css('--red'),11);
+  text(x,'发 0',a.X(l0),a.Y(pk)-6,css('--blue'),11,'center');text(x,'发 1',a.X(l1),a.Y(pk)-6,css('--amp'),11,'center');
+  /* scatter */
+  const [y,W2,H2]=fit($('es'));const b=axes(y,W2,H2,{x0:0,x1:2000,y0:lo,y1:hi,xt:[0,1000,2000],yt:[l0,l1].concat(Math.abs(th-l0)>(hi-lo)*0.08&&Math.abs(th-l1)>(hi-lo)*0.08?[th]:[]),yf:v=>fmt(v,2),title:eSim?'接收样本（红点 = 判错）':'接收样本：点上面的按钮',pl:40,xl:'比特序号'});
+  plot(y,b.X,b.Y,()=>th,0,2000,css('--red'),1.4,2);
+  if(eSim){eSim.pts.forEach(([v,bit],i)=>{const wrong=(v>th)!==(bit===1);y.fillStyle=wrong?css('--red'):bit?css('--amp'):css('--blue');y.globalAlpha=wrong?1:0.35;const r=wrong?2.6:1.4;y.fillRect(b.X(i)-r,b.Y(Math.max(lo,Math.min(hi,v)))-r,2*r,2*r);});y.globalAlpha=1;}
+}
+presets(6,'e',S6);
+let eSeed=11;$('eRun').addEventListener('click',()=>{const [l0,l1]=eLevels(),s=val('eS'),th=val('eT'),r=rng(eSeed++),pts=[];let err=0;
+  for(let i=0;i<2000;i++){const bit=r()<0.5?0:1,v=(bit?l1:l0)+s*gauss(r);pts.push([v,bit]);if((v>th)!==(bit===1))err++;}eSim={key:[l0,l1,s,th].join(),pts,err};Lab.draw(6);});
+$('eOpt').addEventListener('click',()=>{const [l0,l1]=eLevels();$('eT').value=(l0+l1)/2;Lab.draw(6);});
+Lab.add(6,lab6,{ep:220,es:220});
+
+/* ---------- Lab 7: Butterworth vs Chebyshev ---------- */
+const S7=['fN','fR','fS','fA'];
+const cheb=(n,w)=>w<=1?Math.cos(n*Math.acos(w)):Math.cosh(n*Math.acosh(w));
+function lab7(){
+  const n=val('fN'),r=val('fR'),ws=val('fS'),A=val('fA'),eps=Math.sqrt(10**(r/10)-1);
+  $('fNO').textContent=n;$('fRO').textContent=r.toFixed(1)+' dB';$('fSO').textContent=ws.toFixed(1);$('fAO').textContent=A+' dB';pressP(7,'f',S7);
+  const bw=w=>1/(1+w**(2*n)),cb=w=>1/(1+eps*eps*cheb(n,w)**2),dB=v=>10*Math.log10(v);
+  const nb=Math.ceil(Math.log10(10**(A/10)-1)/(2*Math.log10(ws))-1e-9),nc=Math.ceil(Math.acosh(Math.sqrt(10**(A/10)-1)/eps)/Math.acosh(ws)-1e-9);
+  $('fE').textContent=fmt(eps,4);$('fAt').textContent=`${(-dB(bw(ws))).toFixed(1)} dB / ${(-dB(cb(ws))).toFixed(1)} dB`;
+  $('fMin').textContent=`${Math.max(nb,1)} 阶 / ${Math.max(nc,1)} 阶`;$('fSl').textContent=`−${20*n} dB/十倍频（−${6*n} dB/倍频）`;
+  const [x,W,H]=fit($('fd'));const a=axes(x,W,H,{x0:-1,x1:1,y0:-100,y1:5,xt:[-1,0,1],xf:v=>['0.1ω_c','ω_c','10ω_c'][v+1],yt:[0,-20,-40,-60,-80,-100],title:'|T|² (dB) – ω/ω_c（对数）',pl:40,pr:26});
+  x.fillStyle=css('--shade');const xs=a.X(Math.log10(ws));x.fillRect(xs,a.Y(-A),W-a.pr-xs,a.Y(-100)-a.Y(-A));x.strokeStyle=css('--purple');x.lineWidth=1.4;x.strokeRect(xs,a.Y(-A),W-a.pr-xs,a.Y(-100)-a.Y(-A));
+  text(x,'阻带要求',xs+4,a.Y(-A)+14,css('--purple'),11);
+  x.save();x.beginPath();x.rect(a.pl,a.pt,W-a.pl-a.pr,H-a.pt-a.pb);x.clip();
+  plot(x,a.X,a.Y,u=>dB(bw(10**u)),-1,1,css('--blue'),2.4,400);plot(x,a.X,a.Y,u=>dB(cb(10**u)),-1,1,css('--amp'),2.4,800);x.restore();
+  text(x,'蓝 Butterworth　橙 Chebyshev',a.pl+6,a.Y(-88),css('--muted'),11);
+  const [y,W2,H2]=fit($('fl'));const b=axes(y,W2,H2,{x0:0,x1:2,y0:0,y1:1.1,xt:[0,0.5,1,1.5,2],yt:[0,0.5,1/(1+eps*eps),1],yf:v=>(+v.toFixed(3)).toString(),title:'|T|²（线性）：通带细节',pl:40,xl:'ω/ω_c'});
+  y.setLineDash([3,4]);plot(y,b.X,b.Y,()=>1/(1+eps*eps),0,2,css('--muted'),1,2);y.setLineDash([]);
+  plot(y,b.X,b.Y,bw,0,2,css('--blue'),2.4,300);plot(y,b.X,b.Y,cb,0,2,css('--amp'),2.4,600);
+}
+presets(7,'f',S7);
+Lab.add(7,lab7,{fd:220,fl:220});
+Lab.start();
+</script>
+</body></html>
