@@ -27,7 +27,7 @@ GROUPS = [
 BLURB = {
     'cards': ('Year 1 EE + Year 2 全部笔记', '自测题、易错点、勘误做成卡片，间隔重复自动安排复习'),
     'circuit-sim': ('模拟器', '画电路仿真：运放、三极管、稳压管、LED、变压器；自动查错、极点 / 时间常数、戴维宁等效、Bode 图'),
-    'logic-sim': ('模拟器', '门电路 / MUX / 译码器 / 触发器仿真；输入表达式或真值表自动生成电路，卡诺图、冒险检测、状态图'),
+    'logic-sim': ('模拟器', '门电路 / 触发器仿真；表达式化简：1–6 变量卡诺图、完全和、所有最简式、Q–M 表格法和代数推导步骤，检查自己的答案；自动生成电路、状态图'),
     'logic-lab': ('DE ①②③', 'K-map 最小化、触发器时序、同步状态机、静态冒险'),
     'fsm-lab': ('DE ①②', '布尔函数的几种写法、Moore vs Mealy、触发器互换、编码分配'),
     'afsm-lab': ('DE ③', '继电器河道闸门、竞争与虚拟状态、门级 AFSM 触发器'),
@@ -54,7 +54,7 @@ BLURB = {
 KEYWORDS = {
     'cards': '复习 review flashcards 卡片 间隔重复 自测',
     'circuit-sim': '电路 circuit 仿真 simulator 示波器 oscilloscope bode rc rlc 二极管 运放 op-amp 三极管 transistor 稳压管 zener led 变压器 transformer 戴维宁 thevenin 极点 pole',
-    'logic-sim': '逻辑 logic 门 gate 触发器 flip-flop 真值表 truth table 仿真 冒险 hazard 卡诺图 karnaugh k-map 化简 状态图 state mux 译码器 decoder 数码管',
+    'logic-sim': '逻辑 logic 门 gate 触发器 flip-flop 真值表 truth table 仿真 冒险 hazard 卡诺图 karnaugh k-map 化简 simplify 最简 最小项 minterm 最大项 maxterm 质蕴含项 prime implicant quine mccluskey 表格法 完全和 状态图 state mux 译码器 decoder 数码管',
     'logic-lab': '卡诺图 k-map 质蕴含项 最小和 触发器 flip-flop 状态机 fsm 毛刺 冒险 hazard',
     'fsm-lab': '状态机 fsm 激励表 excitation moore mealy 布尔代数 编码 步进电机',
     'afsm-lab': '异步 asynchronous 竞争 race 冒险 hazard 继电器 relay 虚拟状态',

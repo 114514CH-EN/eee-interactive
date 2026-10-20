@@ -178,10 +178,14 @@ function synth(specs,style,newId){
         default:{const kids=e.args.map(build);return gate({and:'AND',or:'OR',xor:'XOR'}[e.op],kids,XG+7*depth(e));}}};
       const depth=e=>0;finish(s.name,build(s.ast));continue;}
     if(NOR){/* product of sums, NOR–NOR: F = NOR( NOR(sum literals) ... ) */
-      const cover=minCover(off,s.dc,n),bars=cover.map(p=>{const L=[];s.vars.forEach((v,i)=>{const b=n-1-i;if(p.m>>b&1)return;L.push((p.v>>b&1)?neg(v):v);});
+      const cover=s.coverOff||minCover(off,s.dc,n),bars=cover.map(p=>{const L=[];s.vars.forEach((v,i)=>{const b=n-1-i;if(p.m>>b&1)return;L.push((p.v>>b&1)?neg(v):v);});
         return L.length===1?comp(L[0]):gate('NOR',L,XG);});
       finish(s.name,bars.length===1?one('NOR',[bars[0]],XS):gate('NOR',bars,XS));continue;}
-    const cover=style==='hazard'?hazardFree(s.on,s.dc,n):minCover(s.on,s.dc,n);
+    if(style==='pos'){/* product of sums, OR–AND */
+      const cover=s.coverOff||minCover(off,s.dc,n),sums=cover.map(p=>{const L=[];s.vars.forEach((v,i)=>{const b=n-1-i;if(p.m>>b&1)return;L.push((p.v>>b&1)?neg(v):v);});
+        return L.length===1?L[0]:gate('OR',L,XG);});
+      finish(s.name,sums.length===1?sums[0]:gate('AND',sums,XS));continue;}
+    const cover=style==='hazard'?hazardFree(s.on,s.dc,n):(s.cover||minCover(s.on,s.dc,n));
     const terms=cover.map(p=>{const L=[];s.vars.forEach((v,i)=>{const b=n-1-i;if(p.m>>b&1)return;L.push((p.v>>b&1)?v:neg(v));});return L;});
     if(NAND){/* F = NAND( NAND(product literals) ... ); a one-literal product enters inverted */
       const bars=terms.map(L=>L.length===1?comp(L[0]):gate('NAND',L,XG));finish(s.name,bars.length===1?one('NAND',[bars[0]],XS):gate('NAND',bars,XS));continue;}

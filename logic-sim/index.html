@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>逻辑模拟器</title>
-<meta name="description" content="放门电路、触发器、数据选择器、译码器、全加器和数码管，连线后运行：导线颜色显示 0 / 1，逻辑分析仪逐拍记录，门延迟造成的毛刺看得见。输入表达式或真值表能自动生成电路（最小和、全与非、全或非、无冒险），还会画卡诺图、检测冒险、找关键路径，时序电路自动画状态图并检查锁死。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="逻辑模拟器"><meta property="og:description" content="放门电路、触发器、数据选择器、译码器、全加器和数码管，连线后运行：导线颜色显示 0 / 1，逻辑分析仪逐拍记录，门延迟造成的毛刺看得见。输入表达式或真值表能自动生成电路（最小和、全与非、全或非、无冒险），还会画卡诺图、检测冒险、找关键路径，时序电路自动画状态图并检查锁死。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/logic-sim/">
+<meta name="description" content="放门电路、触发器、数据选择器、译码器、全加器和数码管，连线后运行：导线颜色显示 0 / 1，逻辑分析仪逐拍记录，门延迟造成的毛刺看得见。输入表达式或真值表能自动生成电路（最小和、最小积、全与非、全或非、无冒险）；化简页画 1–6 变量卡诺图，给出标准式、完全和、所有最简式，并一步步演示卡诺图法、表格法（Q–M）和代数推导，还能检查自己的化简；也会检测冒险、找关键路径，时序电路自动画状态图并检查锁死。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="逻辑模拟器"><meta property="og:description" content="放门电路、触发器、数据选择器、译码器、全加器和数码管，连线后运行：导线颜色显示 0 / 1，逻辑分析仪逐拍记录，门延迟造成的毛刺看得见。输入表达式或真值表能自动生成电路（最小和、最小积、全与非、全或非、无冒险）；化简页画 1–6 变量卡诺图，给出标准式、完全和、所有最简式，并一步步演示卡诺图法、表格法（Q–M）和代数推导，还能检查自己的化简；也会检测冒险、找关键路径，时序电路自动画状态图并检查锁死。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/logic-sim/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@ canvas#sch{border-radius:0;touch-action:none;display:block}
 .outblk{border-top:1px solid var(--line);margin-top:12px;padding-top:6px}
 .outblk h3,#ttBox>h3{font:600 16px var(--display);margin:6px 0}
 .m{font-size:13px;color:var(--muted);margin:4px 0}.warnp{font-size:13px;color:var(--amp);margin:4px 0}.haz{font-size:13px;color:var(--red);margin:6px 0}.okp{font-size:13px;color:var(--green);margin:6px 0}
-.kmrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}canvas.km{width:min(330px,100%)}.kmnote{display:flex;flex-direction:column;gap:4px;font:600 13px var(--mono)}
+.kmrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}canvas.km{width:min(330px,100%)}canvas.km.wide{width:min(560px,100%)}.kmnote{display:flex;flex-direction:column;gap:4px;font:600 13px var(--mono)}
 .pi{border-left:4px solid var(--c);padding-left:6px}.pi small{font:11px var(--body);color:var(--muted)}.pi .ov{text-decoration:overline}
 table.tt td.v1{color:var(--green);font-weight:600}table.tt td.vX{color:var(--red)}table.tt th.o,#teTab th.o{color:var(--amp)}
 tr.unused td{color:var(--muted)}
@@ -33,6 +33,35 @@ button.small{padding:2px 8px;font-size:12px}
 .styles{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
 #teTab .cell{min-width:30px;padding:1px 6px;font:600 13px var(--mono)}#teTab .cell.v1{background:var(--fillB)}#teTab .cell.vX{color:var(--red)}
 .gen h3{font:600 15px var(--display);margin:0 0 6px}
+/* 化简 · 卡诺图 */
+.kin{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.kin label.m{margin:0}
+.krow{display:flex;gap:8px;align-items:center}.krow input{flex:1;min-width:0;font:15px var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 12px}
+.kh{display:flex;gap:6px;align-items:center}
+.kgrid{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:22px;align-items:start}@media (max-width:860px){.kgrid{grid-template-columns:1fr}}
+.ktabs{margin-bottom:6px}.ktabs button{padding:4px 11px}
+.kleft{position:sticky;top:8px}@media (max-width:860px){.kleft{position:static}}
+#kMapWrap{margin-top:8px}canvas#kMap{display:block;cursor:pointer;touch-action:manipulation}
+.kfn{font:600 14px var(--mono);margin:0 0 6px;overflow-wrap:anywhere}.kfn span{color:var(--muted);font-weight:400}
+.ksec{border-top:1px solid var(--line);padding-top:4px;margin-top:8px}.ksec h4{font:600 14.5px var(--body);margin:6px 0 2px}.ksec h4 small{font:12px var(--body);color:var(--muted);margin-left:4px}
+.ksec.cur h4{color:var(--accent)}.ksec details summary{font-size:13px;color:var(--muted);cursor:pointer;margin:4px 0}
+.expr.big{font-size:16.5px}.expr .pi,.kpl .pi,.ksteps .pi,.qm .pi,.pich .pi{border-left:0;padding:0 1px;border-bottom:3px solid var(--c);cursor:default}.expr .pi sup{color:var(--muted);font-size:10px}
+.ovb{display:inline-block;border-top:1.5px solid currentColor;padding-top:1px;line-height:1.15;margin:0 2px}
+.ksol{align-items:center}.ksol button{padding:2px 9px;font-size:12.5px}
+table.kcost td,table.kcost th{text-align:center}table.kcost td:first-child{text-align:left}table.kcost tr.best td{color:var(--accent);font-weight:600}
+#kRes{position:relative}#kRes.spoil>*:not(.unspoil){filter:blur(7px);pointer-events:none;user-select:none}
+#kRes .unspoil{position:absolute;left:50%;top:60px;transform:translateX(-50%);z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.kstepnav{align-items:center;margin:8px 0}.ksteps{margin:4px 0;padding-left:0;list-style:none;counter-reset:ks}
+.ksteps>li{counter-increment:ks;border-left:3px solid var(--line);padding:6px 10px 6px 12px;margin:6px 0;cursor:pointer;font-size:13.5px;line-height:1.6;border-radius:0 8px 8px 0}
+.ksteps>li>b::before{content:counter(ks) '. ';color:var(--muted)}.ksteps>li.on{border-left-color:var(--accent);background:var(--fillB)}.ksteps>li.hid{opacity:.6;cursor:default}
+.kpl{margin:4px 0;padding-left:18px}.kpl li{margin:2px 0}
+.qmcols{display:flex;gap:14px;overflow-x:auto;align-items:flex-start;padding-bottom:6px}
+table.qm{flex:none;width:auto;min-width:0}table.qm td,table.qm th{padding:3px 9px}table.qm td{font-family:var(--mono);font-size:12.5px}table.qm td.pat{letter-spacing:1px}table.qm tr.grp td{font:600 11.5px var(--body);color:var(--muted);background:var(--fillB)}table.qm i{color:var(--amp)}
+table.pich td,table.pich th{text-align:center;font-family:var(--mono);font-size:12.5px}table.pich td:first-child{text-align:left;white-space:nowrap}
+table.pich tr.ess td:first-child{font-weight:700}table.pich td.o1{color:var(--accent);font-weight:700}table.pich tr.cv td{color:var(--green);font-weight:600}
+table.alg{border-collapse:collapse}table.alg td{padding:5px 8px;vertical-align:top;border-bottom:1px dashed var(--line)}table.alg td.lhs{font:600 14.5px var(--mono);white-space:nowrap;text-align:right}
+table.alg td.expr{margin:0;white-space:nowrap}table.alg td.why{font-size:12.5px;color:var(--muted);min-width:140px}
+.kitems{list-style:none;padding:0;margin:4px 0}.kitems li{margin:5px 0;font-size:13.5px}.kitems .haz,.kitems .warnp,.kitems .okp{display:inline;margin:0}
+#kChk{margin-top:8px}
 @media (max-width:620px){#presets>.btns{display:none}.psel{display:block}.toolgrp>span{display:none}}
 html.embed #presets .grp{display:none}html.embed .status,html.embed #restore{display:none}
 </style>
@@ -41,8 +70,8 @@ html.embed #presets .grp{display:none}html.embed .status,html.embed #restore{dis
 <header>
   <div class="tag">LOGIC SIMULATOR · GATE DELAYS · ANALYSER · K-MAP · STATE DIAGRAM · SYNTHESIS</div>
   <h1>逻辑模拟器</h1>
-  <p>搭门电路、触发器和功能模块，按运行看每根线的 0 / 1 和逻辑分析仪波形。「真值表」会自动出最小和 / 最小积、卡诺图圈组、冒险检测和关键路径；「状态图」把时序电路画成状态转换图并检查锁死；「生成电路」把表达式或真值表直接变成门电路。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">打开模拟器</a><a href="#help">怎么用</a><a href="../logic-lab/">数字逻辑实验室</a></nav>
+  <p>搭门电路、触发器和功能模块，按运行看每根线的 0 / 1 和逻辑分析仪波形。「真值表」会自动出最小和 / 最小积、卡诺图圈组、冒险检测和关键路径；「化简 · 卡诺图」输入任意表达式就画出卡诺图，给出标准式、完全和、所有最简式，并一步步演示卡诺图法、表格法（Q–M）和代数推导，还能检查你自己的化简；「状态图」把时序电路画成状态转换图并检查锁死；「生成电路」把表达式或真值表直接变成门电路。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">打开模拟器</a><a href="?v=km#lab1">化简 · 卡诺图</a><a href="#help">怎么用</a><a href="../logic-lab/">数字逻辑实验室</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -57,9 +86,33 @@ html.embed #presets .grp{display:none}html.embed .status,html.embed #restore{dis
   <div id="schWrap"><canvas id="sch" height="440" tabindex="0" aria-label="逻辑电路编辑区"></canvas></div>
   <div class="props" id="props" aria-live="polite"></div>
   <ul class="diag" id="diag" aria-live="polite"></ul>
-  <div class="tabs btns" role="group" aria-label="视图"><button data-v="la">逻辑分析仪</button><button data-v="tt">真值表 · 卡诺图</button><button data-v="sd">状态图</button><button data-v="gen">生成电路</button></div>
+  <div class="tabs btns" role="group" aria-label="视图"><button data-v="la">逻辑分析仪</button><button data-v="tt">真值表</button><button data-v="km">化简 · 卡诺图</button><button data-v="sd">状态图</button><button data-v="gen">生成电路</button></div>
   <div id="v_la"><p class="m" id="laInfo"></p><canvas id="la" height="220" aria-label="逻辑分析仪"></canvas><p id="laGlitch"></p></div>
   <div id="v_tt" style="display:none"><div id="ttBox"></div></div>
+  <div id="v_km" style="display:none">
+    <div class="kin">
+      <label for="kExpr" class="m">函数：表达式、Σm / ∏M（可以加无关项 d(…)），或者一串真值表 0 / 1 / x；也可以直接点卡诺图的格子</label>
+      <div class="krow"><input id="kExpr" type="text" spellcheck="false" autocomplete="off" value="F = A'B + AC" aria-label="要化简的函数"><button id="kGo" class="play">化简</button></div>
+      <div class="btns" id="kEx" role="group" aria-label="例子"></div>
+      <div class="vbar"><label>空白卡诺图 <select id="kN"></select> 个变量</label><button id="kBlank">新建</button>
+        <label>导入电路里的 <select id="kOut"></select></label><button id="kImport">导入</button>
+        <label class="kh"><input type="checkbox" id="kHide"> 先自己做（藏起答案，一步步看）</label></div>
+      <p id="kErr" class="haz" hidden></p>
+    </div>
+    <div class="kgrid">
+      <div class="kleft">
+        <div class="btns" role="group" aria-label="圈 1 还是圈 0"><button data-km="sop">圈 1 → 与或式</button><button data-km="pos">圈 0 → 或与式</button></div>
+        <div id="kMapWrap"><canvas id="kMap" height="220" aria-label="卡诺图：点格子切换 0 / 1 / X"></canvas></div>
+        <p class="m" id="kMapNote"></p>
+      </div>
+      <div class="kright">
+        <div class="ktabs btns" role="group" aria-label="结果和化简方法"><button data-ks="res">结果</button><button data-ks="steps">卡诺图步骤</button><button data-ks="qm">表格法 Q–M</button><button data-ks="alg">代数推导</button><button data-ks="chk">检查我的答案</button></div>
+        <div id="kRes" aria-live="polite"></div>
+        <div id="kSub" hidden></div>
+        <div id="kChk" hidden><div class="krow"><input id="kAns" type="text" spellcheck="false" autocomplete="off" placeholder="例如 A'B + AC 或 (A + B)(A' + C)" aria-label="你的答案"><button id="kAnsGo" class="play">检查</button></div><div id="kChkRes"></div></div>
+      </div>
+    </div>
+  </div>
   <div id="v_sd" style="display:none"><div id="sdBox"></div></div>
   <div id="v_gen" style="display:none" class="gen">
     <div class="genGrid">
@@ -76,7 +129,7 @@ Co = AB + ACin + BCin">全加器（两个输出）</button><button data-ex="D = 
     </div>
     <div class="styles" role="radiogroup" aria-label="实现方式"><span>实现方式：</span>
       <label><input type="radio" name="gStyle" value="sop" checked> 最小和（与–或）</label><label><input type="radio" name="gStyle" value="direct"> 按原式</label><label><input type="radio" name="gStyle" value="hazard"> 无冒险 SOP</label>
-      <label><input type="radio" name="gStyle" value="nand"> 全与非</label><label><input type="radio" name="gStyle" value="nor"> 全或非（最小积）</label></div>
+      <label><input type="radio" name="gStyle" value="pos"> 最小积（或–与）</label><label><input type="radio" name="gStyle" value="nand"> 全与非</label><label><input type="radio" name="gStyle" value="nor"> 全或非（最小积）</label></div>
     <div class="btns"><button id="gGo" class="play">从表达式生成电路</button></div>
   </div>
 </section>
@@ -87,9 +140,12 @@ Co = AB + ACin + BCin">全加器（两个输出）</button><button data-ex="D = 
   <p class="lead">选工具后在网格上点一下放元件；导线从一点拖到另一点（斜着拖会自动拐直角）。点「开关」切换 0 / 1，键盘上按和开关同名的字母也行。同名的「网络标签」自动相连，不用拉长线。悬停在任意一根线上能看到它的值、谁在驱动它。选中元件后在下方改名字、输入数、门延迟、时钟半周期、触发沿和复位值。</p>
   <p class="note"><strong>仿真规则：</strong>每个门有自己的传播延迟（默认 1 拍），所以经过反相器的路径比直接到与门的路径慢，这就是静态冒险。触发器只在时钟边沿动作（可选上升 / 下降沿），D 锁存器在 EN = 1 时透明。一根线有两个输出驱动且值不同显示红色 X，没有驱动的输入按 0 处理并在提示行里列出来。</p>
   <p class="note"><strong>智能功能：</strong>「真值表」对每个 LED 给出 Σm、最小和、最小积、卡诺图（彩色圈出每个乘积项、标出本质质蕴含项）、静态 1 冒险和要补的冗余项，还能找出最长的门延迟路径；按钮可以把当前电路换成最小和 / 全与非 / 全或非实现。「状态图」枚举所有触发器状态和输入，画出状态转换图和状态表，判断 Moore / Mealy，标出用不到的状态和锁死的状态。「生成电路」支持表达式、Σm / ∏M（含无关项）和可编辑的真值表。</p>
+  <p class="note"><strong>化简 · 卡诺图：</strong>输入 <code>F = A'B + AC</code>、<code>F(A,B,C,D) = Σm(…) + d(…)</code>、<code>∏M(…)</code> 或一串真值表 <code>0001 0111</code>，最多 6 个变量（5、6 个变量画成 2 张 / 4 张 4×4 的图）。右边列出标准与或式 / 或与式、完全和（所有质蕴含项）、最简与或式和最简或与式（有几个同样简的解就全列出来），还有与非–与非、或非–或非、异或写法和门数比较。下面三种方法任选：「卡诺图步骤」分 5 步，卡诺图跟着每一步变；「表格法」是 Quine–McCluskey 合并表、质蕴含项表和 Petrick 方法；「代数推导」从最小项之和一步步用分配律和互补律化到最简。「检查我的答案」把你写的式子画成圈，告诉你哪一项圈错了、哪一项还能扩大、哪一项多余。勾「先自己做」可以先把答案藏起来。点格子能直接改函数，悬停在式子的某一项上，卡诺图会高亮那个圈。</p>
   <p class="note"><strong>可以试：</strong>冒险预设里打开「BC项」开关，毛刺消失（真值表页会告诉你要补的就是 BC）；环形计数器预设直接打开状态图，看 000 等状态的锁死；4 位计数器里数码管会从 0 数到 F；在「生成电路」输入 <code>F = A'B + AC</code> 选「无冒险 SOP」，比较生成的电路多了哪一项。快捷键：<span class="kbd">空格</span> 运行 / 暂停，<span class="kbd">.</span> 单步，<span class="kbd">Ctrl Z / Y</span> 撤销 / 重做，<span class="kbd">Ctrl C / V / D</span> 复制 / 粘贴 / 复制一份，<span class="kbd">Delete</span> 删除，<span class="kbd">Esc</span> 回到选择。</p>
 </section>
 </div>
 <script src="engine.js"></script>
+<script src="bool.js"></script>
+<script src="kmap.js"></script>
 <script src="app.js"></script>
 </body></html>

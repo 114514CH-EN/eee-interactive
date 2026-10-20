@@ -273,34 +273,25 @@ function drawTT(){if(view!=='tt')return;const box=$('ttBox');if(!net){box.innerH
     h+=`<div class="outblk"><h3>${esc(o.name)} = Σm(${on.join(', ')||'—'})</h3>`;
     h+=`<p class="expr"><span class="lab">最小和 SOP</span> ${esc(o.name)} = ${fmtExpr(LE.sopText(cover,names,on,n))}</p><p class="expr"><span class="lab">最小积 POS</span> ${esc(o.name)} = ${fmtExpr(LE.posText(coverOff,names,off,n))}</p>`;
     if(xs.length)h+=`<p class="m">有 ${xs.length} 行输出是 X（冲突或不确定），化简时按 0 处理。</p>`;
-    if(n>=2&&n<=4)h+=`<div class="kmrow"><canvas class="km" data-j="${j}" height="${n===4?190:n===3?130:110}" aria-label="${esc(o.name)} 的卡诺图"></canvas><div class="kmnote">${cover.map((p,k)=>`<span class="pi" style="--c:var(${KC[k%KC.length]})">${fmtExpr(LE.termText(p,names,false))}${ess.some(e=>e.v===p.v&&e.m===p.m)?' <small>本质</small>':''}</span>`).join('')}</div></div>`;
+    if(n>=1&&n<=6)h+=`<div class="kmrow"><canvas class="km${n>=5?' wide':''}" data-j="${j}" height="160" aria-label="${esc(o.name)} 的卡诺图"></canvas><div class="kmnote">${cover.map((p,k)=>`<span class="pi" style="--c:var(${KC[k%KC.length]})">${fmtExpr(LE.termText(p,names,false))}${ess.some(e=>e.v===p.v&&e.m===p.m)?' <small>本质</small>':''}</span>`).join('')}</div></div>`;
     if(hz.length)h+=`<p class="haz">⚠ 理论（按最小和）有静态 1 冒险 ${hz.length} 处：${hz.map(x=>`${bin(x.a,n)} ↔ ${bin(x.b,n)}（只差 ${names[n-1-Math.log2(x.a^x.b)]}，没有一个乘积项同时盖住它们）`).join('；')}。加上冗余项 ${[...new Set(hz.map(x=>LE.termText(x.fix,names,false)))].map(fmtExpr).join('、')} 就能消除；或者到「生成电路」选「无冒险 SOP」。</p>`;
     else if(on.length&&on.length<1<<n)h+='<p class="okp">✓ 理论：最小和没有静态 1 冒险（相邻的 1 都被同一个乘积项盖住）。</p>';
     if(!seq){const g=glitches.filter(x=>x.out===j);if(g.length){const seen=new Set(),items=[];g.forEach(x=>{const k=x.from+'>'+x.to;if(seen.has(k))return;seen.add(k);
         const other=names.map((nm,i)=>i===x.bit?null:`${nm}=${(x.from>>(n-1-i))&1}`).filter(Boolean).join(' ');items.push(`${esc(names[x.bit])} ${(x.from>>(n-1-x.bit))&1}→${(x.to>>(n-1-x.bit))&1}${other?'（'+esc(other)+'）':''}：${x.kind==='static'?`本应保持 ${x.level}，却出现 ${x.width} 拍的 ${1-x.level}`:`变化中来回跳了 ${x.width} 次`}`);});
         h+=`<p class="haz">🔬 实测这个电路（按当前门延迟）：${items.length} 种单输入变化会产生毛刺——${items.slice(0,6).join('；')}${items.length>6?'……':''}。</p>`;}
       else h+='<p class="okp">🔬 实测这个电路：任何一个输入单独变化，输出都不会出现毛刺。</p>';}
-    h+=`<div class="btns"><button data-re="${j}" data-style="sop">用最小和重画这个电路</button><button data-re="${j}" data-style="nand">全与非实现</button><button data-re="${j}" data-style="nor">全或非实现</button></div></div>`;});
+    h+=`<div class="btns"><button data-kopen="${j}" class="play">化简步骤 · 卡诺图 →</button><button data-re="${j}" data-style="sop">用最小和重画这个电路</button><button data-re="${j}" data-style="nand">全与非实现</button><button data-re="${j}" data-style="nor">全或非实现</button></div></div>`;});
   const cp=LE.criticalPath(net);if(cp&&cp.path.length)h+=`<h3>关键路径</h3><p class="m">最长的门延迟路径是 <b>${cp.t} 拍</b>：${cp.path.map(c=>esc(c.name||LIB[c.t].n)).join(' → ')}。输入变化后最多要等这么久输出才稳定；时钟周期必须比它长。<button id="cpShow" class="small">在图上标出</button></p>`;
-  box.innerHTML=h;box.querySelectorAll('canvas.km').forEach(cv=>{const j=+cv.dataset.j,on=rows.map((r,m)=>r[j]===1?m:-1).filter(m=>m>=0);drawKmap(cv,n,names,rows.map(r=>r[j]),LE.minCover(on,[],n));});
+  box.innerHTML=h;box.querySelectorAll('canvas.km').forEach(cv=>{const j=+cv.dataset.j,on=rows.map((r,m)=>r[j]===1?m:-1).filter(m=>m>=0);
+    KMapUI.draw(cv,{names,t:rows.map(r=>r[j]===1?1:0),groups:LE.minCover(on,[],n).map((p,k)=>({p,color:KC[k%KC.length],style:'solid'})),mode:'sop'});});
+  box.querySelectorAll('[data-kopen]').forEach(bt=>bt.addEventListener('click',()=>{const j=+bt.dataset.kopen;openKM({name:outs[j].name,vars:names,on:rows.map((r,m)=>r[j]===1?m:-1).filter(m=>m>=0),dc:[]});}));
   const b=$('cpShow');if(b)b.addEventListener('click',()=>{hlPath=new Set(cp.path.map(c=>c.id));setTimeout(()=>{hlPath=null;scheduleDraw();},4000);scheduleDraw();$('sch').scrollIntoView({block:'center',behavior:'smooth'});});
   box.querySelectorAll('[data-re]').forEach(bt=>bt.addEventListener('click',()=>{const j=+bt.dataset.re,on=rows.map((r,m)=>r[j]===1?m:-1).filter(m=>m>=0);
     const specs=outs.map((o,k)=>({name:o.name,vars:names,on:rows.map((r,m)=>r[k]===1?m:-1).filter(m=>m>=0),dc:[],ast:null}));generate(specs,bt.dataset.style);}));}
 const KC=['--blue','--amp','--green','--purple','--red','--accent'];
 const bin=(m,n)=>m.toString(2).padStart(n,'0');
 const fmtExpr=s=>esc(s).replace(/([A-Za-z][a-z0-9_]*)'/g,'<span class="ov">$1</span>');
-function drawKmap(cv,n,names,col,cover){const [g,W,H]=fit(cv);const gray=[0,1,3,2],rb=n===4?2:1,cb=n-rb,R=1<<rb,C=1<<cb,ro=rb===1?[0,1]:gray,co=cb===1?[0,1]:gray;
-  const cell=Math.min(42,(W-70)/C,(H-34)/R),x0=56,y0=28;g.font=`600 12px ${css('--mono')}`;g.fillStyle=css('--muted');
-  g.fillText(names.slice(0,rb).join('')+'＼'+names.slice(rb).join(''),2,16);co.forEach((c,k)=>g.fillText(bin(c,cb),x0+k*cell+cell/2-g.measureText(bin(c,cb)).width/2,y0-6));ro.forEach((r,k)=>g.fillText(bin(r,rb),x0-8-g.measureText(bin(r,rb)).width,y0+k*cell+cell/2+4));
-  for(let i=0;i<R;i++)for(let j=0;j<C;j++){const m=(ro[i]<<cb)|co[j],v=col[m],x=x0+j*cell,y=y0+i*cell;g.strokeStyle=css('--line');g.lineWidth=1;g.strokeRect(x,y,cell,cell);
-    g.fillStyle=v===1?css('--ink'):v==='X'?css('--red'):css('--muted');g.font=`${v===1?'700 ':''}14px ${css('--mono')}`;g.fillText(String(v),x+cell/2-4,y+cell/2+5);g.font=`9px ${css('--mono')}`;g.fillStyle=css('--muted');g.fillText(String(m),x+2,y+10);}
-  cover.forEach((p,k)=>{const rows=[...Array(R).keys()].filter(i=>{for(let j=0;j<C;j++){const m=(ro[i]<<cb)|co[j];if(((m^p.v)&~p.m&((1<<n)-1))===0)return true;}return false;}),
-      cols=[...Array(C).keys()].filter(j=>{for(let i=0;i<R;i++){const m=(ro[i]<<cb)|co[j];if(((m^p.v)&~p.m&((1<<n)-1))===0)return true;}return false;});
-    const runs=(idx,N)=>{if(idx.length===N)return [[0,N-1]];const s=new Set(idx),out=[];let i=0;while(i<N){if(s.has(i)){let j=i;while(j+1<N&&s.has(j+1))j++;out.push([i,j]);i=j+1;}else i++;}
-      if(out.length===2&&out[0][0]===0&&out[1][1]===N-1)return out; return out;};
-    const ins=3+k*2.5;g.strokeStyle=css(KC[k%KC.length]);g.lineWidth=2.4;
-    runs(rows,R).forEach(([r0,r1])=>runs(cols,C).forEach(([c0,c1])=>{const x=x0+c0*cell+ins,y=y0+r0*cell+ins,w=(c1-c0+1)*cell-2*ins,h=(r1-r0+1)*cell-2*ins;g.beginPath();g.roundRect?g.roundRect(x,y,w,h,cell*0.3):g.rect(x,y,w,h);g.stroke();}));});}
-
+function openKM(spec){view='km';syncView();if(typeof spec==='string')KMapUI.setText(spec);else KMapUI.setSpec(spec);$('v_km').scrollIntoView({block:'start',behavior:'smooth'});}
 /* ================= state diagram ================= */
 const sd={dirty:true};
 function drawSD(){if(view!=='sd')return;const box=$('sdBox');if(!net){box.innerHTML='';return;}const r=LE.stateAnalysis(net);if(r.err){box.innerHTML=`<p class="m">${r.err}</p>`;return;}
@@ -336,9 +327,10 @@ function generate(specs,style){comps=[];wires=[];sel.clear();running=false;curP=
   flashMsg(`已生成：${comps.filter(c=>LIB[c.t].gate).length} 个门（按 Ctrl+Z 撤销）`);}
 function genPreview(){const lines=$('gExpr').value.split(/\n|;/).map(s=>s.trim()).filter(Boolean),out=$('gPrev');if(!lines.length){out.innerHTML='';return null;}
   const specs=[],names='FGHPQR'.split('');let html='';try{lines.forEach((l,i)=>{const s=LE.parseSpec(l,names[i]||'F'+i);specs.push(s);const n=s.vars.length,cover=LE.minCover(s.on,s.dc,n),off=[...Array(1<<n).keys()].filter(k=>!s.on.includes(k)&&!s.dc.includes(k));
-      html+=`<p class="expr"><b>${esc(s.name)}</b>(${s.vars.join(', ')}) = Σm(${s.on.join(', ')||'—'})${s.dc.length?` + d(${s.dc.join(', ')})`:''}<br><span class="lab">最小和</span> ${fmtExpr(LE.sopText(cover,s.vars,s.on,n))}　<span class="lab">最小积</span> ${fmtExpr(LE.posText(LE.minCover(off,s.dc,n),s.vars,off,n))}</p>`;});
+      html+=`<p class="expr"><b>${esc(s.name)}</b>(${s.vars.join(', ')}) = Σm(${s.on.join(', ')||'—'})${s.dc.length?` + d(${s.dc.join(', ')})`:''}<br><span class="lab">最小和</span> ${fmtExpr(LE.sopText(cover,s.vars,s.on,n))}　<span class="lab">最小积</span> ${fmtExpr(LE.posText(LE.minCover(off,s.dc,n),s.vars,off,n))} <button class="small" data-kline="${esc(l)}">卡诺图 · 化简步骤 →</button></p>`;});
     out.innerHTML=html;return specs;}catch(e){out.innerHTML=`<p class="haz">✖ ${esc(e.message)}</p>`;return null;}}
 $('gExpr').addEventListener('input',genPreview);
+$('gPrev').addEventListener('click',ev=>{const b=ev.target.closest('[data-kline]');if(b)openKM(b.dataset.kline);});
 $('gGo').addEventListener('click',()=>{const specs=genPreview();if(!specs)return;const st=document.querySelector('input[name=gStyle]:checked').value;if(st==='direct'&&specs.some(s=>!s.ast)){flashMsg('Σm / ∏M 写法没有「原式」，已改用最小和');}generate(specs,st==='direct'&&specs.some(s=>!s.ast)?'sop':st);});
 document.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{$('gExpr').value=b.dataset.ex;genPreview();}));
 /* truth-table editor */
@@ -354,7 +346,7 @@ teInit();
 
 /* ================= views ================= */
 document.querySelectorAll('#lab1 [data-v]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.v;syncView();Lab.draw(1);}));
-function syncView(){pressGroup('#lab1 [data-v]',b=>b.dataset.v===view);['la','tt','sd','gen'].forEach(v=>$('v_'+v).style.display=view===v?'':'none');}
+function syncView(){pressGroup('#lab1 [data-v]',b=>b.dataset.v===view);['la','tt','km','sd','gen'].forEach(v=>$('v_'+v).style.display=view===v?'':'none');if(view==='km')KMapUI.show();}
 
 /* ================= presets ================= */
 const PRE={};
@@ -413,8 +405,11 @@ let acc=0;const anim=Lab.anim(1,sch,dt=>{acc+=dt*(+$('spd').value);let n=Math.mi
 new ResizeObserver(()=>{if(autoFit&&net)fitView();scheduleDraw();}).observe($('schWrap'));
 async function boot(){const m=/#c=([\w-]+)/.exec(location.hash),qp=new URLSearchParams(location.search).get('p');
   if(m){try{const s=await K.decode(m[1]);load(s,false);curP='';rebuild();hist.reset();autoFit=true;fitView();syncView();syncBar();renderProps();flashMsg('已载入分享的电路');Lab.draw(1);return;}catch(e){}}
-  loadPreset(PRE[qp]?qp:'haz');if(K.store.get(STORE)&&!qp&&!window.EMBED_LAB)$('restore').hidden=false;}
+  loadPreset(PRE[qp]?qp:'haz');if(K.store.get(STORE)&&!qp&&!window.EMBED_LAB)$('restore').hidden=false;
+  const sp=new URLSearchParams(location.search),vq=sp.get('v'),fq=sp.get('f');if(fq)KMapUI.setText(fq);if(['la','tt','km','sd','gen'].includes(vq)){view=vq;syncView();}}
 $('restore').addEventListener('click',()=>{const s=K.store.get(STORE);if(!s)return;try{load(s,false);curP='';rebuild();hist.reset();autoFit=true;fitView();syncBar();pressPresets();renderProps();Lab.draw(1);$('restore').hidden=true;}catch(e){}});
+KMapUI.init({generate,flash:flashMsg,getTT:()=>{if(!net)return {err:'还没有电路'};const T=computeTT();if(T.err)return T;
+  return {names:T.names,outs:T.outs.map((o,j)=>({name:o.name,on:T.rows.map((r,m)=>r[j]===1?m:-1).filter(m=>m>=0)}))};}});
 setTool('s');syncView();boot();Lab.start();
 window.__V=V;window.__logic={get comps(){return comps;},get wires(){return wires;},get net(){return net;},get sim(){return sim;},loadPreset,PRE,ser:()=>ser(false),generate};
 })();
