@@ -260,13 +260,16 @@ function carry(list){const m=new Map(els.map(e=>[e.id,e]));list.forEach(e=>{cons
 function transformSel(base,ids,fn){const list=carry(deser(base,true)),moved=new Map();
   for(const e of list){if(!ids.has(e.id))continue;const before=terms(e).map(p=>[p[0],p[1]]);fn(e);const after=terms(e);
     before.forEach((p,i)=>{const d=[after[i][0]-p[0],after[i][1]-p[1]];if(!moved.has(key(p))||d[0]||d[1])moved.set(key(p),d);});}
-  const extra=[];
-  for(const e of list){if(ids.has(e.id))continue;
-    if(e.t==='w'){const ma=moved.get(key(e.a)),mb=moved.get(key(e.b));if(!ma&&!mb)continue;
-      if(ma&&mb&&ma[0]===mb[0]&&ma[1]===mb[1]){e.a=[e.a[0]+ma[0],e.a[1]+ma[1]];e.b=[e.b[0]+mb[0],e.b[1]+mb[1]];continue;}
-      const A=ma?[e.a[0]+ma[0],e.a[1]+ma[1]]:e.a,B=mb?[e.b[0]+mb[0],e.b[1]+mb[1]]:e.b;const pts=route(B,A,e.a[0]===e.b[0]);e.b=pts[0];e.a=pts[1];for(let i=1;i+1<pts.length;i++)extra.push({t:'w',a:pts[i],b:pts[i+1],id:newId()});}
-    else terms(e).forEach(p=>{const m=moved.get(key(p));if(m&&(m[0]||m[1])){const pts=route(p,[p[0]+m[0],p[1]+m[1]]);for(let i=0;i+1<pts.length;i++)extra.push({t:'w',a:pts[i],b:pts[i+1],id:newId()});}});}
-  return list.concat(extra);}
+  const sh=(p,m)=>[p[0]+m[0],p[1]+m[1]],nz=m=>m&&(m[0]||m[1]),keep=[],jobs=[];
+  for(const e of list){if(ids.has(e.id)||e.t!=='w'){keep.push(e);continue;}const ma=moved.get(key(e.a)),mb=moved.get(key(e.b));
+    if(!nz(ma)&&!nz(mb)){keep.push(e);continue;}
+    if(ma&&mb&&ma[0]===mb[0]&&ma[1]===mb[1]){e.a=sh(e.a,ma);e.b=sh(e.b,mb);keep.push(e);continue;}
+    jobs.push({from:ma&&!mb?e.b:mb&&!ma?e.a:sh(e.a,ma),to:ma&&!mb?sh(e.a,ma):mb&&!ma?sh(e.b,mb):sh(e.b,mb),v:e.a[0]===e.b[0]});}
+  for(const e of list){if(ids.has(e.id)||e.t==='w')continue;terms(e).forEach(p=>{const m=moved.get(key(p));if(nz(m))jobs.push({from:p,to:sh(p,m)});});}
+  if(jobs.length){const comps=keep.filter(e=>e.t!=='w');const pins=comps.flatMap(e=>terms(e).map(key)),boxes=comps.filter(isFp).map(e=>{const ol=fpOutline(e),xs=ol.map(p=>p[0]),ys=ol.map(p=>p[1]);return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];});
+    jobs.forEach(j=>{const ws=keep.filter(e=>e.t==='w'||isTwo(e));const ob={segs:ws.map(e=>[e.a,e.b]),pts:new Set([...pins,...keep.filter(e=>e.t==='w').flatMap(w=>[key(w.a),key(w.b)])]),boxes};
+      ob.pts.delete(key(j.from));ob.pts.delete(key(j.to));const p=K.smartRoute(j.from,j.to,ob,j.v);for(let i=0;i+1<p.length;i++)keep.push({t:'w',a:p[i],b:p[i+1],id:newId()});});}
+  return keep;}
 function applyMove(base,ids,dx,dy,endpoint){
   return transformSel(base,ids,e=>{
     if(endpoint&&endpoint.id===e.id){const k=endpoint.k?'b':'a',o=e[k];let np=[o[0]+dx,o[1]+dy];if(e.t!=='w'){const other=e[endpoint.k?'a':'b'];np=Math.abs(np[0]-other[0])>=Math.abs(np[1]-other[1])?[np[0],other[1]]:[other[0],np[1]];}e[k]=np;return;}

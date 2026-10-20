@@ -71,6 +71,24 @@ const SimKit=(()=>{
   const route=(a,b,vFirst)=>a[0]===b[0]||a[1]===b[1]?[a,b]:vFirst?[a,[a[0],b[1]],b]:[a,[b[0],a[1]],b];
   function segDist(px,py,a,b){const [ax,ay]=a,[bx,by]=b,L2=(bx-ax)**2+(by-ay)**2||1e-9,u=clamp(((px-ax)*(bx-ax)+(py-ay)*(by-ay))/L2,0,1);return Math.hypot(px-ax-u*(bx-ax),py-ay-u*(by-ay));}
 
+  /* Manhattan path from a to b that avoids lying on top of other wires / component bodies and avoids
+     touching foreign pins (which would create unintended connections). ob = {segs:[[p,q]], pts:Set(key), boxes:[[x0,y0,x1,y1]]} */
+  function smartRoute(a,b,ob,vFirst){if(a[0]===b[0]&&a[1]===b[1])return [a];const cands=[[a,[b[0],a[1]],b],[a,[a[0],b[1]],b]];
+    const xs=new Set(),ys=new Set();for(let d=1;d<=5;d++){[a[0]-d,a[0]+d,b[0]-d,b[0]+d].forEach(v=>xs.add(v));[a[1]-d,a[1]+d,b[1]-d,b[1]+d].forEach(v=>ys.add(v));}
+    xs.forEach(x=>cands.push([a,[x,a[1]],[x,b[1]],b]));ys.forEach(y=>cands.push([a,[a[0],y],[b[0],y],b]));
+    let best=null,bc=Infinity;cands.forEach((raw,i)=>{const p=cleanPath(raw);const c=pathCost(p,ob,a,b)+(i===(vFirst?1:0)?0:0.01);if(c<bc){bc=c;best=p;}});return best;}
+  function cleanPath(pts){const o=[];pts.forEach(p=>{if(!o.length||o[o.length-1][0]!==p[0]||o[o.length-1][1]!==p[1])o.push([p[0],p[1]]);});
+    for(let i=1;i+1<o.length;){const [p,q,r]=[o[i-1],o[i],o[i+1]];if((p[0]===q[0]&&q[0]===r[0])||(p[1]===q[1]&&q[1]===r[1]))o.splice(i,1);else i++;}return o;}
+  const inside=(p,s)=>onSeg(p,s[0],s[1]);
+  function overlap(s,t){if(s[0][1]===s[1][1]&&t[0][1]===t[1][1]&&s[0][1]===t[0][1]){const a0=Math.min(s[0][0],s[1][0]),a1=Math.max(s[0][0],s[1][0]),b0=Math.min(t[0][0],t[1][0]),b1=Math.max(t[0][0],t[1][0]);return Math.min(a1,b1)-Math.max(a0,b0)>0;}
+    if(s[0][0]===s[1][0]&&t[0][0]===t[1][0]&&s[0][0]===t[0][0]){const a0=Math.min(s[0][1],s[1][1]),a1=Math.max(s[0][1],s[1][1]),b0=Math.min(t[0][1],t[1][1]),b1=Math.max(t[0][1],t[1][1]);return Math.min(a1,b1)-Math.max(a0,b0)>0;}return false;}
+  function pathCost(p,ob,a,b){let c=0,bad=0;for(let i=0;i+1<p.length;i++){const s=[p[i],p[i+1]];c+=Math.abs(s[1][0]-s[0][0])+Math.abs(s[1][1]-s[0][1]);
+      for(const t of ob.segs){if(overlap(s,t))bad++;}
+      for(const k of ob.pts){const [x,y]=k.split(',').map(Number);if(inside([x,y],s))bad++;}
+      for(const bx of ob.boxes||[]){const x0=Math.min(s[0][0],s[1][0]),x1=Math.max(s[0][0],s[1][0]),y0=Math.min(s[0][1],s[1][1]),y1=Math.max(s[0][1],s[1][1]);if(x1>bx[0]&&x0<bx[2]&&y1>bx[1]&&y0<bx[3])c+=8;}}
+    for(let i=1;i+1<p.length;i++){const q=p[i];if(ob.pts.has(key(q)))bad++;for(const t of ob.segs)if(inside(q,t))bad++;}
+    return c+3*(p.length-2)+1000*bad;}
+
   /* inject shared styles once */
   const st=document.createElement('style');st.textContent=`
 .simtip{position:absolute;display:none;z-index:5;pointer-events:none;max-width:280px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:12px/1.5 var(--mono);box-shadow:0 4px 16px rgba(0,0,0,.12)}
@@ -92,8 +110,9 @@ const SimKit=(()=>{
 .tabs{display:flex;flex-wrap:wrap;gap:6px}
 .kbd{font:11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--bg)}
 html.embed .tools button,html.embed .bar button{padding:2px 7px;font-size:11.5px}
-html.embed .toolgrp>span{display:none}`;
+html.embed .toolgrp>span{display:none}
+@media (max-width:620px){.toolgrp{display:contents}.toolgrp>span{display:none}.tools{gap:5px}.tools button{padding:3px 8px;font-size:12.5px}}`;
   document.head.appendChild(st);
 
-  return {View,History,encode,decode,copyText,store,download,tooltip,gestures,fmtSI,parseSI,key,eq,onSeg,route,segDist,clamp};
+  return {View,History,encode,decode,copyText,store,download,tooltip,gestures,fmtSI,parseSI,key,eq,onSeg,route,smartRoute,segDist,clamp};
 })();
