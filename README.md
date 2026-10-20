@@ -10,7 +10,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [功率与变压器实验室](https://114514ch-en.github.io/eee-interactive/power-lab/) | DEEM · EM Week 1–2 | 平均值与 RMS、电感伏秒平衡、理想变压器与折算阻抗 |
 | [数字逻辑实验室](https://114514ch-en.github.io/eee-interactive/logic-lab/) | DEEM · DE ①②③ | K-map 最小化、触发器时序、同步状态机、静态冒险 |
 | [拉普拉斯实验室](https://114514ch-en.github.io/eee-interactive/laplace-lab/) | Maths Part B | s 平面极点与响应、第二平移定理、卷积 |
-| [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验 |
+| [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验、马尔可夫过程与 PageRank |
 | [信息与编码实验室](https://114514ch-en.github.io/eee-interactive/coding-lab/) | Communication Systems Week 1 / 3 | 熵、Huffman / Fano / Shannon、分贝 |
 | [同步状态机实验室](https://114514ch-en.github.io/eee-interactive/fsm-lab/) | DEEM · DE ①② | 布尔函数的几种写法、Moore vs Mealy、用 X 触发器实现 Y、编码分配 |
 | [异步状态机实验室](https://114514ch-en.github.io/eee-interactive/afsm-lab/) | DEEM · DE ③ | 继电器河道闸门、竞争与虚拟状态、门级 AFSM 触发器（静态 / 本质冒险） |
@@ -20,8 +20,13 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [交流功率实验室](https://114514ch-en.github.io/eee-interactive/acpower-lab/) | EE1 · AC Power | 瞬时功率 p = vi、功率三角形与功率因数校正、最大功率传输、三相功率 |
 | [ALU 与微控制器实验室](https://114514ch-en.github.io/eee-interactive/alu-lab/) | EE1 · Programmable & Computational Circuits / Lab 2 | 补码转盘、4 位 ALU 与 C / V 标志、硬件 PWM、光敏电阻 + ADC |
 | [滤波与谐振实验室](https://114514ch-en.github.io/eee-interactive/filter-lab/) | EE1 · Communications Circuits | RC / RL 低通高通 Bode 图与相量图、串联 RLC 谐振、三种阻尼 |
-| [傅里叶实验室](https://114514ch-en.github.io/eee-interactive/fourier-lab/) | EE1 Fourier / Maths Part B | 级数合成与吉布斯现象、rect ⟷ sinc 与线性相位、采样与混叠 |
+| [傅里叶实验室](https://114514ch-en.github.io/eee-interactive/fourier-lab/) | EE1 Fourier / Maths Part B | 级数合成与吉布斯现象、rect ⟷ sinc 与线性相位、采样与混叠、傅里叶系数怎么来（正交性） |
 | [电机与变压器实验室](https://114514ch-en.github.io/eee-interactive/machines-lab/) | EE1 · Electrical Machines | 直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波 |
 | [复习卡片](https://114514ch-en.github.io/eee-interactive/cards/) | Year 1 EE + Year 2 全部 | 自测题、易错点、勘误卡片，间隔重复（`?c=DE&l=DE5` 只看某一讲） |
 | [电路模拟器](https://114514ch-en.github.io/eee-interactive/circuit-sim/) | 模拟器 | 自己画电路：RC / RLC 瞬态、整流滤波、交流 RL、频率响应（Bode 图） |
 | [逻辑模拟器](https://114514ch-en.github.io/eee-interactive/logic-sim/) | 模拟器 | 门电路 + 触发器 + 逻辑分析仪 + 真值表：冒险、计数器、步进电机、SR 锁存器、防盗报警、化简对比 |
+
+## 维护
+
+- 每页的 `?lab=N` 在 Notion 里嵌入时只显示第 N 个实验（`assets/common.js`）；直接打开则滚动到该实验。
+- 新增或改名实验后运行 `python3 tools/build_index.py`，首页的分组卡片和实验小标签会按各页 header 里的导航重新生成（分组和一句话简介在脚本顶部的 `GROUPS` / `BLURB`）。

@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>逻辑模拟器</title>
+<meta name="description" content="放门电路、触发器、开关和时钟，连线后按运行：导线颜色显示 0 / 1，下方的逻辑分析仪逐拍记录每个信号，所以门延迟造成的毛刺、触发器只在上升沿动作、未分配状态的去向都能直接看到。组合电路还能一键生成真值表和最小和。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="逻辑模拟器"><meta property="og:description" content="放门电路、触发器、开关和时钟，连线后按运行：导线颜色显示 0 / 1，下方的逻辑分析仪逐拍记录每个信号，所以门延迟造成的毛刺、触发器只在上升沿动作、未分配状态的去向都能直接看到。组合电路还能一键生成真值表和最小和。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/logic-sim/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
@@ -244,7 +249,7 @@ function load(k){comps=[];wires=[];sel=null;running=false;curP=k;PRE[k]();wires=
 document.querySelectorAll('#lab1 [data-p]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.p)));
 function lab1(){syncUI();drawSch();if(view==='la')drawLA();}
 Lab.add(1,lab1,{});
-let acc=0;const anim=Lab.anim(1,sch,dt=>{acc+=dt*(+$('spd').value);let n=Math.min(Math.floor(acc),20);acc=Math.min(acc-n,5);if(n){for(let i=0;i<n;i++)step();drawSch();drawLA();}},()=>running&&!REDUCE);
+let acc=0;const anim=Lab.anim(1,sch,dt=>{acc+=dt*(+$('spd').value);let n=Math.min(Math.floor(acc),20);acc=Math.min(acc-n,5);if(n){for(let i=0;i<n;i++)step();drawSch();drawLA();}},()=>running);/* user pressed Run: runs even with reduced motion */
 const QP=new URLSearchParams(location.search).get('p');load(PRE[QP]?QP:'haz');Lab.start();
 </script>
 </body></html>

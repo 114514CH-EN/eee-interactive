@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>复习卡片</title>
+<meta name="description" content="Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="复习卡片"><meta property="og:description" content="Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/cards/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <link rel="stylesheet" href="../assets/common.css">
@@ -39,9 +44,9 @@ html.embed .q{font-size:15.5px}html.embed .a{font-size:14px}html.embed .card{min
 </head><body>
 <div class="wrap">
 <header>
-  <div class="tag">EEE YEAR 2 · SPACED REPETITION</div>
+  <div class="tag">EEE YEAR 1–2 · SPACED REPETITION</div>
   <h1>复习卡片</h1>
-  <p>所有 Year 2 笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。</p>
+  <p>Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。</p>
   <nav><a href="../">← 所有互动页</a></nav>
 </header>
 
@@ -70,10 +75,12 @@ let S={};try{S=JSON.parse(localStorage.getItem('eee-cards-v1')||'{}');}catch(e){
 const save=()=>{try{localStorage.setItem('eee-cards-v1',JSON.stringify(S));}catch(e){}};
 const qp=new URLSearchParams(location.search);
 let fc=qp.get('c')||'',fl=qp.get('l')||'',mode=qp.get('m')||'due',queue=[],pos=0,shown=false,sessionN=0;
-function mk(s){/* tiny markup: **b**, ‹code›, lines starting with "- " become list items, \n -> <br> */
+function mk(s){/* tiny markup: **b**, ‹code›, lines starting with "- " become list items, \n -> <br>.
+   The text is HTML-escaped first, so "<" inside maths ($\sum_{i<s}$, $0\le x<2\pi$) stays text for KaTeX instead of opening a tag. */
+  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const lines=s.split('\n');let out='',inList=false;
   lines.forEach(l=>{const li=/^\s*-\s+/.test(l);if(li&&!inList){out+='<ul>';inList=true;}if(!li&&inList){out+='</ul>';inList=false;}
-    const t=l.replace(/^\s*-\s+/,'').replace(/‹(.+?)›/g,(m,c)=>'<code>'+c.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');out+=li?`<li>${t}</li>`:(t?t+'<br>':'');});
+    const t=esc(l.replace(/^\s*-\s+/,'')).replace(/‹(.+?)›/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');out+=li?`<li>${t}</li>`:(t?t+'<br>':'');});
   if(inList)out+='</ul>';return out.replace(/<br>$/,'');}
 function math(el){if(window.renderMathInElement){try{renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}catch(e){}}}
 function pool(){return ALL.filter(c=>(!fc||c.c===fc)&&(!fl||c.l===fl));}

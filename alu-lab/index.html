@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ALU 与微控制器实验室</title>
+<meta name="description" content="四个实验对应一年级 EE 的 Programmable and Computational Circuits 和 Lab 2（Arduino）：4 位补码转盘、74382 式 4 位 ALU（加减法、按位逻辑、C / V 标志）、硬件 PWM 发生器（计数器 + 比较器）、光敏电阻分压 + ADC …">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="ALU 与微控制器实验室"><meta property="og:description" content="四个实验对应一年级 EE 的 Programmable and Computational Circuits 和 Lab 2（Arduino）：4 位补码转盘、74382 式 4 位 ALU（加减法、按位逻辑、C / V 标志）、硬件 PWM 发生器（计数器 + 比较器）、光敏电阻分压 + ADC …"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/alu-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
@@ -192,7 +197,8 @@ function lab3(){
 $('pV').addEventListener('input',()=>Lab.draw(3));$('pRun').addEventListener('change',()=>{Lab.draw(3);Lab.anims.forEach(a=>Lab.kick(a));});
 document.querySelectorAll('#lab3 [data-p]').forEach(b=>b.addEventListener('click',()=>{$('pV').value=b.dataset.p;Lab.draw(3);}));
 Lab.add(3,lab3,{pw:250,led:250});
-Lab.anim(3,$('pw'),dt=>{pt=(pt+dt*160)%(3*256);Lab.draw(3);},()=>$('pRun').value==='1'&&!REDUCE);
+if(REDUCE)$('pRun').value='0';/* no autoplay with reduced motion, but 运行 still works when chosen */
+Lab.anim(3,$('pw'),dt=>{pt=(pt+dt*160)%(3*256);Lab.draw(3);},()=>$('pRun').value==='1');
 
 /* ---------- Lab 4: LDR divider + ADC ---------- */
 const ohm=r=>r>=1e6?(r/1e6).toPrecision(3)+' MΩ':r>=1e3?(+(r/1e3).toPrecision(3))+' kΩ':Math.round(r)+' Ω';

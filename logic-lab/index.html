@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>数字逻辑实验室</title>
+<meta name="description" content="四个实验对应 DE ①②③：点 K-map 自动找质蕴含项和最小和；给触发器喂输入看时序；让讲义里的状态机一步步走（包括从未分配状态出发）；亲眼看静态冒险的毛刺怎样被多加的一项消掉。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="数字逻辑实验室"><meta property="og:description" content="四个实验对应 DE ①②③：点 K-map 自动找质蕴含项和最小和；给触发器喂输入看时序；让讲义里的状态机一步步走（包括从未分配状态出发）；亲眼看静态冒险的毛刺怎样被多加的一项消掉。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/logic-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
@@ -206,7 +211,7 @@ $('sreset').addEventListener('click',()=>{sCur=MACH[mk].init;hist=[sCur];Lab.dra
 $('splay').addEventListener('click',()=>{sPlaying=!sPlaying;sAcc=0;Lab.draw(3);Lab.kick(sAnim);});
 document.querySelectorAll('#lab3 [data-s]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.s;sCur=MACH[mk].init;hist=[sCur];Lab.draw(3);}));
 Lab.add(3,lab3,{sd:250,sw:250});
-sAnim=Lab.anim(3,$('sd'),dt=>{sAcc+=dt;if(sAcc>=0.8){sAcc=0;sStep();Lab.draw(3);}},()=>sPlaying&&!REDUCE);
+sAnim=Lab.anim(3,$('sd'),dt=>{sAcc+=dt;if(sAcc>=0.8){sAcc=0;sStep();Lab.draw(3);}},()=>sPlaying);/* user pressed play: runs even with reduced motion */
 
 /* ===== Lab 4: static hazard ===== */
 let useBC=false;

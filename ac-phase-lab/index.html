@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>交流电相位实验室</title>
+<meta name="description" content="拖动滑块，看电压和电流怎样错开、感抗从哪里来、负载的超前或滞后怎样改变变压器的压降。三个实验对应 EM Week 1–4 的核心公式。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="交流电相位实验室"><meta property="og:description" content="拖动滑块，看电压和电流怎样错开、感抗从哪里来、负载的超前或滞后怎样改变变压器的压降。三个实验对应 EM Week 1–4 的核心公式。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/ac-phase-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -20,12 +25,14 @@
   --volt:#c9d6cf; --amp:#ff9a4d; --accent:#3fd0b8; --purple:#b49aff; --green:#5fd27a; --red:#ff7a6e; --blue:#7fb2ff;
   --shade:rgba(180,154,255,.16); color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
 .wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
 header h1{font-family:var(--display);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:.02em}
 header p{color:var(--muted);margin:.5rem 0 0;max-width:62ch}
 .legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px;font-size:13px;color:var(--muted)}
+header nav{margin-top:10px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px}
+header nav a{color:var(--accent);text-decoration:none}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:22px;height:3px;border-radius:2px;display:inline-block}
 section.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px clamp(14px,3vw,26px);display:flex;flex-direction:column;gap:14px}
@@ -82,6 +89,7 @@ html.embed .open{display:inline-block;position:absolute;top:8px;right:12px;font:
   <h1>交流电相位实验室</h1>
   <p>拖动滑块，看电压和电流怎样错开、感抗从哪里来、负载的超前或滞后怎样改变变压器的压降。三个实验对应 EM Week 1–4 的核心公式。</p>
   <div class="legend"><span><i class="sw" style="background:var(--volt)"></i>电压 v / V</span><span><i class="sw" style="background:var(--amp)"></i>电流 i / I</span><span><i class="sw" style="background:var(--green)"></i>电阻压降 IR</span><span><i class="sw" style="background:var(--purple)"></i>电抗压降 jIX</span></div>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 超前与滞后</a><a href="#lab2">实验 2 阻抗三角形</a><a href="#lab3">实验 3 变压器压降相量图</a></nav>
 </header>
 
 <section class="panel" id="lab1">

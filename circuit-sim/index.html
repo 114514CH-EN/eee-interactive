@@ -1,5 +1,10 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>电路模拟器</title>
+<meta name="description" content="在网格上画电路，按运行就能看到每个节点的电压（导线颜色）、电流（流动的小点）和示波器波形，还能对同一个电路扫频画 Bode 图。底层是改进节点分析法（MNA）加梯形积分，二极管用 Shockley 方程迭代求解。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="电路模拟器"><meta property="og:description" content="在网格上画电路，按运行就能看到每个节点的电压（导线颜色）、电流（流动的小点）和示波器波形，还能对同一个电路扫频画 Bode 图。底层是改进节点分析法（MNA）加梯形积分，二极管用 Shockley 方程迭代求解。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/circuit-sim/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
@@ -197,7 +202,7 @@ function drawScope(fast){
   traces.forEach((tr,j)=>{const Y=tr.unit==='V'?YV:YI;g.strokeStyle=css(tr.col);g.lineWidth=2;g.beginPath();for(let k=0;k<n;k++){const xx=X(bufT[idx(k)]),yy=Y(buf[j][idx(k)]);k?g.lineTo(xx,yy):g.moveTo(xx,yy);}g.stroke();});
   text(g,`${fmtSI(sweep/10,'s')}/格`,W-pr,H-6,css('--muted'),11,'right');text(g,`窗口 ${fmtSI(t0,'s')} – ${fmtSI(t1,'s')}`,pl,H-6,css('--muted'),11);
   if(fast&&performance.now()-lastStats<300)return;lastStats=performance.now();setStats('<tr><th>波形</th><th>平均值</th><th>RMS</th><th>峰峰值</th><th>最大 / 最小</th></tr>'+traces.map((tr,j)=>{let s=0,s2=0,lo=Infinity,hi=-Infinity;for(let k=0;k<n;k++){const v=buf[j][idx(k)];s+=v;s2+=v*v;if(v<lo)lo=v;if(v>hi)hi=v;}
-    return `<tr><td><span style="background:var(${tr.col})"></span>${tr.name}</td><td>${fmtSI(s/n,tr.unit)}</td><td>${fmtSI(Math.sqrt(s2/n),tr.unit)}</td><td>${fmtSI(hi-lo,tr.unit)}</td><td>${fmtSI(hi,tr.unit)} / ${fmtSI(lo,tr.unit)}</td></tr>`;}).join(''));
+    return `<tr><td><span style="background:var(${tr.col})"></span>${tr.name}</td><td>${fmtSI(Math.abs(s/n)<1e-4*Math.max(Math.abs(hi),Math.abs(lo))?0:s/n,tr.unit)}</td><td>${fmtSI(Math.sqrt(s2/n),tr.unit)}</td><td>${fmtSI(hi-lo,tr.unit)}</td><td>${fmtSI(hi,tr.unit)} / ${fmtSI(lo,tr.unit)}</td></tr>`;}).join(''));
 }
 function setStats(h){if(h!==statsHTML){statsHTML=h;$('stats').innerHTML=h;}}
 
@@ -278,7 +283,7 @@ Lab.add(1,lab1,{scope:170});
 const anim=Lab.anim(1,$('sch'),dt=>{const spd=+$('speed').value;simAcc+=dt*spd*(1000/2);let n=Math.min(Math.floor(simAcc),400);simAcc=Math.min(simAcc-n,50);
   try{for(let i=0;i<n;i++)step();}catch(e){solveErr='电路无法求解（奇异矩阵）。检查电压源是否被短路或并联。';running=false;}
   const imax=Math.max(1e-9,...els.filter(e=>!T[e.t].one).map(e=>Math.abs(e.i||0)));els.forEach(e=>{if(!T[e.t].one)e.ph+=(e.i||0)/imax*GU*3*dt;});
-  drawSch(true);if(view!=='bode')drawScope(true);if(!running)syncUI();},()=>running&&!REDUCE);
+  drawSch(true);if(view!=='bode')drawScope(true);if(!running)syncUI();},()=>running);/* user pressed Run: runs even with reduced motion */
 const QP=new URLSearchParams(location.search).get('p');load(PRE[QP]?QP:'rc');
 Lab.start();
 </script>
