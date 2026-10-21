@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>通信链路实验室</title>
-<meta name="description" content="通信系统的七个实验：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算（自由空间与地面双径）、量化噪声 SQNR、高斯噪声中的误码率、Butterworth 与 Chebyshev 滤波器。公式全部来自课程的 Useful Equations。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="通信链路实验室"><meta property="og:description" content="通信系统的七个实验：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算（自由空间与地面双径）、量化噪声 SQNR、高斯噪声中的误码率、Butterworth 与 Chebyshev 滤波器。公式全部来自课程的 Useful Equations。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/comms-lab/">
+<meta name="description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="通信链路实验室"><meta property="og:description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/comms-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,15 +20,127 @@
 .msg i{font-style:normal;color:var(--red);text-decoration:underline}
 .parses{font:13px var(--mono);color:var(--muted);columns:3 120px;margin:0;padding-left:18px}
 #kIn{width:100%}
+.grouphead{padding:8px 4px 0}.grouphead h2{font:600 22px var(--display);margin:4px 0 6px}.grouphead p{color:var(--muted);margin:0;max-width:72ch}
+html.embed .grouphead{display:none}
+h3.sub{font:600 16px var(--display);margin:6px 0 0}
+.ctl.wide{grid-column:1/-1}.ctl.wide input{width:100%}
+.cbook table{width:auto}.cbook td{padding:3px 6px}.cbook input{font:600 14px var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+.cbook input.sym{width:4.2em}.cbook input.cw{width:8em}.cbook input.bad{border-color:var(--red);color:var(--red)}.cbook .mv{font:12px var(--mono);color:var(--muted)}
+.cbook .del{padding:1px 8px}.cbook .add{margin-top:6px}
+pre.mat{font:13px/1.5 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+pre.mat .err{color:var(--red)}
+.verdict.ok{color:var(--green)}.verdict.bad{color:var(--red)}.verdict.warn{color:var(--amp)}
+table.trace{border-collapse:collapse;font:13px var(--mono)}table.trace th{font:12px var(--body);color:var(--muted);text-align:right;padding:3px 8px;white-space:nowrap}
+table.trace td{text-align:center;padding:3px 5px;border-left:1px solid var(--line);min-width:30px;white-space:nowrap}table.trace td.cur{background:var(--fillB)}table.trace td.fut{color:var(--muted);opacity:.45}
+table.trace td.emit b{color:var(--c,var(--accent))}table.trace tr.bits td{font-weight:700}
+.chk{list-style:none;padding:0;margin:0;font-size:14px}.chk li{margin:3px 0}.chk .ok{color:var(--green)}.chk .no{color:var(--red)}
+details.think{border:1px solid var(--line);border-radius:10px;padding:8px 12px}details.think summary{cursor:pointer;font-weight:600;font-size:14px}details.think p{font-size:14px;margin:8px 0 0;max-width:76ch}
+details summary{cursor:pointer;font-size:14px}
+#tText{width:100%;min-height:120px;font:13px/1.5 var(--mono);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;resize:vertical}
+.chkl{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.m{font-size:13px;color:var(--muted);margin:0}
+table.sum td:nth-child(2){font:600 14px var(--mono);white-space:nowrap}table.sum td:nth-child(3){font-size:12px;color:var(--muted)}
+.uinfo{font-size:13.5px;line-height:1.6;overflow-wrap:anywhere}.uinfo code{font-size:12.5px}.uinfo p{margin:0 0 6px}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">COMMUNICATION SYSTEMS (LI) · FOR AEROSPACE A (LH)</div>
   <h1>通信链路实验室</h1>
-  <p>沿着讲义的「通信系统通用模型」走一遍：信源编码 → 信道容量 → 无线传播 → 模拟信号数字化 → 噪声里判决 → 滤波。实验 1–2 接着 Week 3 的信源编码讲；实验 3–7 的公式都来自课程的 <em>Useful Equations</em>，后面几周才会细讲，可以当预习。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 前缀码解码</a><a href="#lab2">实验 2 分组编码逼近熵</a><a href="#lab3">实验 3 信道容量</a><a href="#lab4">实验 4 无线链路预算</a><a href="#lab5">实验 5 量化噪声</a><a href="#lab6">实验 6 噪声中的误码</a><a href="#lab7">实验 7 Butterworth / Chebyshev</a></nav>
+  <p><strong>官方 Lab 1（Source Coding）</strong>在最前面：自己写编码器、解码器、码表检查器，压缩真实文本，看统计不准时多花多少比特。后面的实验 1–7 沿着讲义的「通信系统通用模型」走一遍：信源编码 → 信道容量 → 无线传播 → 模拟信号数字化 → 噪声里判决 → 滤波。实验 1–2 接着 Week 3 的信源编码讲；实验 3–7 的公式都来自课程的 <em>Useful Equations</em>，后面几周才会细讲，可以当预习。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab8">Lab 1 · Task 1 编码器</a><a href="#lab9">Task 2 解码器与码表检查</a><a href="#lab10">Task 3 压缩真实文本</a><a href="#lab11">Task 4 统计不准时</a><a href="#lab1">实验 1 前缀码解码</a><a href="#lab2">实验 2 分组编码逼近熵</a><a href="#lab3">实验 3 信道容量</a><a href="#lab4">实验 4 无线链路预算</a><a href="#lab5">实验 5 量化噪声</a><a href="#lab6">实验 6 噪声中的误码</a><a href="#lab7">实验 7 Butterworth / Chebyshev</a></nav>
 </header>
+
+<div class="grouphead" id="lab1-official">
+  <div class="tag">官方 LAB 1 · SOURCE CODING · WEEK 4–5 · 不计分（可交 formative feedback）</div>
+  <h2>Lab 1：自己写编码器和解码器，压缩真实文本，看理论在哪里失灵</h2>
+  <p>对应讲义 <em>Communication Systems Lab 1</em> 的 Task 1–4 和 Extension。学习目标：① 根据码表实现前缀码的编码器和解码器；② 在真实数据上测出压缩效果，和 H(x) 比较。下面每个面板都可以直接拿来核对你的 MATLAB 结果；默认码表就是 Live Script 默认概率 0.55 / 0.3 / 0.1 / 0.05 下 huffmandict 给出的 A=0、B=10、C=110、D=111。</p>
+</div>
+
+<section class="panel" id="lab8">
+  <div class="tag">Lab 1 · Task 1 · Build an Encoder · bits = encodeSource(seq, dict)</div>
+  <h2>编码器：查表、按顺序拼起来——难点在「不要在循环里一点点加长 bits」</h2>
+  <p class="lead">huffmandict 只给<strong>码表</strong>：dict{i,1} 是符号，dict{i,2} 是码字向量（比如 [1 1 0]），不给比特流。encodeSource 要做的就是对 seq 里的每个符号查到码字、按顺序接成一行 0/1。改码表或序列看比特流怎么变；输入一个码表里没有的符号（比如 E），看一个<strong>有用的</strong> error() 应该说什么。</p>
+  <div class="btns" role="group" aria-label="码表预设"><button data-e="huff">Live Script 默认（Huffman）</button><button data-e="shannon">同一信源的 Shannon 码</button><button data-e="fixed">定长 2 位</button></div>
+  <div class="cbook" id="eBook"></div>
+  <div class="controls"><div class="ctl wide"><label for="eSeq">seq（空格或逗号隔开；也可以连写 ABCDAA）</label><input id="eSeq" type="text" value="A B C D A A" spellcheck="false" autocomplete="off"><span></span></div></div>
+  <div class="btns" role="group" aria-label="序列预设"><button data-q="A B C D A A">Check：A B C D A A</button><button data-q="A B E A">含码表外的 E</button><button id="eRnd">随机 20 个符号（按 0.55 / 0.3 / 0.1 / 0.05）</button></div>
+  <div class="bitrow" id="eBits" aria-live="polite"></div>
+  <pre class="mat" id="eMat"></pre>
+  <p class="verdict" id="eV"></p>
+  <h3 class="sub">为什么 10,000 个符号会慢：每次「加长」都要整段复制</h3>
+  <p class="lead">在循环里写 <code>bits = [bits dict{k,2}];</code>，MATLAB 每次都要新开一块更长的内存，把已有的比特全部复制过去。第 k 次复制大约 k·L̄ 个元素，加起来约 L̄N²/2——N 翻倍，时间变 4 倍。先算出总长度一次分配好（预分配），每个比特只写一次，总共 L̄N 次。</p>
+  <div class="stage even"><canvas id="eCopy" height="250" aria-label="复制次数随符号数 N"></canvas><div><div class="btns"><button id="eBench" class="play">在浏览器里实测 N = 1k → 16k</button></div><div class="scroll"><table class="mini" id="eBenchT"><tr><th>N</th><th>边循环边加长</th><th>预分配</th></tr><tr><td colspan="3" style="color:var(--muted)">点上面的按钮开始（几秒钟）</td></tr></table></div></div></div>
+  <p class="note"><strong>MATLAB 思路（不是完整答案）：</strong>① 查表：用 ismember 一次找出每个符号在 dict(:,1) 里的行号 idx；找不到的位置用 <code>error('encodeSource:unknownSymbol', 'Symbol "%s" at position %d is not in the dictionary', …)</code> 报出来——要说清<strong>哪个符号、第几个</strong>。② 预分配：每个码字长度 len = cellfun(@numel, dict(:,2))，总长 sum(len(idx))，先 zeros(1, 总长)，再用一个位置指针往里填；或者用逗号分隔列表一次拼接 <code>[dict{idx,2}]</code>（只分配一次）。③ 两个坑：Live Script 里 <code>huffmandict(n, p)</code> 的符号是<strong>数字 1–4</strong>，不是 'A'–'D'，要么用 huffmandict({'A','B','C','D'}, p)，要么先把字母映射成数字；<code>'A B C D A A'</code> 这样带空格的字符向量里，<strong>空格本身也是一个符号</strong>，会触发你的 error()。</p>
+</section>
+
+<section class="panel" id="lab9">
+  <div class="tag">Lab 1 · Task 2 · Build a Decoder · seq = decodeSource(bits, dict)</div>
+  <h2>解码器：一位一位读，凑成码字就输出并清空——码表不是前缀码时，错误往往是「看起来正常」的</h2>
+  <p class="lead">规定的做法：从左到右每读一位就把它加进缓冲区，缓冲区和某个码字一样就输出那个符号并清空；不许往后看、不许分隔符、不许传长度。前缀码保证「第一次匹配就是对的」。把 C 的 110 改成 11（它变成了 D = 111 的前缀），同一条消息再编码、再解码，看会怎样。</p>
+  <div class="btns" role="group" aria-label="码表预设"><button data-d="huff">默认 Huffman（前缀码）</button><button data-d="c11">C：110 → 11</button><button data-d="b1">B：10 → 1</button><button data-d="dup">B、C 同一个码字</button><button data-d="empty">D 的码字误设成空 []</button></div>
+  <div class="cbook" id="dBook"></div>
+  <div class="controls"><div class="ctl wide"><label for="dSeq">发送的 seq</label><input id="dSeq" type="text" value="A B C D A A" spellcheck="false" autocomplete="off"><span></span></div></div>
+  <div class="btns"><button id="dPlay" class="play">▶ 逐位解码</button><button id="dStep">单步</button><button id="dEnd">直接看结果</button><button id="dRnd">随机发 2000 条消息统计</button></div>
+  <div class="scroll"><table class="trace" id="dTrace"></table></div>
+  <p class="msg" id="dMsg"></p>
+  <p class="verdict" id="dV"></p>
+  <p class="m" id="dStat"></p>
+  <h3 class="sub">码表检查器：解码前先确认是前缀码</h3>
+  <ul class="chk" id="dChk"></ul>
+  <details class="think"><summary>想一想：报错、卡死、给出看似正常的错数据，哪种在真实接收机里最危险？（点开看思路）</summary>
+    <p><strong>看似正常的错数据最危险。</strong>报错（比如末尾剩下凑不成码字的比特）至少让接收端知道出了问题，可以重传或丢弃；卡死也会被看门狗或超时发现。但贪心匹配到一个更短的码字后，后面的切点全部错位，输出的却是一串完全合法的符号——符号个数可能一样、可能不一样，接收端没有任何办法发现，错数据会被当成真数据继续用。上面「随机发 2000 条消息」可以看到，同一本坏码表下，<strong>有的消息会报错，有的不会</strong>：靠「解码时报没报错」来判断码表对不对是靠不住的，所以要在用之前检查码表。</p>
+    <p><strong>什么时候会卡死：</strong>规定的「读一位再查表」不会卡死；但如果实现成「先查表、匹配不上才读下一位」，一个空码字 [] 会让解码器原地不停地输出它；用 while 循环等待「剩余比特以某个码字开头」的写法，在尾巴凑不成码字时也会永远等下去。</p>
+  </details>
+  <p class="note"><strong>检查器的思路：</strong>把码字当成字符串（比如 strjoin(string(c),"")）按字典序排序，<strong>只需比较相邻两个</strong>：如果 a 是某个 b 的前缀，排序后夹在 a 和 b 之间的串也都以 a 开头，所以 a 一定是它紧后面那个串的前缀（重复码字也会相邻）。再加上：不能有空码字、只能含 0 和 1。Kraft 和 K = Σ2<sup>−ℓ</sup> ≤ 1 是唯一可译的<strong>必要</strong>条件，可以顺手算，但 K ≤ 1 并不保证前缀性（比如 A=0、B=01 的 K = 0.75，却不是前缀码）。</p>
+</section>
+
+<section class="panel" id="lab10">
+  <div class="tag">Lab 1 · Task 3 · Compress Real Data</div>
+  <h2>压缩一段真实文本：H、测得的 L、ASCII 的 8 bit，差距各来自哪里</h2>
+  <p class="lead">做法和讲义给的 MATLAB 代码一样：fileread 读进来，double() 变成字符编码，unique 找出用到的符号，accumarray 计数得到经验分布 p，再算 H(x)、建 Huffman 码表、编码整个文件。可以直接粘贴你的 mytext.txt，或者读取本地文件（只在浏览器里处理，不上传）。</p>
+  <div class="btns"><button id="tSample">示例英文（原创，2810 个字符）</button><button id="tFileBtn">读取本地 .txt 文件</button><input type="file" id="tFile" accept=".txt,text/plain" hidden><label class="chkl"><input type="checkbox" id="tCRLF"> 换行按 Windows 记事本保存的 \r\n 算</label></div>
+  <textarea id="tText" spellcheck="false" aria-label="要压缩的文本">Every message we send is a sequence of symbols, and every symbol costs something to transmit. Long before computers, telegraph operators already knew this. When Samuel Morse and Alfred Vail designed their code, they gave the shortest patterns to the letters that appear most often in English. The letter E became a single dot, while rarer letters such as J or X were given longer runs of dots and dashes. An operator tapping out a long telegram therefore spent less time on the common letters and more time on the unusual ones, and on average the whole message went faster.
+
+The same idea sits at the heart of modern source coding. If we know how often each symbol occurs, we can give frequent symbols short codewords and rare symbols long ones. The average number of bits per symbol then falls below what a fixed-length code would need. There is, however, a limit. Claude Shannon showed that no uniquely decodable code can use fewer bits per symbol, on average, than the entropy of the source. Entropy measures how unpredictable the source is: a source that almost always sends the same symbol has very low entropy and can be squeezed hard, while a source whose symbols are all equally likely cannot be compressed at all.
+
+Knowing the limit is not the same as reaching it. In 1951 a graduate student at MIT, David Huffman, was offered a choice by his teacher Robert Fano: sit the final exam, or write a term paper on finding the most efficient binary code. He picked the paper, struggled with it for months, and was about to give up when he saw that the code tree should be built from the bottom up rather than from the top down. Keep joining the two least likely symbols until only one node is left; the result can never be beaten by any other symbol-by-symbol code. His method, published in 1952, still runs inside file formats, image compressors and network protocols.
+
+A Huffman code is also a prefix code: no codeword is the beginning of another one. That is what lets a receiver read the bitstream from left to right, one bit at a time, and know exactly where each codeword ends without any separators. Break that rule and the receiver can no longer tell where one symbol stops and the next begins.
+
+So what should an encoder do when the statistics are unknown? In practice it has to estimate them from data it has already seen, and the estimate is never perfect. Text written by one author about one topic has different statistics from text written by another author about something else; a code that was optimal yesterday may waste bits today. Worse, when a symbol appears that the encoder has never met, a fixed codebook simply has no codeword for it. Real systems handle this with adaptive models, escape symbols, or by sending a fresh codebook along with the data (at a cost of a few hundred bits).</textarea>
+  <p class="m" id="tInfo"></p>
+  <div class="stage even"><div class="scroll"><table class="mini" id="tTab"></table></div><div><canvas id="tBud" height="240" aria-label="每个符号的比特数：ASCII → 定长 → 熵 → Huffman"></canvas><p class="m" id="tBudN"></p></div></div>
+  <canvas id="tSc" height="320" aria-label="码长 ℓ 对 −log₂p 的散点图"></canvas>
+  <details><summary>每个符号的计数、p、−log₂p、码长和码字（按出现次数排序）</summary><div class="scroll"><table class="mini" id="tSym"></table></div></details>
+  <details class="think"><summary>想一想：为什么对 ASCII 的压缩比比 η 看起来好得多？（点开看思路）</summary>
+    <p>η = H/L 只衡量「在<strong>已经知道只有这 |𝒳| 个符号</strong>的前提下，离最优还差多少」，所以总是 95% 以上。8 bit 的 ASCII 基线是在为 <strong>256 种可能的字符</strong>付钱，而你的文本只用到其中几十种：光是「只给用到的符号编号」就能从 8 bit 降到 ⌈log₂|𝒳|⌉ bit，这一截和概率分布无关，η 根本没算进去。右上图把 8 → L 的下降拆成三段：字母表变小、按概率分配、整数码长的代价。</p>
+    <p><strong>谁离 x = y 线最远：</strong>码长只能是整数。出现一次的字符 −log₂p 是十几，Huffman 往往给得更短（在线下方）；最常见的空格 −log₂p ≈ 2.6，只能给 3（在线上方，多付了零点几 bit，但乘以很大的 p，对 L 的影响反而最大）。Huffman 不会让每个点都靠近 x = y，它只保证 Σ p<sub>i</sub>ℓ<sub>i</sub> 最小。</p>
+  </details>
+  <p class="note"><strong>和 MATLAB 结果对不上时：</strong>① 记事本保存的文件换行是 \r\n，double(txt) 里会多出字符 13，勾上上面的选项再比；② huffmandict 在概率相同的符号之间分配码长的方式可能和这里不同，个别符号的码长会差 1，但<strong>平均码长 L 一定一样</strong>（所有 Huffman 码都是最优的）；③ L 用测得的总比特数 ÷ 符号数，和 Σ p<sub>i</sub>ℓ<sub>i</sub> 相等，因为 p 就是从这份文本数出来的。</p>
+</section>
+
+<section class="panel" id="lab11">
+  <div class="tag">Lab 1 · Task 4 + Extension · When the Statistics are Wrong</div>
+  <h2>用前一半建码表、编码后一半：多出来的比特就是「统计不准」的代价</h2>
+  <p class="lead">编码器从来不知道真实的 p，只能用已经见过的数据估计。用 Task 3 的文本（在上一个面板里改），前面一部分数出 p 建 Huffman 码表，拿它编码剩下的部分，和剩下部分自己的熵 H 比。后半出现了前半没有的字符时，Task 1 的编码器会直接 error()；Extension 让你想办法处理它，下面可以切换几种办法比较。</p>
+  <div class="controls">
+    <div class="ctl"><label for="uSplit">用来建码表的部分</label><input id="uSplit" type="range" min="0.1" max="0.9" step="0.05" value="0.5"><output id="uSplitO"></output></div>
+    <div class="ctl"><label for="uMode">遇到码表里没有的字符</label><select id="uMode"><option value="err">error()，跳过不算（Task 4 的情况）</option><option value="esc">转义：ESC 码字 + 8 位原始编码</option><option value="add1">加一平滑：256 个字节值计数都 +1</option><option value="adapt">自适应：边编码边计数，每 200 个字符重建码表</option></select><span></span></div>
+  </div>
+  <div class="read"><div><small>后半部分的熵 H(q)</small><b id="uH"></b></div><div><small>用后半自己的统计建 Huffman</small><b id="uLo"></b></div><div><small>用前半的码表测得 L</small><b id="uL"></b></div><div><small>多花 L − H(q)</small><b id="uGap"></b></div><div><small>其中理论代价 D(q‖p)</small><b id="uKL"></b></div></div>
+  <div class="stage even"><canvas id="uCh" height="270" aria-label="不同训练比例下的平均码长"></canvas><div id="uInfo" class="uinfo"></div></div>
+  <details class="think"><summary>想一想：为什么 L 比 H 大，大多少？（点开看思路）</summary>
+    <p>用为 p 设计的码去编码统计为 q 的数据，理想（码长可以是小数）时每个符号要 −log₂p<sub>i</sub> bit，平均就是交叉熵 H(q, p) = Σ q<sub>i</sub>(−log₂p<sub>i</sub>) = H(q) + D(q‖p)。D(q‖p) = Σ q<sub>i</sub>log₂(q<sub>i</sub>/p<sub>i</sub>) 叫 KL 散度，≥ 0，两个分布越不像越大；再加上整数码长的那一点点代价，就是测得的 L − H(q)。训练数据越少，p 估得越不准，D(q‖p) 越大（左图往左走）。只要后半有一个前半没见过的字符，p<sub>i</sub> = 0，−log₂p<sub>i</sub> = ∞：固定码表<strong>根本编不出来</strong>，不是「多花一点」的问题。</p>
+    <p><strong>Extension 的几种办法：</strong>转义符给「没见过的字符」留一个码字，后面跟它的原始编码，代价是每个新字符多花一个 ESC 加 8 bit；加一平滑让 256 个字节值都有码字，代价是每个已知字符的码字略长；自适应让编码器和解码器按同样的规则一起更新统计（解码器能同步，因为它看到的数据和编码器一样），越编越准。</p>
+  </details>
+</section>
+
+<div class="grouphead" id="lectures">
+  <div class="tag">课堂内容练习 · 讲义和 USEFUL EQUATIONS</div>
+  <h2>实验 1–7：跟着讲义走一遍通信系统模型</h2>
+  <p>这部分是讲座内容的互动练习，不是官方 Lab 的题目。</p>
+</div>
 
 <section class="panel" id="lab1">
   <div class="tag">实验 1 · Week 3 · Huffman Coding Tutorial Question / Further Thoughts</div>
@@ -361,6 +473,230 @@ function lab7(){
 }
 presets(7,'f',S7);
 Lab.add(7,lab7,{fd:220,fl:220});
+
+/* ================= Official Lab 1 (Tasks 1–4 + Extension) ================= */
+const BOOKS={huff:[['A','0'],['B','10'],['C','110'],['D','111']],shannon:[['A','0'],['B','10'],['C','1101'],['D','11110']],fixed:[['A','00'],['B','01'],['C','10'],['D','11']],
+  c11:[['A','0'],['B','10'],['C','11'],['D','111']],b1:[['A','0'],['B','1'],['C','110'],['D','111']],dup:[['A','0'],['B','10'],['C','10'],['D','111']],empty:[['A','0'],['B','10'],['C','110'],['D','']]};
+const LSP={A:0.55,B:0.3,C:0.1,D:0.05};
+const escH=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const SYMC=['--blue','--amp','--purple','--green','--accent','--red'];
+const cw=v=>String(v).replace(/[\s,\[\]]/g,'');
+const okCW=v=>!/[^01]/.test(cw(v));
+const mvec=v=>'['+[...cw(v)].join(' ')+']';
+const SUP=n=>String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]||c).join('');
+function parseSeq(s){s=String(s).replace(/[{}\[\]'"]/g,' ').trim();if(!s)return [];return /[\s,;]/.test(s)?s.split(/[\s,;]+/).filter(Boolean):[...s];}
+const sameBook=(a,b)=>a.length===b.length&&a.every((r,i)=>r[0]===b[i][0]&&cw(r[1])===b[i][1]);
+/* editable codebook table; rows are [symbol, codeword-as-typed] */
+function codeBook(id,rows,onChange){const root=$(id),st={rows:rows.map(r=>r.slice())};
+  const draw=()=>{root.innerHTML=`<div class="scroll"><table class="mini"><tr><th>dict{i,1} 符号</th><th>dict{i,2} 码字</th><th>MATLAB 里是</th><th>ℓ</th><th></th></tr>${st.rows.map((r,i)=>`<tr><td><input class="sym" data-i="${i}" data-f="0" value="${escH(r[0])}" aria-label="第 ${i+1} 个符号"></td><td><input class="cw${okCW(r[1])?'':' bad'}" data-i="${i}" data-f="1" value="${escH(r[1])}" inputmode="numeric" aria-label="第 ${i+1} 个码字"></td><td class="mv" data-mv="${i}">${mvec(r[1])}</td><td class="mv" data-l="${i}">${cw(r[1]).length}</td><td><button class="del" data-del="${i}" aria-label="删除这一行">×</button></td></tr>`).join('')}</table></div><button class="add">+ 加一个符号</button>`;};
+  root.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.i===undefined)return;const i=+t.dataset.i;st.rows[i][+t.dataset.f]=t.value;
+    if(t.dataset.f==='1'){t.classList.toggle('bad',!okCW(t.value));root.querySelector(`[data-mv="${i}"]`).textContent=mvec(t.value);root.querySelector(`[data-l="${i}"]`).textContent=cw(t.value).length;}onChange();});
+  root.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;
+    if(b.dataset.del!==undefined){st.rows.splice(+b.dataset.del,1);draw();onChange();}
+    else if(b.classList.contains('add')){const used=new Set(st.rows.map(r=>r[0]));const c=[...'EFGHIJKLMNOPQRSTUVWXYZ'].find(ch=>!used.has(ch))||'?';st.rows.push([c,'']);draw();onChange();root.querySelector(`[data-i="${st.rows.length-1}"][data-f="1"]`).focus();}});
+  st.set=r=>{st.rows=r.map(x=>x.slice());draw();onChange();};draw();return st;}
+function encodeSeq(seq,rows){const map=new Map();rows.forEach(r=>{if(!map.has(r[0]))map.set(r[0],cw(r[1]));});const segs=[];let bits='';
+  for(let k=0;k<seq.length;k++){const s=seq[k];if(!map.has(s))return {err:{s,k},segs,bits};const c=map.get(s);segs.push({s,a:bits.length,b:bits.length+c.length});bits+=c;}return {segs,bits};}
+const symCol=(rows,s)=>SYMC[Math.max(0,rows.findIndex(x=>x[0]===s))%SYMC.length];
+function bookWarnings(rows){const w=[],seen=new Map();rows.forEach(r=>{if(seen.has(r[0]))w.push(`符号 ${r[0]} 出现了两次，查表只会用到第一行`);seen.set(r[0],1);
+  if(!okCW(r[1]))w.push(`${r[0]} 的码字「${r[1]}」里有 0 / 1 以外的字符`);else if(!cw(r[1]).length)w.push(`${r[0]} 的码字是空的：编码时它不产生任何比特，解码器永远解不出它`);});return w;}
+
+/* ---------- Task 1: encoder ---------- */
+let eBook;
+function lab8(){const rows=eBook.rows,seq=parseSeq($('eSeq').value),r=encodeSeq(seq,rows);
+  pressGroup('#lab8 [data-e]',b=>sameBook(rows,BOOKS[b.dataset.e]));pressGroup('#lab8 [data-q]',b=>b.dataset.q===$('eSeq').value.trim());
+  let h='';r.segs.forEach(g=>{h+=`<span class="seg" style="--c:var(${symCol(rows,g.s)})"><b>${escH(g.s)}</b><span>`;for(let i=g.a;i<g.b;i++)h+=`<span class="bit">${r.bits[i]}</span>`;if(g.a===g.b)h+='<span class="bit" style="opacity:.5">∅</span>';h+='</span></span>';});
+  if(r.err)h+=`<span class="seg" style="--c:var(--red)"><b>${escH(r.err.s)}</b><span><span class="bit fl">?</span></span></span>`;
+  $('eBits').innerHTML=h||'<span style="color:var(--muted)">（空序列）</span>';
+  const seqM=seq.length?'{'+seq.map(s=>`'${s}'`).join(',')+'}':'{}';
+  if(r.err){$('eMat').innerHTML=`&gt;&gt; seq = ${escH(seqM)};\n&gt;&gt; bits = encodeSource(seq, dict)\n<span class="err">Error using encodeSource\nSymbol "${escH(r.err.s)}" at position ${r.err.k+1} is not in the dictionary.</span>`;
+    $('eV').className='verdict bad';$('eV').textContent=`✗ 第 ${r.err.k+1} 个符号「${r.err.s}」不在码表里。好的 error() 要说出是哪个符号、在第几个位置；如果静默跳过，解出来的消息会少一个符号，而且没人知道。`;}
+  else{$('eMat').textContent=`>> seq = ${seqM};\n>> bits = encodeSource(seq, dict)\nbits =\n  1×${r.bits.length} 的行向量\n  ${[...r.bits].join(' ')||'（空）'}`;
+    const chk=seq.join('')==='ABCDAA'&&sameBook(rows,BOOKS.huff);
+    $('eV').className='verdict'+(chk?' ok':'');
+    $('eV').textContent=chk?`✓ Check 的答案：0 | 10 | 110 | 111 | 0 | 0 → ${r.bits}，共 11 位（1.83 位/符号；这条短消息里 C、D 占得比平均多，所以比 L = 1.6 长）`:
+      `${seq.length} 个符号 → ${r.bits.length} 位${seq.length?`，${fmt(r.bits.length/seq.length,3)} 位/符号`:''}`;}
+  const w=bookWarnings(rows);if(w.length&&!r.err){$('eV').className='verdict warn';$('eV').textContent='⚠ '+w.join('；')+'。'+($('eV').textContent.startsWith('✓')?'':' 这一串：'+r.bits.length+' 位。');}
+  drawCopy();}
+function drawCopy(){const [g,W,H]=fit($('eCopy')),Lb=1.6;
+  const a=axes(g,W,H,{x0:1,x1:6,y0:1,y1:12,xt:[1,2,3,4,5,6],xf:v=>'10'+SUP(v),yt:[2,4,6,8,10,12],yf:v=>'10'+SUP(v),title:'复制 / 写入的元素个数（对数坐标），L̄ = 1.6 位/符号',xl:'符号数 N',pl:44,pt:28});
+  plot(g,a.X,a.Y,lx=>Math.log10(Lb*Math.pow(10,2*lx)/2),1,6,css('--red'),2.4,100);plot(g,a.X,a.Y,lx=>Math.log10(Lb*Math.pow(10,lx)),1,6,css('--green'),2.4,100);
+  text(g,'边循环边加长 ≈ L̄N²/2（斜率 2）',a.X(1.15),a.Y(9.6),css('--red'),11.5);text(g,'预分配 = L̄N（斜率 1）',a.X(6)-4,a.Y(3.3),css('--green'),11.5,'right');
+  const x4=a.X(4);g.strokeStyle=css('--muted');g.setLineDash([4,4]);g.beginPath();g.moveTo(x4,a.Y(12));g.lineTo(x4,a.Y(1));g.stroke();g.setLineDash([]);
+  [[Math.log10(Lb*1e8/2),css('--red'),'8×10⁷',-1],[Math.log10(Lb*1e4),css('--green'),'1.6×10⁴',1]].forEach(([y,c,s,side])=>{g.fillStyle=c;g.beginPath();g.arc(x4,a.Y(y),4.5,0,7);g.fill();g.font=`600 11.5px ${css('--mono')}`;const w=g.measureText(s).width;label(g,s,side<0?x4-8-w:x4+8,a.Y(y)+(side<0?-6:16),c,11.5);});
+  text(g,'N = 10,000',x4-4,a.Y(11.3),css('--muted'),11,'right');}
+async function bench(){const btn=$('eBench'),T=$('eBenchT'),codes=BOOKS.huff.map(r=>Uint8Array.from([...r[1]].map(Number))),rnd=rng(11),res=[];btn.disabled=true;
+  const show=()=>{T.innerHTML='<tr><th>N</th><th>边循环边加长</th><th>预分配</th><th>N 翻倍，加长那种变成</th></tr>'+res.map((r,i)=>`<tr><td>${r.N.toLocaleString()}</td><td>${r.tg.toFixed(1)} ms</td><td>${r.tp.toFixed(2)} ms</td><td>${i?`×${(r.tg/Math.max(res[i-1].tg,0.05)).toFixed(1)}`:'—'}</td></tr>`).join('')+(res.length<5?'<tr><td colspan="4" style="color:var(--muted)">测量中…</td></tr>':'<tr><td colspan="4" style="color:var(--muted)">理论上每次 ×4；浏览器分配内存比 MATLAB 快，但增长规律一样</td></tr>');};
+  for(const N of [1000,2000,4000,8000,16000]){const idx=new Uint8Array(N);for(let i=0;i<N;i++){const u=rnd();idx[i]=u<0.55?0:u<0.85?1:u<0.95?2:3;}
+    let tg=Infinity,tp=Infinity,bits,out;
+    for(let rep=0;rep<2;rep++){let t0=performance.now();bits=new Uint8Array(0);for(let i=0;i<N;i++){const c=codes[idx[i]],nb=new Uint8Array(bits.length+c.length);nb.set(bits);nb.set(c,bits.length);bits=nb;}tg=Math.min(tg,performance.now()-t0);
+      t0=performance.now();let tot=0;for(let i=0;i<N;i++)tot+=codes[idx[i]].length;out=new Uint8Array(tot);let pos=0;for(let i=0;i<N;i++){out.set(codes[idx[i]],pos);pos+=codes[idx[i]].length;}tp=Math.min(tp,performance.now()-t0);await new Promise(r=>setTimeout(r,10));}
+    if(out[0]!==bits[0])console.warn('mismatch');res.push({N,tg,tp});show();await new Promise(r=>setTimeout(r,40));}
+  btn.disabled=false;}
+
+/* ---------- Task 2: decoder ---------- */
+let dBook,dPos=-1,dTimer=null;
+function decodeBits(bits,rows){const dict=rows.map(r=>({s:r[0],c:cw(r[1])})).filter(d=>d.c!==''&&okCW(d.c));const steps=[],out=[];let buf='';
+  for(let i=0;i<bits.length;i++){buf+=bits[i];const m=dict.find(d=>d.c===buf);const st={bit:bits[i],buf};if(m){st.emit=m.s;out.push(m.s);buf='';}steps.push(st);}return {steps,out,rest:buf};}
+function classify(seq,rows){const e=encodeSeq(seq,rows);if(e.err)return {kind:'enc',e};const d=decodeBits(e.bits,rows);const lost=seq.some(s=>{const r=rows.find(x=>x[0]===s);return r&&cw(r[1])==='';});
+  const kind=d.rest?'err':d.out.join('\u0001')===seq.join('\u0001')?'ok':lost?'lost':d.out.length===seq.length?'wrong':'wrongn';return {kind,e,d};}
+function prefixCheck(rows){const cs=rows.map(r=>({s:r[0],c:cw(r[1]),ok:okCW(r[1])}));const res={bad:cs.filter(x=>!x.ok),empty:cs.filter(x=>x.ok&&!x.c),dup:[],pre:[]};
+  const good=cs.filter(x=>x.ok&&x.c);for(let i=0;i<good.length;i++)for(let j=0;j<good.length;j++){if(i===j)continue;const a=good[i],b=good[j];
+    if(a.c===b.c){if(i<j)res.dup.push([a,b]);}else if(b.c.startsWith(a.c))res.pre.push([a,b]);}
+  res.K=good.reduce((s,x)=>s+Math.pow(2,-x.c.length),0);res.prefix=!res.bad.length&&!res.empty.length&&!res.dup.length&&!res.pre.length;
+  /* the sorted-neighbour method finds a conflict iff one exists */
+  const srt=good.map(x=>x.c).sort();res.adj=srt.some((c,i)=>i&&srt[i].startsWith(srt[i-1]));return res;}
+function lab9(){const rows=dBook.rows,seq=parseSeq($('dSeq').value),C=classify(seq,rows);
+  pressGroup('#lab9 [data-d]',b=>sameBook(rows,BOOKS[b.dataset.d]));
+  const T=$('dTrace'),M=$('dMsg'),V=$('dV');
+  if(C.kind==='enc'){T.innerHTML='';M.textContent='';V.className='verdict bad';V.textContent=`✗ 编码就失败了：第 ${C.e.err.k+1} 个符号「${C.e.err.s}」不在码表里`;}
+  else{const {steps}=C.d,n=steps.length,pos=dPos<0?n:Math.min(dPos,n);
+    const cell=(i,f)=>{const st=steps[i],cls=i===pos-1?'cur':i>=pos?'fut':'';return f(st,cls);};
+    let h='<tr><th>第几位</th>'+steps.map((s,i)=>`<td class="${i===pos-1?'cur':i>=pos?'fut':''}">${i+1}</td>`).join('')+'</tr>';
+    h+='<tr class="bits"><th>读到的比特</th>'+steps.map((s,i)=>cell(i,(st,c)=>`<td class="${c}">${st.bit}</td>`)).join('')+'</tr>';
+    h+='<tr><th>缓冲区</th>'+steps.map((s,i)=>cell(i,(st,c)=>`<td class="${c}">${i<pos?st.buf:''}</td>`)).join('')+'</tr>';
+    h+='<tr><th>匹配 → 输出</th>'+steps.map((s,i)=>cell(i,(st,c)=>`<td class="${c}${st.emit&&i<pos?' emit':''}" style="--c:var(${symCol(rows,st.emit)})">${i<pos&&st.emit?`<b>${escH(st.emit)}</b>`:''}</td>`)).join('')+'</tr>';
+    T.innerHTML=n?h:'';
+    const outSoFar=steps.slice(0,pos).filter(s=>s.emit).map(s=>s.emit);
+    M.innerHTML=`发送：<b>${seq.map(escH).join(' ')||'—'}</b>　编码：<b>${C.e.bits||'（0 位）'}</b>（${C.e.bits.length} 位）<br>解码${pos<n?`（读到第 ${pos} 位）`:''}：<b>${outSoFar.map(escH).join(' ')||'—'}</b>${pos>=n&&C.d.rest?`　<i>末尾剩下 ${C.d.rest} 凑不成码字</i>`:''}`;
+    if(pos<n){V.className='verdict';V.textContent='';}
+    else{const k=C.kind;V.className='verdict '+(k==='ok'?'ok':k==='err'?'warn':'bad');
+      V.textContent=k==='ok'?'✓ 解码正确：前缀码下，每次第一次匹配就是对的':k==='err'?'⚠ 报错：比特读完了缓冲区里还剩东西——至少接收端知道出了问题':
+        k==='lost'?'✗ 没报错，但丢了符号：空码字在编码时不产生比特，解码器永远解不出它':k==='wrong'?'✗ 没报错，符号个数也对，但内容是错的——看起来完全正常的错数据（最危险）':'✗ 没报错，但解出的符号个数都变了——仍然是一串「合法」的符号';}}
+  /* checker */
+  const P=prefixCheck(rows),li=(ok,s)=>`<li class="${ok?'ok':'no'}">${ok?'✓':'✗'} ${s}</li>`;
+  $('dChk').innerHTML=li(!P.bad.length,'只含 0 和 1'+(P.bad.length?'：'+P.bad.map(x=>`${escH(x.s)}「${escH(x.c)}」`).join('、'):''))+li(!P.empty.length,'没有空码字'+(P.empty.length?'：'+P.empty.map(x=>escH(x.s)).join('、')+' 是空的':''))+
+    li(!P.dup.length,'没有重复的码字'+(P.dup.length?'：'+P.dup.map(([a,b])=>`${escH(a.s)} 和 ${escH(b.s)} 都是 ${a.c}`).join('；'):''))+
+    li(!P.pre.length,'没有一个码字是别的码字的前缀'+(P.pre.length?'：'+P.pre.map(([a,b])=>`${escH(a.s)} = ${a.c} 是 ${escH(b.s)} = ${b.c} 的前缀`).join('；'):''))+
+    `<li class="${P.K<=1+1e-12?'ok':'no'}">${P.K<=1+1e-12?'✓':'✗'} Kraft 和 K = Σ2<sup>−ℓ</sup> = ${fmt(P.K,4)}${P.K>1+1e-12?' > 1：不可能唯一可译':Math.abs(P.K-1)<1e-12?'（= 1，码树是满的）':'（≤ 1 是必要条件，不保证前缀性）'}</li>`+
+    `<li style="font-weight:700" class="${P.prefix?'ok':'no'}">${P.prefix?'→ 是前缀码，可以逐位解码':'→ 不是前缀码：checkCodebook 应该在这里 error()，不要拿去解码'}</li>`;}
+function dStop(){if(dTimer){clearInterval(dTimer);dTimer=null;}$('dPlay').textContent='▶ 逐位解码';}
+function dTotal(){const e=encodeSeq(parseSeq($('dSeq').value),dBook.rows);return e.err?0:e.bits.length;}
+function dRandom(){const rows=dBook.rows,syms=[...new Set(rows.map(r=>r[0]))],pr=syms.every(s=>LSP[s]!==undefined)?syms.map(s=>LSP[s]):syms.map(()=>1),tot=pr.reduce((a,b)=>a+b,0),rnd=rng(5);const cnt={ok:0,err:0,wrong:0,wrongn:0,lost:0,enc:0};const M=2000;
+  for(let m=0;m<M;m++){const seq=[];for(let k=0;k<6;k++){let u=rnd()*tot,i=0;while(i<syms.length-1&&u>=pr[i]){u-=pr[i];i++;}seq.push(syms[i]);}cnt[classify(seq,rows).kind]++;}
+  const pc=v=>(100*v/M).toFixed(1)+'%';
+  $('dStat').innerHTML=`随机 ${M} 条 6 符号消息（${syms.every(s=>LSP[s]!==undefined)?'按 0.55 / 0.3 / 0.1 / 0.05':'等概率'}）：<b style="color:var(--green)">正确 ${pc(cnt.ok)}</b>　·　<b style="color:var(--amp)">报错 ${pc(cnt.err)}</b>　·　<b style="color:var(--red)">没报错但错了 ${pc(cnt.wrong+cnt.wrongn+cnt.lost)}</b>${cnt.wrongn?`（其中符号个数变了 ${pc(cnt.wrongn)}）`:''}${cnt.lost?`（丢符号 ${pc(cnt.lost)}）`:''}`;}
+
+/* ---------- Task 3: real data ---------- */
+let tHover=-1,tPts=[],tData=null;
+const visCh=c=>c===32?'␠':c===10?'↵':c===13?'␍':c===9?'⇥':String.fromCharCode(c);
+const visName=c=>c===32?'空格':c===10?'换行':c===13?'\\r':c===9?'Tab':`'${String.fromCharCode(c)}'`;
+function getText(){let t=$('tText').value;if($('tCRLF').checked)t=t.replace(/\r?\n/g,'\r\n');return t;}
+function countsOf(t){const m=new Map();for(let i=0;i<t.length;i++){const c=t.charCodeAt(i);m.set(c,(m.get(c)||0)+1);}return m;}
+function huffMap(cnt){const keys=[...cnt.keys()].sort((a,b)=>a-b),tot=keys.reduce((s,k)=>s+cnt.get(k),0);if(!keys.length)return new Map();
+  if(keys.length===1)return new Map([[keys[0],'0']]);const h=huffman(keys.map(k=>cnt.get(k)/tot));return new Map(keys.map((k,i)=>[k,h.code[i]]));}
+const entropyOf=cnt=>{let n=0;cnt.forEach(v=>n+=v);let H=0;cnt.forEach(v=>{const p=v/n;H-=p*LOG2(p);});return H;};
+function lab10(){const t=getText(),N=t.length,cnt=countsOf(t),u=[...cnt.keys()].sort((a,b)=>a-b),X=u.length;
+  $('tInfo').innerHTML=`${N.toLocaleString()} 个字符${N<2000?'　<span style="color:var(--red)">讲义要求至少 2,000 个</span>':''}${t.includes('\r')?'　（含 \\r：Windows 换行）':''}`;
+  if(N<2){$('tTab').innerHTML='';tData=null;return;}
+  const code=huffMap(cnt),H=entropyOf(cnt);let bits=0;cnt.forEach((v,k)=>bits+=v*code.get(k).length);const L=bits/N,fixedL=Math.max(1,Math.ceil(LOG2(X)-1e-12));
+  tData={N,X,H,L,fixedL,bits};
+  $('tTab').className='mini sum';
+  $('tTab').innerHTML=`<tr><th>表里要报的量</th><th>值</th><th>怎么来的</th></tr>
+    <tr><td>字母表大小 |𝒳|</td><td>${X}</td><td>numel(u)：文本里出现过的不同字符</td></tr>
+    <tr><td>熵 H(x)</td><td>${H.toFixed(4)} bit/符号</td><td>−Σ p<sub>i</sub> log₂ p<sub>i</sub></td></tr>
+    <tr><td>测得的 L</td><td>${L.toFixed(4)} bit/符号</td><td>编码后总比特数 ÷ 字符数 = ${bits.toLocaleString()} ÷ ${N.toLocaleString()}</td></tr>
+    <tr><td>定长基线</td><td>${fixedL} bit/符号</td><td>⌈log₂|𝒳|⌉ = ⌈${LOG2(X).toFixed(3)}⌉</td></tr>
+    <tr><td>ASCII 基线</td><td>8 bit/符号</td><td>每个字符一个字节</td></tr>
+    <tr><td>对 ASCII 的压缩比</td><td>${(8/L).toFixed(2)} : 1</td><td>8 ÷ L；压缩后是原来的 ${(L/8*100).toFixed(1)}%</td></tr>
+    <tr><td>效率 η = H/L</td><td>${(H/L*100).toFixed(2)} %</td><td>离熵还差 L − H = ${(L-H).toFixed(4)} bit</td></tr>`;
+  /* per-symbol table */
+  const rows=u.map(k=>({k,c:cnt.get(k),p:cnt.get(k)/N,I:-LOG2(cnt.get(k)/N),l:code.get(k).length,w:code.get(k)})).sort((a,b)=>b.c-a.c||a.k-b.k);
+  $('tSym').innerHTML='<tr><th>字符</th><th>double</th><th>次数</th><th>p</th><th>−log₂p</th><th>ℓ</th><th>ℓ − (−log₂p)</th><th>码字</th></tr>'+rows.map(r=>`<tr><td>${escH(visCh(r.k))}</td><td>${r.k}</td><td>${r.c}</td><td>${r.p.toFixed(4)}</td><td>${r.I.toFixed(2)}</td><td>${r.l}</td><td style="color:var(${r.l-r.I>0?'--amp':'--blue'})">${(r.l-r.I>=0?'+':'')+(r.l-r.I).toFixed(2)}</td><td style="font-family:var(--mono)">${r.w}</td></tr>`).join('');
+  drawBudget();drawScatter(rows);}
+function drawBudget(){const d=tData,[g,W,H]=fit($('tBud'));if(!d)return;const a=axes(g,W,H,{x0:0,x1:4,y0:0,y1:8.6,yt:[0,2,4,6,8],title:'每个字符要几个 bit',pl:30,pt:26,pb:40});
+  const bars=[['ASCII',8,'--muted'],['定长 ⌈log₂|𝒳|⌉',d.fixedL,'--purple'],['熵 H',d.H,'--red'],['Huffman L',d.L,'--blue']],bw=(a.X(1)-a.X(0))*0.56;
+  bars.forEach(([n,v,c],i)=>{const x=a.X(i+0.5);g.fillStyle=css(c);g.globalAlpha=.85;g.fillRect(x-bw/2,a.Y(v),bw,a.Y(0)-a.Y(v));g.globalAlpha=1;text(g,v.toFixed(i>1?3:0),x,a.Y(v)-5,css(c),12,'center');
+    n.split(' ').forEach((s,j)=>text(g,s,x,H-a.pb+15+j*13,css('--muted'),11,'center'));});
+  $('tBudN').innerHTML=`<span style="color:var(--purple)">8 → ${d.fixedL}：只给用到的 ${d.X} 个字符编号</span>；<span style="color:var(--red)">${d.fixedL} → ${d.H.toFixed(3)}：按概率分配码长</span>；<span style="color:var(--blue)">${d.H.toFixed(3)} → ${d.L.toFixed(3)}：码长只能取整数</span>。对 ASCII 的 ${(8/d.L).toFixed(2)} 倍里，${(8/d.fixedL).toFixed(2)} 倍来自第一步，和 η 无关。`;}
+function drawScatter(rows){const cv=$('tSc'),[g,W,H]=fit(cv);if(!rows||!rows.length)return;const mx=Math.ceil(Math.max(...rows.map(r=>r.I),...rows.map(r=>r.l))+0.5);
+  const a=axes(g,W,H,{x0:0,x1:mx,y0:0,y1:mx,xt:[...Array(mx+1).keys()].filter(v=>v%2===0),yt:[...Array(mx+1).keys()].filter(v=>v%2===0),title:'纵轴 码长 ℓᵢ，横轴 −log₂pᵢ（bit）　点的面积 ∝ pᵢ　红线 x = y',xl:'−log₂ pᵢ (bit)',pl:34,pt:26});
+  plot(g,a.X,a.Y,v=>v,0,mx,css('--red'),1.6,2);
+  const dev=rows.map(r=>r.l-r.I),hi=rows.map((r,i)=>i).sort((i,j)=>dev[j]-dev[i]).slice(0,3),lo=rows.map((r,i)=>i).sort((i,j)=>dev[i]-dev[j]).slice(0,3);
+  tPts=rows.map((r,i)=>({x:a.X(r.I),y:a.Y(r.l),r,rad:2.5+14*Math.sqrt(r.p)}));
+  tPts.forEach((P,i)=>{g.fillStyle=css(dev[i]>0?'--amp':'--blue');g.globalAlpha=.55;g.beginPath();g.arc(P.x,P.y,P.rad,0,7);g.fill();g.globalAlpha=1;});
+  const boxes=[];const lab=(i,c,below)=>{const P=tPts[i],s=`${visName(P.r.k)} ${dev[i]>=0?'+':''}${dev[i].toFixed(2)}`;g.font=`600 11px ${css('--mono')}`;const w=g.measureText(s).width;
+    let x=below?P.x+P.rad+3:P.x-P.rad-3-w,y=below?P.y+P.rad+11:P.y-P.rad-3;if(x+w>W-4)x=W-4-w;if(x<a.pl+2)x=a.pl+2;
+    for(let k=0;k<6&&boxes.some(b=>x<b[0]+b[2]&&x+w>b[0]&&y-10<b[1]&&y>b[1]-10);k++)y+=below?12:-12;boxes.push([x,y,w]);label(g,s,x,y,css(c),11);};
+  hi.forEach(i=>lab(i,'--amp',false));lo.forEach(i=>lab(i,'--blue',true));
+  text(g,'在线上方：码字比 −log₂p 长（橙）　线下方：比它短（蓝）',W-8,H-a.pb-8,css('--muted'),11,'right');
+  if(tHover>=0&&tPts[tHover]){const P=tPts[tHover],r=P.r,s=`${visName(r.k)}（${r.k}）  ×${r.c}  p = ${r.p.toFixed(4)}  −log₂p = ${r.I.toFixed(2)}  ℓ = ${r.l}  码字 ${r.w}`;
+    g.strokeStyle=css('--ink');g.lineWidth=2;g.beginPath();g.arc(P.x,P.y,P.rad+2,0,7);g.stroke();g.font=`12px ${css('--mono')}`;const w=g.measureText(s).width+12,x=Math.min(Math.max(4,P.x-w/2),W-w-4),y=P.y>60?P.y-34:P.y+18;
+    g.fillStyle=css('--panel');g.globalAlpha=.95;g.fillRect(x,y,w,22);g.globalAlpha=1;g.strokeStyle=css('--line');g.lineWidth=1;g.strokeRect(x,y,w,22);g.fillStyle=css('--ink');g.fillText(s,x+6,y+15);}}
+
+/* ---------- Task 4 + Extension: mismatched statistics ---------- */
+const ESC=-1;
+function bitsFor(mode,train,test){const ct=countsOf(train),cq=countsOf(test),n=test.length;let bits=0,unknown=new Map(),skipped=0,firstBad=-1,model=null;
+  const raw=c=>c<256?8:16;
+  if(mode==='err'){const code=huffMap(ct);for(let i=0;i<n;i++){const c=test.charCodeAt(i),w=code.get(c);if(w===undefined){unknown.set(c,(unknown.get(c)||0)+1);skipped++;if(firstBad<0)firstBad=i;}else bits+=w.length;}
+    model=k=>ct.has(k)?ct.get(k)/train.length:0;return {L:n-skipped?bits/(n-skipped):NaN,unknown,firstBad,model,skipped};}
+  if(mode==='esc'){const c2=new Map(ct);c2.set(ESC,1);const code=huffMap(c2),tot=train.length+1,le=code.get(ESC).length;
+    for(let i=0;i<n;i++){const c=test.charCodeAt(i),w=code.get(c);if(w===undefined){unknown.set(c,(unknown.get(c)||0)+1);bits+=le+raw(c);}else bits+=w.length;}
+    model=k=>ct.has(k)?ct.get(k)/tot:(1/tot)*Math.pow(2,-raw(k));return {L:bits/n,unknown,model,esc:le};}
+  if(mode==='add1'){const c2=new Map();for(let k=0;k<256;k++)c2.set(k,1+(ct.get(k)||0));ct.forEach((v,k)=>{if(k>=256)c2.set(k,v);});const code=huffMap(c2);let tot=0;c2.forEach(v=>tot+=v);
+    for(let i=0;i<n;i++){const c=test.charCodeAt(i),w=code.get(c);if(w===undefined){unknown.set(c,(unknown.get(c)||0)+1);skipped++;}else{bits+=w.length;if(!ct.has(c))unknown.set(c,(unknown.get(c)||0)+1);}}
+    model=k=>c2.has(k)?c2.get(k)/tot:0;return {L:n-skipped?bits/(n-skipped):NaN,unknown,model,skipped};}
+  /* adaptive: both ends start from the training counts + ESC, update counts as they go, rebuild every 200 symbols */
+  const c2=new Map(ct);c2.set(ESC,1);let code=huffMap(c2);
+  for(let i=0;i<n;i++){if(i&&i%200===0)code=huffMap(c2);const c=test.charCodeAt(i),w=code.get(c);if(w===undefined){unknown.set(c,(unknown.get(c)||0)+1);bits+=code.get(ESC).length+raw(c);}else bits+=w.length;c2.set(c,(c2.get(c)||0)+1);}
+  return {L:bits/n,unknown,model:null};}
+function crossEntropy(test,model){const cq=countsOf(test),n=test.length;let ce=0;for(const [k,v] of cq){const p=model(k);if(!(p>0))return Infinity;ce-=v/n*LOG2(p);}return ce;}
+function lab11(){const t=getText(),N=t.length,f=+$('uSplit').value,mode=$('uMode').value;$('uSplitO').textContent=`前 ${Math.round(f*100)}%`;
+  const k=Math.round(N*f),train=t.slice(0,k),test=t.slice(k);
+  if(train.length<1||test.length<1){['uH','uLo','uL','uGap','uKL'].forEach(id=>$(id).textContent='—');$('uInfo').textContent='文本太短';return;}
+  const cq=countsOf(test),Hq=entropyOf(cq),co=huffMap(cq);let bo=0;cq.forEach((v,c)=>bo+=v*co.get(c).length);const Lo=bo/test.length;
+  const r=bitsFor(mode,train,test),ce=r.model?crossEntropy(test,r.model):NaN;
+  $('uH').textContent=Hq.toFixed(4)+' bit';$('uLo').textContent=Lo.toFixed(4)+' bit';
+  const fail=mode==='err'&&r.skipped>0;
+  $('uL').innerHTML=fail?`编不出来 ✗<small style="display:block">跳过新字符：${r.L.toFixed(4)} bit</small>`:isFinite(r.L)?r.L.toFixed(4)+' bit':'—';
+  $('uGap').innerHTML=fail?`—<small style="display:block">跳过新字符：+${(r.L-Hq).toFixed(4)}</small>`:isFinite(r.L)?'+'+(r.L-Hq).toFixed(4)+' bit':'—';
+  $('uKL').textContent=mode==='adapt'?'—（模型在变）':ce===Infinity?'∞（p = 0）':isFinite(ce)?(ce-Hq).toFixed(4)+' bit':'—';
+  const unk=[...r.unknown.entries()].sort((a,b)=>b[1]-a[1]),nUnk=unk.reduce((s,x)=>s+x[1],0);
+  let h=`<p>前 ${k.toLocaleString()} 个字符建码表（${countsOf(train).size} 种字符），编码后 ${test.length.toLocaleString()} 个（${cq.size} 种）。</p>`;
+  if(!unk.length)h+='<p style="color:var(--green)">后半部分没有前半没见过的字符。</p>';
+  else h+=`<p>后半有 <b>${unk.length}</b> 种前半没见过的字符、共 ${nUnk} 次：${unk.slice(0,12).map(([c,v])=>`<code>'${escH(visCh(c))}'</code>×${v}`).join('、')}${unk.length>12?'…':''}</p>`;
+  if(mode==='err'&&unk.length)h+=`<p style="color:var(--red)">✗ 用固定码表时，后半第 ${r.firstBad+1} 个字符（全文第 ${k+r.firstBad+1} 个）${escH(visName(test.charCodeAt(r.firstBad)))} 就会让 encodeSource 报错，整个后半编不出来。上面小字是跳过这些字符时的 L，只能看个大概；要真正编出来，换成下拉框里的 Extension 办法。</p>`;
+  if(mode==='esc')h+=`<p>ESC 的码字 ${r.esc} 位，每个新字符要 ${r.esc} + 8 位；新字符一共多花 ${nUnk?(nUnk*(r.esc+8)).toLocaleString():0} 位。已知字符的码字因为给 ESC 让了位置，几乎不变。</p>`;
+  if(mode==='add1')h+=`<p>256 个字节值都有码字，任何 ASCII 字符都编得出来。代价：从没出现过的 ${256-countsOf(train).size} 个值也占了码树的位置，常用字符的码字略长。</p>`;
+  if(mode==='adapt')h+='<p>编码器和解码器从同样的计数出发、按同样的规则更新，所以解码器不需要额外传码表也能同步；后半越长，统计越接近后半自己的分布。</p>';
+  $('uInfo').innerHTML=h;drawU(t,f,mode);}
+function drawU(t,fcur,mode){const [g,W,H]=fit($('uCh')),fs=[];for(let f=0.1;f<=0.9001;f+=0.05)fs.push(+f.toFixed(2));
+  const pts=fs.map(f=>{const k=Math.round(t.length*f),tr=t.slice(0,k),te=t.slice(k),cq=countsOf(te),Hq=entropyOf(cq),co=huffMap(cq);let bo=0;cq.forEach((v,c)=>bo+=v*co.get(c).length);const r=bitsFor(mode,tr,te);return {f,Hq,Lo:bo/te.length,L:r.L,bad:r.unknown.size>0&&(mode==='err')};});
+  const ys=pts.flatMap(p=>[p.Hq,p.Lo,p.L]).filter(isFinite),y0=Math.floor(Math.min(...ys)*2)/2-0.25,y1=Math.ceil(Math.max(...ys)*2)/2+0.25;
+  const a=axes(g,W,H,{x0:0.05,x1:0.95,y0,y1,xt:[0.1,0.3,0.5,0.7,0.9],xf:v=>Math.round(v*100)+'%',yt:[y0+0.25,(y0+y1)/2,y1-0.25].map(v=>+v.toFixed(2)),title:'bit/字符　红 H(后半)　蓝 后半自己的 Huffman　橙 用前半的码表',xl:'用来建码表的比例',pl:40,pt:28});
+  const line=(key,col,dash)=>{g.strokeStyle=css(col);g.lineWidth=2.2;g.setLineDash(dash||[]);g.beginPath();let first=true;pts.forEach(p=>{const v=p[key];if(!isFinite(v)){first=true;return;}first?g.moveTo(a.X(p.f),a.Y(v)):g.lineTo(a.X(p.f),a.Y(v));first=false;});g.stroke();g.setLineDash([]);};
+  line('Hq','--red');line('Lo','--blue',[5,4]);line('L','--amp');
+  pts.forEach(p=>{if(p.bad&&isFinite(p.L)){g.strokeStyle=css('--red');g.lineWidth=1.6;const x=a.X(p.f),y=a.Y(p.L);g.beginPath();g.moveTo(x-4,y-4);g.lineTo(x+4,y+4);g.moveTo(x+4,y-4);g.lineTo(x-4,y+4);g.stroke();}});
+  const xc=a.X(fcur);g.strokeStyle=css('--muted');g.setLineDash([3,4]);g.beginPath();g.moveTo(xc,a.pt);g.lineTo(xc,H-a.pb);g.stroke();g.setLineDash([]);
+  if(mode==='err')text(g,'× = 后半有没见过的字符，固定码表其实会报错',W-8,H-a.pb-8,css('--red'),11,'right');}
+
+/* ---------- wiring ---------- */
+eBook=codeBook('eBook',BOOKS.huff,()=>Lab.draw(8));
+document.querySelectorAll('#lab8 [data-e]').forEach(b=>b.addEventListener('click',()=>eBook.set(BOOKS[b.dataset.e])));
+document.querySelectorAll('#lab8 [data-q]').forEach(b=>b.addEventListener('click',()=>{$('eSeq').value=b.dataset.q;Lab.draw(8);}));
+$('eSeq').addEventListener('input',()=>Lab.draw(8));
+let e1Seed=3;$('eRnd').addEventListener('click',()=>{const r=rng(e1Seed++);const s=[];for(let i=0;i<20;i++){const u=r();s.push(u<0.55?'A':u<0.85?'B':u<0.95?'C':'D');}$('eSeq').value=s.join(' ');Lab.draw(8);});
+$('eBench').addEventListener('click',bench);
+Lab.add(8,lab8,{eCopy:210});
+dBook=codeBook('dBook',BOOKS.huff,()=>{dStop();dPos=-1;$('dStat').textContent='';Lab.draw(9);});
+document.querySelectorAll('#lab9 [data-d]').forEach(b=>b.addEventListener('click',()=>dBook.set(BOOKS[b.dataset.d])));
+$('dSeq').addEventListener('input',()=>{dStop();dPos=-1;Lab.draw(9);});
+$('dPlay').addEventListener('click',()=>{if(dTimer){dStop();return;}const n=dTotal();if(!n)return;if(dPos<0||dPos>=n)dPos=0;$('dPlay').textContent='❚❚ 暂停';
+  dTimer=setInterval(()=>{dPos++;Lab.draw(9);if(dPos>=dTotal())dStop();},520);Lab.draw(9);});
+$('dStep').addEventListener('click',()=>{dStop();const n=dTotal();if(dPos<0||dPos>=n)dPos=0;dPos=Math.min(n,dPos+1);Lab.draw(9);});
+$('dEnd').addEventListener('click',()=>{dStop();dPos=-1;Lab.draw(9);});
+$('dRnd').addEventListener('click',dRandom);
+Lab.add(9,lab9);
+const T3=()=>{Lab.draw(10);Lab.draw(11);};
+$('tText').addEventListener('input',T3);$('tCRLF').addEventListener('change',T3);
+const SAMPLE=$('tText').value;$('tSample').addEventListener('click',()=>{$('tText').value=SAMPLE;$('tCRLF').checked=false;T3();});
+$('tFileBtn').addEventListener('click',()=>$('tFile').click());
+$('tFile').addEventListener('change',ev=>{const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const s=String(rd.result);$('tCRLF').checked=s.includes('\r\n');$('tText').value=s.replace(/\r\n/g,'\n');T3();};rd.readAsText(f);ev.target.value='';});
+$('tSc').addEventListener('pointermove',ev=>{const r=$('tSc').getBoundingClientRect(),x=ev.clientX-r.left,y=ev.clientY-r.top;let best=-1,bd=14;tPts.forEach((P,i)=>{const d=Math.hypot(P.x-x,P.y-y)-P.rad;if(d<bd){bd=d;best=i;}});if(best!==tHover){tHover=best;Lab.draw(10);}});
+$('tSc').addEventListener('pointerleave',()=>{if(tHover>=0){tHover=-1;Lab.draw(10);}});
+Lab.add(10,lab10,{tBud:200,tSc:260});
+$('uSplit').addEventListener('input',()=>Lab.draw(11));$('uMode').addEventListener('change',()=>Lab.draw(11));
+Lab.add(11,lab11,{uCh:220});
 Lab.start();
 </script>
 </body></html>
