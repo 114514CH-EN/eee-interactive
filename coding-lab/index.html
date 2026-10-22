@@ -1,20 +1,30 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>信息与编码实验室</title>
-<meta name="description" content="三个实验对应通信系统 Week 1 和 Week 3：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来。预设按钮就是讲义和 Tutorial 的数字。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="信息与编码实验室"><meta property="og:description" content="三个实验对应通信系统 Week 1 和 Week 3：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来。预设按钮就是讲义和 Tutorial 的数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/coding-lab/">
+<meta name="description" content="五个实验对应通信系统 Week 1、3、4：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来、Hamming(7,4) 编码 / 校验子 / 纠错、突发错误与交织。预设按钮就是讲义和 Tutorial 的数字。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="信息与编码实验室"><meta property="og:description" content="五个实验对应通信系统 Week 1、3、4：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来、Hamming(7,4) 编码 / 校验子 / 纠错、突发错误与交织。预设按钮就是讲义和 Tutorial 的数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/coding-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
+<style>
+.hrows{display:flex;flex-direction:column;gap:6px}
+.hrow{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.hl{min-width:9.5em;font-size:13px;color:var(--muted)}.hm{font-size:13px;color:var(--muted)}
+.hb{min-width:34px;height:34px;padding:0;font:700 16px var(--mono);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.hb.c{background:var(--fillB)}.hb.st{cursor:default}.hb.fl{background:var(--red);color:var(--panel);border-color:var(--red)}
+.hn{min-width:34px;text-align:center;font:12px var(--mono);color:var(--muted)}
+@media (max-width:620px){.hl{flex-basis:100%;min-width:0}.hrow .hl:empty{display:none}.hb,.hn{min-width:30px}.hb{height:30px;font-size:15px}}
+table.htab td{font-family:var(--mono);font-size:12.5px}table.htab tr.bad td{color:var(--red)}table.htab tr.rule td{color:var(--muted)}table.htab tr.rule.on td{color:var(--ink);font-weight:700;background:var(--fillB)}
+</style>
 </head><body>
 <div class="wrap">
 <header>
-  <div class="tag">COMMUNICATION SYSTEMS · INFORMATION, SOURCE CODING, DECIBELS</div>
+  <div class="tag">COMMUNICATION SYSTEMS · INFORMATION, SOURCE CODING, DECIBELS, CHANNEL CODING</div>
   <h1>信息与编码实验室</h1>
-  <p>三个实验对应通信系统 Week 1 和 Week 3：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来。预设按钮就是讲义和 Tutorial 的数字。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 熵</a><a href="#lab2">实验 2 Huffman / Fano / Shannon</a><a href="#lab3">实验 3 分贝</a></nav>
+  <p>五个实验对应通信系统 Week 1、3、4：调概率看熵、一步步搭 Huffman 树并和 Fano、Shannon 比较、用分贝把一串增益加起来、Hamming(7,4) 编码 / 校验子 / 纠错、突发错误与交织。预设按钮就是讲义和 Tutorial 的数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 熵</a><a href="#lab2">实验 2 Huffman / Fano / Shannon</a><a href="#lab3">实验 3 分贝</a><a href="#lab4">实验 4 Hamming(7,4)</a><a href="#lab5">实验 5 突发错误与交织</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -57,6 +67,35 @@
   <div class="stage one"><canvas id="chain" height="230" aria-label="增益链"></canvas></div>
   <div class="read"><div><small>总增益 (dB)</small><b id="gT"></b></div><div><small>总功率比（线性）</small><b id="gL"></b></div><div><small>对应电压比</small><b id="gV"></b></div><div><small>输出功率</small><b id="gO"></b></div></div>
   <p class="note"><strong>只背 4 个数：</strong>×10 = +10 dB，×2 ≈ +3 dB，×0.5 ≈ −3 dB，×1 = 0 dB。电压要先平方成功率：电压 ×10 = 功率 ×100 = 20 dB。dBm 和 dBW 差 30 dB（1 W = 1000 mW）。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 信道编码 Hamming(7,4)（Week 4）</div>
+  <h2>3 个校验位守着 4 个数据位：哪几个圆圈「报警」，就知道是哪一位错了</h2>
+  <p class="lead">讲义规定 c₁ = d₁⊕d₃⊕d₄、c₂ = d₁⊕d₂⊕d₃、c₃ = d₂⊕d₃⊕d₄，按 c₁c₂c₃d₁d₂d₃d₄ 的顺序发送。换个说法：每个圆圈里 1 的个数必须是偶数。点「要发的数据」改数据；点「信道」那一行（或右边图里的数字）把某一位翻转，看接收端怎么算出校验子、找到错位、把它改回来。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-h="0101|">讲义例子 d = 0101</button><button data-h="1011|6">Tutorial 收到 1001010</button><button data-h="1011|2">Tutorial 收到 1011011</button><button data-h="1011|">Tutorial 收到 1001011</button><button data-h="1011|3,4">两位出错</button></div>
+  <div class="hrows" id="hRows"></div>
+  <div class="controls"><div class="ctl"><label for="hIn">或者直接输入收到的 7 位（c₁c₂c₃d₁d₂d₃d₄）</label><input id="hIn" type="text" inputmode="numeric" maxlength="7" placeholder="例如 1001010" spellcheck="false"><span></span></div></div>
+  <div class="stage even"><canvas id="hv" height="300" aria-label="三个校验圆圈：每个圆里 1 的个数应为偶数"></canvas><div><div class="scroll"><table class="mini htab" id="hTab"></table></div></div></div>
+  <div class="read"><div><small>校验子 s₁s₂s₃</small><b id="hS"></b></div><div><small>接收端判断</small><b id="hJ" style="font-size:15px"></b></div><div><small>纠正后的码字 / 数据</small><b id="hC" style="font-size:15px"></b></div><div><small>和发送的比</small><b id="hR" style="font-size:15px"></b></div></div>
+  <canvas id="hd" height="190" aria-label="收到的字到 16 个合法码字的 Hamming 距离"></canvas>
+  <p class="note"><strong>为什么能纠一位：</strong>16 个合法码字两两之间至少差 3 位（最小 Hamming 距离 d<sub>min</sub> = 3）。错一位后，收到的字离原来的码字只差 1，离其他码字至少差 2，最近的那个只有一个，就是原码字。错两位时，它离原码字差 2，却可能离另一个码字只差 1，解码器就会「纠」到那个错的码字上——下面的距离图里能直接看到。Hamming(7,4) 里任何两位出错都会这样（7 位的 128 种组合，正好每个都离某一个码字距离 ≤ 1），所以它只能保证纠一位。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 多位错误、突发错误与交织（Week 4）</div>
+  <h2>突发错误会把一个码字打穿；交织把它摊到几个码字上，每个只错一位</h2>
+  <p class="lead">把一段文字按 ASCII 拆成 4 位一组，每组编成一个 Hamming(7,4) 码字。信道里的干扰往往是一连串相邻的比特一起错（突发错误 burst）。不交织时这些错位挤在同一个码字里，超过它的纠错能力；交织时先把码字排成一张表，<strong>按列</strong>发送，相邻发出去的比特属于不同码字，一段突发只让每个码字错一位。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-b="HI|4|9|0">4 位突发，不交织</button><button data-b="HI|4|9|1">同样的突发，交织</button><button data-b="HI|2|3|0">只错 2 位也会纠错</button><button data-b="HI|5|9|1">5 位突发 &gt; 4 个码字：交织也不够</button><button data-b="EEE|6|20|1">6 位突发，6 个码字交织</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="bTxt">发送的文字（ASCII）</label><input id="bTxt" type="text" value="HI" maxlength="8" spellcheck="false"><span></span></div>
+    <div class="ctl"><label for="bLen">突发长度（连续错几位）</label><input id="bLen" type="range" min="0" max="12" step="1" value="4"><output id="bLenO"></output></div>
+    <div class="ctl"><label for="bPos">突发从第几位开始</label><input id="bPos" type="range" min="0" max="27" step="1" value="9"><output id="bPosO"></output></div>
+    <div class="ctl"><label for="bInt">发送顺序</label><select id="bInt"><option value="0">一个码字一个码字发（不交织）</option><option value="1">按列发（交织）</option></select><span></span></div>
+  </div>
+  <canvas id="bc" height="300" aria-label="码字表与发送顺序，红色是被突发打中的位"></canvas>
+  <div class="read"><div><small>不编码直接发（同一段突发）</small><b id="bRaw" style="font-size:15px"></b></div><div><small>Hamming(7,4) 解码后</small><b id="bDec" style="font-size:15px"></b></div><div><small>每个码字错几位</small><b id="bPer" style="font-size:15px"></b></div><div><small>代价：码率 k/n</small><b>4/7 ≈ 57%</b></div></div>
+  <p class="note"><strong>交织的代价：</strong>接收端要等整张表都收齐才能按行读出码字，延迟变成「码字个数 × 7」位。码字越多，能摊开的突发越长（突发长度 ≤ 码字个数时，每个码字最多错一位）。不编码时一位错就让一个字符变样，而且接收端根本不知道错了。</p>
 </section>
 </div>
 
@@ -169,6 +208,107 @@ function lab3(){
 [0,1,2,3].forEach(i=>$('g'+i).addEventListener('input',()=>Lab.draw(3)));
 document.querySelectorAll('#lab3 [data-g]').forEach(b=>b.addEventListener('click',()=>{b.dataset.g.split(',').forEach((t,i)=>$('g'+i).value=t);Lab.draw(3);}));
 Lab.add(3,lab3,{chain:210});
+/* ---------- Lab 4: Hamming(7,4) ---------- */
+const HN=['c₁','c₂','c₃','d₁','d₂','d₃','d₄'];
+const HCHK=[[0,3,5,6],[1,3,4,5],[2,4,5,6]];           /* bits in circle i: c_i with its data bits */
+const SYN={'000':-1,'100':0,'010':1,'001':2,'110':3,'011':4,'111':5,'101':6};
+const henc=d=>[d[0]^d[2]^d[3],d[0]^d[1]^d[2],d[1]^d[2]^d[3],d[0],d[1],d[2],d[3]];
+const HCW=[...Array(16).keys()].map(v=>henc([v>>3&1,v>>2&1,v>>1&1,v&1]));
+const hsyn=r=>HCHK.map(ix=>ix.reduce((s,i)=>s^r[i],0));
+const hdist=(a,b)=>a.reduce((s,x,i)=>s+(x!==b[i]),0);
+let hD=[0,1,0,1],hFlip=new Set(),hRx=null,hHot=-1;   /* hRx: received word typed directly (sender unknown) */
+function hRecv(){return hRx?hRx.slice():henc(hD).map((b,i)=>hFlip.has(i)?b^1:b);}
+function lab4(){
+  const sent=hRx?null:henc(hD),r=hRecv(),s=hsyn(r),key=s.join(''),pos=SYN[key],cor=r.slice();if(pos>=0)cor[pos]^=1;
+  pressGroup('#lab4 [data-h]',b=>{if(hRx)return false;const [d,f]=b.dataset.h.split('|');return d===hD.join('')&&[...hFlip].sort().join(',')===f;});
+  const bit=(v,i,cls,attr)=>`<button class="hb ${i<3?'c':'d'}${cls?' '+cls:''}" ${attr} aria-label="${HN[i]} = ${v}">${v}</button>`;
+  let h=`<div class="hrow"><span class="hl">要发的数据 d₁d₂d₃d₄</span>${hRx?'<span class="hm">（直接输入了收到的字，发送端未知）</span>':hD.map((v,i)=>`<button class="hb d" data-dd="${i}" aria-label="d${i+1} = ${v}，点击切换">${v}</button>`).join('')}</div>`;
+  h+=`<div class="hrow"><span class="hl">编码后发送</span>${sent?sent.map((v,i)=>`<span class="hb ${i<3?'c':'d'} st">${v}</span>`).join(''):'<span class="hm">?</span>'}</div>`;
+  h+=`<div class="hrow"><span class="hl">信道（点一位翻转）</span>${r.map((v,i)=>bit(v,i,(!hRx&&hFlip.has(i))?'fl':'',`data-fl="${i}"`)).join('')}</div>`;
+  h+=`<div class="hrow"><span class="hl"></span>${HN.map(n=>`<span class="hn">${n}</span>`).join('')}</div>`;
+  $('hRows').innerHTML=h;
+  /* receiver table */
+  const eq=['d₁⊕d₃⊕d₄','d₁⊕d₂⊕d₃','d₂⊕d₃⊕d₄'];
+  let t='<tr><th>校验</th><th>用收到的数据重算</th><th>收到的</th><th></th></tr>';
+  HCHK.forEach((ix,k)=>{const calc=ix.slice(1).reduce((a,i)=>a^r[i],0);t+=`<tr class="${s[k]?'bad':''}"><td>c${'₁₂₃'[k]}</td><td>${eq[k]} = ${ix.slice(1).map(i=>r[i]).join('⊕')} = <b>${calc}</b></td><td><b>${r[k]}</b></td><td>${s[k]?'✗ 不符 → s'+'₁₂₃'[k]+' = 1':'✓'}</td></tr>`;});
+  t+='<tr><th colspan="4">讲义的查表规则（校验子 → 错位）</th></tr>';
+  const rules=[['000','全部相符：没有错'],['100','只有 c₁ 不符：c₁ 本身错'],['010','只有 c₂ 不符：c₂ 本身错'],['001','只有 c₃ 不符：c₃ 本身错'],['110','c₁、c₂ 不符：d₁ 错'],['011','c₂、c₃ 不符：d₂ 错'],['111','三个都不符：d₃ 错'],['101','c₁、c₃ 不符：d₄ 错']];
+  rules.forEach(([k,txt])=>t+=`<tr class="rule${k===key?' on':''}"><td>${k}</td><td colspan="3">${txt}</td></tr>`);
+  $('hTab').innerHTML=t;
+  $('hS').textContent=key;
+  $('hJ').textContent=pos<0?'没有错误':`${HN[pos]} 错了 → 翻回来`;
+  $('hC').textContent=cor.join('')+' → 数据 '+cor.slice(3).join('');
+  const R=$('hR');
+  if(!sent){R.textContent='（不知道发的是什么）';R.style.color='';}
+  else{const nErr=hFlip.size,ok=cor.every((v,i)=>v===sent[i]);
+    R.textContent=nErr===0?'✓ 没出错':ok?`✓ ${nErr} 位错，已纠正`:`✗ ${nErr} 位错，被「纠」成另一个码字`;R.style.color=ok?css('--green'):css('--red');}
+  drawVenn(r,s,sent);drawDist(r,sent,cor);}
+function vennPos(W,H){const R=Math.min(W*0.2,H*0.3),cx=W/2,cy=H*(W<520?0.5:0.47);
+  const C=[[cx-R*0.62,cy-R*0.38],[cx+R*0.62,cy-R*0.38],[cx,cy+R*0.62]];
+  const P=[[cx-R*1.12,cy-R*0.62],[cx+R*1.12,cy-R*0.62],[cx,cy+R*1.2],[cx,cy-R*0.78],[cx+R*0.55,cy+R*0.3],[cx,cy-R*0.04],[cx-R*0.55,cy+R*0.3]];
+  return {R,C,P};}
+function drawVenn(r,s,sent){const [x,W,H]=fit($('hv')),{R,C,P}=vennPos(W,H),cols=['--blue','--amp','--purple'];
+  C.forEach(([px,py],k)=>{x.beginPath();x.arc(px,py,R,0,7);x.fillStyle=css(s[k]?'--red':cols[k]);x.globalAlpha=s[k]?.13:.06;x.fill();x.globalAlpha=1;x.lineWidth=s[k]?3.2:2;x.strokeStyle=css(s[k]?'--red':cols[k]);x.stroke();
+    const lx=k===0?px-R*0.95:k===1?px+R*0.95:px+R*1.05,ly=k===2?py+R*0.55:py-R*0.92;
+    const ones=HCHK[k].reduce((a,i)=>a+r[i],0),msg=`c${'₁₂₃'[k]} 圈：${ones} 个 1 ${s[k]?'✗ 奇数':'✓ 偶数'}`;
+    if(W<520)label(x,`c${'₁₂₃'[k]}：${ones} 个 1 ${s[k]?'✗':'✓'}`,6+k*(W-12)/3,16,css(s[k]?'--red':cols[k]),11);
+    else label(x,msg,k===0?Math.max(4,lx-120):k===1?Math.min(W-150,lx-30):Math.min(W-150,lx-10),ly,css(s[k]?'--red':cols[k]),12);});
+  P.forEach(([px,py],i)=>{const flipped=sent&&r[i]!==sent[i];x.beginPath();x.arc(px,py,15,0,7);x.fillStyle=flipped?css('--red'):css('--panel');x.fill();x.strokeStyle=css(i<3?'--accent':'--ink');x.lineWidth=i===hHot?3:1.5;x.stroke();
+    x.font=`700 15px ${css('--mono')}`;x.fillStyle=flipped?css('--panel'):css('--ink');const t=String(r[i]);x.fillText(t,px-x.measureText(t).width/2,py+5);
+    x.font=`11px ${css('--mono')}`;x.fillStyle=css('--muted');x.fillText(HN[i],px-8,py+29);});
+  text(x,W<520?'点数字可翻转　红底 = 被翻转':'点圆里的数字也能翻转它　红底 = 被信道翻转的位',8,H-4,css('--muted'),11);}
+function drawDist(r,sent,cor){const [x,W,H]=fit($('hd')),ds=HCW.map(c=>hdist(r,c));
+  const a=axes(x,W,H,{x0:-0.5,x1:15.5,y0:0,y1:9,yt:[0,1,2,3,4,5,6,7],title:W<520?'到 16 个码字的 Hamming 距离':'收到的字到 16 个合法码字的 Hamming 距离（横轴：码字的数据位 d₁d₂d₃d₄）',pl:30,pt:26,pb:34});
+  const bw=(a.X(1)-a.X(0))*0.62,sk=sent?sent.join(''):'',ck=cor.join('');
+  HCW.forEach((c,v)=>{const d=ds[v],X=a.X(v),isS=c.join('')===sk,isC=c.join('')===ck;x.fillStyle=css(isC&&isS?'--green':isC?'--red':isS?'--blue':'--muted');x.globalAlpha=isC||isS?.9:.35;
+    x.fillRect(X-bw/2,a.Y(d),bw,a.Y(0)-a.Y(d));if(isC||isS)x.fillRect(X-bw/2,a.Y(0)-4,bw,4);x.globalAlpha=1;text(x,String(d),X,a.Y(d)-(d?4:8),isC||isS?x.fillStyle:css('--ink'),11,'center');
+    if(W>520||v%3===0||isC||isS){x.save();x.translate(X,H-a.pb+12);x.font=`${isC||isS?'bold ':''}10px ${css('--mono')}`;x.fillStyle=css(isC&&isS?'--green':isC?'--red':isS?'--blue':'--muted');const s=(v>>>0).toString(2).padStart(4,'0');x.fillText(s,-x.measureText(s).width/2,0);x.restore();}});
+  x.setLineDash([4,4]);plot(x,a.X,a.Y,()=>1,-0.5,15.5,css('--green'),1.2,2);x.setLineDash([]);
+  text(x,`${sent?'蓝 = 发送的码字　':''}${sent&&ck===sk?'绿 = 解码结果（就是发送的）':'红 = 解码器选的最近码字'}`,W-8,W<520?a.pt+10:a.pt+2,css('--muted'),W<520?10:11,'right');}
+$('hRows').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.dd!==undefined){hD[+b.dataset.dd]^=1;Lab.draw(4);return;}
+  if(b.dataset.fl!==undefined){const i=+b.dataset.fl;if(hRx){hRx[i]^=1;$('hIn').value=hRx.join('');}else{hFlip.has(i)?hFlip.delete(i):hFlip.add(i);}Lab.draw(4);}});
+$('hv').addEventListener('click',ev=>{const c=$('hv'),rc=c.getBoundingClientRect(),{P}=vennPos(rc.width,+c.dataset.h||300),mx=ev.clientX-rc.left,my=ev.clientY-rc.top;
+  const i=P.findIndex(([px,py])=>Math.hypot(px-mx,py-my)<18);if(i<0)return;if(hRx){hRx[i]^=1;$('hIn').value=hRx.join('');}else{hFlip.has(i)?hFlip.delete(i):hFlip.add(i);}Lab.draw(4);});
+$('hv').addEventListener('pointermove',ev=>{const c=$('hv'),rc=c.getBoundingClientRect(),{P}=vennPos(rc.width,+c.dataset.h||300),i=P.findIndex(([px,py])=>Math.hypot(px-(ev.clientX-rc.left),py-(ev.clientY-rc.top))<18);c.style.cursor=i>=0?'pointer':'default';if(i!==hHot){hHot=i;Lab.draw(4);}});
+$('hIn').addEventListener('input',()=>{const v=$('hIn').value.replace(/[^01]/g,'');if(v.length===7){hRx=[...v].map(Number);}else if(!v.length){hRx=null;}Lab.draw(4);});
+document.querySelectorAll('#lab4 [data-h]').forEach(b=>b.addEventListener('click',()=>{const [d,f]=b.dataset.h.split('|');hD=[...d].map(Number);hFlip=new Set(f?f.split(',').map(Number):[]);hRx=null;$('hIn').value='';Lab.draw(4);}));
+Lab.add(4,lab4,{hv:260,hd:170});
+
+/* ---------- Lab 5: bursts and interleaving ---------- */
+const hdec=r=>{const p=SYN[hsyn(r).join('')],c=r.slice();if(p>=0)c[p]^=1;return c;};
+function lab5(){
+  const txt=($('bTxt').value||'').replace(/[^\x20-\x7e]/g,'').slice(0,8)||'?',L=+$('bLen').value,il=$('bInt').value==='1';
+  const nib=[];for(const ch of txt){const v=ch.charCodeAt(0);nib.push([v>>7&1,v>>6&1,v>>5&1,v>>4&1],[v>>3&1,v>>2&1,v>>1&1,v&1]);}
+  const N=nib.length,tot=N*7;$('bPos').max=Math.max(0,tot-1);const P=Math.min(+$('bPos').value,tot-1);$('bLenO').textContent=L+' 位';$('bPosO').textContent='第 '+(P+1)+' 位';
+  pressGroup('#lab5 [data-b]',b=>{const [t,l,p,i]=b.dataset.b.split('|');return t===txt&&+l===L&&+p===P&&+i===(il?1:0);});
+  const cws=nib.map(henc),order=[];   /* order[k] = [row, col] of the k-th transmitted bit */
+  if(il){for(let c=0;c<7;c++)for(let r=0;r<N;r++)order.push([r,c]);}else{for(let r=0;r<N;r++)for(let c=0;c<7;c++)order.push([r,c]);}
+  const hit=new Set();for(let k=P;k<Math.min(tot,P+L);k++)hit.add(order[k].join(','));
+  const rx=cws.map((c,r)=>c.map((b,cc)=>hit.has(r+','+cc)?b^1:b)),dec=rx.map(hdec),per=cws.map((c,r)=>c.reduce((s,b,cc)=>s+(hit.has(r+','+cc)?1:0),0));
+  const outN=dec.map(c=>c.slice(3));let out='';for(let i=0;i+1<outN.length;i+=2){const v=[...outN[i],...outN[i+1]].reduce((a,b)=>a*2+b,0);out+=v>=32&&v<127?String.fromCharCode(v):'·';}
+  /* uncoded: 8 bits per char, same burst on the raw stream (no interleaving) */
+  const raw=[];for(const ch of txt){const v=ch.charCodeAt(0);for(let b=7;b>=0;b--)raw.push(v>>b&1);}
+  const rawRx=raw.map((b,k)=>k>=P&&k<P+L?b^1:b);let rawOut='';for(let i=0;i<rawRx.length;i+=8){const v=rawRx.slice(i,i+8).reduce((a,b)=>a*2+b,0);rawOut+=v>=32&&v<127?String.fromCharCode(v):'·';}
+  const okDec=out===txt,okRaw=rawOut===txt;
+  $('bRaw').textContent=`「${rawOut}」${okRaw?'✓':'✗'}`;$('bRaw').style.color=okRaw?css('--green'):css('--red');
+  $('bDec').textContent=`「${out}」${okDec?'✓':'✗'}`;$('bDec').style.color=okDec?css('--green'):css('--red');
+  $('bPer').textContent=per.join(' / ')+(per.some(e=>e>=2)?'（有码字错 ≥ 2 位，纠不回来）':per.some(e=>e)?'（每个最多 1 位，全部纠回）':'');
+  /* drawing: codeword table (rows) + transmitted stream */
+  const cv=$('bc'),cell=Math.min(30,((cv.getBoundingClientRect().width||600)-150)/7);cv.dataset.h=Math.round(34+N*cell+74);const [x,W,H]=fit(cv),gx=110,gy=34;
+  text(x,'码字表（每行一个码字：c₁c₂c₃d₁d₂d₃d₄）　格子里的小数字 = 第几个被发送',8,16,css('--muted'),11);
+  for(let r=0;r<N;r++){text(x,`码字 ${r+1}：${per[r]} 位错`,8,gy+r*cell+cell*0.65,css(per[r]>=2?'--red':per[r]?'--amp':'--muted'),11);
+    for(let c=0;c<7;c++){const k=order.findIndex(o=>o[0]===r&&o[1]===c),isHit=hit.has(r+','+c),X=gx+c*cell,Y=gy+r*cell;
+      x.fillStyle=isHit?css('--red'):c<3?css('--fillB'):css('--panel');x.fillRect(X,Y,cell-2,cell-2);x.strokeStyle=css('--line');x.strokeRect(X,Y,cell-2,cell-2);
+      x.font=`700 13px ${css('--mono')}`;x.fillStyle=isHit?css('--panel'):css('--ink');x.fillText(String(rx[r][c]),X+cell/2-5,Y+cell/2+4);
+      x.font=`9px ${css('--mono')}`;x.fillStyle=isHit?css('--panel'):css('--muted');x.fillText(String(k+1),X+2,Y+9);}}
+  /* stream */
+  const sy=H-44,sw=Math.min(14,(W-16)/tot);text(x,`发送的比特流（${il?'按列读表':'一行一行读表'}），红 = 突发打中的 ${L} 位`,8,sy-10,css('--muted'),11);
+  order.forEach(([r,c],k)=>{const isHit=k>=P&&k<P+L;x.fillStyle=isHit?css('--red'):css(['--blue','--amp','--purple','--green','--accent'][r%5]);x.globalAlpha=isHit?1:.45;x.fillRect(8+k*sw,sy,sw-1,18);x.globalAlpha=1;});
+  text(x,'颜色 = 属于哪个码字',8,H-8,css('--muted'),10);}
+['bTxt','bLen','bPos'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(5)));$('bInt').addEventListener('change',()=>Lab.draw(5));
+document.querySelectorAll('#lab5 [data-b]').forEach(b=>b.addEventListener('click',()=>{const [t,l,p,i]=b.dataset.b.split('|');$('bTxt').value=t;$('bLen').value=l;$('bInt').value=i;$('bPos').max=14*t.length-1;$('bPos').value=p;Lab.draw(5);}));
+Lab.add(5,lab5,{bc:260});
 Lab.start();
 </script>
 </body></html>
