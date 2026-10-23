@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>傅里叶实验室</title>
-<meta name="description" content="四个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）…">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="四个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
+<meta name="description" content="五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2…">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
   <h1>傅里叶实验室</h1>
-  <p>四个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a></nav>
+  <p>五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -74,6 +74,19 @@
   <div class="stage even"><canvas id="zs" height="270" aria-label="函数与部分和"></canvas><canvas id="zi" height="270" aria-label="被积函数与面积"></canvas></div>
   <div class="read"><div><small>a₀/2（平均值）</small><b id="z0"></b></div><div><small>当前系数</small><b id="zc"></b></div><div><small>a₁…a₅</small><b id="za" style="font-size:12px"></b></div><div><small>b₁…b₅</small><b id="zb" style="font-size:12px"></b></div></div>
   <p class="note" id="zf"></p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 常数项为什么是 a₀/2（Maths Part B · Week 4）</div>
+  <h2>cos² nx 的平均高度只有 ½，常数 1 的平均高度是 1：同一个公式用到 n = 0 会多算一倍</h2>
+  <p class="lead">左边是「尺子自乘」cos² nx 在一个周期上的面积：n ≥ 1 时只有 π（平均高度 ½），n = 0 时 cos 0 = 1，面积是 2π（平均高度 1）。系数公式前面的 1/π 是按「面积 π」配好的，所以拿它算 n = 0 会得到平均值的 2 倍。右边看结果：红色虚线是直接用 a₀ 当常数项，绿色是 a₀/2，只有绿色正好是 f 的平均高度。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-fh="c3">f = 3（常数）</button><button data-fh="sqE">讲义方波 0 / 4</button><button data-fh="q3">Tut Q3：2x</button><button data-fh="q7">Tut Q7：7 − 3x/π</button><button data-fh="ex1">例题 2016/17：−2 / 4</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="hn">尺子 cos nx 的 n</label><input id="hn" type="range" min="0" max="4" step="1" value="0"><output id="hnO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="hr" height="250" aria-label="cos 平方的面积"></canvas><canvas id="hf" height="250" aria-label="f 与常数项"></canvas></div>
+  <div class="read"><div><small>∫ cos² nx dx（一个周期）</small><b id="hA"></b></div><div><small>a₀ = (1/π)∫ f dx</small><b id="h0"></b></div><div><small>真正的平均值 (1/2π)∫ f dx</small><b id="hM"></b></div><div><small>所以常数项</small><b id="hC"></b></div></div>
+  <p class="note"><strong>一句话：</strong>求 aₙ 时两边乘 cos nx 再积分，右边剩下 aₙ·∫cos² nx dx = aₙ·π，所以除以 π。常数项那一项乘的是 1，∫1·1 dx = 2π，本该除以 2π。课件为了只记一个公式，统一除以 π，代价就是 n = 0 时多了一倍，于是在级数里写 a₀/2 把它除回来。</p>
 </section>
 </div>
 
@@ -193,6 +206,38 @@ function lab4(){
 ['zN','zn','zt'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 document.querySelectorAll('#lab4 [data-fz]').forEach(b=>b.addEventListener('click',()=>{fz=b.dataset.fz;Lab.draw(4);}));
 Lab.add(4,lab4,{zs:240,zi:240});
+
+/* ---------- Lab 5: why a0/2 ---------- */
+const FH={c3:{x0:-PI,f:()=>3,t:'f = 3'},sqE:FZ.sqE,q3:FZ.q3,q7:FZ.q7,ex1:FZ.ex1};
+let fh='c3';
+function lab5(){
+  const n=val('hn'),F=FH[fh];$('hnO').textContent=n===0?'0（cos 0 = 1）':n;
+  pressGroup('#lab5 [data-fh]',b=>b.dataset.fh===fh);
+  const A=n===0?2*PI:PI,xa=F.x0,xb=F.x0+2*PI;let I=0;const M=4096;for(let i=0;i<M;i++)I+=F.f(xa+(i+0.5)*2*PI/M)*2*PI/M;
+  const a0=I/PI,mean=I/(2*PI),r=v=>(+v.toFixed(3)).toString();
+  $('hA').textContent=n===0?'2π（≈ 6.283）':'π（≈ 3.142）';$('h0').textContent=r(a0);$('hM').textContent=r(mean);$('hC').textContent='a₀/2 = '+r(a0/2);
+  const xf=v=>({'-3.142':'−π','0.000':'0','3.142':'π'})[v.toFixed(3)]||'';
+  const [x,W,H]=fit($('hr'));const a=axes(x,W,H,{x0:-PI,x1:PI,y0:0,y1:1.25,xt:[-PI,0,PI],xf,yt:[0,0.5,1],title:n===0?'1 × 1 = 1：面积 2π，平均高度 1':`cos² ${n}x：面积 π，平均高度 ½`,pl:30});
+  const g=t=>Math.cos(n*t)**2,K=500,dx=2*PI/K;x.fillStyle=css('--blue');x.globalAlpha=.25;
+  for(let i=0;i<K;i++){const t=-PI+(i+0.5)*dx;x.fillRect(a.X(t-dx/2),a.Y(g(t)),Math.max(a.X(t+dx/2)-a.X(t-dx/2),1),a.Y(0)-a.Y(g(t)));}x.globalAlpha=1;
+  plot(x,a.X,a.Y,g,-PI,PI,css('--blue'),2.2,800);
+  x.setLineDash([6,4]);plot(x,a.X,a.Y,()=>n===0?1:0.5,-PI,PI,css('--purple'),1.6,2);x.setLineDash([]);
+  text(x,n===0?'平均高度 1':'平均高度 ½',W-a.pr-4,a.Y(n===0?1:0.5)-6,css('--ink'),12,'right');
+  /* right: f with a0 and a0/2 */
+  let lo=Math.min(0,a0),hi=Math.max(0,a0);for(let i=0;i<=600;i++){const v=F.f(xa+2*PI*i/600);lo=Math.min(lo,v);hi=Math.max(hi,v);}
+  const pad=(hi-lo)*0.15+0.3;const [y,W2,H2]=fit($('hf'));
+  const b=axes(y,W2,H2,{x0:xa,x1:xb,y0:lo-pad,y1:hi+pad,xt:[xa,xb],xf:v=>({'-1':'−π','0':'0','1':'π','2':'2π','-0.75':'−3π/4','1.25':'5π/4'})[(+(v/PI).toFixed(2)).toString()]||v.toFixed(2),yt:[],title:'f(x) 一个周期：绿 = a₀/2（平均），红虚线 = a₀',pl:14});
+  y.fillStyle=css('--muted');y.globalAlpha=.18;for(let i=0;i<K;i++){const t=xa+(i+0.5)*dx,v=F.f(t);y.fillRect(b.X(t-dx/2),Math.min(b.Y(v),b.Y(0)),Math.max(b.X(t+dx/2)-b.X(t-dx/2),1),Math.abs(b.Y(v)-b.Y(0)));}y.globalAlpha=1;
+  y.strokeStyle=css('--muted');y.lineWidth=1;y.beginPath();y.moveTo(b.pl,b.Y(0));y.lineTo(W2-b.pr,b.Y(0));y.stroke();
+  plot(y,b.X,b.Y,F.f,xa,xb,css('--ink'),2,1600);
+  plot(y,b.X,b.Y,()=>a0/2,xa,xb,css('--green'),2.6,2);
+  y.setLineDash([6,4]);plot(y,b.X,b.Y,()=>a0,xa,xb,css('--red'),2,2);y.setLineDash([]);
+  text(y,'a₀/2 = '+r(a0/2),W2-b.pr-4,b.Y(a0/2)+(a0>=0?16:-6),css('--green'),12,'right');
+  text(y,'a₀ = '+r(a0)+'（多了一倍）',W2-b.pr-4,b.Y(a0)+(a0>=0?-6:16),css('--red'),12,'right');
+}
+$('hn').addEventListener('input',()=>Lab.draw(5));
+document.querySelectorAll('#lab5 [data-fh]').forEach(b=>b.addEventListener('click',()=>{fh=b.dataset.fh;Lab.draw(5);}));
+Lab.add(5,lab5,{hr:220,hf:220});
 Lab.start();
 </script>
 </body></html>
