@@ -27,4 +27,24 @@ $R_L<R_s$ 时导数为正，$R_L>R_s$ 时为负 → 最大值。`],
 ['fix',r`Week 2 calculus examples 的两处笔误（例 5、例 6）`,r`例 5（第 3 页）：$\frac{d}{dx}3\ln(1+2x)=\frac{6}{1+2x}$，讲义写成 $\frac3{1+2x}$；最终答案里的 $3\sqrt{1-x}(1+2x)^2$ 应为 $6\sqrt{1-x}(1+2x)^2$。
 例 6（第 4 页）：最后一行分母漏了 t，应为 $\dfrac{d^2y}{dx^2}=\dfrac{-3(t^2+1)}{16t(t^2-1)^3}$。`],
 ]);
+D('M1-C2','不定积分与换元法','402202737d7a81239e7ac9c952700095',[
+['q',r`定积分 $\int_a^bf(x)\,dx$ 的定义（面积是和的极限）是什么？`,r`把 a 到 b 分成 n 条宽 $\delta x$ 的长条：$\displaystyle\int_a^bf(x)\,dx=\lim_{\delta x\to0}\sum_{k=1}^nf(x_k)\,\delta x$。积分号 ∫ 就是拉长的 S（sum）。`],
+['q',r`什么是原函数（antiderivative）？为什么不定积分要加 C？`,r`$F'(x)=f(x)$ 的 F 叫 f 的原函数。常数的导数是 0，所以 $F+C$ 也都是原函数（图像上下平移，斜率不变）。C 由初始条件确定。`],
+['q',r`讲师要求背的标准积分有哪些？`,r`$\int k\,dx=kx+c$；$\int x^n dx=\frac{x^{n+1}}{n+1}+c\ (n\ne-1)$；$\int\frac1x dx=\ln|x|+c$；$\int e^x dx=e^x+c$；$\int\sin x\,dx=-\cos x+c$；$\int\cos x\,dx=\sin x+c$；$\int\sinh x\,dx=\cosh x+c$；$\int\cosh x\,dx=\sinh x+c$。`],
+['q',r`为什么 $\int\frac1x dx=\ln|x|+c$ 要加绝对值？`,r`$\ln x$ 只对 $x>0$ 有定义。$x<0$ 时 $\frac{d}{dx}\ln(-x)=\frac{-1}{-x}=\frac1x$，所以两种情况合起来写 $\ln|x|$。`],
+['q',r`换元法的步骤？它为什么成立？`,r`1. 找内层函数 $u=g(x)$；2. $du=g'(x)dx$；3. 把被积式全部换成 u（包括 dx）；4. 积分后把 u 换回 x。
+成立的原因：它是链式法则 $\frac{d}{dx}F(g(x))=f(g(x))g'(x)$ 倒过来用。`],
+['q',r`$\int\sin(3x+2)\,dx$ = ？`,r`$u=3x+2$，$dx=\frac13du$：$\frac13\int\sin u\,du=-\frac13\cos(3x+2)+C$。`],
+['q',r`$\int\frac{dx}{2x+1}$ = ？`,r`$u=2x+1$，$dx=\frac12du$：$\frac12\ln|2x+1|+C$。（讲义例 3 漏了 ½。）`],
+['q',r`$\int\sin^2x\cos x\,dx$ = ？`,r`$u=\sin x$，$du=\cos x\,dx$：$\int u^2du=\frac{\sin^3x}{3}+C$。`],
+['q',r`$\int\tan x\,dx$ 和 $\int\cot x\,dx$ = ？`,r`$\tan x=\frac{\sin x}{\cos x}$，分子是分母导数的负数：$-\ln|\cos x|=\ln|\sec x|+C$。
+$\cot x=\frac{\cos x}{\sin x}$：$\ln|\sin x|+C$。规律：$\int\frac{f'(x)}{f(x)}dx=\ln|f(x)|+C$。`],
+['q',r`有空气阻力的落体 $m\frac{dv}{dt}=mg-kv$，$v(0)=0$。求 $v(t)$ 和终端速度。`,r`分离变量 $\int\frac{dv}{mg-kv}=\int\frac{dt}{m}$，换元 $u=mg-kv$：$-\frac1k\ln|mg-kv|=\frac tm+C$。
+用 v(0) = 0 定 C，得 $v=\frac{mg}{k}\left(1-e^{-kt/m}\right)$，终端速度 $\frac{mg}{k}$。`],
+['q',r`二极管里 $\frac{dE}{dx}=Q(x)$，Q 是分段常数。E(x) 是什么形状？`,r`每段 Q 为常数 → E 是直线（斜率 = Q）。n 区斜率 $+Q_n$ 上升，p 区斜率 $-Q_p$ 下降，用 E 连续把各段接起来，得到三角形，峰值在结处 $E(0)=Q_nw_n$。`],
+['err',r`换元时最常漏掉什么？`,r`忘了把 **dx 也换成 du**（要乘 $\frac{dx}{du}$，例如 $dx=\frac13du$），或者积分完忘了把 u 换回 x。还有 $\int x^n$ 公式在 n = −1 时不能用。`],
+['fix',r`Week 3 examples 的两处错误`,r`第 2 页例 3：$\int\frac{dx}{2x+1}=\frac12\ln|2x+1|+C$，讲义漏了 ½。
+第 3 页例 5：应为 $du=\cos x\,dx$（写成了 $\cos u\,du$），答案应为 $\frac{\sin^3x}3+C$（写成了 $\cos^3x$）。`],
+['fix',r`Week 3 slides 第 4 页的落体方程`,r`$m\frac{dv}{dt}=-mg$ 约掉 m 后应是 $\frac{dv}{dt}=-g$，讲义写成了 $-gt$（$-gt$ 是解出来的 $v$）。`],
+]);
 })();

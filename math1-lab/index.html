@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -59,6 +59,22 @@
   <div class="stage one"><canvas id="mpc" height="260" aria-label="功率曲线"></canvas></div>
   <div class="read"><div><small>负载功率 P</small><b id="mpP"></b></div><div><small>最大可能 V²/(4R<sub>s</sub>)</small><b id="mpM"></b></div><div><small>dP/dR<sub>L</sub> 的符号</small><b id="mpD"></b></div><div><small>效率 R<sub>L</sub>/(R<sub>L</sub>+R<sub>s</sub>)</small><b id="mpE"></b></div></div>
   <p class="note"><strong>为什么讲师说「不要再求一次导」：</strong>二阶导数检验在 f″ = 0 时失效（例如 x⁴ 在 0 处 f″ = 0 却是最小值），而且这里的二阶导数很难算。看一阶导数在驻点左右的符号（+ 变 − 是最大，− 变 + 是最小）总是有效的。</p>
+</section>
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 黎曼和、定积分与平均值（C2、C4）</div>
+  <h2>定积分 = 无数个窄长条面积之和的极限；平均值 = 积分 ÷ 区间长度</h2>
+  <p class="lead">把 a 到 b 分成 n 个宽 Δx = (b − a)/n 的长条，每条高度取左端、右端或中点的函数值。蓝条是正面积，红条是负面积（曲线在 x 轴下方）。紫色虚线是平均值 f<sub>mean</sub>：以它为高、以 b − a 为宽的矩形，面积正好等于积分。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-rs="sq,1,5,4,mid">C4 例 1：∫₁⁵ 2x² dx，n = 4</button><button data-rs="sq,1,5,40,left">同一题，n = 40</button><button data-rs="sq,5,1,10,mid">上下限对调（a = 5，b = 1）</button><button data-rs="sin,0,6.28,20,mid">sin x 一整个周期 → 0</button><button data-rs="cos2,0,6.28,20,mid">cos²x：平均值 ½（rms 的来源）</button><button data-rs="cub,-1.5,2,12,mid">x³ − x：正负面积抵消</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="rsF">函数</label><select id="rsF"><option value="sq">f(x) = 2x²</option><option value="sin">f(x) = sin x</option><option value="cos2">f(x) = cos²x</option><option value="cub">f(x) = x³ − x</option><option value="exp">f(x) = e^(−x)</option></select><span></span></div>
+    <div class="ctl"><label for="rsM">长条高度取</label><select id="rsM"><option value="left">左端点</option><option value="right">右端点</option><option value="mid">中点</option></select><span></span></div>
+    <div class="ctl"><label for="rsA">下限 a</label><input id="rsA" type="range" min="-2" max="6.3" step="0.01" value="1"><output id="rsAO"></output></div>
+    <div class="ctl"><label for="rsB">上限 b</label><input id="rsB" type="range" min="-2" max="6.3" step="0.01" value="5"><output id="rsBO"></output></div>
+    <div class="ctl"><label for="rsN">长条数 n</label><input id="rsN" type="range" min="1" max="100" step="1" value="4"><output id="rsNO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="rsc" height="300" aria-label="黎曼和"></canvas></div>
+  <div class="read"><div><small>Δx = (b − a)/n</small><b id="rsD"></b></div><div><small>长条面积和</small><b id="rsS"></b></div><div><small>精确积分 F(b) − F(a)</small><b id="rsI"></b></div><div><small>误差</small><b id="rsE"></b></div><div><small>平均值 积分/(b − a)</small><b id="rsMv"></b></div></div>
+  <p class="note" id="rsNote"></p>
 </section>
 </div>
 
@@ -180,6 +196,37 @@ function lab3(){
 ['mpV','mpS','mpL'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
 document.querySelectorAll('#lab3 [data-mp]').forEach(b=>b.addEventListener('click',()=>{const [v,s,l]=b.dataset.mp.split(',');$('mpV').value=v;$('mpS').value=s;$('mpL').value=l;Lab.draw(3);}));
 Lab.add(3,lab3,{mpc:220});
+/* ---------- Lab 4: Riemann sums ---------- */
+const RF={sq:{f:x=>2*x*x,F:x=>2*x**3/3,t:'2x²'},sin:{f:Math.sin,F:x=>-Math.cos(x),t:'sin x'},cos2:{f:x=>Math.cos(x)**2,F:x=>x/2+Math.sin(2*x)/4,t:'cos²x'},
+  cub:{f:x=>x**3-x,F:x=>x**4/4-x*x/2,t:'x³ − x'},exp:{f:x=>Math.exp(-x),F:x=>-Math.exp(-x),t:'e^(−x)'}};
+function lab4(){
+  const k=$('rsF').value,R=RF[k],a=val('rsA'),b=val('rsB'),n=val('rsN'),m=$('rsM').value;
+  $('rsAO').textContent=fmt(a,2);$('rsBO').textContent=fmt(b,2);$('rsNO').textContent=n;
+  pressGroup('#lab4 [data-rs]',e=>{const q=e.dataset.rs.split(',');return q[0]===k&&Math.abs(+q[1]-a)<0.006&&Math.abs(+q[2]-b)<0.006&&+q[3]===n&&q[4]===m;});
+  const h=(b-a)/n,off=m==='left'?0:m==='right'?1:0.5;let S=0;const bars=[];
+  for(let i=0;i<n;i++){const x0=a+i*h,v=R.f(x0+off*h);S+=v*h;bars.push([x0,v]);}
+  const I=R.F(b)-R.F(a),mean=Math.abs(b-a)>1e-9?I/(b-a):NaN;
+  $('rsD').textContent=fmt(h,4);$('rsS').textContent=fmt(S,4);$('rsI').textContent=fmt(I,4);$('rsE').textContent=fmt(S-I,4);$('rsMv').textContent=fmt(mean,4);
+  const lo=Math.min(a,b),hi=Math.max(a,b),pad=Math.max(0.3,(hi-lo)*0.08),x0=lo-pad,x1=hi+pad;
+  let ymin=0,ymax=0;for(let i=0;i<=300;i++){const v=R.f(x0+(x1-x0)*i/300);ymin=Math.min(ymin,v);ymax=Math.max(ymax,v);}
+  const span=ymax-ymin||1;ymin-=span*0.08;ymax+=span*0.12;
+  const [x,W,H]=fit($('rsc'));const ax=axes(x,W,H,{x0,x1,y0:ymin,y1:ymax,xt:[lo,(lo+hi)/2,hi].map(v=>+v.toFixed(2)),yt:[ymin<-0.05*span?+(ymin*0.8).toPrecision(1):null,0,+(ymax*0.8).toPrecision(1)].filter(v=>v!==null),title:`f(x) = ${R.t}，从 a = ${fmt(a,2)} 到 b = ${fmt(b,2)}`,pl:44});
+  bars.forEach(([xa,v])=>{const xl=Math.min(xa,xa+h),xr=Math.max(xa,xa+h);const pos=v*Math.sign(h)>=0;
+    x.fillStyle=pos?css('--fillB'):css('--fillA');x.strokeStyle=pos?css('--blue'):css('--red');x.lineWidth=n>60?0.5:1;
+    const yt=ax.Y(Math.max(v,0)),yb=ax.Y(Math.min(v,0));x.fillRect(ax.X(xl),yt,ax.X(xr)-ax.X(xl),yb-yt);x.strokeRect(ax.X(xl),yt,ax.X(xr)-ax.X(xl),yb-yt);});
+  plot(x,ax.X,ax.Y,R.f,x0,x1,css('--ink'),2.2,600);
+  if(isFinite(mean)){x.strokeStyle=css('--purple');x.setLineDash([6,4]);x.lineWidth=2;x.beginPath();x.moveTo(ax.X(lo),ax.Y(mean));x.lineTo(ax.X(hi),ax.Y(mean));x.stroke();x.setLineDash([]);text(x,'平均值 '+fmt(mean,3),ax.X(hi)-4,ax.Y(mean)-6,css('--purple'),11,'right');}
+  let nt;
+  if(b<a)nt=`b < a：每条的宽 Δx 是负的，所以结果变号。这就是性质 ∫ₐᵇ = −∫ᵦᵃ。`;
+  else if(k==='sin'&&Math.abs(b-a-2*Math.PI)<0.05)nt='sin 一整个周期：正负面积正好抵消，积分为 0，平均值为 0。交流电压的平均值为 0，所以要用 rms。';
+  else if(k==='cos2')nt='cos²x 的平均值是 ½（降幂公式 cos²x = ½(1 + cos 2x)，cos 2x 的平均为 0）。电阻功率 ∝ cos²ωt，所以平均功率是峰值的一半，V_rms = V_peak/√2。';
+  else if(k==='cub')nt='x 轴下方的部分算负面积（红条）。定积分是「带符号的面积」，正负会抵消；要算真正的几何面积，得分段取绝对值。';
+  else nt=`n 越大，误差越小。左端点和右端点的误差大约 ∝ 1/n，中点 ∝ 1/n²，所以中点法收敛得快得多。`;
+  $('rsNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['rsF','rsM','rsA','rsB','rsN'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-rs]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.rs.split(',');$('rsF').value=q[0];$('rsA').value=q[1];$('rsB').value=q[2];$('rsN').value=q[3];$('rsM').value=q[4];Lab.draw(4);}));
+Lab.add(4,lab4,{rsc:240});
 Lab.start();
 </script>
 </body></html>
