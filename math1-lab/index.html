@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -87,6 +87,21 @@
   <div class="stage even"><canvas id="hyc" height="300" aria-label="圆与双曲线"></canvas><canvas id="hyg" height="300" aria-label="双曲函数图像"></canvas></div>
   <div class="read"><div><small>cosh u，sinh u</small><b id="hyCS"></b></div><div><small>tanh u</small><b id="hyT"></b></div><div><small>cosh² − sinh²</small><b id="hyI"></b></div><div><small>cosh u + sinh u = eᵘ</small><b id="hyE"></b></div><div><small>cos u，sin u（对比）</small><b id="hyTr"></b></div></div>
   <p class="note"><strong>为什么工程里会遇到：</strong>两端挂起的电缆形状是 y = a cosh(x/a)（悬链线）；传输线、热传导、梁的弯曲、过阻尼振动的解里都有 e<sup>x</sup> 和 e<sup>−x</sup> 的组合，用 sinh、cosh 写最整齐。和三角恒等式比，双曲恒等式只是在「两个 sin 相乘」的地方变号（Osborn 规则）：cos²A + sin²A = 1 → cosh²A − sinh²A = 1。</p>
+</section>
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · Taylor 多项式（C5、C6）</div>
+  <h2>f(x) ≈ f(x₀) + f′(x₀)(x − x₀) + f″(x₀)(x − x₀)²/2! + …：阶数越高、离 x₀ 越近，越准</h2>
+  <p class="lead">选函数、展开点 x₀ 和阶数 N。黑线是原函数，红线是 N 阶 Taylor 多项式；绿色区域是误差小于 0.01 的范围。右边列出每一项的系数 f<sup>(k)</sup>(x₀)/k!。有些级数只在一定范围内收敛（灰色区域外项越多越离谱）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-ty="sin,0,3">sin x，x₀ = 0，3 阶（x − x³/3!）</button><button data-ty="sin,1.571,2">sin x，x₀ = π/2，2 阶</button><button data-ty="exp,0,4">eˣ，4 阶</button><button data-ty="gau,0,3">例 5：e^−(x−1)²，x₀ = 0</button><button data-ty="gau,1,3">例 5：x₀ = 1</button><button data-ty="inv,0,8">1/(1 + x)：只在 |x| &lt; 1 收敛</button><button data-ty="grav,0,3">C6 引力 1/(1 + h)²</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="tyF">函数</label><select id="tyF"><option value="sin">sin x</option><option value="cos">cos x</option><option value="exp">eˣ</option><option value="ln">ln(1 + x)</option><option value="inv">1/(1 + x)</option><option value="sqrt">√(1 + x)</option><option value="gau">e^−(x−1)²（例 5）</option><option value="grav">1/(1 + x)²（C6 引力）</option></select><span></span></div>
+    <div class="ctl"><label for="tyX">展开点 x₀</label><input id="tyX" type="range" min="-2" max="3" step="0.001" value="0"><output id="tyXO"></output></div>
+    <div class="ctl"><label for="tyN">阶数 N</label><input id="tyN" type="range" min="0" max="15" step="1" value="3"><output id="tyNO"></output></div>
+    <div class="ctl"><label for="tyE">在 x = 处看误差</label><input id="tyE" type="range" min="-3" max="4" step="0.01" value="0.5"><output id="tyEO"></output></div>
+  </div>
+  <div class="stage"><canvas id="tyc" height="300" aria-label="Taylor 多项式"></canvas><canvas id="tyk" height="300" aria-label="系数"></canvas></div>
+  <div class="read"><div><small>f(x)</small><b id="tyV"></b></div><div><small>N 阶近似</small><b id="tyP"></b></div><div><small>误差</small><b id="tyR"></b></div><div><small>误差 &lt; 0.01 的范围</small><b id="tyG" style="font-size:15px"></b></div></div>
+  <p class="note" id="tyNote"></p>
 </section>
 </div>
 
@@ -266,6 +281,56 @@ function lab5(){
 $('hyU').addEventListener('input',()=>Lab.draw(5));
 document.querySelectorAll('#lab5 [data-hy]').forEach(b=>b.addEventListener('click',()=>{$('hyU').value=b.dataset.hy;Lab.draw(5);}));
 Lab.add(5,lab5,{hyc:250,hyg:250});
+/* ---------- Lab 6: Taylor polynomials ---------- */
+/* k-th derivative functions; numeric for the gaussian via Hermite recursion */
+const fact=n=>{let r=1;for(let i=2;i<=n;i++)r*=i;return r;};
+function gauD(k,x){/* d^k/dx^k e^{-(x-1)^2} = (-1)^k H_k(x-1) e^{-(x-1)^2}, physicists' Hermite */const u=x-1;let h0=1,h1=2*u;if(k===0)return Math.exp(-u*u);let hk=h1;for(let n=1;n<k;n++){hk=2*u*h1-2*n*h0;h0=h1;h1=hk;}return (k%2?-1:1)*hk*Math.exp(-u*u);}
+const TY={
+  sin:{f:Math.sin,d:(k,x)=>Math.sin(x+k*Math.PI/2),dom:[-7,7],y:[-2,2],R:Infinity,t:'sin x'},
+  cos:{f:Math.cos,d:(k,x)=>Math.cos(x+k*Math.PI/2),dom:[-7,7],y:[-2,2],R:Infinity,t:'cos x'},
+  exp:{f:Math.exp,d:(k,x)=>Math.exp(x),dom:[-3,3],y:[-2,12],R:Infinity,t:'eˣ'},
+  ln:{f:x=>x>-1?Math.log(1+x):NaN,d:(k,x)=>k===0?Math.log(1+x):((k%2?1:-1)*fact(k-1)/Math.pow(1+x,k)),dom:[-0.99,3],y:[-4,2.5],R:'x0+1',t:'ln(1 + x)'},
+  inv:{f:x=>x>-1?1/(1+x):NaN,d:(k,x)=>(k%2?-1:1)*fact(k)/Math.pow(1+x,k+1),dom:[-0.99,3],y:[-1,5],R:'x0+1',t:'1/(1 + x)'},
+  sqrt:{f:x=>x>=-1?Math.sqrt(1+x):NaN,d:(k,x)=>{let c=1;for(let i=0;i<k;i++)c*=(0.5-i);return c*Math.pow(1+x,0.5-k);},dom:[-1,3],y:[-0.5,2.5],R:'x0+1',t:'√(1 + x)'},
+  gau:{f:x=>Math.exp(-((x-1)**2)),d:gauD,dom:[-1.5,3.5],y:[-0.8,1.6],R:Infinity,t:'e^−(x−1)²'},
+  grav:{f:x=>x>-1?1/((1+x)**2):NaN,d:(k,x)=>(k%2?-1:1)*fact(k+1)/Math.pow(1+x,k+2),dom:[-0.99,3],y:[-1,5],R:'x0+1',t:'1/(1 + x)²'}};
+function lab6(){
+  const k=$('tyF').value,T=TY[k];let x0=val('tyX'),N=val('tyN'),xe=val('tyE');
+  if(T.R!==Infinity&&x0<=-0.9){x0=-0.9;}
+  $('tyXO').textContent=fmt(x0,3);$('tyNO').textContent=N;$('tyEO').textContent=fmt(xe,2);
+  pressGroup('#lab6 [data-ty]',b=>{const q=b.dataset.ty.split(',');return q[0]===k&&Math.abs(+q[1]-x0)<0.002&&+q[2]===N;});
+  const c=[];for(let i=0;i<=N;i++)c.push(T.d(i,x0)/fact(i));
+  const P=x=>{let s=0,p=1;for(let i=0;i<=N;i++){s+=c[i]*p;p*=(x-x0);}return s;};
+  const fe=T.f(xe),pe=P(xe);$('tyV').textContent=fmt(fe,5);$('tyP').textContent=fmt(pe,5);$('tyR').textContent=isFinite(fe)?fmt(pe-fe,3):'—';
+  const [d0,d1]=T.dom;let lo=x0,hi=x0;const st=(d1-d0)/2000;
+  while(lo-st>=d0&&Math.abs(P(lo-st)-T.f(lo-st))<0.01)lo-=st;while(hi+st<=d1&&Math.abs(P(hi+st)-T.f(hi+st))<0.01)hi+=st;
+  $('tyG').textContent=`${fmt(lo,2)} 到 ${fmt(hi,2)}`;
+  const Rv=T.R===Infinity?Infinity:x0+1;
+  const [x,W,H]=fit($('tyc'));const a=axes(x,W,H,{x0:d0,x1:d1,y0:T.y[0],y1:T.y[1],xt:[d0,(d0+d1)/2,d1].map(v=>+v.toFixed(1)),yt:[T.y[0],0,T.y[1]],title:`f(x) = ${T.t}，在 x₀ = ${fmt(x0,3)} 展开到 ${N} 阶`,pl:32});
+  if(isFinite(Rv)){x.fillStyle=css('--grid');x.globalAlpha=.5;const L=Math.max(d0,x0-Rv),Rr=Math.min(d1,x0+Rv);x.fillRect(a.X(L),a.pt,a.X(Rr)-a.X(L),H-a.pt-a.pb);x.globalAlpha=1;text(x,'收敛范围 |x − x₀| < '+fmt(Rv,2),a.X(Rr)-4,a.pt+12,css('--muted'),11,'right');}
+  x.fillStyle=css('--green');x.globalAlpha=.12;x.fillRect(a.X(lo),a.pt,a.X(hi)-a.X(lo),H-a.pt-a.pb);x.globalAlpha=1;
+  x.save();x.beginPath();x.rect(a.pl,a.pt,W-a.pl-a.pr,H-a.pt-a.pb);x.clip();
+  plot(x,a.X,a.Y,T.f,d0,d1,css('--ink'),2.6,800);
+  plot(x,a.X,a.Y,v=>{const y=P(v);return Math.abs(y)>50?NaN:y;},d0,d1,css('--red'),2,800);
+  x.restore();
+  x.fillStyle=css('--red');x.beginPath();x.arc(a.X(x0),a.Y(T.f(x0)),5,0,7);x.fill();
+  x.strokeStyle=css('--amp');x.setLineDash([4,4]);x.beginPath();x.moveTo(a.X(xe),a.pt);x.lineTo(a.X(xe),H-a.pb);x.stroke();x.setLineDash([]);
+  /* coefficient bars */
+  const [y,W2,H2]=fit($('tyk'));const M=Math.max(...c.map(Math.abs),1e-9);
+  const b=axes(y,W2,H2,{x0:-0.5,x1:Math.max(N,3)+0.5,y0:-M*1.15,y1:M*1.15,xt:[...Array(Math.max(N,3)+1).keys()].filter(i=>N<=8||i%2===0),yt:[-M,0,M].map(v=>+v.toPrecision(2)),yf:v=>fmt(v,3),title:'系数 f⁽ᵏ⁾(x₀)/k!',pl:44,xl:'k'});
+  const bw=Math.max(3,(b.X(1)-b.X(0))*0.55);
+  c.forEach((v,i)=>{y.fillStyle=Math.abs(v)<1e-12?css('--grid'):css('--blue');y.fillRect(b.X(i)-bw/2,Math.min(b.Y(v),b.Y(0)),bw,Math.abs(b.Y(v)-b.Y(0))||1);});
+  let nt;
+  if(k==='sin'&&Math.abs(x0-Math.PI/2)<0.01&&N>=2)nt='在 π/2 处 sin 的奇数阶导数（cos、−cos）都是 0，所以 2 阶和 3 阶近似一样：sin x ≈ 1 − (x − π/2)²/2!（例 4）。';
+  else if(k==='sin'&&Math.abs(x0)<0.001)nt='在 0 处偶数阶系数都是 0（sin 是奇函数），只剩 x、−x³/3!、x⁵/5!……；x 必须用弧度。';
+  else if(isFinite(Rv)&&(Math.abs(xe-x0)>=Rv))nt=`x = ${fmt(xe,2)} 在收敛范围之外：加再多项也不会更准，反而越来越离谱。这就是讲义说的「Need to be careful about range of validity」。`;
+  else if(k==='grav')nt='C6 引力问题：F/(mg) = 1/(1 + h/R₀)² ≈ 1 − 2(h/R₀) + 3(h/R₀)² − 4(h/R₀)³。h/R₀ 小时一阶就够；h 达到地球半径的量级就不行了。';
+  else nt='展开点处多项式和函数的值、斜率、弯曲……一直到 N 阶导数都相同；离展开点越远，没被匹配的高阶项影响越大。';
+  $('tyNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['tyF','tyX','tyN','tyE'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(6)));
+document.querySelectorAll('#lab6 [data-ty]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.ty.split(',');$('tyF').value=q[0];$('tyX').value=q[1];$('tyN').value=q[2];Lab.draw(6);}));
+Lab.add(6,lab6,{tyc:250,tyk:250});
 Lab.start();
 </script>
 </body></html>

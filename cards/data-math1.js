@@ -84,4 +84,21 @@ $\langle P\rangle=-\frac\omega2F_0y_0\sin\phi$。`],
 ['err',r`算平均值时最常见的错误？`,r`忘了除以区间长度 $b-a$（或周期 T）；或者把 $\sin^2$ 的平均值当成 0。sin、cos 的平均值是 0，但它们**平方**的平均值是 ½，**乘积** $\sin\omega t\cos\omega t$ 的平均值是 0。`],
 ['fix',r`Week 5 examples 例 3（第 5 页）的小笔误`,r`方括号那一行漏了 $\frac1\omega$：$\int\frac12\sin2\omega t\,dt=-\frac{1}{4\omega}\cos2\omega t$，讲义写成 $-\frac14\cos2\omega t$；下一行代入时又写对了，最终结果 $-\frac\omega2F_0y_0\sin\phi$ 正确。`],
 ]);
+D('M1-C5','分部积分与 Taylor 级数','402202737d7a81c7b19ef477a341bd11',[
+['q',r`分部积分公式是什么？从哪来？`,r`$\int u\frac{dv}{dx}dx=uv-\int v\frac{du}{dx}dx$（定积分：$[uv]_a^b-\int_a^b v\,u'\,dx$）。
+来自乘积法则 $(uv)'=uv'+vu'$ 两边积分再移项。`],
+['q',r`分部积分怎么选 u 和 dv/dx？`,r`u 选求导后变简单的（多项式、ln x、反三角），dv/dx 选好积分的（$e^x$、sin、cos）。常用顺序 LIATE：对数、反三角、代数（多项式）、三角、指数，越靠前越适合当 u。`],
+['q',r`$\int x\cos x\,dx$ = ？`,r`$u=x$，$v'=\cos x$，$v=\sin x$：$x\sin x-\int\sin x\,dx=x\sin x+\cos x+C$。`],
+['q',r`$\int_0^\pi x^2\cos x\,dx$ = ？要用几次分部积分？`,r`两次（每次把 $x^2$ 的次数降 1）：$[x^2\sin x]_0^\pi+2[x\cos x]_0^\pi-2[\sin x]_0^\pi=0+2\pi(-1)-0=-2\pi$。`],
+['q',r`$\int\ln x\,dx$ 不是乘积，怎么用分部积分？`,r`令 $u=\ln x$，$\frac{dv}{dx}=1$（讲义：u = 1 的技巧），$v=x$：$x\ln x-\int x\cdot\frac1x dx=x\ln x-x+C$。`],
+['q',r`Taylor 级数公式？系数 $c_n$ 是怎么得到的？`,r`$f(x)=\sum_n\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n$。
+设 $f=c_0+c_1(x-x_0)+c_2(x-x_0)^2+\dots$，求 n 次导后令 $x=x_0$，只剩 $n!\,c_n=f^{(n)}(x_0)$。`],
+['q',r`一阶近似（线性近似）是什么？几何意义？`,r`$f(x)\approx f(x_0)+f'(x_0)(x-x_0)$：用 $x_0$ 处的切线代替曲线。x 离 $x_0$ 越近越准。`],
+['q',r`写出 sin x、cos x、eˣ 的 Maclaurin 级数。在什么范围成立？`,r`$\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\dots$，$\cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\dots$，$e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\dots$。对所有 x 成立（x 用弧度）。`],
+['q',r`二项式级数 $(1+x)^n$ 是什么？在哪里有效？`,r`$1+nx+\frac{n(n-1)}{2!}x^2+\frac{n(n-1)(n-2)}{3!}x^3+\dots$。n 不是正整数时只在 $-1<x<1$ 收敛；n 是正整数时级数有限项，处处成立。`],
+['q',r`sin x 在 $x_0=\frac\pi2$ 的三阶近似？为什么和二阶一样？`,r`$f(\frac\pi2)=1$，$f'=\cos=0$，$f''=-\sin=-1$，$f'''=-\cos=0$：$\sin x\approx1-\frac12(x-\frac\pi2)^2$。三阶导数在这一点为 0，所以三阶项为 0。`],
+['q',r`$e^{-(x-1)^2}$ 在 x = 1 的三阶 Taylor 近似？`,r`$f(1)=1$，$f'(1)=0$，$f''(1)=-2$，$f'''(1)=0$：$f\approx1-(x-1)^2$。`],
+['q',r`$\sin(0.5)\approx0.5-\frac{0.5^3}{6}$ 有多准？为什么要用弧度？`,r`$0.47917$，真实值 $0.47943$，误差约 $2.6\times10^{-4}$。$\frac{d}{dx}\sin x=\cos x$ 只在弧度下成立，Taylor 系数都由导数决定，所以 x 必须是弧度（0.5 rad ≈ 28.6°）。`],
+['err',r`Taylor 级数最常见的错误？`,r`忘了除以 $n!$；把 $f^{(n)}(x_0)$ 写成 $f^{(n)}(x)$（导数要在展开点取值）；用角度代入；在收敛范围外使用二项式级数。`],
+]);
 })();
