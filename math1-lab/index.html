@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -75,6 +75,18 @@
   <div class="stage one"><canvas id="rsc" height="300" aria-label="黎曼和"></canvas></div>
   <div class="read"><div><small>Δx = (b − a)/n</small><b id="rsD"></b></div><div><small>长条面积和</small><b id="rsS"></b></div><div><small>精确积分 F(b) − F(a)</small><b id="rsI"></b></div><div><small>误差</small><b id="rsE"></b></div><div><small>平均值 积分/(b − a)</small><b id="rsMv"></b></div></div>
   <p class="note" id="rsNote"></p>
+</section>
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 双曲函数：圆和双曲线（C3）</div>
+  <h2>(cos u, sin u) 在圆 x² + y² = 1 上，(cosh u, sinh u) 在双曲线 x² − y² = 1 上；两种情况下阴影面积都是 u/2</h2>
+  <p class="lead">拖动参数 u。左图：蓝色是圆上的点，紫色是双曲线右支上的点，阴影面积都等于 u/2，这就是「双曲」这个名字的来历。右图：cosh、sinh、tanh 的图像，灰色虚线是 e<sup>u</sup>/2 和 e<sup>−u</sup>/2：cosh 是两者之和，sinh 是两者之差。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-hy="0">u = 0</button><button data-hy="0.5">u = 0.5</button><button data-hy="1">u = 1</button><button data-hy="-1">u = −1（奇偶性）</button><button data-hy="2">u = 2：cosh ≈ sinh ≈ eᵘ/2</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="hyU">参数 u</label><input id="hyU" type="range" min="-2.2" max="2.2" step="0.01" value="1"><output id="hyUO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="hyc" height="300" aria-label="圆与双曲线"></canvas><canvas id="hyg" height="300" aria-label="双曲函数图像"></canvas></div>
+  <div class="read"><div><small>cosh u，sinh u</small><b id="hyCS"></b></div><div><small>tanh u</small><b id="hyT"></b></div><div><small>cosh² − sinh²</small><b id="hyI"></b></div><div><small>cosh u + sinh u = eᵘ</small><b id="hyE"></b></div><div><small>cos u，sin u（对比）</small><b id="hyTr"></b></div></div>
+  <p class="note"><strong>为什么工程里会遇到：</strong>两端挂起的电缆形状是 y = a cosh(x/a)（悬链线）；传输线、热传导、梁的弯曲、过阻尼振动的解里都有 e<sup>x</sup> 和 e<sup>−x</sup> 的组合，用 sinh、cosh 写最整齐。和三角恒等式比，双曲恒等式只是在「两个 sin 相乘」的地方变号（Osborn 规则）：cos²A + sin²A = 1 → cosh²A − sinh²A = 1。</p>
 </section>
 </div>
 
@@ -227,6 +239,33 @@ function lab4(){
 ['rsF','rsM','rsA','rsB','rsN'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 document.querySelectorAll('#lab4 [data-rs]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.rs.split(',');$('rsF').value=q[0];$('rsA').value=q[1];$('rsB').value=q[2];$('rsN').value=q[3];$('rsM').value=q[4];Lab.draw(4);}));
 Lab.add(4,lab4,{rsc:240});
+/* ---------- Lab 5: hyperbolic functions ---------- */
+function lab5(){
+  const u=val('hyU');$('hyUO').textContent=fmt(u,2);pressGroup('#lab5 [data-hy]',b=>Math.abs(+b.dataset.hy-u)<0.006);
+  const ch=Math.cosh(u),sh=Math.sinh(u);
+  $('hyCS').textContent=`${fmt(ch,4)}，${fmt(sh,4)}`;$('hyT').textContent=fmt(Math.tanh(u),4);$('hyI').textContent=fmt(ch*ch-sh*sh,6);$('hyE').textContent=`${fmt(ch+sh,4)} = ${fmt(Math.exp(u),4)}`;$('hyTr').textContent=`${fmt(Math.cos(u),3)}，${fmt(Math.sin(u),3)}`;
+  const [x,W,H]=fit($('hyc'));const S=Math.min((W-30)/6.2,(H-30)/5.2),ox=W*0.36,oy=H/2;const P=(a,b)=>[ox+a*S,oy-b*S];
+  x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(4,oy);x.lineTo(W-4,oy);x.moveTo(ox,4);x.lineTo(ox,H-4);x.stroke();
+  x.setLineDash([3,4]);x.strokeStyle=css('--muted');x.beginPath();x.moveTo(...P(-2.6,-2.6));x.lineTo(...P(2.6,2.6));x.moveTo(...P(-2.6,2.6));x.lineTo(...P(2.6,-2.6));x.stroke();x.setLineDash([]);
+  x.strokeStyle=css('--muted');x.lineWidth=1.2;x.beginPath();x.arc(ox,oy,S,0,7);x.stroke();
+  [1,-1].forEach(sg=>{x.beginPath();for(let i=0;i<=200;i++){const v=-2.4+4.8*i/200;const p=P(sg*Math.cosh(v),Math.sinh(v));i?x.lineTo(...p):x.moveTo(...p);}x.stroke();});
+  const fillSector=(fx,fy,col)=>{x.fillStyle=col;x.beginPath();x.moveTo(ox,oy);const n=80;for(let i=0;i<=n;i++){const v=u*i/n;x.lineTo(...P(fx(v),fy(v)));}x.closePath();x.fill();};
+  fillSector(Math.cos,Math.sin,css('--fillB'));fillSector(Math.cosh,Math.sinh,css('--shade'));
+  const dot=(a,b,col)=>{x.fillStyle=col;x.beginPath();x.arc(...P(a,b),5,0,7);x.fill();};
+  x.strokeStyle=css('--purple');x.lineWidth=2.6;x.beginPath();x.moveTo(...P(ch,0));x.lineTo(...P(ch,sh));x.stroke();
+  x.strokeStyle=css('--blue');x.beginPath();x.moveTo(...P(Math.cos(u),0));x.lineTo(...P(Math.cos(u),Math.sin(u)));x.stroke();
+  dot(Math.cos(u),Math.sin(u),css('--blue'));dot(ch,sh,css('--purple'));
+  label(x,'sinh u',P(ch,sh/2)[0]+6,P(ch,sh/2)[1],css('--purple'),12);
+  text(x,'x² + y² = 1',...P(-1.05,1.15),css('--blue'),11);text(x,'x² − y² = 1',...P(1.9,2.3),css('--purple'),11);
+  const [y,W2,H2]=fit($('hyg'));const a=axes(y,W2,H2,{x0:-2.4,x1:2.4,y0:-4.5,y1:4.5,xt:[-2,-1,0,1,2],yt:[-4,-2,0,2,4],title:'cosh（蓝）、sinh（紫）、tanh（绿）',pl:28,xl:'u'});
+  y.setLineDash([4,4]);plot(y,a.X,a.Y,v=>Math.exp(v)/2,-2.4,2.4,css('--muted'),1,200);plot(y,a.X,a.Y,v=>Math.exp(-v)/2,-2.4,2.4,css('--muted'),1,200);plot(y,a.X,a.Y,v=>-Math.exp(-v)/2,-2.4,2.4,css('--muted'),1,200);y.setLineDash([]);
+  plot(y,a.X,a.Y,Math.cosh,-2.4,2.4,css('--blue'),2.4,300);plot(y,a.X,a.Y,Math.sinh,-2.4,2.4,css('--purple'),2.4,300);plot(y,a.X,a.Y,Math.tanh,-2.4,2.4,css('--green'),2,300);
+  y.strokeStyle=css('--muted');y.setLineDash([4,4]);y.beginPath();y.moveTo(a.X(u),a.pt);y.lineTo(a.X(u),H2-a.pb);y.stroke();y.setLineDash([]);
+  [[ch,'--blue'],[sh,'--purple'],[Math.tanh(u),'--green']].forEach(([v,c])=>{if(Math.abs(v)<4.5){y.fillStyle=css(c);y.beginPath();y.arc(a.X(u),a.Y(v),4,0,7);y.fill();}});
+}
+$('hyU').addEventListener('input',()=>Lab.draw(5));
+document.querySelectorAll('#lab5 [data-hy]').forEach(b=>b.addEventListener('click',()=>{$('hyU').value=b.dataset.hy;Lab.draw(5);}));
+Lab.add(5,lab5,{hyc:250,hyg:250});
 Lab.start();
 </script>
 </body></html>

@@ -47,4 +47,23 @@ $\cot x=\frac{\cos x}{\sin x}$：$\ln|\sin x|+C$。规律：$\int\frac{f'(x)}{f(
 第 3 页例 5：应为 $du=\cos x\,dx$（写成了 $\cos u\,du$），答案应为 $\frac{\sin^3x}3+C$（写成了 $\cos^3x$）。`],
 ['fix',r`Week 3 slides 第 4 页的落体方程`,r`$m\frac{dv}{dt}=-mg$ 约掉 m 后应是 $\frac{dv}{dt}=-g$，讲义写成了 $-gt$（$-gt$ 是解出来的 $v$）。`],
 ]);
+D('M1-C3','三角积分、双曲函数与三角代换','402202737d7a8145aaf6c3eb1844218f',[
+['q',r`积分 $\sin^nx$、$\cos^nx$：偶次幂和奇次幂分别用什么方法？`,r`**偶次幂**：降幂（倍角）公式 $\cos^2x=\frac12(1+\cos2x)$，反复用直到没有平方。
+**奇次幂**：拆出一个 $\cos x$（或 $\sin x$），其余偶次幂用 $\cos^2x=1-\sin^2x$ 改写，再令 $u=\sin x$。`],
+['q',r`$\int\cos^4x\,dx$ = ？`,r`$\cos^4x=\frac14(1+\cos2x)^2=\frac38+\frac12\cos2x+\frac18\cos4x$，积分：$\frac{3x}8+\frac{\sin2x}4+\frac{\sin4x}{32}+C$。`],
+['q',r`$\int\cos^5x\,dx$ = ？`,r`$\int(1-\sin^2x)^2\cos x\,dx$，令 $u=\sin x$：$\sin x-\frac23\sin^3x+\frac15\sin^5x+C$。`],
+['q',r`$\int\cos3x\sin4x\,dx$ 怎么做？`,r`积化和差：$\sin4x\cos3x=\frac12(\sin7x+\sin x)$。积分得 $-\frac1{14}\cos7x-\frac12\cos x+C$。`],
+['q',r`写出 sinh、cosh、tanh 的定义和取值范围。`,r`$\sinh x=\frac{e^x-e^{-x}}2$（取遍实数，奇），$\cosh x=\frac{e^x+e^{-x}}2$（$\ge1$，偶），$\tanh x=\frac{\sinh x}{\cosh x}$（在 ±1 之间，奇）。`],
+['q',r`为什么叫「双曲」函数？`,r`$(\cosh u,\sinh u)$ 落在双曲线 $x^2-y^2=1$ 上，正如 $(\cos u,\sin u)$ 落在圆 $x^2+y^2=1$ 上；两种情况下 u 都等于阴影扇形面积的 2 倍。`],
+['q',r`从三角恒等式怎样得到双曲恒等式？举两个例子。`,r`Osborn 规则：把 cos → cosh、sin → sinh，凡是**两个 sinh 相乘**的地方变号。
+$\cos^2+\sin^2=1\to\cosh^2-\sinh^2=1$；$\cos(A+B)=\cos A\cos B-\sin A\sin B\to\cosh(A+B)=\cosh A\cosh B+\sinh A\sinh B$。`],
+['q',r`$\frac{d}{dx}\sinh x$、$\frac{d}{dx}\cosh x$、$\frac{d}{dx}\tanh x$ = ？和三角函数有什么不同？`,r`$\cosh x$、$\sinh x$（**没有负号**）、$\mathrm{sech}^2x$。三角函数 $\frac{d}{dx}\cos x=-\sin x$ 有负号，双曲的没有。`],
+['q',r`$\int\sinh^2x\,dx$ = ？它的降幂公式和 $\sin^2$ 的有什么区别？`,r`$\sinh^2x=\frac12(\cosh2x-1)$（$\sin^2x=\frac12(1-\cos2x)$，符号相反）。积分：$\frac14\sinh2x-\frac x2+C$。`],
+['q',r`$\frac{d}{dx}\sinh^{-1}x$、$\frac{d}{dx}\cosh^{-1}x$、$\frac{d}{dx}\tanh^{-1}x$ = ？`,r`$\frac1{\sqrt{x^2+1}}$；$\frac1{\sqrt{x^2-1}}\ (x>1)$；$\frac1{1-x^2}\ (|x|<1)$。用隐函数求导推（同 C1 的反三角函数）。`],
+['q',r`三角代换：$\sqrt{a^2-x^2}$、$a^2+x^2$、$\sqrt{x^2-a^2}$ 分别令 x = ？`,r`$x=a\sin u$（$a^2-a^2\sin^2u=a^2\cos^2u$）；$x=a\tan u$ 或 $a\sinh u$（$1+\tan^2=\sec^2$，$1+\sinh^2=\cosh^2$）；$x=a\cosh u$（$\cosh^2-1=\sinh^2$）。目的：用平方关系消掉根号。`],
+['q',r`$\int\frac{dx}{\sqrt{4-9x^2}}$ = ？`,r`提出 2：$\frac12\int\frac{dx}{\sqrt{1-\frac94x^2}}$，令 $\sin u=\frac32x$：$\frac13\sin^{-1}\frac{3x}2+C$。`],
+['q',r`$\int\frac{dx}{x^2+x+1}$ = ？关键一步是什么？`,r`**配方**：$x^2+x+1=(x+\frac12)^2+\frac34$。令 $\tan u=\frac{2x+1}{\sqrt3}$：$\frac{2}{\sqrt3}\tan^{-1}\frac{2x+1}{\sqrt3}+C$。`],
+['err',r`降幂时最常见的错误？`,r`$\cos^4x=(\cos^2x)^2$，不是 $(\cos^2x)^4$；展开 $(1+\cos2x)^2$ 后 $\cos^22x$ 还要再降一次幂（变成 $\cos4x$）；积分 $\cos2x$ 时别忘了除以 2。`],
+['fix',r`Week 4 examples 例 1（第 1 页）的错误`,r`$\cos^4x=(\cos^2x)^4$ 应为 $(\cos^2x)^2$；最终答案 $\frac38x+\sin2x+\frac1{32}\sin4x$ 中 $\sin2x$ 前漏了 $\frac14$，应为 $\frac{3x}8+\frac14\sin2x+\frac1{32}\sin4x+C$（上一行是对的）。`],
+]);
 })();
