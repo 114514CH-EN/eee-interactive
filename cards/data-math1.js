@@ -66,4 +66,22 @@ $\cos^2+\sin^2=1\to\cosh^2-\sinh^2=1$；$\cos(A+B)=\cos A\cos B-\sin A\sin B\to\
 ['err',r`降幂时最常见的错误？`,r`$\cos^4x=(\cos^2x)^2$，不是 $(\cos^2x)^4$；展开 $(1+\cos2x)^2$ 后 $\cos^22x$ 还要再降一次幂（变成 $\cos4x$）；积分 $\cos2x$ 时别忘了除以 2。`],
 ['fix',r`Week 4 examples 例 1（第 1 页）的错误`,r`$\cos^4x=(\cos^2x)^4$ 应为 $(\cos^2x)^2$；最终答案 $\frac38x+\sin2x+\frac1{32}\sin4x$ 中 $\sin2x$ 前漏了 $\frac14$，应为 $\frac{3x}8+\frac14\sin2x+\frac1{32}\sin4x+C$（上一行是对的）。`],
 ]);
+D('M1-C4','定积分与平均值','402202737d7a81afafabcef78a969852',[
+['q',r`怎样计算定积分 $\int_a^bf(u)\,du$？为什么不用加 C？`,r`找原函数 F（$F'=f$），$\int_a^bf\,du=\big[F(u)\big]_a^b=F(b)-F(a)$。
+如果用 $F+C$，结果是 $(F(b)+C)-(F(a)+C)$，C 抵消了。`],
+['q',r`函数在 [a, b] 上的平均值公式？几何意义？`,r`$f_{mean}=\dfrac1{b-a}\displaystyle\int_a^bf(x)\,dx$。以它为高、以 $b-a$ 为宽的矩形，面积等于曲线下的面积。`],
+['q',r`$\sin\omega t$ 和 $\sin^2\omega t$ 在一个周期上的平均值？和 rms 有什么关系？`,r`$\sin$ 的平均值 0；$\sin^2=\frac12(1-\cos2\omega t)$ 的平均值 ½。
+$V_{rms}=\sqrt{\overline{v^2}}=\sqrt{V_p^2/2}=V_p/\sqrt2$。`],
+['q',r`定积分的四条代数性质？`,r`拆区间：$\int_a^b=\int_a^c+\int_c^b$；对调上下限变号：$\int_a^b=-\int_b^a$；$\int_a^a=0$；线性：$\int(f+g)=\int f+\int g$，$\int cf=c\int f$。`],
+['q',r`$\int_1^52x^2dx$、$\int_5^12x^2dx$ 各是多少？`,r`$\left[\frac{2x^3}3\right]_1^5=\frac{2(125-1)}3=\frac{248}3$；对调上下限：$-\frac{248}3$。`],
+['q',r`定积分换元时上下限怎么处理？两种正确做法？`,r`方法 1：把上下限也换成 u 的值（$u=g(a)$ 到 $u=g(b)$），积完直接代 u。
+方法 2：上下限保持 x 的值并写明 $x=a$、$x=b$，积完先把 u 换回 x 再代。
+**错误**：换了变量却还用 x 的上下限去代 u。`],
+['q',r`$\int_1^2x^2\sqrt{2x^3-1}\,dx$ = ？`,r`$u=2x^3-1$，$du=6x^2dx$；x = 1 → u = 1，x = 2 → u = 15：$\frac16\int_1^{15}\sqrt u\,du=\frac19(15^{3/2}-1)\approx6.34$。`],
+['q',r`弹簧质量系统：$F=F_0\cos\omega t$，$y=y_0\cos(\omega t+\phi)$，一个周期的平均吸收功率？`,r`$P=Fv$，$v=\dot y=-\omega y_0\sin(\omega t+\phi)$。展开后只有 $\cos^2\omega t$ 项平均值非零（½）：
+$\langle P\rangle=-\frac\omega2F_0y_0\sin\phi$。`],
+['q',r`电路里 $v=v_0\cos\omega t$、$i=i_0\cos(\omega t+\phi)$，平均功率是多少？`,r`$P=\frac1T\int_0^Tvi\,dt=\frac{v_0i_0}2\cos\phi$（Mock Exam 第 1(b) 题）。$\cos\phi$ 就是功率因数。`],
+['err',r`算平均值时最常见的错误？`,r`忘了除以区间长度 $b-a$（或周期 T）；或者把 $\sin^2$ 的平均值当成 0。sin、cos 的平均值是 0，但它们**平方**的平均值是 ½，**乘积** $\sin\omega t\cos\omega t$ 的平均值是 0。`],
+['fix',r`Week 5 examples 例 3（第 5 页）的小笔误`,r`方括号那一行漏了 $\frac1\omega$：$\int\frac12\sin2\omega t\,dt=-\frac{1}{4\omega}\cos2\omega t$，讲义写成 $-\frac14\cos2\omega t$；下一行代入时又写对了，最终结果 $-\frac\omega2F_0y_0\sin\phi$ 正确。`],
+]);
 })();
