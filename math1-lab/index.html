@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -8,14 +8,28 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}</style>
+<style>.ctl select{width:100%}
+.gewrap{overflow-x:auto;max-width:100%}
+table.aug{border-collapse:separate;border-spacing:0;margin:0 auto;font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums}
+table.aug th{font:500 12px var(--body);color:var(--muted);padding:2px 8px;text-align:right}
+table.aug td{padding:6px 10px;text-align:right;min-width:52px;border-bottom:1px solid var(--grid);white-space:nowrap}
+table.aug td.rl,table.aug th.rl{color:var(--muted);font:500 12px var(--body);text-align:left;min-width:0;padding-right:4px}
+table.aug .rhs{border-left:2px solid var(--muted)}
+table.aug tr.tg td:not(.rl){background:var(--fillA)}
+table.aug tr.sr td:not(.rl){background:var(--fillB)}
+table.aug tr.sw td:not(.rl){background:var(--shade)}
+table.aug td.pv{box-shadow:inset 0 0 0 2px var(--amp);font-weight:600}
+table.aug tr.zr td:not(.rl){color:var(--red);font-weight:600}
+@media (max-width:560px){table.aug{font-size:13px}table.aug td{padding:4px 5px;min-width:38px}}
+html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min-width:44px}
+</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -134,6 +148,21 @@
   <div class="stage even"><canvas id="mxc" height="320" aria-label="矩阵变换"></canvas><canvas id="mxe" height="320" aria-label="特征多项式"></canvas></div>
   <div class="read"><div><small>det A = a₁₁a₂₂ − a₁₂a₂₁</small><b id="mxDet"></b></div><div><small>A⁻¹</small><b id="mxInv" style="font-size:14px"></b></div><div><small>特征值 λ</small><b id="mxL" style="font-size:15px"></b></div><div><small>特征向量</small><b id="mxV" style="font-size:14px"></b></div><div><small>x 与 Ax 的夹角</small><b id="mxAng"></b></div></div>
   <p class="note" id="mxNote"></p>
+</section>
+<section class="panel" id="lab9">
+  <div class="tag">实验 9 · 高斯消元与高斯-约当法（M3）</div>
+  <h2>用行变换在对角线下方造出 0（上三角），再从最后一行往回代；继续把左边化成单位矩阵，就是高斯-约当法</h2>
+  <p class="lead">选一个方程组，拖动「步骤」或点「下一步」。黄框是主元，红色是正在被改的行，蓝色是拿来相减的主元行，紫色是交换的两行。竖线右边是 b（求逆时是单位矩阵 I），每一步都要和左边一起变。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-ge="lec">课件例题：唯一解</button><button data-ge="conc">浓度（课件第 35 页）</button><button data-ge="inc">矛盾：无解</button><button data-ge="ind">不确定：无穷多解</button><button data-ge="piv">主元为 0：要换行</button><button data-ge="inv">求逆 [A | I]（课件第 39 页）</button><button data-ge="rnd">随机方程组</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="geM">方法</label><select id="geM"><option value="ge">高斯消元 + 回代</option><option value="gj">高斯-约当（化成单位矩阵）</option></select><span></span></div>
+    <div class="ctl"><label for="geF">消元方式</label><select id="geF"><option value="e">消元因子 E（可能出现分数）</option><option value="i">整数倍相减（避免分数）</option></select><span></span></div>
+    <div class="ctl"><label for="geS">步骤</label><input id="geS" type="range" min="0" max="1" step="1" value="0"><output id="geSO"></output></div>
+  </div>
+  <div class="btns"><button id="gePrev">← 上一步</button><button id="geNext" class="play">下一步 →</button><button id="geEnd">跳到最后</button></div>
+  <div class="gewrap"><table class="aug" id="geT" aria-label="增广矩阵"></table></div>
+  <div class="read"><div><small>这一步的行变换</small><b id="geOp" style="font-size:15px"></b></div><div><small>rank A / rank [A | b]</small><b id="geR"></b></div><div><small>结果</small><b id="geRes" style="font-size:15px"></b></div></div>
+  <p class="note" id="geNote"></p>
 </section>
 </div>
 
@@ -447,6 +476,98 @@ function lab8(){
 ['mxA','mxB','mxC','mxD','mxT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(8)));
 document.querySelectorAll('#lab8 [data-mx]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.mx.split(',');['mxA','mxB','mxC','mxD'].forEach((id,i)=>$(id).value=q[i]);Lab.draw(8);}));
 Lab.add(8,lab8,{mxc:260,mxe:260});
+/* ---------- Lab 9: Gaussian elimination stepper (exact fractions) ---------- */
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+const Fr=(n,d=1)=>{if(d<0){n=-n;d=-d;}const g=gcd(n,d);return {n:n/g||0,d:d/g};};
+const fsub=(a,b)=>Fr(a.n*b.d-b.n*a.d,a.d*b.d),fmul=(a,b)=>Fr(a.n*b.n,a.d*b.d),fdiv=(a,b)=>Fr(a.n*b.d,a.d*b.n);
+const fz=a=>a.n===0,f1=a=>a.n===1&&a.d===1;
+const fstr=a=>(a.n<0?'−':'')+Math.abs(a.n)+(a.d===1?'':'/'+a.d);
+const fpar=a=>a.n<0||a.d!==1?'('+fstr(a)+')':fstr(a);
+const GE={
+  lec:{A:[[2,1,1],[4,1,0],[-2,2,1]],B:[[1],[-2],[7]],v:['u','v','w'],t:'课件第 13–25 页的例题：2u + v + w = 1，4u + v = −2，−2u + 2v + w = 7'},
+  conc:{A:[[2,1,1],[1,3,2],[3,-2,-4]],B:[[5],[1],[-4]],v:['x','y','z'],t:'课件第 35–38 页：浓度方程组（和 M2 用逆矩阵解的是同一组）'},
+  inc:{A:[[2,1,1],[1,2,1],[7,5,4]],B:[[6],[10],[7]],v:['x₁','x₂','x₃'],t:'课件第 27、29 页：矛盾方程组'},
+  ind:{A:[[2,1,1],[1,2,1],[10,-1,3]],B:[[6],[10],[2]],v:['x₁','x₂','x₃'],t:'课件第 27、30–31 页：不确定方程组'},
+  piv:{A:[[0,2,1],[1,1,1],[2,1,3]],B:[[3],[2],[1]],v:['x','y','z'],t:'a₁₁ = 0，不能当主元（课件第 12 页）'},
+  inv:{A:[[3,1,2],[2,1,0],[2,1,1]],B:[[1,0,0],[0,1,0],[0,0,1]],v:['','',''],t:'课件第 39–47 页：[A | I] 用高斯-约当法求逆（和 M2 例 1 是同一个矩阵）'},
+  rnd:null};
+let geKey='lec';
+function geRandom(){for(let t=0;t<200;t++){const r=()=>Math.floor(Math.random()*7)-3;const A=[[r(),r(),r()],[r(),r(),r()],[r(),r(),r()]];
+  const d=A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1])-A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0])+A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);
+  if(d===0||A[0][0]===0)continue;const x=[r(),r(),r()];return {A,B:A.map(row=>[row[0]*x[0]+row[1]*x[1]+row[2]*x[2]]),v:['x','y','z'],t:`随机生成（答案是整数：x = ${fstr(Fr(x[0]))}，y = ${fstr(Fr(x[1]))}，z = ${fstr(Fr(x[2]))}）`};}
+  return GE.lec;}
+function geRun(P,mode,intMode){
+  const nA=P.A[0].length,R=P.A.length;let M=P.A.map((row,i)=>row.concat(P.B[i]).map(v=>Fr(v)));
+  const cl=()=>M.map(r=>r.slice());const S=[{M:cl(),op:'初始增广矩阵',hi:{},nt:'目标：用行变换在主对角线<b>下方</b>造出 0（上三角）。从第 1 列开始，第 1 行第 1 列是第一个主元（pivot）。'}];
+  let r=0;const piv=[];
+  for(let c=0;c<nA&&r<R;c++){
+    let p=-1;for(let i=r;i<R;i++)if(!fz(M[i][c])){p=i;break;}
+    if(p<0)continue;
+    if(p!==r){[M[p],M[r]]=[M[r],M[p]];S.push({M:cl(),op:`R${r+1} ↔ R${p+1}`,hi:{piv:[r,c],sw:[r,p]},nt:`第 ${c+1} 列的主元位置是 0，不能拿来做除数。和下面第一个这一列非零的行交换（课件第 12 页）。交换方程的顺序不改变解。`});}
+    for(let i=r+1;i<R;i++){if(fz(M[i][c]))continue;const a=M[r][c],b=M[i][c];let op,nt;
+      if(intMode){const g=gcd(a.n,b.n),ag=Fr(a.n/g),bg=Fr(b.n/g);M[i]=M[i].map((v,j)=>fsub(fmul(ag,v),fmul(bg,M[r][j])));op=`R${i+1} ← ${f1(ag)?'':fpar(ag)+'·'}R${i+1} − ${f1(bg)?'':fpar(bg)+'·'}R${r+1}`;
+        nt=`主元是 ${fstr(a)}，要消掉的是 ${fstr(b)}。把 R${i+1} 乘 ${fstr(ag)}、R${r+1} 乘 ${fstr(bg)} 再相减：第 ${c+1} 列变成 ${fpar(ag)}·${fpar(b)} − ${fpar(bg)}·${fpar(a)} = 0，全程没有分数（课件第 37、39 页就是先把两行乘成同样的数再相减）。右边也要一起算。`;}
+      else{const E=fdiv(b,a);M[i]=M[i].map((v,j)=>fsub(v,fmul(E,M[r][j])));op=`R${i+1} ← R${i+1} − ${fpar(E)}·R${r+1}`;
+        nt=`消元因子 E = 被消的数 ÷ 主元 = ${fstr(b)} ÷ ${fpar(a)} = ${fstr(E)}。R${i+1} 减去 E 倍的 R${r+1}，第 ${c+1} 列就变成 0。右边的 b 也要一起减（课件：Must remember to do elimination on b matrix at same time）。`;}
+      S.push({M:cl(),op,hi:{piv:[r,c],tg:i,sr:r},nt});}
+    piv.push([r,c]);r++;}
+  const fw=cl();
+  if(mode==='gj'){for(let k=piv.length-1;k>=0;k--){const [pr,pc]=piv[k];
+      if(!f1(M[pr][pc])){const s=M[pr][pc];M[pr]=M[pr].map(v=>fdiv(v,s));S.push({M:cl(),op:`R${pr+1} ← R${pr+1} ÷ ${fpar(s)}`,hi:{piv:[pr,pc],tg:pr},nt:`把主元变成 1：整行除以 ${fstr(s)}（乘一个非零常数不改变解）。`});}
+      for(let i=pr-1;i>=0;i--){if(fz(M[i][pc]))continue;const E=M[i][pc];M[i]=M[i].map((v,j)=>fsub(v,fmul(E,M[pr][j])));
+        S.push({M:cl(),op:`R${i+1} ← R${i+1} − ${fpar(E)}·R${pr+1}`,hi:{piv:[pr,pc],tg:i,sr:pr},nt:`往<b>上</b>消：用 R${pr+1}（主元已经是 1）把上面 R${i+1} 第 ${pc+1} 列的 ${fstr(E)} 变成 0（课件第 33 页：从下往上做）。`});}}}
+  return {S,fw,piv,nA,R};
+}
+function geAnalyse(P,run,mode){
+  const {fw,nA,R}=run,nB=P.B[0].length,V=P.v;
+  const nzA=row=>row.slice(0,nA).some(v=>!fz(v)),nzAll=row=>row.some(v=>!fz(v));
+  const rA=fw.filter(nzA).length,rAug=fw.filter(nzAll).length;
+  const out={rA,rAug,rank:nB===1?`${rA} / ${rAug}`:`${rA}`,res:'',lines:[]};
+  /* full RREF for the answer */
+  const rr=geRun(P,'gj',false).S.slice(-1)[0].M;
+  if(nB>1){if(rA<nA){out.res='A 不可逆';out.lines.push('左边出现全 0 的行：A 奇异（det = 0），没有逆矩阵（课件第 32 页）。');}
+    else{out.res=mode==='gj'?'右半边就是 A⁻¹':'左边还不是 I';out.lines.push(mode==='gj'?'左边已经是单位矩阵 I，所以右半边就是 A⁻¹。可以乘回去检查 A⁻¹A = I。':'左边已经是上三角。要得到 A⁻¹ 还得继续往上消、把主元变成 1：把「方法」换成高斯-约当。');}
+    return out;}
+  if(rA<rAug){out.res='无解（矛盾）';const k=fw.findIndex(row=>!nzA(row)&&nzAll(row));out.zr=k;
+    out.lines.push(`第 ${k+1} 行变成 0 = ${fstr(fw[k][nA])}，不可能成立：方程组<b>矛盾（inconsistent）</b>，没有解。rank A = ${rA} < rank [A | b] = ${rAug}。`);return out;}
+  if(rA<nA){out.res=`无穷多解（${nA-rA} 个自由变量）`;out.zr=fw.findIndex(row=>!nzAll(row));
+    const pc=[];rr.forEach(row=>{const j=row.slice(0,nA).findIndex(v=>!fz(v));if(j>=0)pc.push(j);});
+    const free=[...Array(nA).keys()].filter(j=>!pc.includes(j));const lam=['λ','μ'];
+    const expr=[];pc.forEach((j,k)=>{let s=fstr(rr[k][nA]);free.forEach((f,q)=>{const c=rr[k][f];if(!fz(c)){const ac=Fr(Math.abs(c.n),c.d);s+=` ${c.n>0?'−':'+'} ${f1(ac)?'':(ac.d===1?fstr(ac):'('+fstr(ac)+')')}${lam[q]}`;}});expr[j]=`${V[j]} = ${s}`;});
+    free.forEach((f,q)=>expr[f]=`${V[f]} = ${lam[q]}`);
+    out.lines.push(`最后一行变成 0 = 0：这个方程没有提供新信息，方程组<b>不确定（indeterminate）</b>。rank A = rank [A | b] = ${rA} < 未知数个数 ${nA}。`);
+    out.lines.push(`令 ${free.map((f,q)=>V[f]+' = '+lam[q]).join('，')}（任意数），得到 ${expr.join('，')}。λ 取不同的值就是不同的解（课件第 31 页）。`);return out;}
+  const x=rr.map(row=>row[nA]);out.res=V.map((v,j)=>`${v} = ${fstr(x[j])}`).join('，');
+  if(mode==='ge'){const U=fw;const xs=Array(nA);const L=[];
+    for(let i=nA-1;i>=0;i--){let num=U[i][nA];let t=fstr(U[i][nA]);for(let j=i+1;j<nA;j++){if(fz(U[i][j]))continue;num=fsub(num,fmul(U[i][j],xs[j]));t+=` − ${fpar(U[i][j])}·${fpar(xs[j])}`;}
+      xs[i]=fdiv(num,U[i][i]);L.push(`${V[i]} = (${t}) ÷ ${fpar(U[i][i])} = ${fstr(xs[i])}`.replace(/^(\S+ = )\((−?[\d/]+)\) ÷/,'$1$2 ÷'));}
+    out.lines.push('上三角已经得到。<b>回代</b>：最后一行只有一个未知数，先求它，再一行一行往上代（课件第 8–10 页）：');out.lines.push(L.join('；')+'。');}
+  else out.lines.push('左边已经是单位矩阵：每一行就是「某个未知数 = 右边的数」，直接读出答案，不用回代。');
+  return out;}
+function lab9(){
+  if(geKey==='rnd'&&!GE.rnd)GE.rnd=geRandom();
+  const P=GE[geKey],mode=$('geM').value,intMode=$('geF').value==='i';
+  pressGroup('#lab9 [data-ge]',b=>b.dataset.ge===geKey);
+  const run=geRun(P,mode,intMode),N=run.S.length-1,sl=$('geS');
+  if(+sl.max!==N){sl.max=N;if(+sl.value>N)sl.value=N;}
+  const k=+sl.value,st=run.S[k];$('geSO').textContent=`${k} / ${N}`;
+  const nA=run.nA,nB=P.B[0].length,last=k===N,an=geAnalyse(P,run,mode);
+  let h='<tr><th class="rl"></th>'+P.v.map(v=>`<th>${v}</th>`).join('')+(nB===1?'<th class="rhs">b</th>':'<th class="rhs" colspan="3" style="text-align:center">I → A⁻¹</th>')+'</tr>';
+  st.M.forEach((row,i)=>{const hi=st.hi;let c=hi.tg===i?'tg':hi.sr===i?'sr':(hi.sw&&hi.sw.includes(i))?'sw':'';if(last&&an.zr===i&&nB===1)c+=' zr';
+    h+=`<tr class="${c.trim()}"><td class="rl">R${i+1}</td>`+row.map((v,j)=>`<td class="${j===nA?'rhs ':''}${hi.piv&&hi.piv[0]===i&&hi.piv[1]===j?'pv':''}">${fstr(v)}</td>`).join('')+'</tr>';});
+  $('geT').innerHTML=h;
+  $('geOp').textContent=st.op;$('geR').textContent=last?an.rank:'—';$('geRes').textContent=last?an.res:'（做到最后一步再看）';
+  let nt=`<strong>${P.t}。</strong> `+st.nt;
+  if(last)nt+=' '+an.lines.join(' ');
+  if(last&&geKey==='conc'&&!intMode)nt+=' 课件先交换 R1、R2 让主元变成 1，避免分数；这里按「主元不为 0 就不换」的规则做，答案一样。';
+  $('geNote').innerHTML=nt;
+}
+const geGo=d=>{const s=$('geS');s.value=Math.max(0,Math.min(+s.max,d==='end'?+s.max:+s.value+d));Lab.draw(9);};
+$('geS').addEventListener('input',()=>Lab.draw(9));
+['geM','geF'].forEach(id=>$(id).addEventListener('change',()=>{$('geS').value=0;Lab.draw(9);}));
+$('gePrev').addEventListener('click',()=>geGo(-1));$('geNext').addEventListener('click',()=>geGo(1));$('geEnd').addEventListener('click',()=>geGo('end'));
+document.querySelectorAll('#lab9 [data-ge]').forEach(e=>e.addEventListener('click',()=>{geKey=e.dataset.ge;if(geKey==='rnd')GE.rnd=geRandom();if(geKey==='inv')$('geM').value='gj';$('geS').value=0;Lab.draw(9);}));
+Lab.add(9,lab9,{});
 Lab.start();
 </script>
 </body></html>
