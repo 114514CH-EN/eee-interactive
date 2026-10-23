@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -28,8 +28,8 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -163,6 +163,22 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
   <div class="gewrap"><table class="aug" id="geT" aria-label="增广矩阵"></table></div>
   <div class="read"><div><small>这一步的行变换</small><b id="geOp" style="font-size:15px"></b></div><div><small>rank A / rank [A | b]</small><b id="geR"></b></div><div><small>结果</small><b id="geRes" style="font-size:15px"></b></div></div>
   <p class="note" id="geNote"></p>
+</section>
+<section class="panel" id="lab10">
+  <div class="tag">实验 10 · 两层楼的振动：特征值 = ω²，特征向量 = 振型（M4）</div>
+  <h2>按特征向量的比例推，两层楼就以同一个频率一起振；随便推，运动是两个振型的叠加</h2>
+  <p class="lead">课件第 28–31 页的模型：下层质量 2m、弹簧 2k，上层质量 m、弹簧 k。系统矩阵 A = M⁻¹K 的特征值 λ = ω²（固有频率的平方），特征向量 = 振型（两层位移的比例）。设定两层的初始位移，点「播放」。左图：楼房（灰色虚线是静止位置）；右图：两层位移随时间变化。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-vb="0.5,1">振型 1：0.5 : 1（同相）</button><button data-vb="-1,1">振型 2：−1 : 1（反相）</button><button data-vb="0,1">只推上层</button><button data-vb="1,0">只推下层</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="vbA">下层初始位移 x₁(0)</label><input id="vbA" type="range" min="-1" max="1" step="0.05" value="0.5"><output id="vbAO"></output></div>
+    <div class="ctl"><label for="vbB">上层初始位移 x₂(0)</label><input id="vbB" type="range" min="-1" max="1" step="0.05" value="1"><output id="vbBO"></output></div>
+    <div class="ctl"><label for="vbK">k / m</label><input id="vbK" type="range" min="0.5" max="4" step="0.1" value="1"><output id="vbKO"></output></div>
+    <div class="ctl"><label for="vbT">时间 t</label><input id="vbT" type="range" min="0" max="40" step="0.05" value="0"><output id="vbTO"></output></div>
+  </div>
+  <div class="btns"><button id="vbPlay" class="play">▶ 播放</button></div>
+  <div class="stage even"><canvas id="vbc" height="300" aria-label="两层楼振动动画"></canvas><canvas id="vbg" height="300" aria-label="位移随时间"></canvas></div>
+  <div class="read"><div><small>特征值 λ = ω²</small><b id="vbL" style="font-size:15px"></b></div><div><small>固有频率 ω（rad/s）</small><b id="vbW" style="font-size:15px"></b></div><div><small>特征向量（振型）</small><b id="vbV" style="font-size:15px"></b></div><div><small>两个振型的分量 c₁，c₂</small><b id="vbC" style="font-size:15px"></b></div></div>
+  <p class="note" id="vbNote"></p>
 </section>
 </div>
 
@@ -568,6 +584,54 @@ $('geS').addEventListener('input',()=>Lab.draw(9));
 $('gePrev').addEventListener('click',()=>geGo(-1));$('geNext').addEventListener('click',()=>geGo(1));$('geEnd').addEventListener('click',()=>geGo('end'));
 document.querySelectorAll('#lab9 [data-ge]').forEach(e=>e.addEventListener('click',()=>{geKey=e.dataset.ge;if(geKey==='rnd')GE.rnd=geRandom();if(geKey==='inv')$('geM').value='gj';$('geS').value=0;Lab.draw(9);}));
 Lab.add(9,lab9,{});
+/* ---------- Lab 10: two-storey vibration, eigenvectors = mode shapes ---------- */
+const vb={play:false};
+function lab10(){
+  const x10=val('vbA'),x20=val('vbB'),r=val('vbK'),t=val('vbT');
+  $('vbAO').textContent=fmt(x10,2);$('vbBO').textContent=fmt(x20,2);$('vbKO').textContent=fmt(r,1);$('vbTO').textContent=fmt(t,1)+' s';
+  pressGroup('#lab10 [data-vb]',b=>{const q=b.dataset.vb.split(',').map(Number);return Math.abs(q[0]-x10)<1e-9&&Math.abs(q[1]-x20)<1e-9;});
+  const l1=r/2,l2=2*r,w1=Math.sqrt(l1),w2=Math.sqrt(l2);
+  const c1=(x10+x20)/1.5,c2=(-x10+0.5*x20)/1.5;
+  const X=tt=>[c1*0.5*Math.cos(w1*tt)+c2*(-1)*Math.cos(w2*tt),c1*Math.cos(w1*tt)+c2*Math.cos(w2*tt)];
+  const [x1,x2]=X(t);
+  $('vbL').textContent=`λ₁ = k/2m = ${fmt(l1,3)}，λ₂ = 2k/m = ${fmt(l2,3)}`;
+  $('vbW').textContent=`ω₁ = ${fmt(w1,3)}，ω₂ = ${fmt(w2,3)}`;
+  $('vbV').textContent='(0.5, 1)，(−1, 1)';
+  $('vbC').textContent=`${fmt(c1,3)}，${fmt(c2,3)}`;
+  /* building */
+  const [g,W,H]=fit($('vbc'));const gy=H-26,h1=(gy-30)/2,S=Math.min(W*0.15,90),cx=W/2,sw=Math.min(W*0.36,170),sh=16;
+  g.fillStyle=css('--muted');g.fillRect(cx-sw*0.8,gy,sw*1.6,4);
+  for(let k=0;k<9;k++){g.strokeStyle=css('--muted');g.lineWidth=1;g.beginPath();g.moveTo(cx-sw*0.8+k*sw*0.2,gy+4);g.lineTo(cx-sw*0.8+k*sw*0.2-8,gy+14);g.stroke();}
+  const fl=[[gy-h1,x1,'2m'],[gy-2*h1,x2,'m']];
+  g.setLineDash([5,5]);g.strokeStyle=css('--grid');g.lineWidth=1.5;[cx-sw/2,cx+sw/2].forEach(px=>{g.beginPath();g.moveTo(px,gy);g.lineTo(px,gy-2*h1-sh);g.stroke();});g.setLineDash([]);
+  let prevY=gy,prevX=0;
+  fl.forEach(([y,xx,lab],i)=>{const dx=xx*S;
+    g.strokeStyle=css('--ink');g.lineWidth=3;[-sw/2+6,sw/2-6].forEach(o=>{g.beginPath();g.moveTo(cx+o+prevX,prevY);g.bezierCurveTo(cx+o+prevX,prevY-(prevY-y)*0.45,cx+o+dx,y+(prevY-y)*0.45,cx+o+dx,y);g.stroke();});
+    g.fillStyle=i?css('--red'):css('--blue');g.globalAlpha=.85;g.fillRect(cx-sw/2+dx,y-sh,sw,sh);g.globalAlpha=1;
+    label(g,lab,cx+dx-8,y-3,css('--panel'),12);
+    text(g,i?'弹簧 k':'弹簧 2k',4,(y+prevY)/2,css('--muted'),11);
+    const lb=`x${i?'₂':'₁'} = ${fmt(xx,2)}`;g.font=`11px ${css('--body')}`;const lw=g.measureText(lb).width;
+    const rx=cx+sw/2+dx+6,lx=cx-sw/2+dx-6-lw;text(g,lb,rx+lw<=W-3?rx:(lx>=2?lx:Math.max(2,W-lw-3)),y-sh/2+4,i?css('--red'):css('--blue'),11);
+    prevY=y-sh;prevX=dx;});
+  /* time plot */
+  const [y,W2,H2]=fit($('vbg'));const T1=2*Math.PI/w1,Tm=Math.max(3*T1,8),amp=Math.max(1,Math.abs(c1)*1+Math.abs(c2)*1)*1.1;
+  const ax=axes(y,W2,H2,{x0:0,x1:Tm,y0:-amp,y1:amp,xt:[0,+(Tm/2).toFixed(1),+Tm.toFixed(1)],yt:[-1,0,1],title:'位移 x₁（蓝，下层）和 x₂（红，上层）',xl:'t / s',pl:34});
+  const tw=t%Tm;
+  plot(y,ax.X,ax.Y,tt=>X(tt)[0],0,Tm,css('--blue'),2,500);plot(y,ax.X,ax.Y,tt=>X(tt)[1],0,Tm,css('--red'),2,500);
+  y.strokeStyle=css('--amp');y.lineWidth=1.5;y.beginPath();y.moveTo(ax.X(tw),ax.pt);y.lineTo(ax.X(tw),H2-ax.pb);y.stroke();
+  [[X(tw)[0],'--blue'],[X(tw)[1],'--red']].forEach(([v,c])=>{y.fillStyle=css(c);y.beginPath();y.arcS(ax.X(tw),ax.Y(v),4.5,0,7);y.fill();});
+  let nt;const a1=Math.abs(c1),a2=Math.abs(c2);
+  if(a1<1e-9&&a2<1e-9)nt='初始位移为 0：楼不动。';
+  else if(a2<1e-9)nt=`只激发了<b>振型 1</b>：初始位移正好是特征向量 (0.5, 1) 的倍数，两层<b>同方向</b>（同相）一起摆，上层位移始终是下层的 2 倍，整体以 ω₁ = √(k/2m) = ${fmt(w1,3)} rad/s 做正弦振动（周期 ${fmt(T1,2)} s）。这就是 Ax = λx：按特征向量的比例变形，回复力也按同样的比例，形状保持不变。`;
+  else if(a1<1e-9)nt=`只激发了<b>振型 2</b>：初始位移是 (−1, 1) 的倍数，两层<b>反方向</b>（反相）、幅度相同，频率 ω₂ = √(2k/m) = ${fmt(w2,3)} rad/s，比振型 1 快一倍。`;
+  else nt=`初始位移不是任何一个特征向量的倍数，运动是两个振型的<b>叠加</b>：x(t) = c₁·(0.5, 1)·cos ω₁t + c₂·(−1, 1)·cos ω₂t。两层的位移比例一直在变，曲线不再是单一的正弦。（这里 ω₂ / ω₁ = 2 正好是整数，所以每 ${fmt(T1,2)} s 重复一次。）`;
+  $('vbNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['vbA','vbB','vbK','vbT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(10)));
+document.querySelectorAll('#lab10 [data-vb]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.vb.split(',');$('vbA').value=q[0];$('vbB').value=q[1];$('vbT').value=0;Lab.draw(10);}));
+const vbAnim=Lab.anim(10,$('vbc'),dt=>{const s=$('vbT');let t=+s.value+dt*1.2;if(t>40)t=0;s.value=t;Lab.draw(10);},()=>vb.play);
+$('vbPlay').addEventListener('click',()=>{vb.play=!vb.play;$('vbPlay').textContent=vb.play?'⏸ 暂停':'▶ 播放';Lab.kick(vbAnim);});
+Lab.add(10,lab10,{vbc:240,vbg:240});
 Lab.start();
 </script>
 </body></html>
