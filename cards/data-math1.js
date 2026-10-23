@@ -130,4 +130,19 @@ D('M1-V1','向量基础与点积','402202737d7a81539e6cfd57c0e4ad88',[
 ['fix',r`Vectors Wk1 第 38、42 页的笔误`,r`第 38 页：$\hat e$ 应为 $\frac1{\sqrt{90}}(4,-5,-7)$，讲义抄成了 $\hat c$ 的 $(3,1,-5)$。
 第 42 页：合力写成 $F_1+F_2+F_2$，应为 $F_1+F_2+F_3$（计算用的是 $F_3$，结果正确）。`],
 ]);
+D('M1-V2','叉积（向量积）','402202737d7a8138921bebccf0bdc918',[
+['q',r`叉积的几何定义？结果是什么？`,r`$\vec a\times\vec b=|\vec a||\vec b|\sin\theta\,\hat u$，结果是**向量**：大小 = a、b 张成的平行四边形面积，方向 $\hat u$ 垂直于 a 和 b（右手定则）。`],
+['q',r`右手定则怎么用？`,r`食指指向第一个向量 a，中指指向第二个向量 b，拇指就是 $\vec a\times\vec b$ 的方向。（或：四指从 a 弯向 b，拇指方向。）`],
+['q',r`$\vec b\times\vec a$ 和 $\vec a\times\vec b$ 是什么关系？`,r`$\vec b\times\vec a=-\vec a\times\vec b$：大小相同、方向相反。叉积**不满足交换律**，顺序很重要。`],
+['q',r`写出 i、j、k 之间的叉积。`,r`$\mathbf i\times\mathbf i=\mathbf j\times\mathbf j=\mathbf k\times\mathbf k=0$；$\mathbf i\times\mathbf j=\mathbf k$，$\mathbf j\times\mathbf k=\mathbf i$，$\mathbf k\times\mathbf i=\mathbf j$（顺着 i→j→k 循环为正）；反过来为负：$\mathbf j\times\mathbf i=-\mathbf k$ 等。`],
+['q',r`叉积的分量公式（行列式形式）？`,r`$\vec a\times\vec b=\begin{vmatrix}\mathbf i&\mathbf j&\mathbf k\\a_x&a_y&a_z\\b_x&b_y&b_z\end{vmatrix}=(a_yb_z-a_zb_y)\mathbf i-(a_xb_z-a_zb_x)\mathbf j+(a_xb_y-a_yb_x)\mathbf k$。注意 j 前面是负号。`],
+['q',r`$(3,-2,5)\times(1,3,-3)$ = ？怎么检查？`,r`$(6-15,\ 5+9,\ 9+2)=(-9,14,11)$。检查：结果和两个原向量的点积都应为 0：$-27-28+55=0$ ✓，$-9+42-33=0$ ✓。`],
+['q',r`两个向量平行时叉积是多少？垂直时呢？`,r`平行（θ = 0 或 180°）：$\sin\theta=0$，叉积为零向量。垂直：大小最大，$|\vec a||\vec b|$。`],
+['q',r`力矩怎么用叉积表示？$\vec r=(3,-5,2)$、$\vec F=(5,3,-2)$ 的力矩？`,r`$\vec M=\vec r\times\vec F$（r 在前）。$|\vec M|=|\vec r||\vec F|\sin\theta$ = 力 × 力臂，方向是转轴。结果 $4\mathbf i+16\mathbf j+34\mathbf k$ N·m。`],
+['q',r`三角形 ABC 和平行四边形的面积怎样用叉积求？`,r`平行四边形：$|\vec{AB}\times\vec{AC}|$；三角形：$\frac12|\vec{AB}\times\vec{AC}|$。不规则四边形拆成两个三角形相加。`],
+['q',r`平行六面体的体积？`,r`$V=|\vec a\cdot(\vec b\times\vec c)|$：$|\vec b\times\vec c|$ 是底面积，$\vec a$ 在法向上的投影是高。`],
+['q',r`怎样求同时垂直于 $\vec a$ 和 $\vec b$ 的单位向量？`,r`$\pm\frac{\vec a\times\vec b}{|\vec a\times\vec b|}$（两个方向都对）。例：$(5,2,-3)$、$(1,0,-1)$ → $(-2,2,-2)/(2\sqrt3)=\pm\frac1{\sqrt3}(-1,1,-1)$。`],
+['err',r`算叉积时最容易错在哪里？`,r`j 分量的符号（行列式第二项要减，结果是 $a_zb_x-a_xb_z$）；顺序写反（$\vec F\times\vec r$ 得到相反的力矩）；以为叉积满足结合律（$(\vec a\times\vec b)\times\vec c\ne\vec a\times(\vec b\times\vec c)$）。`],
+['err',r`为什么不用 $\sin\theta=\frac{|\vec a\times\vec b|}{|\vec a||\vec b|}$ 求夹角？`,r`$\sin^{-1}$ 只给 0–90°，分不清锐角和钝角。$(3,-2,5)$ 和 $(1,3,-3)$ 实际夹角 132°，用 sin 算出 48°。求夹角用点积（cos 在 0–180° 是单调的）。`],
+]);
 })();
