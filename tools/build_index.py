@@ -21,11 +21,12 @@ GROUPS = [
     ('Year 2 · 多学科系统与软件工程', 'MSSE · PYTHON · SYSML', ['msse-lab']),
     ('Year 1 · 电气工程 EE1', 'ELECTRICAL ENGINEERING 1',
      ['network-lab', 'amp-lab', 'digital-lab', 'acpower-lab', 'alu-lab', 'filter-lab', 'machines-lab', 'bench-lab']),
+    ('Year 1 · 工程数学 1', 'ENGINEERING MATHEMATICS 1', ['math1-lab']),
 ]
 
 # course line + one-line summary shown on the card (kept short; the chips list the labs)
 BLURB = {
-    'cards': ('Year 1 EE + Year 2 全部笔记', '自测题、易错点、勘误做成卡片，间隔重复自动安排复习'),
+    'cards': ('Year 1 EE、工程数学 1 + Year 2 全部笔记', '自测题、易错点、勘误做成卡片，间隔重复自动安排复习'),
     'circuit-sim': ('模拟器', '画电路仿真：运放、三极管、稳压管、LED、变压器；自动查错、极点 / 时间常数、戴维宁等效、Bode 图'),
     'logic-sim': ('模拟器', '门电路 / 触发器仿真；表达式化简：1–6 变量卡诺图、完全和、所有最简式、Q–M 表格法和代数推导步骤，检查自己的答案；自动生成电路、状态图'),
     'logic-lab': ('DE ①②③', 'K-map 最小化、触发器时序、同步状态机、静态冒险'),
@@ -36,6 +37,7 @@ BLURB = {
     'prob-lab': ('Part A · Week 1–4', '期望与方差、Bayes、中心极限定理、假设检验、马尔可夫与 PageRank'),
     'laplace-lab': ('Part B · Week 1–3', 's 平面极点与响应、第二平移定理、卷积'),
     'fourier-lab': ('Part B · Week 4 / 通信 Week 4 / EE1 Fourier', '级数合成与吉布斯现象、rect ⟷ sinc、采样与混叠、系数积分与正交性、为什么是 a₀/2、常见脉冲的频谱、DFT 频率轴'),
+    'math1-lab': ('微积分 / 向量 / 矩阵 / 复数 / 常微分方程', '单位圆与三角函数、参数求导、最大功率'),
     'coding-lab': ('Week 1 / 3 / 4', '熵、Huffman / Fano / Shannon、分贝、Hamming 码与交织'),
     'msse-lab': ('Python Lecture 1–2 / Module Overview', '切片、Python 2 vs 3 除法、列表推导式、浏览器里逐行跑 Python、Vee 模型'),
     'comms-lab': ('Lab 1 + Week 3 + Useful Equations', '官方 Lab 1：编码器 / 解码器 / 码表检查、压缩真实文本、统计不准的代价；另有信道容量、链路预算、量化噪声、误码率、滤波器'),
@@ -63,6 +65,7 @@ KEYWORDS = {
     'prob-lab': '概率 probability 期望 方差 贝叶斯 bayes clt 正态 高斯 gaussian 假设检验 markov 马尔可夫 pagerank 稳态',
     'laplace-lab': 'laplace 拉氏 极点 pole s 平面 阶跃 冲激 heaviside 卷积 convolution 传递函数',
     'fourier-lab': 'fourier 傅立叶 频谱 spectrum 吉布斯 gibbs 采样 sampling 混叠 aliasing 正交 orthogonality sinc a0 平均值 直流 dc dft fft dtft 脉冲 pulse 高斯 gaussian 三角 triangular 旁瓣 sidelobe 泄漏 leakage',
+    'math1-lab': '三角 trig 单位圆 unit circle 象限 cast 隐函数 implicit 参数 parametric 导数 derivative 切线 tangent 最大功率 maximum power',
     'coding-lab': '熵 entropy 霍夫曼 huffman 香农 shannon fano 分贝 db 编码 hamming 汉明 信道编码 channel coding 校验子 syndrome 交织 interleaving 纠错',
     'msse-lab': 'python 切片 slice 下标 index 除法 division 整除 floor 类型 type 列表推导式 list comprehension 循环 loop 别名 alias 字典 dict 异常 exception try except pyodide 逐行 trace vee 模型 验证 verification 确认 validation sysml 系统工程',
     'comms-lab': '前缀码 prefix 解码 decode 误码 信道容量 channel capacity shannon 带宽 snr 信噪比 天线 antenna friis 自由空间 路径损耗 链路预算 link budget 双径 量化 quantisation sqnr pcm 采样 nyquist 高斯 gaussian 误码率 ber 门限 butterworth chebyshev 滤波器 lab 1 encoder 编码器 decoder 解码器 encodesource decodesource huffmandict 码表 codebook 前缀码检查 kraft 压缩 compression ascii 交叉熵 cross entropy kl 散度 escape 转义 自适应 adaptive',

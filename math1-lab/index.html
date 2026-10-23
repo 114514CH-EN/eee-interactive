@@ -1,0 +1,185 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>工程数学 1 实验室</title>
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.ctl select{width:100%}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
+  <h1>工程数学 1 实验室</h1>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 单位圆上的六个三角函数（C1）</div>
+  <h2>sin、cos 是单位圆上点的坐标；tan、sec 落在 x = 1 那条切线上，cot、cosec 落在 y = 1 那条切线上</h2>
+  <p class="lead">拖动角度 θ。左图：红 = sin θ，蓝 = cos θ，绿 = tan θ（x = 1 上的高度），紫 = sec θ（原点到 (1, tan θ) 的长度，带符号），橙 = cot θ，青 = cosec θ。右图是 sin、cos、tan 的图像，竖线标出当前的 θ。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-u="30">30°</button><button data-u="60">60°</button><button data-u="135">135°（第二象限）</button><button data-u="210">210°（第三象限）</button><button data-u="300">300°（第四象限）</button><button data-u="90">90°：tan 无定义</button><button data-u="-30">−30°：奇偶性</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="uT">角度 θ</label><input id="uT" type="range" min="-360" max="360" step="1" value="30"><output id="uTO"></output></div>
+    <div class="ctl"><label for="uS">显示 cot、cosec</label><select id="uS"><option value="0">不显示</option><option value="1">显示</option></select><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="uc" height="300" aria-label="单位圆"></canvas><canvas id="ug" height="300" aria-label="三角函数图像"></canvas></div>
+  <div class="read"><div><small>象限 / 哪些为正</small><b id="uQ"></b></div><div><small>sin θ，cos θ</small><b id="uSC"></b></div><div><small>tan θ = sin/cos</small><b id="uTa"></b></div><div><small>sec θ，cosec θ，cot θ</small><b id="uSe" style="font-size:15px"></b></div><div><small>sin² + cos²</small><b id="uI1"></b></div><div><small>1 + tan² 与 sec²</small><b id="uI2" style="font-size:15px"></b></div></div>
+  <p class="note" id="uNote"></p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 参数求导（C1）</div>
+  <h2>点沿曲线运动：水平速度 dx/dt，竖直速度 dy/dt，切线斜率 dy/dx = (dy/dt) ÷ (dx/dt)</h2>
+  <p class="lead">选一条参数曲线，拖动 t。左图：橙色箭头是 dx/dt，绿色是 dy/dt，红色是合速度（沿切线）。右图：dy/dx 和 d²y/dx² 随 t 的变化。注意二阶导数要再除一次 dx/dt：d²y/dx² = [d(dy/dx)/dt] ÷ (dx/dt)，不是 (d²y/dt²) ÷ (d²x/dt²)。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-pc="ex6,1.4">例 6：x = (t²−1)², y = t³</button><button data-pc="ex6,1">例 6：t = 1（切线竖直）</button><button data-pc="circ,0.785">圆 (cos t, sin t)</button><button data-pc="cyc,1.571">摆线 (t − sin t, 1 − cos t)</button><button data-pc="ell,0.5">椭圆 (2cos t, sin t)</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="pcC">曲线</label><select id="pcC"><option value="ex6">例 6：x = (t²−1)², y = t³</option><option value="circ">圆：x = cos t, y = sin t</option><option value="cyc">摆线：x = t − sin t, y = 1 − cos t</option><option value="ell">椭圆：x = 2cos t, y = sin t</option></select><span></span></div>
+    <div class="ctl"><label for="pcT">参数 t</label><input id="pcT" type="range" min="-1.5" max="1.5" step="0.01" value="1.4"><output id="pcTO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="pcxy" height="300" aria-label="参数曲线"></canvas><canvas id="pcd" height="300" aria-label="导数随 t 变化"></canvas></div>
+  <div class="read"><div><small>(x, y)</small><b id="pcP"></b></div><div><small>dx/dt，dy/dt</small><b id="pcV"></b></div><div><small>dy/dx</small><b id="pcD1"></b></div><div><small>d²y/dx²</small><b id="pcD2"></b></div><div><small>公式</small><b id="pcF" style="font-size:13px"></b></div></div>
+  <p class="note" id="pcNote"></p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 最大功率定理（C1 应用）</div>
+  <h2>P = V²R<sub>L</sub>/(R<sub>L</sub> + R<sub>s</sub>)²：dP/dR<sub>L</sub> 由正变负的地方（R<sub>L</sub> = R<sub>s</sub>）功率最大</h2>
+  <p class="lead">电压源 V 带内阻 R<sub>s</sub>，接负载 R<sub>L</sub>。拖动 R<sub>L</sub>，看负载功率 P 和导数 dP/dR<sub>L</sub> = V²(R<sub>s</sub> − R<sub>L</sub>)/(R<sub>L</sub> + R<sub>s</sub>)³ 的符号。效率 = R<sub>L</sub>/(R<sub>L</sub> + R<sub>s</sub>)，最大功率时只有 50%。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-mp="10,50,2">R<sub>L</sub> 太小</button><button data-mp="10,50,50">R<sub>L</sub> = R<sub>s</sub></button><button data-mp="10,50,250">R<sub>L</sub> 太大</button><button data-mp="5,8,8">音箱 8 Ω，功放内阻 8 Ω</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="mpV">电源电压 V</label><input id="mpV" type="range" min="1" max="20" step="1" value="10"><output id="mpVO"></output></div>
+    <div class="ctl"><label for="mpS">内阻 R<sub>s</sub></label><input id="mpS" type="range" min="1" max="100" step="1" value="50"><output id="mpSO"></output></div>
+    <div class="ctl"><label for="mpL">负载 R<sub>L</sub></label><input id="mpL" type="range" min="1" max="400" step="1" value="50"><output id="mpLO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="mpc" height="260" aria-label="功率曲线"></canvas></div>
+  <div class="read"><div><small>负载功率 P</small><b id="mpP"></b></div><div><small>最大可能 V²/(4R<sub>s</sub>)</small><b id="mpM"></b></div><div><small>dP/dR<sub>L</sub> 的符号</small><b id="mpD"></b></div><div><small>效率 R<sub>L</sub>/(R<sub>L</sub>+R<sub>s</sub>)</small><b id="mpE"></b></div></div>
+  <p class="note"><strong>为什么讲师说「不要再求一次导」：</strong>二阶导数检验在 f″ = 0 时失效（例如 x⁴ 在 0 处 f″ = 0 却是最小值），而且这里的二阶导数很难算。看一阶导数在驻点左右的符号（+ 变 − 是最大，− 变 + 是最小）总是有效的。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+/* ---------- Lab 1: unit circle ---------- */
+function lab1(){
+  const deg=val('uT'),th=deg*D2R,show=$('uS').value==='1';$('uTO').textContent=deg+'°';
+  pressGroup('#lab1 [data-u]',b=>+b.dataset.u===deg);
+  const s=Math.sin(th),c=Math.cos(th),eps=1e-9,cz=Math.abs(c)<1e-6,sz=Math.abs(s)<1e-6;
+  const t=cz?NaN:s/c,se=cz?NaN:1/c,cs=sz?NaN:1/s,ct=sz?NaN:c/s;
+  const m=((deg%360)+360)%360;const axis=m%90===0;const q=axis?0:Math.floor(m/90)+1;
+  const qs=['','第一象限：全部为正','第二象限：只有 sin 为正','第三象限：只有 tan 为正','第四象限：只有 cos 为正'];
+  $('uQ').textContent=axis?`在坐标轴上（${m}°）`:qs[q];$('uQ').style.fontSize='15px';
+  const f=v=>isFinite(v)?fmt(v,3):'无定义';
+  $('uSC').textContent=`${f(s)}，${f(c)}`;$('uTa').textContent=f(t);$('uSe').textContent=`${f(se)}，${f(cs)}，${f(ct)}`;
+  $('uI1').textContent=fmt(s*s+c*c,4);$('uI2').textContent=cz?'都无定义':`${fmt(1+t*t,3)} = ${fmt(se*se,3)}`;
+  /* circle */
+  const [x,W,H]=fit($('uc'));const R=Math.min(W*0.32,H*0.36),ox=W*0.42,oy=H*0.53;const P=(u,v)=>[ox+u*R,oy-v*R];
+  x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(4,oy);x.lineTo(W-4,oy);x.moveTo(ox,4);x.lineTo(ox,H-4);x.stroke();
+  x.setLineDash([3,4]);x.strokeStyle=css('--muted');x.beginPath();x.moveTo(...P(1,-1.45));x.lineTo(...P(1,1.45));x.stroke();
+  if(show){x.beginPath();x.moveTo(...P(-1.45,1));x.lineTo(...P(1.5,1));x.stroke();}x.setLineDash([]);
+  x.strokeStyle=css('--muted');x.lineWidth=1.2;x.beginPath();x.arc(ox,oy,R,0,7);x.stroke();
+  const seg=(a,b,col,w=3)=>{x.strokeStyle=col;x.lineWidth=w;x.beginPath();x.moveTo(...P(...a));x.lineTo(...P(...b));x.stroke();};
+  const lim=v=>Math.max(-1.45,Math.min(1.45,v));
+  if(!cz){const ty=lim(t);const k=ty/t;x.globalAlpha=.35;seg([0,0],[k,ty],css('--purple'),7);x.globalAlpha=1;seg([1,0],[1,ty],css('--green'),3);}
+  if(show&&!sz){const tx=Math.max(-1.45,Math.min(1.5,ct));const k=tx/ct;x.globalAlpha=.3;seg([0,0],[tx,k],css('--accent'),7);x.globalAlpha=1;seg([0,1],[tx,1],css('--amp'),3);}
+  seg([0,0],[c,s],css('--ink'),2);seg([c,0],[c,s],css('--red'),3.2);seg([0,0],[c,0],css('--blue'),3.2);
+  x.fillStyle=css('--ink');x.beginPath();x.arc(...P(c,s),4,0,7);x.fill();
+  x.strokeStyle=css('--ink');x.lineWidth=1.2;x.beginPath();x.arc(ox,oy,R*0.22,0,-th,th>0);x.stroke();
+  label(x,'θ',...P(0.26*Math.cos(th/2)+0.02,0.26*Math.sin(th/2)+0.02),css('--ink'),12);
+  label(x,'sin',P(c,s/2)[0]+(c>=0?-30:6),P(c,s/2)[1],css('--red'),12);label(x,'cos',P(c/2,0)[0]-12,oy+(s>=0?16:-8),css('--blue'),12);
+  if(!cz&&Math.abs(t)<1.4)label(x,'tan',P(1,t/2)[0]+6,P(1,t/2)[1],css('--green'),12);
+  text(x,'x = 1',P(1,1.4)[0]+4,P(1,1.4)[1]+10,css('--muted'),11);
+  ['I','II','III','IV'].forEach((n,i)=>{const a=(45+90*i)*D2R;text(x,n,...P(1.3*Math.cos(a),1.3*Math.sin(a)),i+1===q?css('--accent'):css('--grid'),13,'center');});
+  /* graphs */
+  const [y,W2,H2]=fit($('ug'));const a=axes(y,W2,H2,{x0:-360,x1:360,y0:-2.6,y1:2.6,xt:[-360,-270,-180,-90,0,90,180,270,360],xf:v=>W2<520&&v%180?'':v+'°',yt:[-2,-1,0,1,2],title:'sin（红）、cos（蓝）、tan（绿）',pl:28});
+  const tn=d=>{const v=Math.tan(d*D2R);return Math.abs(Math.cos(d*D2R))<0.03?NaN:v;};
+  y.save();y.beginPath();y.rect(a.pl,a.pt,W2-a.pl-a.pr,H2-a.pt-a.pb);y.clip();
+  plot(y,a.X,a.Y,tn,-360,360,css('--green'),1.8,2400);
+  y.restore();
+  plot(y,a.X,a.Y,d=>Math.sin(d*D2R),-360,360,css('--red'),2.2,800);plot(y,a.X,a.Y,d=>Math.cos(d*D2R),-360,360,css('--blue'),2.2,800);
+  y.strokeStyle=css('--muted');y.setLineDash([4,4]);y.beginPath();y.moveTo(a.X(deg),a.pt);y.lineTo(a.X(deg),H2-a.pb);y.stroke();y.setLineDash([]);
+  [[s,'--red'],[c,'--blue'],[t,'--green']].forEach(([v,cl])=>{if(isFinite(v)&&Math.abs(v)<2.6){y.fillStyle=css(cl);y.beginPath();y.arc(a.X(deg),a.Y(v),4,0,7);y.fill();}});
+  let nt;
+  if(cz)nt=`cos θ = 0：(1, tan θ) 那条线和半径平行，交不上，所以 tan θ 和 sec θ <b>无定义</b>（图像上的渐近线）。`;
+  else if(deg<0)nt=`θ 为负 = 顺时针转。和 ${-deg}° 比：sin 变号（奇函数 sin(−A) = −sin A），cos 不变（偶函数 cos(−A) = cos A），tan 变号。`;
+  else nt=`红、蓝两段和半径组成直角三角形，斜边为 1，所以 sin²θ + cos²θ = 1。两边同除 cos²θ 得 tan²θ + 1 = sec²θ：绿、紫两段和 x 轴上长 1 的那段也是一个直角三角形。`;
+  $('uNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['uT','uS'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-u]').forEach(b=>b.addEventListener('click',()=>{$('uT').value=b.dataset.u;Lab.draw(1);}));
+Lab.add(1,lab1,{uc:250,ug:250});
+
+/* ---------- Lab 2: parametric differentiation ---------- */
+const PC={
+  ex6:{x:t=>(t*t-1)**2,y:t=>t**3,dx:t=>4*t*(t*t-1),dy:t=>3*t*t,t0:-1.5,t1:1.5,box:[-0.3,2.8,-3.6,3.6],f:'dy/dx = 3t/(4(t²−1))；d²y/dx² = −3(t²+1)/(16t(t²−1)³)'},
+  circ:{x:t=>Math.cos(t),y:t=>Math.sin(t),dx:t=>-Math.sin(t),dy:t=>Math.cos(t),t0:-3.14,t1:3.14,box:[-1.6,1.6,-1.4,1.4],f:'dy/dx = −cot t = −x/y；d²y/dx² = −1/sin³t'},
+  cyc:{x:t=>t-Math.sin(t),y:t=>1-Math.cos(t),dx:t=>1-Math.cos(t),dy:t=>Math.sin(t),t0:-6.28,t1:6.28,box:[-7,7,-0.6,2.6],f:'dy/dx = sin t/(1 − cos t)；d²y/dx² = −1/(1 − cos t)²'},
+  ell:{x:t=>2*Math.cos(t),y:t=>Math.sin(t),dx:t=>-2*Math.sin(t),dy:t=>Math.cos(t),t0:-3.14,t1:3.14,box:[-2.6,2.6,-1.5,1.5],f:'dy/dx = −cot t / 2；d²y/dx² = −1/(4sin³t)'}};
+function d2(C,t){const h=1e-4;const g=u=>C.dy(u)/C.dx(u);return (g(t+h)-g(t-h))/(2*h)/C.dx(t);}
+function lab2(){
+  const k=$('pcC').value,C=PC[k],sl=$('pcT');if(+sl.min!==C.t0){sl.min=C.t0;sl.max=C.t1;}
+  const t=val('pcT');$('pcTO').textContent=fmt(t,2);
+  pressGroup('#lab2 [data-pc]',b=>{const [a,v]=b.dataset.pc.split(',');return a===k&&Math.abs(+v-t)<0.006;});
+  const X=C.x(t),Y=C.y(t),dx=C.dx(t),dy=C.dy(t),vert=Math.abs(dx)<1e-3,stop=vert&&Math.abs(dy)<1e-3;
+  const D1=dy/dx,D2=d2(C,t);
+  $('pcP').textContent=`(${fmt(X,3)}, ${fmt(Y,3)})`;$('pcV').textContent=`${fmt(dx,3)}，${fmt(dy,3)}`;
+  $('pcD1').textContent=stop?'0/0：要取极限':vert?'∞（切线竖直）':fmt(D1,4);$('pcD2').textContent=vert||!isFinite(D2)||Math.abs(D2)>1e5?'无定义':fmt(D2,4);$('pcF').textContent=C.f;
+  const [x,W,H]=fit($('pcxy'));const [bx0,bx1,by0,by1]=C.box;
+  /* equal aspect */
+  const sx=(W-40)/(bx1-bx0),sy=(H-40)/(by1-by0),s=Math.min(sx,sy),cx=(bx0+bx1)/2,cy=(by0+by1)/2;
+  const PX=u=>W/2+(u-cx)*s,PY=v=>H/2-(v-cy)*s+6;
+  x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(4,PY(0));x.lineTo(W-4,PY(0));x.moveTo(PX(0),4);x.lineTo(PX(0),H-4);x.stroke();
+  text(x,'x',W-12,PY(0)-6,css('--muted'),11);text(x,'y',PX(0)+6,14,css('--muted'),11);
+  x.strokeStyle=css('--blue');x.lineWidth=2.2;x.beginPath();for(let i=0;i<=600;i++){const u=C.t0+(C.t1-C.t0)*i/600;i?x.lineTo(PX(C.x(u)),PY(C.y(u))):x.moveTo(PX(C.x(u)),PY(C.y(u)));}x.stroke();
+  /* tangent line */
+  const L=(bx1-bx0)*0.35,nrm=Math.hypot(dx,dy)||1;
+  if(!stop){x.strokeStyle=css('--red');x.lineWidth=1.4;x.setLineDash([6,4]);x.beginPath();x.moveTo(PX(X-dx/nrm*L),PY(Y-dy/nrm*L));x.lineTo(PX(X+dx/nrm*L),PY(Y+dy/nrm*L));x.stroke();x.setLineDash([]);}
+  const sc=0.28*Math.max(bx1-bx0,by1-by0)/Math.max(Math.hypot(dx,dy),1e-6);
+  arrow(x,PX(X),PY(Y),PX(X+dx*sc),PY(Y),css('--amp'),2.4,9);arrow(x,PX(X+dx*sc),PY(Y),PX(X+dx*sc),PY(Y+dy*sc),css('--green'),2.4,9);
+  arrow(x,PX(X),PY(Y),PX(X+dx*sc),PY(Y+dy*sc),css('--red'),2.6,10);
+  x.fillStyle=css('--ink');x.beginPath();x.arc(PX(X),PY(Y),4.5,0,7);x.fill();
+  /* derivative plot */
+  const [y,W2,H2]=fit($('pcd'));const lim=4;const a=axes(y,W2,H2,{x0:C.t0,x1:C.t1,y0:-lim,y1:lim,xt:[C.t0,(C.t0+C.t1)/2,C.t1].map(v=>+v.toFixed(2)),yt:[-4,-2,0,2,4],title:'dy/dx（红）与 d²y/dx²（紫）随 t 的变化',pl:28,xl:'t'});
+  y.save();y.beginPath();y.rect(a.pl,a.pt,W2-a.pl-a.pr,H2-a.pt-a.pb);y.clip();
+  const cut=f=>u=>{const v=f(u);return Math.abs(v)>lim*3?NaN:v;};
+  const jump=(f)=>{let prev=NaN;return u=>{const v=f(u);const out=(isFinite(prev)&&Math.abs(v-prev)>lim)?NaN:v;prev=v;return out;};};
+  plot(y,a.X,a.Y,jump(cut(u=>C.dy(u)/C.dx(u))),C.t0,C.t1,css('--red'),2,1500);
+  plot(y,a.X,a.Y,jump(cut(u=>d2(C,u))),C.t0,C.t1,css('--purple'),2,1500);
+  y.restore();
+  y.strokeStyle=css('--muted');y.setLineDash([4,4]);y.beginPath();y.moveTo(a.X(t),a.pt);y.lineTo(a.X(t),H2-a.pb);y.stroke();y.setLineDash([]);
+  [[D1,'--red'],[D2,'--purple']].forEach(([v,cl])=>{if(isFinite(v)&&Math.abs(v)<lim){y.fillStyle=css(cl);y.beginPath();y.arc(a.X(t),a.Y(v),4,0,7);y.fill();}});
+  let nt=stop?'这里 dx/dt 和 dy/dt 同时为 0（点停了一下），dy/dx 是 0/0，要看附近的 t 取极限；摆线在这里有尖点。':
+    vert?'dx/dt = 0：点这一瞬间只在竖直方向动，切线竖直，dy/dx 无定义（趋于 ∞）。':
+    `红色合速度箭头沿切线方向，它的斜率 = 绿 ÷ 橙 = ${fmt(dy,3)} ÷ ${fmt(dx,3)} = ${fmt(D1,4)}。不用先消去 t 把 y 写成 x 的函数。`;
+  $('pcNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+$('pcC').addEventListener('input',()=>{const C=PC[$('pcC').value];const sl=$('pcT');sl.min=C.t0;sl.max=C.t1;sl.value=((C.t0+C.t1)/2+C.t1)/2;Lab.draw(2);});
+$('pcT').addEventListener('input',()=>Lab.draw(2));
+document.querySelectorAll('#lab2 [data-pc]').forEach(b=>b.addEventListener('click',()=>{const [k,v]=b.dataset.pc.split(',');$('pcC').value=k;const C=PC[k];const sl=$('pcT');sl.min=C.t0;sl.max=C.t1;sl.value=v;Lab.draw(2);}));
+Lab.add(2,lab2,{pcxy:250,pcd:250});
+
+/* ---------- Lab 3: maximum power ---------- */
+function lab3(){
+  const V=val('mpV'),Rs=val('mpS'),RL=val('mpL');$('mpVO').textContent=V+' V';$('mpSO').textContent=Rs+' Ω';$('mpLO').textContent=RL+' Ω';
+  pressGroup('#lab3 [data-mp]',b=>b.dataset.mp===`${V},${Rs},${RL}`);
+  const P=r=>V*V*r/((r+Rs)**2),Pm=V*V/(4*Rs),d=V*V*(Rs-RL)/((RL+Rs)**3);
+  $('mpP').textContent=fmt(P(RL),4)+' W';$('mpM').textContent=fmt(Pm,4)+' W';$('mpD').textContent=Math.abs(RL-Rs)<1e-9?'0（驻点）':d>0?'+（应加大负载）':'−（应减小负载）';$('mpE').textContent=fmt(100*RL/(RL+Rs),3)+' %';
+  const [x,W,H]=fit($('mpc'));const rmax=400;const a=axes(x,W,H,{x0:0,x1:rmax,y0:0,y1:Pm*1.18,xt:[0,100,200,300,400],xf:v=>v+' Ω',yt:[0,Pm/2,Pm].map(v=>+v.toPrecision(3)),yf:v=>fmt(v,3)+' W',title:'负载功率 P 随负载电阻的变化',pl:62,pr:26});
+  plot(x,a.X,a.Y,P,0.01,rmax,css('--blue'),2.4,800);
+  x.strokeStyle=css('--red');x.setLineDash([4,4]);x.beginPath();x.moveTo(a.X(Rs),a.pt);x.lineTo(a.X(Rs),H-a.pb);x.stroke();x.setLineDash([]);
+  text(x,'负载 = 内阻',a.X(Rs)+4,a.pt+12,css('--red'),11);
+  /* tangent segment: slope converted from W/Ω to screen pixels */
+  const k=d*(rmax/(W-a.pl-a.pr))*((H-a.pt-a.pb)/(Pm*1.18));const dxp=40/Math.sqrt(1+k*k);
+  x.strokeStyle=css('--amp');x.lineWidth=2;x.beginPath();x.moveTo(a.X(RL)-dxp,a.Y(P(RL))+k*dxp);x.lineTo(a.X(RL)+dxp,a.Y(P(RL))-k*dxp);x.stroke();
+  x.fillStyle=css('--amp');x.beginPath();x.arc(a.X(RL),a.Y(P(RL)),5,0,7);x.fill();
+}
+['mpV','mpS','mpL'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-mp]').forEach(b=>b.addEventListener('click',()=>{const [v,s,l]=b.dataset.mp.split(',');$('mpV').value=v;$('mpS').value=s;$('mpL').value=l;Lab.draw(3);}));
+Lab.add(3,lab3,{mpc:220});
+Lab.start();
+</script>
+</body></html>

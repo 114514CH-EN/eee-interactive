@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>复习卡片</title>
-<meta name="description" content="Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="复习卡片"><meta property="og:description" content="Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/cards/">
+<meta name="description" content="Year 1 电气工程、工程数学 1 和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="复习卡片"><meta property="og:description" content="Year 1 电气工程、工程数学 1 和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/cards/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,7 @@
 <script src="data-comms.js"></script>
 <script src="data-msse.js"></script>
 <script src="data-ee.js"></script>
+<script src="data-math1.js"></script>
 <style>
 .bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .bar select{font:13px var(--body);padding:4px 6px}
@@ -46,7 +47,7 @@ html.embed .q{font-size:15.5px}html.embed .a{font-size:14px}html.embed .card{min
 <header>
   <div class="tag">EEE YEAR 1–2 · SPACED REPETITION</div>
   <h1>复习卡片</h1>
-  <p>Year 1 电气工程和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。</p>
+  <p>Year 1 电气工程、工程数学 1 和 Year 2 全部笔记里的自测题、易错点和课件勘误做成的卡片。先自己回答，再翻面打分：「不会」今天再来一次，「模糊」明天再看，「会了」间隔逐级拉长（1 → 3 → 7 → 16 → 35 天）。进度只存在这台设备的浏览器里，可以导出备份。</p>
   <nav><a href="../">← 所有互动页</a></nav>
 </header>
 
@@ -67,7 +68,7 @@ html.embed .q{font-size:15.5px}html.embed .a{font-size:14px}html.embed .card{min
 </div>
 <script>
 const ALL=(window.CARDS||[]);
-const COURSES={DE:'数字电子 DE',EM:'电机 EM',MA:'数学 Part A',MB:'数学 Part B',CS:'通信系统',SE:'MSSE',EE:'电气工程 EE1（Year 1）'};
+const COURSES={DE:'数字电子 DE',EM:'电机 EM',MA:'数学 Part A',MB:'数学 Part B',CS:'通信系统',SE:'MSSE',EE:'电气工程 EE1（Year 1）',M1:'工程数学 1（Year 1）'};
 const KIND={q:['自测','k-q'],err:['易错','k-err'],fix:['勘误','k-fix']};
 const INT=[0,1,3,7,16,35];
 const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);};
