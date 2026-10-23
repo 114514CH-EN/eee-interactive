@@ -101,4 +101,17 @@ D('M1-C5','分部积分与 Taylor 级数','402202737d7a81c7b19ef477a341bd11',[
 ['q',r`$\sin(0.5)\approx0.5-\frac{0.5^3}{6}$ 有多准？为什么要用弧度？`,r`$0.47917$，真实值 $0.47943$，误差约 $2.6\times10^{-4}$。$\frac{d}{dx}\sin x=\cos x$ 只在弧度下成立，Taylor 系数都由导数决定，所以 x 必须是弧度（0.5 rad ≈ 28.6°）。`],
 ['err',r`Taylor 级数最常见的错误？`,r`忘了除以 $n!$；把 $f^{(n)}(x_0)$ 写成 $f^{(n)}(x)$（导数要在展开点取值）；用角度代入；在收敛范围外使用二项式级数。`],
 ]);
+D('M1-C6','微积分应用：引力与转动惯量','402202737d7a81cfa261cd327fe816e6',[
+['q',r`把 $F=\frac{GMm}{r^2}$ 在 $r=R_0$ 处展开到三阶（$h=r-R_0$）。`,r`导数：$-\frac{2GMm}{r^3}$、$\frac{6GMm}{r^4}$、$-\frac{24GMm}{r^5}$。
+$F\approx\frac{GMm}{R_0^2}-\frac{2GMm}{R_0^3}h+\frac{3GMm}{R_0^4}h^2-\frac{4GMm}{R_0^5}h^3$。`],
+['q',r`由 h = 0 怎样得到 g？`,r`$F(0)=\frac{GM_0m}{R_0^2}=mg\Rightarrow g=\frac{GM_0}{R_0^2}$。`],
+['q',r`把引力写成 $F\approx mg\,S(h/R_0)$，S 是什么？`,r`$S=1-2\frac{h}{R_0}+3\left(\frac{h}{R_0}\right)^2-4\left(\frac{h}{R_0}\right)^3$，就是 $(1+\frac h{R_0})^{-2}$ 的二项式展开。`],
+['q',r`$R_0\approx6000$ km 时，一阶、二阶、三阶项各在多高处贡献 10%？`,r`$2\frac h{R_0}=0.1\Rightarrow h\approx300$ km；$3(\frac h{R_0})^2=0.1\Rightarrow h\approx1100$ km；$4(\frac h{R_0})^3=0.1\Rightarrow h\approx1750$ km。`],
+['q',r`为什么在地面附近可以把重力当常数？`,r`一阶修正是 $2h/R_0$。h 小于 30 km 时 $2h/R_0<1\%$，可以忽略；到几百公里就有约 10%，不能再当常数。`],
+['q',r`转动惯量的定义？为什么要把物体切成小块？`,r`$I=\sum x^2\delta m\to\int x^2\,dm$，x 是到转轴的距离。各部分离轴的距离不同，所以要切成小块分别算再加起来（积分）。`],
+['q',r`台球杆（圆锥）模型里，$\delta m$ 怎么写？`,r`$\delta m=\rho A(x)\delta x$，$\rho=\frac{M}{\frac13\pi R^2l}$，$A(x)=\pi R^2(1-\frac xl)^2$，所以 $\delta m=\frac{3M}l\left(1-\frac xl\right)^2\delta x$。`],
+['q',r`绕粗端的转动惯量 $I=\frac{3M}l\int_0^lx^2(1-\frac xl)^2dx$ = ？和均匀细杆比呢？`,r`展开 $x^2-\frac{2x^3}l+\frac{x^4}{l^2}$ 积分：$\frac{3M}l\cdot l^3(\frac13-\frac12+\frac15)=\frac{Ml^2}{10}$。均匀细杆绕一端是 $\frac{Ml^2}3$，圆锥质量集中在转轴附近，所以小得多。`],
+['err',r`积分 $\int_0^lx^2(1-\frac xl)^2dx$ 时常见的错误？`,r`不展开就想换元（讲义说「唯一的办法是展开」）；展开 $(1-\frac xl)^2$ 时漏了 $\frac{x^2}{l^2}$ 项或把交叉项写成 $-\frac xl$（应为 $-\frac{2x}l$）。`],
+['fix',r`applied examples week 7 第 13 页的小笔误`,r`$\delta m=\frac{M}{\frac13\pi R^2l}\cdot\pi R^2(1-\frac xl)^2\delta x$，讲义分子漏了 π（写成 $R^2$）；π 本来就会约掉，最终 $\frac{3M}l(1-\frac xl)^2\delta x$ 正确。`],
+]);
 })();
