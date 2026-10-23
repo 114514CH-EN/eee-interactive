@@ -191,4 +191,20 @@ D('M1-M3','高斯消元与高斯-约当法','402202737d7a8164acb8cbf1551c7e26',[
 ['q',r`伴随矩阵法、高斯消元、高斯-约当法各适合什么情况？`,r`伴随矩阵：2×2、3×3 手算、题目要求「adjoint method」；高斯消元：只要解方程组、未知数多（电脑用的方法，例如有限元 FEA）；高斯-约当：要求逆、或想直接读出答案。考试按题目指定的方法做。`],
 ['err',r`高斯消元最常见的错误？`,r`忘了对 b 做同样的变换；E 的分子分母颠倒（分母是主元）；减的时候符号错（尤其 E 是负数时）；行乘 0；回代时从上往下代。`],
 ]);
+D('M1-M4','特征值与特征向量','402202737d7a81579d13e4e9853a42fb',[
+['q',r`特征值、特征向量的定义？`,r`方阵 A、非零向量 $\mathbf x$、数 λ 满足 $A\mathbf x=\lambda\mathbf x$：A 作用在 $\mathbf x$ 上只把它伸缩 λ 倍、不改变方向。λ 是特征值，$\mathbf x$ 是对应的特征向量。`],
+['q',r`为什么特征值要满足 $\det(A-\lambda I)=0$？`,r`$A\mathbf x=\lambda\mathbf x\Rightarrow(A-\lambda I)\mathbf x=\mathbf 0$。要有**非零**解 $\mathbf x$，矩阵 $A-\lambda I$ 必须奇异（否则可逆，只能 $\mathbf x=\mathbf 0$），所以行列式为 0。这叫特征方程。`],
+['q',r`为什么要写成 $A-\lambda I$，不能写 $A-\lambda$？`,r`矩阵不能减一个数。$\lambda\mathbf x=\lambda I\mathbf x$，所以 $A\mathbf x-\lambda I\mathbf x=(A-\lambda I)\mathbf x$：只在对角线上减 λ。`],
+['q',r`$A=\begin{pmatrix}4&1\\3&2\end{pmatrix}$ 的特征值和特征向量？`,r`$(4-\lambda)(2-\lambda)-3=\lambda^2-6\lambda+5=0$，λ = 1、5。λ = 1：$3x_1+x_2=0$，$\mathbf x=k(1,-3)$；λ = 5：$-x_1+x_2=0$，$\mathbf x=k(1,1)$。`],
+['q',r`求出 λ 后怎样求特征向量？`,r`把 λ 代回 $(A-\lambda I)\mathbf x=\mathbf 0$，用消元求出各分量的**比例**（会有一行变成 0），令一个分量为 1（或 k）写出其余分量。`],
+['q',r`特征向量为什么不唯一？`,r`如果 $A\mathbf x=\lambda\mathbf x$，那么 $A(k\mathbf x)=\lambda(k\mathbf x)$。任何非零倍数都是同一个特征向量，只有**方向（各分量的比例）**确定。课件第 14 页：(1, −3)、(3, −9)、(−2, 6) 都对。`],
+['q',r`特征值的和、积与矩阵有什么关系？`,r`所有特征值的**积 = det A**，**和 = 迹 tr A**（对角线之和）。例：$\begin{pmatrix}4&1\\3&2\end{pmatrix}$：1 × 5 = 5 = det，1 + 5 = 6 = 4 + 2。可以用来检查。`],
+['q',r`3 × 3 例题 $\begin{pmatrix}2&0&1\\-1&4&-1\\-1&2&0\end{pmatrix}$ 的特征值和特征向量？`,r`$(2-\lambda)(\lambda^2-4\lambda+3)=0$，λ = 1、2、3。特征向量：λ = 1 → (1, 0, −1)；λ = 2 → (2, 1, 0)；λ = 3 → (1, 2, 1)。检查：1·2·3 = 6 = det，1 + 2 + 3 = 6 = tr。`],
+['q',r`怎样用特征值求 $A^n$？`,r`$A\mathbf x=\lambda\mathbf x\Rightarrow A^n\mathbf x=\lambda^n\mathbf x$。把向量拆成特征向量的组合 $c_1\mathbf x_1+c_2\mathbf x_2$，则 $A^n(\cdot)=c_1\lambda_1^n\mathbf x_1+c_2\lambda_2^n\mathbf x_2$。|λ| < 1 的部分在 n 大时消失。`],
+['q',r`$A=\begin{pmatrix}0.8&0.3\\0.2&0.7\end{pmatrix}$，$A^{100}$ ≈ ？为什么？`,r`特征值 1（特征向量 (0.6, 0.4)）和 0.5（特征向量 (1, −1)）。$0.5^{100}\approx0$，所以 $A^{100}(1,-1)^T\approx\mathbf 0$、$A^{100}(0.6,0.4)^T=(0.6,0.4)^T$，解得 $A^{100}\approx\begin{pmatrix}0.6&0.6\\0.4&0.4\end{pmatrix}$。`],
+['q',r`振动问题里，特征值和特征向量分别代表什么？`,r`$M\ddot{\mathbf x}+K\mathbf x=\mathbf 0$，设 $\mathbf x=\mathbf x_0\sin\omega t$ 得 $(M^{-1}K-\omega^2I)\mathbf x_0=\mathbf 0$。特征值 $\lambda=\omega^2$（固有频率的平方），特征向量 = **振型**（各质量位移的比例）。`],
+['q',r`两层楼（2m、2k；m、k）的两个振型？`,r`$\lambda_1=\frac{k}{2m}$，振型 (0.5, 1)：两层同相；$\lambda_2=\frac{2k}{m}$，振型 (−1, 1)：反相。固有频率 $\omega_1=\sqrt{k/2m}$，$\omega_2=\sqrt{2k/m}=2\omega_1$。`],
+['q',r`重根特征值一定只有一个特征向量方向吗？`,r`不一定。Mock Exam 1 的 $G=\frac14\begin{pmatrix}2&1&1\\1&2&1\\1&1&2\end{pmatrix}$ 有重根 λ = 1/4，对应两个独立的特征向量 (−1, 1, 0)、(−1, 0, 1)；λ = 1 对应 (1, 1, 1)。`],
+['err',r`求特征值 / 特征向量最常见的错误？`,r`写成 $A-\lambda$（应为 $A-\lambda I$，只减对角线）；展开行列式时漏负号；以为特征向量是唯一的一组数；代回 λ 后两行不成比例（说明 λ 算错了）；把 λ 当成固有频率（其实是 ω²）。`],
+]);
 })();
