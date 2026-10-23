@@ -114,4 +114,20 @@ $F\approx\frac{GMm}{R_0^2}-\frac{2GMm}{R_0^3}h+\frac{3GMm}{R_0^4}h^2-\frac{4GMm}
 ['err',r`积分 $\int_0^lx^2(1-\frac xl)^2dx$ 时常见的错误？`,r`不展开就想换元（讲义说「唯一的办法是展开」）；展开 $(1-\frac xl)^2$ 时漏了 $\frac{x^2}{l^2}$ 项或把交叉项写成 $-\frac xl$（应为 $-\frac{2x}l$）。`],
 ['fix',r`applied examples week 7 第 13 页的小笔误`,r`$\delta m=\frac{M}{\frac13\pi R^2l}\cdot\pi R^2(1-\frac xl)^2\delta x$，讲义分子漏了 π（写成 $R^2$）；π 本来就会约掉，最终 $\frac{3M}l(1-\frac xl)^2\delta x$ 正确。`],
 ]);
+D('M1-V1','向量基础与点积','402202737d7a81539e6cfd57c0e4ad88',[
+['q',r`向量和标量的区别？各举三个工程里的例子。`,r`向量有大小和方向，标量只有大小。向量：力、速度、电场、动量、转矩；标量：温度、质量、电压、能量、功。`],
+['q',r`怎样把二维向量分解成分量？分量和夹角是什么关系？`,r`$a_x=|\vec a|\cos\alpha$，$a_y=|\vec a|\sin\alpha=|\vec a|\cos\beta$，α、β 是和 x、y 轴的夹角。三维同理：$a_z=|\vec a|\cos\gamma$。`],
+['q',r`三维向量的模（长度）怎么算？$(5,4,3)$ 的模？`,r`勾股定理用两次：$|\vec a|=\sqrt{a_x^2+a_y^2+a_z^2}$。$\sqrt{25+16+9}=\sqrt{50}$。`],
+['q',r`单位向量怎么求？$(3,1,-5)$ 方向的单位向量？`,r`除以模：$\hat a=\frac{\vec a}{|\vec a|}$。$\frac1{\sqrt{35}}(3,1,-5)$。`],
+['q',r`从点 A(5, −4, 3) 到 B(3, 2, −1) 的向量？`,r`终点减起点：$\vec{AB}=\vec{OB}-\vec{OA}=(3-5,\ 2+4,\ -1-3)=(-2,6,-4)$。`],
+['q',r`点积的两个公式？结果是什么类型的量？`,r`$\vec a\cdot\vec b=|\vec a||\vec b|\cos\theta=a_xb_x+a_yb_y+a_zb_z$。结果是**标量**（一个数）。`],
+['q',r`为什么 $\vec a\cdot\vec b=a_xb_x+a_yb_y+a_zb_z$？`,r`展开 $(a_x\mathbf i+a_y\mathbf j+a_z\mathbf k)\cdot(b_x\mathbf i+\dots)$ 得 9 项。$\mathbf i\cdot\mathbf i=\mathbf j\cdot\mathbf j=\mathbf k\cdot\mathbf k=1$（平行），$\mathbf i\cdot\mathbf j$ 等 = 0（垂直），只剩 3 项。`],
+['q',r`点积的几何意义？什么时候为 0、为负？`,r`一个向量在另一个方向上的投影 × 另一个的长度（只乘平行部分）。垂直时为 0，夹角大于 90° 时为负。`],
+['q',r`怎样求两个向量的夹角？$\vec v=(18,-6,1)$、$\vec g=(8,4,1)$ 的夹角？`,r`$\cos\theta=\frac{\vec v\cdot\vec g}{|\vec v||\vec g|}=\frac{121}{19\times9}$，$\theta\approx44.96°$。`],
+['q',r`方向余弦是什么？它们满足什么关系？`,r`$\cos\alpha=\frac{v_x}{|\vec V|}$、$\cos\beta=\frac{v_y}{|\vec V|}$、$\cos\gamma=\frac{v_z}{|\vec V|}$，就是单位向量 $\hat V$ 的三个分量，所以 $\cos^2\alpha+\cos^2\beta+\cos^2\gamma=1$。`],
+['q',r`三个共面力 2 kN（60°）、3 kN（−90°）、4 kN（150°）的合力？`,r`分解后相加：$(1-2\sqrt3)\mathbf i+(\sqrt3-3+2)\mathbf j=-2.46\mathbf i+0.73\mathbf j$，大小 2.57 kN，方向约 163°。`],
+['err',r`算 $\vec{AB}$ 时最常见的错误？`,r`写成「起点减终点」$\vec{OA}-\vec{OB}$，方向反了。记住：**终点减起点**，B − A。`],
+['fix',r`Vectors Wk1 第 38、42 页的笔误`,r`第 38 页：$\hat e$ 应为 $\frac1{\sqrt{90}}(4,-5,-7)$，讲义抄成了 $\hat c$ 的 $(3,1,-5)$。
+第 42 页：合力写成 $F_1+F_2+F_2$，应为 $F_1+F_2+F_3$（计算用的是 $F_3$，结果正确）。`],
+]);
 })();

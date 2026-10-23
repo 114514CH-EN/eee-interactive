@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -102,6 +102,22 @@
   <div class="stage"><canvas id="tyc" height="300" aria-label="Taylor 多项式"></canvas><canvas id="tyk" height="300" aria-label="系数"></canvas></div>
   <div class="read"><div><small>f(x)</small><b id="tyV"></b></div><div><small>N 阶近似</small><b id="tyP"></b></div><div><small>误差</small><b id="tyR"></b></div><div><small>误差 &lt; 0.01 的范围</small><b id="tyG" style="font-size:15px"></b></div></div>
   <p class="note" id="tyNote"></p>
+</section>
+<section class="panel" id="lab7">
+  <div class="tag">实验 7 · 向量：加减、点积与叉积（V1、V2）</div>
+  <h2>a·b = |a||b|cos θ 是「平行部分相乘」；|a × b| = |a||b|sin θ 是平行四边形的面积</h2>
+  <p class="lead">用长度和方向角设定 xy 平面里的两个向量 a（红）和 b（蓝）。左图显示 a + b、a − b、a 在 b 上的投影（绿）和由 a、b 张成的平行四边形（紫）。a × b 垂直于屏幕：读数里 ⊙ 表示指向屏幕外（+z），⊗ 表示指向屏幕里（−z）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-vc="3,30,4,0">锐角：点积 &gt; 0</button><button data-vc="3,90,4,0">垂直：点积 = 0</button><button data-vc="3,150,4,0">钝角：点积 &lt; 0</button><button data-vc="3,0,4,0">平行：叉积 = 0</button><button data-vc="4,0,3,90">i × j = k（换成长度）</button><button data-vc="3,90,4,0,swap">b × a = −a × b</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="vcA">|a|</label><input id="vcA" type="range" min="0.5" max="5" step="0.1" value="3"><output id="vcAO"></output></div>
+    <div class="ctl"><label for="vcTa">a 的方向</label><input id="vcTa" type="range" min="-180" max="180" step="1" value="30"><output id="vcTaO"></output></div>
+    <div class="ctl"><label for="vcB">|b|</label><input id="vcB" type="range" min="0.5" max="5" step="0.1" value="4"><output id="vcBO"></output></div>
+    <div class="ctl"><label for="vcTb">b 的方向</label><input id="vcTb" type="range" min="-180" max="180" step="1" value="0"><output id="vcTbO"></output></div>
+    <div class="ctl"><label for="vcM">叉积顺序</label><select id="vcM"><option value="ab">a × b</option><option value="ba">b × a</option></select><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="vcc" height="320" aria-label="向量图"></canvas><canvas id="vcg" height="320" aria-label="点积和叉积随夹角变化"></canvas></div>
+  <div class="read"><div><small>a，b 的分量</small><b id="vcCo" style="font-size:14px"></b></div><div><small>夹角 θ</small><b id="vcTh"></b></div><div><small>a · b = aₓbₓ + a_yb_y</small><b id="vcD"></b></div><div><small>叉积（z 分量）</small><b id="vcX"></b></div><div><small>a 在 b 上的投影</small><b id="vcP"></b></div></div>
+  <p class="note" id="vcNote"></p>
 </section>
 </div>
 
@@ -331,6 +347,46 @@ function lab6(){
 ['tyF','tyX','tyN','tyE'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(6)));
 document.querySelectorAll('#lab6 [data-ty]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.ty.split(',');$('tyF').value=q[0];$('tyX').value=q[1];$('tyN').value=q[2];Lab.draw(6);}));
 Lab.add(6,lab6,{tyc:250,tyk:250});
+/* ---------- Lab 7: vectors, dot and cross ---------- */
+function lab7(){
+  const A=val('vcA'),ta=val('vcTa'),B=val('vcB'),tb=val('vcTb'),ord=$('vcM').value;
+  $('vcAO').textContent=fmt(A,1);$('vcTaO').textContent=ta+'°';$('vcBO').textContent=fmt(B,1);$('vcTbO').textContent=tb+'°';
+  pressGroup('#lab7 [data-vc]',e=>{const q=e.dataset.vc.split(',');return +q[0]===A&&+q[1]===ta&&+q[2]===B&&+q[3]===tb&&(q[4]==='swap')===(ord==='ba');});
+  const a=[A*Math.cos(ta*D2R),A*Math.sin(ta*D2R)],b=[B*Math.cos(tb*D2R),B*Math.sin(tb*D2R)];
+  const dot=a[0]*b[0]+a[1]*b[1],cz=a[0]*b[1]-a[1]*b[0],cr=ord==='ab'?cz:-cz;
+  let th=Math.abs(((ta-tb)%360+540)%360-180);
+  $('vcCo').textContent=`a = (${fmt(a[0],2)}, ${fmt(a[1],2)})，b = (${fmt(b[0],2)}, ${fmt(b[1],2)})`;$('vcTh').textContent=fmt(th,1)+'°';
+  $('vcD').textContent=fmt(dot,3);$('vcX').textContent=(Math.abs(cr)<1e-9?'0':(cr>0?'⊙ +':'⊗ −')+fmt(Math.abs(cr),3)+'（面积）');$('vcP').textContent=fmt(dot/B,3);
+  const [x,W,H]=fit($('vcc'));const pts=[[0,0],a,b,[a[0]+b[0],a[1]+b[1]]];
+  let x0=Math.min(...pts.map(p=>p[0])),x1=Math.max(...pts.map(p=>p[0])),y0=Math.min(...pts.map(p=>p[1])),y1=Math.max(...pts.map(p=>p[1]));
+  const pad=0.12*Math.max(x1-x0,y1-y0,1);x0-=pad;x1+=pad;y0-=pad;y1+=pad;
+  const S=Math.min((W-20)/(x1-x0),(H-20)/(y1-y0)),ox=W/2-(x0+x1)/2*S,oy=H/2+(y0+y1)/2*S;const P=(u,v)=>[ox+u*S,oy-v*S];
+  x.strokeStyle=css('--grid');x.lineWidth=1;x.beginPath();x.moveTo(4,oy);x.lineTo(W-4,oy);x.moveTo(ox,4);x.lineTo(ox,H-4);x.stroke();
+  x.fillStyle=css('--shade');x.beginPath();x.moveTo(...P(0,0));x.lineTo(...P(...a));x.lineTo(...P(a[0]+b[0],a[1]+b[1]));x.lineTo(...P(...b));x.closePath();x.fill();
+  const pr=dot/(B*B);const pv=[b[0]*pr,b[1]*pr];
+  x.strokeStyle=css('--green');x.lineWidth=5;x.beginPath();x.moveTo(...P(0,0));x.lineTo(...P(...pv));x.stroke();
+  x.setLineDash([4,4]);x.strokeStyle=css('--muted');x.lineWidth=1.2;x.beginPath();x.moveTo(...P(...a));x.lineTo(...P(...pv));x.stroke();
+  x.beginPath();x.moveTo(...P(...a));x.lineTo(...P(a[0]+b[0],a[1]+b[1]));x.lineTo(...P(...b));x.stroke();x.setLineDash([]);
+  arrow(x,...P(0,0),...P(a[0]+b[0],a[1]+b[1]),css('--ink'),2,9);arrow(x,...P(...b),...P(...a),css('--amp'),1.8,9);
+  arrow(x,...P(0,0),...P(...a),css('--red'),3,11);arrow(x,...P(0,0),...P(...b),css('--blue'),3,11);
+  label(x,'a',P(...a)[0]+6,P(...a)[1]-4,css('--red'),13);label(x,'b',P(...b)[0]+6,P(...b)[1]-4,css('--blue'),13);
+  label(x,'a+b',P(a[0]+b[0],a[1]+b[1])[0]+6,P(a[0]+b[0],a[1]+b[1])[1],css('--ink'),12);
+  const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];label(x,'a−b',P(...m)[0]+6,P(...m)[1]+14,css('--amp'),12);
+  /* z arrow symbol at centre of parallelogram */
+  const c0=P(m[0],m[1]);if(Math.abs(cr)>1e-6){x.strokeStyle=css('--purple');x.lineWidth=2;x.beginPath();x.arc(c0[0],c0[1],9,0,7);x.stroke();if(cr>0){x.fillStyle=css('--purple');x.beginPath();x.arc(c0[0],c0[1],2.5,0,7);x.fill();}else{x.beginPath();x.moveTo(c0[0]-6,c0[1]-6);x.lineTo(c0[0]+6,c0[1]+6);x.moveTo(c0[0]+6,c0[1]-6);x.lineTo(c0[0]-6,c0[1]+6);x.stroke();}}
+  const [y,W2,H2]=fit($('vcg'));const M=A*B*1.15;const g=axes(y,W2,H2,{x0:0,x1:180,y0:-M,y1:M,xt:[0,45,90,135,180],xf:v=>v+'°',yt:[-A*B,0,A*B].map(v=>+v.toFixed(2)),yf:v=>fmt(v,3),title:'|a||b|cos θ（绿）与 |a||b|sin θ（紫）',pl:42,xl:'θ'});
+  plot(y,g.X,g.Y,t=>A*B*Math.cos(t*D2R),0,180,css('--green'),2.2,300);plot(y,g.X,g.Y,t=>A*B*Math.sin(t*D2R),0,180,css('--purple'),2.2,300);
+  y.strokeStyle=css('--muted');y.setLineDash([4,4]);y.beginPath();y.moveTo(g.X(th),g.pt);y.lineTo(g.X(th),H2-g.pb);y.stroke();y.setLineDash([]);
+  [[dot,'--green'],[Math.abs(cz),'--purple']].forEach(([v,c])=>{y.fillStyle=css(c);y.beginPath();y.arc(g.X(th),g.Y(v),4.5,0,7);y.fill();});
+  let nt;
+  if(Math.abs(dot)<1e-6)nt='a ⊥ b：没有平行部分，点积为 0（这是判断垂直的标准方法）；平行四边形是矩形，叉积的大小最大 = |a||b|。';
+  else if(Math.abs(cz)<1e-6)nt='a ∥ b：平行四边形压扁成一条线，面积 = 0，所以叉积 = 0（判断平行的方法）；点积 = ±|a||b|。';
+  else nt=`点积 = 绿色投影长度 × |b| = ${fmt(dot/B,3)} × ${fmt(B,2)} = ${fmt(dot,3)}。叉积的大小 = 紫色平行四边形面积 = ${fmt(Math.abs(cz),3)}；${ord==='ab'?'a × b':'b × a'} 指向屏幕${cr>0?'外（右手从 '+(ord==='ab'?'a 转到 b':'b 转到 a')+' 是逆时针）':'里（顺时针）'}。`;
+  $('vcNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['vcA','vcTa','vcB','vcTb','vcM'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
+document.querySelectorAll('#lab7 [data-vc]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.vc.split(',');$('vcA').value=q[0];$('vcTa').value=q[1];$('vcB').value=q[2];$('vcTb').value=q[3];$('vcM').value=q[4]==='swap'?'ba':'ab';Lab.draw(7);}));
+Lab.add(7,lab7,{vcc:260,vcg:260});
 Lab.start();
 </script>
 </body></html>
