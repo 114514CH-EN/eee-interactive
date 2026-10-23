@@ -162,4 +162,18 @@ D('M1-M1','矩阵运算与行列式','402202737d7a81329160e54db86a88cb',[
 ['q',r`交换矩阵的两行，行列式怎样变化？`,r`变号（Tutorial 11 第 2 题：三个矩阵行列式 −100、100、−100）。原因：交换行的初等矩阵行列式为 −1，$\det(e_1A)=\det e_1\det A=-\det A$。`],
 ['err',r`算 3 × 3 行列式最常见的错误？`,r`漏了中间一项的负号（$-a_{12}M_{12}$）；余子式里 $ad-bc$ 的顺序弄反；把余子式和代数余子式混用（cofactor 已经带了符号，不要再乘一次）。`],
 ]);
+D('M1-M2','逆矩阵与解方程组','402202737d7a811ebdecef1e3f4b6e7a',[
+['q',r`逆矩阵 $A^{-1}$ 的定义？什么矩阵才有逆？`,r`满足 $AA^{-1}=A^{-1}A=I$ 的矩阵。必须是**方阵**，而且 $\det A\ne0$（非奇异）。`],
+['q',r`伴随矩阵法求逆的公式？每一项是什么？`,r`$A^{-1}=\dfrac{1}{\det A}\,\mathrm{adj}\,A$，$\mathrm{adj}\,A=C^T$：代数余子式矩阵 C 的**转置**。`],
+['q',r`2 × 2 矩阵 $\begin{pmatrix}a&b\\c&d\end{pmatrix}$ 的逆？`,r`$\dfrac{1}{ad-bc}\begin{pmatrix}d&-b\\-c&a\end{pmatrix}$：主对角线互换，副对角线变号，除以行列式。`],
+['q',r`为什么 $A\mathbf x=\mathbf b$ 的解是 $\mathbf x=A^{-1}\mathbf b$？`,r`两边**左乘** $A^{-1}$：$A^{-1}A\mathbf x=A^{-1}\mathbf b$，$A^{-1}A=I$，$I\mathbf x=\mathbf x$。注意是左乘，写成 $\mathbf bA^{-1}$ 连阶都对不上。`],
+['q',r`用逆矩阵法解方程组的 4 步？`,r`1. 写成 $A\mathbf x=\mathbf b$；2. 求 adj A（先算 det，≠ 0 才继续）；3. 用 adj A 乘 b（先不除 det）；4. 最后除以 det，并代回原方程检查。`],
+['q',r`$(AB)^{-1}$ = ？$(A^T)^{-1}$ = ？`,r`$(AB)^{-1}=B^{-1}A^{-1}$（顺序反过来）；$(A^T)^{-1}=(A^{-1})^T$。`],
+['q',r`det A = 0 时方程组 $A\mathbf x=\mathbf b$ 会怎样？`,r`A 奇异，没有逆，逆矩阵法用不了。方程组要么**无解**（矛盾 inconsistent，例如两条平行线），要么**无穷多解**（不确定 indeterminate，两条线重合）。`],
+['q',r`怎样检查算出来的逆矩阵对不对？`,r`乘回去：$A^{-1}A$ 应该等于单位矩阵 I（课件第 12 页）。解方程组时把 x 代回原方程。`],
+['q',r`$A=\begin{pmatrix}2&-3\\-3&4\end{pmatrix}$ 的逆？解 $A\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}6\\-2\end{pmatrix}$。`,r`det = 8 − 9 = −1，$A^{-1}=-\begin{pmatrix}4&3\\3&2\end{pmatrix}=\begin{pmatrix}-4&-3\\-3&-2\end{pmatrix}$。$\mathbf x=A^{-1}\mathbf b=(-24+6,\,-18+4)=(-18,-14)$。`],
+['q',r`为什么求 adj 要把代数余子式矩阵转置？`,r`$A\,C^T$ 的 (i, j) 元素 = A 的第 i 行 · C 的第 j 行。i = j 时正好是沿第 i 行展开 = det A；i ≠ j 时相当于「两行相同的矩阵」的行列式 = 0。所以 $A\,C^T=(\det A)I$。`],
+['q',r`几何上看，为什么 det = 0 的矩阵没有逆？`,r`矩阵把平面变形；det = 0 时整个平面被压成一条线（或一点），不同的点被送到同一点，无法唯一还原，所以没有逆变换。`],
+['err',r`伴随矩阵法最常见的错误？`,r`忘了转置（直接用 C 当 adj）；代数余子式漏了符号格；没先检查 det ≠ 0；中间就除以 det 导致分数算错；把 $A^{-1}\mathbf b$ 写成 $\mathbf bA^{-1}$。`],
+]);
 })();
