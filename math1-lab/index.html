@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型；复平面上的复数运算与 n 次根。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -28,8 +28,8 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型；在复平面上看复数的加减乘除、共轭和 n 次根。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a><a href="#lab11">实验 11 复平面</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -179,6 +179,22 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
   <div class="stage even"><canvas id="vbc" height="300" aria-label="两层楼振动动画"></canvas><canvas id="vbg" height="300" aria-label="位移随时间"></canvas></div>
   <div class="read"><div><small>特征值 λ = ω²</small><b id="vbL" style="font-size:15px"></b></div><div><small>固有频率 ω（rad/s）</small><b id="vbW" style="font-size:15px"></b></div><div><small>特征向量（振型）</small><b id="vbV" style="font-size:15px"></b></div><div><small>两个振型的分量 c₁，c₂</small><b id="vbC" style="font-size:15px"></b></div></div>
   <p class="note" id="vbNote"></p>
+</section>
+<section class="panel" id="lab11">
+  <div class="tag">实验 11 · 复平面（Argand 图）上的复数运算（Z1、Z2）</div>
+  <h2>加减 = 向量加减；乘法 = 模相乘、角度相加；除法 = 模相除、角度相减；共轭 = 关于实轴翻折；n 次根平均分布在圆上</h2>
+  <p class="lead">拖动 Z₁、Z₂ 的实部和虚部，选择运算。蓝色是 Z₁，绿色是 Z₂，橙色是结果。下方同时给出标准形式 x + jy、极坐标 R∠θ 和指数形式 Re^{jθ}；注意 θ 要按象限判断，不能只看计算器的 tan⁻¹(y/x)。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-cx="3,4,5,2,mul">(3 + 4j)(5 + 2j)</button><button data-cx="2,1,4,3,div">(2 + j) ÷ (4 + 3j)</button><button data-cx="7,-3,5,2,conj">共轭 7 − 3j</button><button data-cx="-1,1.7320508,5,2,polar">−1 + j√3：象限</button><button data-cx="0,1,0,1,mul">乘 j = 转 90°</button><button data-cx="3.4641016,2,5,2,root4">Z⁴ = 2√3 + 2j 的四个根</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="cxA">Z₁ 实部 x₁</label><input id="cxA" type="range" min="-5" max="5" step="any" value="3"><output id="cxAO"></output></div>
+    <div class="ctl"><label for="cxB">Z₁ 虚部 y₁</label><input id="cxB" type="range" min="-5" max="5" step="any" value="4"><output id="cxBO"></output></div>
+    <div class="ctl"><label for="cxC">Z₂ 实部 x₂</label><input id="cxC" type="range" min="-5" max="5" step="any" value="5"><output id="cxCO"></output></div>
+    <div class="ctl"><label for="cxD">Z₂ 虚部 y₂</label><input id="cxD" type="range" min="-5" max="5" step="any" value="2"><output id="cxDO"></output></div>
+    <div class="ctl"><label for="cxOp">运算</label><select id="cxOp"><option value="add">Z₁ + Z₂</option><option value="sub">Z₁ − Z₂</option><option value="mul">Z₁ × Z₂</option><option value="div">Z₁ ÷ Z₂</option><option value="conj">共轭 Z₁*，以及 Z₁Z₁*</option><option value="polar">只看 Z₁ 的极坐标</option><option value="root2">Z₁ 的 2 个平方根</option><option value="root3">Z₁ 的 3 个立方根</option><option value="root4">Z₁ 的 4 个四次方根</option></select><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="cxc" height="380" aria-label="复平面"></canvas></div>
+  <div class="read"><div><small>Z₁</small><b id="cxZ1" style="font-size:14px"></b></div><div><small>Z₂</small><b id="cxZ2" style="font-size:14px"></b></div><div><small>结果</small><b id="cxR" style="font-size:14px"></b></div><div><small>辐角：计算器 tan⁻¹(y/x) 与正确值</small><b id="cxQ" style="font-size:14px"></b></div></div>
+  <p class="note" id="cxNote"></p>
 </section>
 </div>
 
@@ -632,6 +648,56 @@ document.querySelectorAll('#lab10 [data-vb]').forEach(e=>e.addEventListener('cli
 const vbAnim=Lab.anim(10,$('vbc'),dt=>{const s=$('vbT');let t=+s.value+dt*1.2;if(t>40)t=0;s.value=t;Lab.draw(10);},()=>vb.play);
 $('vbPlay').addEventListener('click',()=>{vb.play=!vb.play;$('vbPlay').textContent=vb.play?'⏸ 暂停':'▶ 播放';Lab.kick(vbAnim);});
 Lab.add(10,lab10,{vbc:240,vbg:240});
+/* ---------- Lab 11: Argand diagram ---------- */
+const cnum=(x,y,d=3)=>{const r=v=>Math.abs(v)<5e-10?0:v;x=r(x);y=r(y);const X=fmt(x,d).replace('-','−'),Y=fmt(Math.abs(y),d);
+  if(y===0)return X;if(x===0)return (y<0?'−':'')+'j'+(Y==='1'?'':Y);return `${X} ${y<0?'−':'+'} j${Y==='1'?'':Y}`;};
+const cpol=(x,y)=>{const R=Math.hypot(x,y),t=Math.atan2(y,x);return `${fmt(R,3)}∠${fmt(t/D2R,1)}°（${fmt(t,3)} rad）`.replace(/-/g,'−');};
+function lab11(){
+  const x1=val('cxA'),y1=val('cxB'),x2=val('cxC'),y2=val('cxD'),op=$('cxOp').value;
+  [['cxA',x1],['cxB',y1],['cxC',x2],['cxD',y2]].forEach(([id,v])=>$(id+'O').textContent=fmt(v,2).replace('-','−'));
+  pressGroup('#lab11 [data-cx]',b=>{const q=b.dataset.cx.split(',');return q[4]===op&&Math.abs(+q[0]-x1)<1e-6&&Math.abs(+q[1]-y1)<1e-6&&(['conj','polar'].includes(op)||op.startsWith('root')||(Math.abs(+q[2]-x2)<1e-6&&Math.abs(+q[3]-y2)<1e-6));});
+  const R1=Math.hypot(x1,y1),t1=Math.atan2(y1,x1),R2=Math.hypot(x2,y2),t2=Math.atan2(y2,x2);
+  const useZ2=['add','sub','mul','div'].includes(op);
+  let res=[],txt='',nt='';
+  if(op==='add'){res=[[x1+x2,y1+y2]];txt=cnum(x1+x2,y1+y2);nt='加法：实部加实部、虚部加虚部（课件 Z1 第 13 页）。在图上就是两个向量首尾相接（平行四边形法则），和 V1 的向量加法完全一样。';}
+  else if(op==='sub'){res=[[x1-x2,y1-y2]];txt=cnum(x1-x2,y1-y2);nt='减法：Z₁ − Z₂ = Z₁ + (−Z₂)。结果的长度 |Z₁ − Z₂| 就是两个点之间的距离。';}
+  else if(op==='mul'){const x=x1*x2-y1*y2,y=x1*y2+y1*x2;res=[[x,y]];txt=`${cnum(x,y)} = ${cpol(x,y)}`;
+    nt=`乘法：标准形式按括号展开、j² = −1；在图上看，<b>模相乘</b>（${fmt(R1,3)} × ${fmt(R2,3)} = ${fmt(R1*R2,3)}），<b>角度相加</b>（${fmt(t1/D2R,1)}° + ${fmt(t2/D2R,1)}° = ${fmt((t1+t2)/D2R,1)}°）。所以乘 j（模 1、角 90°）就是逆时针转 90°（Z2 第 18 页的乘法定律）。`;}
+  else if(op==='div'){if(R2<1e-9){txt='除数为 0，无定义';nt='Z₂ = 0 时不能除。';}else{const d=x2*x2+y2*y2,x=(x1*x2+y1*y2)/d,y=(y1*x2-x1*y2)/d;res=[[x,y]];txt=`${cnum(x,y)} = ${cpol(x,y)}`;
+    nt=`除法：分子分母同乘分母的共轭 ${cnum(x2,-y2)}，分母变成实数 ${fmt(d,3)}（Z1 第 19–21 页）。在图上看，<b>模相除</b>（${fmt(R1,3)} ÷ ${fmt(R2,3)} = ${fmt(R1/R2,3)}），<b>角度相减</b>（${fmt(t1/D2R,1)}° − ${fmt(t2/D2R,1)}° = ${fmt((t1-t2)/D2R,1)}°）。`;}}
+  else if(op==='conj'){res=[[x1,-y1]];txt=`Z₁* = ${cnum(x1,-y1)}；Z₁Z₁* = ${fmt(x1*x1+y1*y1,3)}`;nt=`共轭：只把虚部变号，图上是关于实轴的镜像，角度变成 −θ。Z₁Z₁* = x² + y² = |Z₁|² 是实数，这就是做除法时乘共轭的原因（Z1 第 17 页）。`;}
+  else if(op==='polar'){txt=cpol(x1,y1);nt='只看 Z₁：R = √(x² + y²)，θ 从正实轴量起（逆时针为正）。拖到第二、三象限，比较计算器 tan⁻¹(y/x) 和正确的辐角：x < 0 时要加或减 π（Z2 第 9、12 页）。';}
+  else{const n=+op.slice(4),Rn=Math.pow(R1,1/n);for(let k=0;k<n;k++){const a=(t1+2*Math.PI*k)/n;res.push([Rn*Math.cos(a),Rn*Math.sin(a)]);}
+    txt=res.map((p,k)=>`${fmt(Rn,3)}∠${fmt((t1+2*Math.PI*k)/n/D2R,1)}°`.replace(/-/g,'−')).join('，');
+    nt=`n 次根：模开 n 次方（${fmt(R1,3)}^(1/${n}) = ${fmt(Rn,3)}），角度为 (θ + 2πk)/${n}，k = 0…${n-1}。${n} 个根等距分布在半径 ${fmt(Rn,3)} 的圆上，相邻两个差 360°/${n} = ${fmt(360/n,1)}°（Z2 第 22–25 页）。`;}
+  $('cxZ1').textContent=`${cnum(x1,y1)} = ${cpol(x1,y1)}`;$('cxZ2').textContent=useZ2?`${cnum(x2,y2)} = ${cpol(x2,y2)}`:'（这个运算不用 Z₂）';$('cxR').textContent=txt||'—';
+  const naive=Math.abs(x1)<1e-12?(y1>0?90:y1<0?-90:0):Math.atan(y1/x1)/D2R;const ok=t1/D2R;
+  $('cxQ').textContent=`${fmt(naive,1)}° → ${fmt(ok,1)}°${Math.abs(naive-ok)>0.05?'（要修正象限）':'（不用修正）'}`;
+  /* draw */
+  const [g,W,H]=fit($('cxc'));const pts=[[x1,y1],[0,0],...res];if(useZ2)pts.push([x2,y2]);if(op==='add')pts.push([x1+x2,y1+y2]);if(op==='sub')pts.push([-x2,-y2]);
+  const L=Math.max(2,...pts.map(p=>Math.max(Math.abs(p[0]),Math.abs(p[1]))))*1.15;const S=Math.min(W,H)/(2*L),ox=W/2,oy=H/2;const P=(u,v)=>[ox+u*S,oy-v*S];
+  g.strokeStyle=css('--grid');g.lineWidth=1;const st=L>12?5:L>6?2:1;for(let k=-Math.floor(L/st)*st;k<=L;k+=st){g.beginPath();g.moveTo(...P(k,-L));g.lineTo(...P(k,L));g.moveTo(...P(-L,k));g.lineTo(...P(L,k));g.stroke();}
+  g.strokeStyle=css('--muted');g.lineWidth=1.2;g.beginPath();g.moveTo(...P(-L,0));g.lineTo(...P(L,0));g.moveTo(...P(0,-L));g.lineTo(...P(0,L));g.stroke();
+  g.fillStyle=css('--muted');g.font=`10px ${css('--mono')}`;for(let k=-Math.floor(L/st)*st;k<=L;k+=st){if(k===0)continue;const s1=String(k).replace('-','−');g.fillText(s1,P(k,0)[0]-g.measureText(s1).width/2,P(k,0)[1]+12);g.fillText(s1,P(0,k)[0]+4,P(0,k)[1]+3);}
+  text(g,'Re',P(L,0)[0]-20,P(L,0)[1]-6,css('--muted'),12);text(g,'Im',P(0,L)[0]+6,P(0,L)[1]+14,css('--muted'),12);
+  const arc=(r,a0,a1,col)=>{g.strokeStyle=col;g.lineWidth=1.6;g.beginPath();g.arc(ox,oy,r,-a0,-a1,a1>a0);g.stroke();};
+  if(op.startsWith('root')){const Rn=Math.hypot(...res[0]);g.setLineDash([4,4]);g.strokeStyle=css('--amp');g.beginPath();g.arc(ox,oy,Rn*S,0,7);g.stroke();g.setLineDash([]);
+    g.strokeStyle=css('--amp');g.globalAlpha=.5;g.beginPath();res.forEach((p,i)=>i?g.lineTo(...P(...p)):g.moveTo(...P(...p)));g.closePath();g.stroke();g.globalAlpha=1;
+    res.forEach((p,i)=>{arrow(g,...P(0,0),...P(...p),css('--amp'),2.2,9);label(g,'w'+(i+1),P(...p)[0]+5,P(...p)[1]-5,css('--amp'),12);});}
+  if(op==='mul'||op==='div'){arc(28,0,t1,css('--blue'));arc(40,0,t2,css('--green'));const tr=Math.atan2(res[0]?res[0][1]:0,res[0]?res[0][0]:1);if(res[0])arc(52,0,tr,css('--amp'));}
+  if(op==='add'){g.setLineDash([5,4]);g.strokeStyle=css('--muted');g.beginPath();g.moveTo(...P(x1,y1));g.lineTo(...P(x1+x2,y1+y2));g.lineTo(...P(x2,y2));g.stroke();g.setLineDash([]);}
+  if(op==='sub'){g.setLineDash([5,4]);arrow(g,...P(0,0),...P(-x2,-y2),css('--green'),1.6,8);g.setLineDash([]);label(g,'−Z₂',P(-x2,-y2)[0]+5,P(-x2,-y2)[1]-4,css('--green'),12);}
+  if(op==='conj'){g.setLineDash([3,4]);g.strokeStyle=css('--muted');g.beginPath();g.moveTo(...P(x1,y1));g.lineTo(...P(x1,-y1));g.stroke();g.setLineDash([]);}
+  if(op==='polar'&&R1>1e-9){arc(36,0,t1,css('--purple'));g.setLineDash([3,4]);g.strokeStyle=css('--muted');g.beginPath();g.moveTo(...P(x1,y1));g.lineTo(...P(x1,0));g.stroke();g.setLineDash([]);
+    label(g,`θ = ${fmt(t1/D2R,1)}°`,ox+40*Math.cos(t1/2)+4,oy-40*Math.sin(t1/2),css('--purple'),12);}
+  arrow(g,...P(0,0),...P(x1,y1),css('--blue'),2.6,10);label(g,'Z₁',P(x1,y1)[0]+6,P(x1,y1)[1]-6,css('--blue'),13);
+  if(useZ2){arrow(g,...P(0,0),...P(x2,y2),css('--green'),2.6,10);label(g,'Z₂',P(x2,y2)[0]+6,P(x2,y2)[1]-6,css('--green'),13);}
+  if(!op.startsWith('root')&&op!=='polar')res.forEach(p=>{arrow(g,...P(0,0),...P(...p),css('--amp'),3,11);label(g,op==='conj'?'Z₁*':'结果',P(...p)[0]+6,P(...p)[1]+14,css('--amp'),13);});
+  $('cxNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['cxA','cxB','cxC','cxD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(11)));$('cxOp').addEventListener('change',()=>Lab.draw(11));
+document.querySelectorAll('#lab11 [data-cx]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.cx.split(',');['cxA','cxB','cxC','cxD'].forEach((id,i)=>$(id).value=q[i]);$('cxOp').value=q[4];Lab.draw(11);}));
+Lab.add(11,lab11,{cxc:320});
 Lab.start();
 </script>
 </body></html>
