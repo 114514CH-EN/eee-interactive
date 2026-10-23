@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -118,6 +118,22 @@
   <div class="stage even"><canvas id="vcc" height="320" aria-label="向量图"></canvas><canvas id="vcg" height="320" aria-label="点积和叉积随夹角变化"></canvas></div>
   <div class="read"><div><small>a，b 的分量</small><b id="vcCo" style="font-size:14px"></b></div><div><small>夹角 θ</small><b id="vcTh"></b></div><div><small>a · b = aₓbₓ + a_yb_y</small><b id="vcD"></b></div><div><small>叉积（z 分量）</small><b id="vcX"></b></div><div><small>a 在 b 上的投影</small><b id="vcP"></b></div></div>
   <p class="note" id="vcNote"></p>
+</section>
+<section class="panel" id="lab8">
+  <div class="tag">实验 8 · 2×2 矩阵：变换、行列式、逆矩阵与特征向量（M1、M2、M4）</div>
+  <h2>矩阵把每个向量变成另一个向量：det = 面积放大倍数；det = 0 时压扁、没有逆；特征向量只伸缩不转向</h2>
+  <p class="lead">输入 2×2 矩阵 A。左图：灰色是单位正方形，紫色是它被 A 变换后的平行四边形，红、蓝箭头是 A 的两列（也就是 i、j 变成了什么）。绿色虚线是特征向量方向（实特征值时才有）。拖动「测试向量」的角度，看 x 和 Ax 什么时候共线。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-mx="3,1,1,2">det = 5</button><button data-mx="2,0,0,3">对角矩阵：沿坐标轴伸缩</button><button data-mx="0,-1,1,0">旋转 90°（没有实特征向量）</button><button data-mx="2,4,1,2">det = 0：压成一条线</button><button data-mx="0,1,1,0">交换 x、y：det = −1（翻面）</button><button data-mx="2,1,1,2">对称矩阵：特征向量互相垂直</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="mxA">a₁₁</label><input id="mxA" type="range" min="-3" max="3" step="0.5" value="3"><output id="mxAO"></output></div>
+    <div class="ctl"><label for="mxB">a₁₂</label><input id="mxB" type="range" min="-3" max="4" step="0.5" value="1"><output id="mxBO"></output></div>
+    <div class="ctl"><label for="mxC">a₂₁</label><input id="mxC" type="range" min="-3" max="3" step="0.5" value="1"><output id="mxCO"></output></div>
+    <div class="ctl"><label for="mxD">a₂₂</label><input id="mxD" type="range" min="-3" max="3" step="0.5" value="2"><output id="mxDO"></output></div>
+    <div class="ctl"><label for="mxT">测试向量 x 的方向</label><input id="mxT" type="range" min="0" max="180" step="1" value="30"><output id="mxTO"></output></div>
+  </div>
+  <div class="stage even"><canvas id="mxc" height="320" aria-label="矩阵变换"></canvas><canvas id="mxe" height="320" aria-label="特征多项式"></canvas></div>
+  <div class="read"><div><small>det A = a₁₁a₂₂ − a₁₂a₂₁</small><b id="mxDet"></b></div><div><small>A⁻¹</small><b id="mxInv" style="font-size:14px"></b></div><div><small>特征值 λ</small><b id="mxL" style="font-size:15px"></b></div><div><small>特征向量</small><b id="mxV" style="font-size:14px"></b></div><div><small>x 与 Ax 的夹角</small><b id="mxAng"></b></div></div>
+  <p class="note" id="mxNote"></p>
 </section>
 </div>
 
@@ -387,6 +403,50 @@ function lab7(){
 ['vcA','vcTa','vcB','vcTb','vcM'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
 document.querySelectorAll('#lab7 [data-vc]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.vc.split(',');$('vcA').value=q[0];$('vcTa').value=q[1];$('vcB').value=q[2];$('vcTb').value=q[3];$('vcM').value=q[4]==='swap'?'ba':'ab';Lab.draw(7);}));
 Lab.add(7,lab7,{vcc:260,vcg:260});
+/* ---------- Lab 8: 2x2 matrix as a transformation ---------- */
+function lab8(){
+  const a=val('mxA'),b=val('mxB'),c=val('mxC'),d=val('mxD'),tt=val('mxT');
+  ['A','B','C','D'].forEach((k,i)=>$('mx'+k+'O').textContent=fmt([a,b,c,d][i],2));$('mxTO').textContent=tt+'°';
+  pressGroup('#lab8 [data-mx]',e=>e.dataset.mx===`${a},${b},${c},${d}`);
+  const det=a*d-b*c,tr=a+d,disc=tr*tr-4*det;
+  $('mxDet').textContent=fmt(det,3);
+  $('mxInv').textContent=Math.abs(det)<1e-9?'不存在（奇异）':`(1/${fmt(det,3)})·[${fmt(d,2)}, ${fmt(-b,2)}; ${fmt(-c,2)}, ${fmt(a,2)}]`;
+  let ev=[];if(disc>=-1e-12){const r=Math.sqrt(Math.max(disc,0));const l1=(tr+r)/2,l2=(tr-r)/2;
+    const vec=l=>{let v=Math.abs(b)>1e-9?[b,l-a]:(Math.abs(c)>1e-9?[l-d,c]:(Math.abs(l-a)<1e-9?[1,0]:[0,1]));const n=Math.hypot(...v);return [v[0]/n,v[1]/n];};
+    ev=Math.abs(l1-l2)<1e-9?[[l1,vec(l1)]]:[[l1,vec(l1)],[l2,vec(l2)]];
+    $('mxL').textContent=ev.map(e=>fmt(e[0],3)).join('，')+(ev.length===1?'（重根）':'');
+    $('mxV').textContent=ev.map(e=>`(${fmt(e[1][0],2)}, ${fmt(e[1][1],2)})`).join('，');}
+  else{$('mxL').textContent=`${fmt(tr/2,3)} ± ${fmt(Math.sqrt(-disc)/2,3)}j（复数）`;$('mxV').textContent='没有实特征向量';}
+  const x=[Math.cos(tt*D2R),Math.sin(tt*D2R)],Ax=[a*x[0]+b*x[1],c*x[0]+d*x[1]];
+  const nAx=Math.hypot(...Ax);let ang=nAx<1e-9?NaN:Math.acos(Math.max(-1,Math.min(1,(x[0]*Ax[0]+x[1]*Ax[1])/nAx)))/D2R;
+  $('mxAng').textContent=isFinite(ang)?fmt(ang,1)+'°':'Ax = 0';
+  const [g,W,H]=fit($('mxc'));const pts=[[0,0],[a,c],[b,d],[a+b,c+d],[1,1],[-1,-1],Ax,[Ax[0]*1.1,Ax[1]*1.1]];
+  const R=Math.max(1.6,...pts.map(p=>Math.max(Math.abs(p[0]),Math.abs(p[1]))))*1.1;const S=Math.min(W,H)/(2*R),ox=W/2,oy=H/2;const P=(u,v)=>[ox+u*S,oy-v*S];
+  g.strokeStyle=css('--grid');g.lineWidth=1;for(let k=-Math.ceil(R);k<=Math.ceil(R);k++){g.beginPath();g.moveTo(...P(k,-R));g.lineTo(...P(k,R));g.moveTo(...P(-R,k));g.lineTo(...P(R,k));g.stroke();}
+  g.strokeStyle=css('--muted');g.beginPath();g.moveTo(...P(-R,0));g.lineTo(...P(R,0));g.moveTo(...P(0,-R));g.lineTo(...P(0,R));g.stroke();
+  const poly=(q,fill,stroke)=>{g.fillStyle=fill;g.strokeStyle=stroke;g.lineWidth=1.6;g.beginPath();q.forEach((p,i)=>i?g.lineTo(...P(...p)):g.moveTo(...P(...p)));g.closePath();g.fill();g.stroke();};
+  poly([[0,0],[1,0],[1,1],[0,1]],'rgba(128,128,128,.15)',css('--muted'));
+  poly([[0,0],[a,c],[a+b,c+d],[b,d]],det<0?css('--fillA'):css('--shade'),css('--purple'));
+  ev.forEach(e=>{g.setLineDash([6,5]);g.strokeStyle=css('--green');g.lineWidth=1.6;g.beginPath();g.moveTo(...P(-R*e[1][0],-R*e[1][1]));g.lineTo(...P(R*e[1][0],R*e[1][1]));g.stroke();g.setLineDash([]);});
+  arrow(g,...P(0,0),...P(a,c),css('--red'),2.6,10);arrow(g,...P(0,0),...P(b,d),css('--blue'),2.6,10);
+  arrow(g,...P(0,0),...P(...x),css('--ink'),2,8);if(nAx>1e-9)arrow(g,...P(0,0),...P(...Ax),css('--amp'),2.4,10);
+  label(g,'Ai',P(a,c)[0]+5,P(a,c)[1]-4,css('--red'),12);label(g,'Aj',P(b,d)[0]+5,P(b,d)[1]-4,css('--blue'),12);label(g,'x',P(...x)[0]+5,P(...x)[1]+12,css('--ink'),12);if(nAx>1e-9)label(g,'Ax',P(...Ax)[0]+5,P(...Ax)[1]-4,css('--amp'),12);
+  /* characteristic polynomial */
+  const [y,W2,H2]=fit($('mxe'));const L=Math.max(4,Math.abs(tr)+3);const p=l=>l*l-tr*l+det;
+  let ym=0,yM=0;for(let i=0;i<=200;i++){const v=p(-L+2*L*i/200);ym=Math.min(ym,v);yM=Math.max(yM,v);}yM=Math.min(yM,ym+40);
+  const ax=axes(y,W2,H2,{x0:-L,x1:L,y0:Math.min(ym,-1)*1.1,y1:yM*1.05+1,xt:[-L,0,L].map(v=>+v.toFixed(1)),yt:[0],title:'det(A − λI) = λ² − (tr A)λ + det A',pl:30,xl:'λ'});
+  y.save();y.beginPath();y.rect(ax.pl,ax.pt,W2-ax.pl-ax.pr,H2-ax.pt-ax.pb);y.clip();plot(y,ax.X,ax.Y,p,-L,L,css('--purple'),2.2,400);y.restore();
+  ev.forEach((e,k)=>{y.fillStyle=css('--green');y.beginPath();y.arc(ax.X(e[0]),ax.Y(0),5,0,7);y.fill();text(y,'λ = '+fmt(e[0],3),ax.X(e[0]),ax.Y(0)+(k?20:-10),css('--green'),11,'center');});
+  let nt;
+  if(Math.abs(det)<1e-9)nt='det = 0：整个平面被压到一条线上（面积变成 0）。不同的 x 会被送到同一个点，没法「倒回去」，所以没有逆矩阵（M2），方程组要么无解要么无穷多解；λ = 0 是一个特征值。';
+  else if(disc<-1e-12)nt='特征多项式和横轴没有交点：特征值是共轭复数。这个变换包含旋转，没有任何实方向能保持不转，所以没有实特征向量（试拖动测试向量，夹角从不为 0 或 180°）。';
+  else if(isFinite(ang)&&(ang<1||ang>179))nt=`x 正好落在特征向量方向上：Ax 和 x 共线，Ax = λx，λ ≈ ${fmt(nAx*(ang<1?1:-1),3)}。这就是 M4 里 (A − λI)x = 0 的意思。`;
+  else nt=`det = ${fmt(det,3)}：单位正方形（面积 1）变成面积 ${fmt(Math.abs(det),3)} 的平行四边形${det<0?'，而且被翻了面（红蓝顺序反了，det 为负）':''}。拖动测试向量，转到绿色虚线上时 x 和 Ax 共线。`;
+  $('mxNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['mxA','mxB','mxC','mxD','mxT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(8)));
+document.querySelectorAll('#lab8 [data-mx]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.mx.split(',');['mxA','mxB','mxC','mxD'].forEach((id,i)=>$(id).value=q[i]);Lab.draw(8);}));
+Lab.add(8,lab8,{mxc:260,mxe:260});
 Lab.start();
 </script>
 </body></html>
