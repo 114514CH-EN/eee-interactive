@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型；复平面上的复数运算与 n 次根。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型；复平面上的复数运算与 n 次根；一阶微分方程的斜率场与 Euler 法；二阶弹簧–质量–阻尼系统与共振。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -28,8 +28,8 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型；在复平面上看复数的加减乘除、共轭和 n 次根。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a><a href="#lab11">实验 11 复平面</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型；在复平面上看复数的加减乘除、共轭和 n 次根；斜率场、Euler 法和弹簧–质量–阻尼系统的共振。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a><a href="#lab11">实验 11 复平面</a><a href="#lab12">实验 12 斜率场与 Euler 法</a><a href="#lab13">实验 13 弹簧–质量–阻尼</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -195,6 +195,38 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
   <div class="stage one"><canvas id="cxc" height="380" aria-label="复平面"></canvas></div>
   <div class="read"><div><small>Z₁</small><b id="cxZ1" style="font-size:14px"></b></div><div><small>Z₂</small><b id="cxZ2" style="font-size:14px"></b></div><div><small>结果</small><b id="cxR" style="font-size:14px"></b></div><div><small>辐角：计算器 tan⁻¹(y/x) 与正确值</small><b id="cxQ" style="font-size:14px"></b></div></div>
   <p class="note" id="cxNote"></p>
+</section>
+<section class="panel" id="lab12">
+  <div class="tag">实验 12 · 斜率场、解曲线族与 Euler 法（D1、D2、D5）</div>
+  <h2>一阶微分方程 dy/dx = f(x, y) 在每一点给出一个斜率；通解是一族曲线，初始条件挑出其中一条；Euler 法沿着斜率一步一步走</h2>
+  <p class="lead">选一个方程，拖动初始点 (x₀, y₀)。灰色短线是斜率场，细线是通解里的几条曲线，紫色粗线是过初始点的特解，橙色折线是 Euler 法（步长 h）。步长越小，橙线越贴近紫线。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-sf="gauss">dy/dx = −2xy（高斯曲线族）</button><button data-sf="cool">冷却：dT/dt = 0.1(20 − T)</button><button data-sf="rl">RL 电路：di/dt = (V − Ri)/L</button><button data-sf="tank">漏水：dh/dt = −2√h</button><button data-sf="lin">dy/dx + y = x（积分因子）</button><button data-sf="euler">dy/dx = x² + y²（Euler 例题）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="sfX">初始点 x₀</label><input id="sfX" type="range" min="0" max="1" step="any" value="0"><output id="sfXO"></output></div>
+    <div class="ctl"><label for="sfY">初始点 y₀</label><input id="sfY" type="range" min="0" max="1" step="any" value="1"><output id="sfYO"></output></div>
+    <div class="ctl"><label for="sfH">Euler 步长 h</label><select id="sfH"><option value="0">不画 Euler</option><option value="0.4">大步长</option><option value="0.2" selected>中步长</option><option value="0.1">小步长</option><option value="0.04">很小</option></select><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="sfc" height="380" aria-label="斜率场"></canvas></div>
+  <div class="read"><div><small>方程</small><b id="sfE" style="font-size:14px"></b></div><div><small>通解</small><b id="sfG" style="font-size:14px"></b></div><div><small>过初始点的特解</small><b id="sfP" style="font-size:14px"></b></div><div><small>Euler 估计与准确值</small><b id="sfR" style="font-size:14px"></b></div></div>
+  <p class="note" id="sfNote"></p>
+</section>
+
+<section class="panel" id="lab13">
+  <div class="tag">实验 13 · 弹簧–质量–阻尼系统：特征方程的根与受迫振动（D3、D4）</div>
+  <h2>m x″ + d x′ + k x = F₀ cos ωt：特征方程 mr² + dr + k = 0 的根决定自由运动是过阻尼、临界阻尼还是欠阻尼；外力频率接近固有频率时出现共振</h2>
+  <p class="lead">初始条件和课件一样：x(0) = 0.2 m，x′(0) = 0。左图是特征方程的两个根画在复平面上（横轴实部、纵轴虚部）；右图是位移 x(t)；下图是稳态振幅随外力频率 ω 的变化（共振曲线），竖线是当前 ω。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-ms="2,0,128,0,8">无阻尼：x = 0.2 cos 8t</button><button data-ms="2,40,128,0,8">过阻尼 d = 40（课件例题）</button><button data-ms="2,32,128,0,8">临界阻尼 d = 32</button><button data-ms="2,6,128,0,8">欠阻尼 d = 6</button><button data-ms="2,4,128,40,5">受迫：ω = 5</button><button data-ms="2,0,128,40,8">共振：ω = ω₀ = 8，无阻尼</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="msM">质量 m (kg)</label><input id="msM" type="range" min="0.5" max="5" step="0.1" value="2"><output id="msMO"></output></div>
+    <div class="ctl"><label for="msD">阻尼 d (N·s/m)</label><input id="msD" type="range" min="0" max="60" step="0.5" value="0"><output id="msDO"></output></div>
+    <div class="ctl"><label for="msK">刚度 k (N/m)</label><input id="msK" type="range" min="10" max="250" step="1" value="128"><output id="msKO"></output></div>
+    <div class="ctl"><label for="msF">外力幅值 F₀ (N)</label><input id="msF" type="range" min="0" max="60" step="1" value="0"><output id="msFO"></output></div>
+    <div class="ctl"><label for="msW">外力频率 ω (rad/s)</label><input id="msW" type="range" min="0.5" max="20" step="0.1" value="8"><output id="msWO"></output></div>
+  </div>
+  <div class="stage"><canvas id="msx" height="300" aria-label="位移随时间"></canvas><canvas id="msr" height="300" aria-label="特征根"></canvas></div>
+  <div class="stage one"><canvas id="msa" height="170" aria-label="共振曲线"></canvas></div>
+  <div class="read"><div><small>特征方程的根</small><b id="msR" style="font-size:14px"></b></div><div><small>类型</small><b id="msT" style="font-size:14px"></b></div><div><small>固有频率 ω₀ = √(k/m)，阻尼比 ζ</small><b id="msW0" style="font-size:14px"></b></div><div><small>通解（余函数）</small><b id="msG" style="font-size:14px"></b></div></div>
+  <p class="note" id="msNote"></p>
 </section>
 </div>
 
@@ -698,6 +730,88 @@ function lab11(){
 ['cxA','cxB','cxC','cxD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(11)));$('cxOp').addEventListener('change',()=>Lab.draw(11));
 document.querySelectorAll('#lab11 [data-cx]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.cx.split(',');['cxA','cxB','cxC','cxD'].forEach((id,i)=>$(id).value=q[i]);$('cxOp').value=q[4];Lab.draw(11);}));
 Lab.add(11,lab11,{cxc:320});
+/* ---------- Lab 12: slope field + Euler ---------- */
+const SF={
+ gauss:{f:(x,y)=>-2*x*y,ex:(x0,y0,x)=>y0*Math.exp(-(x*x-x0*x0)),dom:[-2.5,2.5,-2,2],init:[0,1],xr:[-2,2],yr:[-1.8,1.8],fam:[-1.5,-1,-0.5,0.5,1,1.5],eq:'dy/dx = −2xy',gen:'y = C e^(−x²)（可分离变量，D1）',part:(x0,y0)=>`C = ${fmt(y0*Math.exp(x0*x0),4)}，y = ${fmt(y0*Math.exp(x0*x0),4)} e^(−x²)`,xl:'x',yl:'y',nt:'每条曲线都是 y = C e^(−x²)（高斯钟形曲线，L17 开头的热身题），C 不同只是上下伸缩；C = 0 时是 y = 0。初始点 (0, 1) 对应 C = 1。'},
+ cool:{f:(t,T)=>0.1*(20-T),ex:(t0,T0,t)=>20+(T0-20)*Math.exp(-0.1*(t-t0)),dom:[0,60,0,200],init:[0,180],xr:[0,30],yr:[5,195],fam:[0,40,100,140,195],eq:'dT/dt = 0.1(20 − T)',gen:'T = 20 + C e^(−0.1t)',part:(t0,T0)=>`C = ${fmt((T0-20)*Math.exp(0.1*t0),4)}，T = 20 + ${fmt((T0-20)*Math.exp(0.1*t0),4)} e^(−0.1t)`,xl:'t / min',yl:'T / °C',nt:'牛顿冷却定律（Tutorial 14 第 5 题的烤鸡）：温度越高冷得越快，所有曲线都趋向室温 20 °C；从 180 °C 出发，约 20.8 分钟降到 40 °C。'},
+ rl:{f:(t,i)=>(10-5*i)/1,ex:(t0,i0,t)=>2+(i0-2)*Math.exp(-5*(t-t0)),dom:[0,1.5,0,3],init:[0,0],xr:[0,1],yr:[0,2.9],fam:[0.5,1,1.5,2.5,3],eq:'L di/dt + Ri = V（V = 10 V，R = 5 Ω，L = 1 H）',gen:'i = V/R + C e^(−Rt/L) = 2 + C e^(−5t)',part:(t0,i0)=>`C = ${fmt((i0-2)*Math.exp(5*t0),4)}；i(0) = 0 时 i = 2(1 − e^(−5t))`,xl:'t / s',yl:'i / A',nt:'RL 电路合上开关（L16 笔记例 1）：电流从 0 指数上升到 V/R = 2 A，时间常数 L/R = 0.2 s。这个方程既能分离变量（D1），也能用积分因子（D2）。'},
+ tank:{f:(t,h)=>h>0?-2*Math.sqrt(h):0,ex:(t0,h0,t)=>{const r=Math.sqrt(Math.max(h0,0))-(t-t0);return r>0?r*r:0;},dom:[0,2.5,0,4.5],init:[0,4],xr:[0,1.5],yr:[0.05,4.4],fam:[1,2.25,3],eq:'dh/dt = −2√h（k = 2）',gen:'√h = −t + C（h ≥ 0）',part:(t0,h0)=>`C = ${fmt(Math.sqrt(Math.max(h0,0))+t0,4)}，√h = ${fmt(Math.sqrt(Math.max(h0,0))+t0,4)} − t，排空时间 t = ${fmt(Math.sqrt(Math.max(h0,0))+t0,3)} h`,xl:'t / h',yl:'h / m',nt:'Tutorial 14 第 4 题：漏水速度和 √h 成正比。从 4 m 开始，1 小时后剩 1 m，2 小时后排空。注意越接近空，漏得越慢，但仍在有限时间内排空（√h 线性下降）。'},
+ lin:{f:(x,y)=>x-y,ex:(x0,y0,x)=>x-1+(y0-x0+1)*Math.exp(-(x-x0)),dom:[-2,4,-3,4],init:[0,1],xr:[-1.5,3],yr:[-2.8,3.8],fam:[-2,-1,0,2,3],eq:'dy/dx + y = x',gen:'y = x − 1 + C e^(−x)（积分因子 e^x，D2）',part:(x0,y0)=>`C = ${fmt((y0-x0+1)*Math.exp(x0),4)}，y = x − 1 + ${fmt((y0-x0+1)*Math.exp(x0),4)} e^(−x)`,xl:'x',yl:'y',nt:'Tutorial 14 第 1(a) 题。所有解都被吸到直线 y = x − 1 上（C e^(−x) 这一项衰减）：这条直线就是特解，指数项是齐次方程的解。'},
+ euler:{f:(x,y)=>x*x+y*y,ex:null,dom:[0,0.6,0.9,2.2],init:[0,1],xr:[0,0.3],yr:[0.92,1.6],fam:[0.9,1.2],eq:'dy/dx = x² + y²',gen:'没有初等函数形式的解，只能用数值方法',part:()=>'参考值用很小步长的 RK4 计算',xl:'x',yl:'y',target:0.3,nt:'L20 笔记的 Euler 例题：y(0) = 1，h = 0.1 时 y(0.3) ≈ 1.3753，准确值 1.43967。y 越大斜率越陡（y²），Euler 每步都用起点的斜率，所以一直偏低；步长减半，误差大约也减半（一阶方法）。'}};
+let sfKey='gauss';
+const rk4=(f,x0,y0,x1,n)=>{let x=x0,y=y0;const h=(x1-x0)/n;for(let i=0;i<n;i++){const k1=f(x,y),k2=f(x+h/2,y+h/2*k1),k3=f(x+h/2,y+h/2*k2),k4=f(x+h,y+h*k3);y+=h/6*(k1+2*k2+2*k3+k4);x+=h;}return y;};
+function sfSetup(key){const P=SF[key];[['sfX',P.xr,P.init[0]],['sfY',P.yr,P.init[1]]].forEach(([id,r,v])=>{$(id).min=r[0];$(id).max=r[1];$(id).value=v;});}
+function lab12(){
+  const P=SF[sfKey],x0=val('sfX'),y0=val('sfY'),h=+$('sfH').value;
+  $('sfXO').textContent=fmt(x0,2);$('sfYO').textContent=fmt(y0,2);pressGroup('#lab12 [data-sf]',b=>b.dataset.sf===sfKey);
+  const [x1,x2,y1,y2]=P.dom;const exact=P.ex?(x=>P.ex(x0,y0,x)):(x=>x<x0?NaN:rk4(P.f,x0,y0,x,Math.max(4,Math.ceil((x-x0)/0.002))));
+  const [g,W,H]=fit($('sfc'));const ax=axes(g,W,H,{x0:x1,x1:x2,y0:y1,y1:y2,xt:[x1,(x1+x2)/2,x2].map(v=>+v.toFixed(2)),yt:[y1,(y1+y2)/2,y2].map(v=>+v.toFixed(2)),title:P.eq,xl:P.xl,pl:40});
+  g.save();g.beginPath();g.rect(ax.pl,ax.pt,W-ax.pl-ax.pr,H-ax.pt-ax.pb);g.clip();
+  const nx=Math.max(10,Math.round((W-ax.pl-ax.pr)/30)),ny=Math.max(8,Math.round((H-ax.pt-ax.pb)/30));g.strokeStyle=css('--muted');g.globalAlpha=.55;g.lineWidth=1.2;
+  for(let i=0;i<=nx;i++)for(let j=0;j<=ny;j++){const x=x1+(x2-x1)*i/nx,y=y1+(y2-y1)*j/ny,sl=P.f(x,y);if(!isFinite(sl))continue;
+    const dxp=1,dyp=-sl*(ax.Y(1)-ax.Y(0))/(ax.X(1)-ax.X(0))*-1;const L=Math.hypot(dxp,dyp),u=9/L;const cx=ax.X(x),cy=ax.Y(y);g.beginPath();g.moveTo(cx-dxp*u,cy-dyp*u);g.lineTo(cx+dxp*u,cy+dyp*u);g.stroke();}
+  g.globalAlpha=1;
+  if(P.ex)P.fam.forEach(c=>{plot(g,ax.X,ax.Y,x=>P.ex(P.init[0],c,x),x1,x2,css('--grid')==='#e3e9e4'?'#9aa9a1':css('--muted'),1.1,300);});
+  plot(g,ax.X,ax.Y,x=>P.ex?exact(x):(x<x0?NaN:exact(x)),P.ex?x1:x0,x2,css('--purple'),2.8,P.ex?400:120);
+  let eY=null,eX=null;
+  if(h>0){const hh=sfKey==='euler'?h/4:h*(x2-x1)/5;let x=x0,y=y0;const pts=[[x,y]];const xe=P.target??x2;while(x+hh<=xe+1e-9&&pts.length<400){y=y+hh*P.f(x,y);x=x+hh;pts.push([x,y]);}
+    g.strokeStyle=css('--amp');g.lineWidth=2;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(ax.X(p[0]),ax.Y(p[1])):g.moveTo(ax.X(p[0]),ax.Y(p[1])));g.stroke();
+    g.fillStyle=css('--amp');pts.forEach(p=>{g.beginPath();g.arcS(ax.X(p[0]),ax.Y(p[1]),3,0,7);g.fill();});
+    eX=pts[pts.length-1][0];eY=pts[pts.length-1][1];$('sfR').textContent=`h = ${fmt(hh,3)}：x = ${fmt(eX,3)} 时 Euler ${fmt(eY,4)}，准确 ${fmt(exact(eX),5)}，误差 ${fmt(Math.abs(eY-exact(eX)),3)}`;}
+  else $('sfR').textContent='（选一个步长）';
+  g.restore();g.fillStyle=css('--purple');g.beginPath();g.arcS(ax.X(x0),ax.Y(y0),5.5,0,7);g.fill();text(g,P.yl,ax.pl+4,ax.pt+12,css('--muted'),11);
+  $('sfE').textContent=P.eq;$('sfG').textContent=P.gen;$('sfP').textContent=P.part(x0,y0);
+  $('sfNote').innerHTML='<strong>读图：</strong>'+P.nt+' 拖动 y₀ 换一条曲线：这就是通解里的任意常数 C 由初始条件决定。';
+}
+['sfX','sfY'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(12)));$('sfH').addEventListener('change',()=>Lab.draw(12));
+document.querySelectorAll('#lab12 [data-sf]').forEach(e=>e.addEventListener('click',()=>{sfKey=e.dataset.sf;sfSetup(sfKey);Lab.draw(12);}));
+sfSetup('gauss');
+Lab.add(12,lab12,{sfc:320});
+/* ---------- Lab 13: mass-spring-damper ---------- */
+function lab13(){
+  const m=val('msM'),d=val('msD'),k=val('msK'),F=val('msF'),w=val('msW');
+  [['msM',m,1],['msD',d,1],['msK',k,0],['msF',F,0],['msW',w,1]].forEach(([id,v,dp])=>$(id+'O').textContent=fmt(v,dp));
+  pressGroup('#lab13 [data-ms]',b=>{const q=b.dataset.ms.split(',').map(Number);return q[0]===m&&q[1]===d&&q[2]===k&&q[3]===F&&Math.abs(q[4]-w)<1e-9;});
+  const disc=d*d-4*m*k,w0=Math.sqrt(k/m),zeta=d/(2*Math.sqrt(m*k)),al=-d/(2*m);
+  let roots,type,gen;
+  if(Math.abs(disc)<1e-6*Math.max(1,d*d)){roots=[[al,0],[al,0]];type='临界阻尼（重根）';gen=`x = (C₁ + C₂t) e^(${fmt(al,3)}t)`;}
+  else if(disc>0){const s=Math.sqrt(disc)/(2*m);roots=[[al+s,0],[al-s,0]];type='过阻尼（两个不同实根）';gen=`x = C₁e^(${fmt(al+s,3)}t) + C₂e^(${fmt(al-s,3)}t)`;}
+  else{const b=Math.sqrt(-disc)/(2*m);roots=[[al,b],[al,-b]];type=d===0?'无阻尼（纯虚根）：简谐运动':'欠阻尼（共轭复根）';gen=d===0?`x = C₁cos(${fmt(b,3)}t) + C₂sin(${fmt(b,3)}t)`:`x = e^(${fmt(al,3)}t)(C₁cos ${fmt(b,3)}t + C₂sin ${fmt(b,3)}t)`;}
+  $('msR').textContent=(roots[0][1]?(Math.abs(roots[0][0])<1e-12?`±${fmt(Math.abs(roots[0][1]),3)}j`:`${fmt(roots[0][0],3)} ± ${fmt(Math.abs(roots[0][1]),3)}j`):roots.map(r=>fmt(r[0],3)).filter((v,i,a)=>a.indexOf(v)===i).join('，')+(roots[0][0]===roots[1][0]?'（重根）':'')).replace(/-/g,'−');
+  $('msT').textContent=type;$('msW0').textContent=`ω₀ = ${fmt(w0,3)} rad/s，ζ = ${fmt(zeta,3)}`;$('msG').textContent=gen.replace(/\^\((-?)1t\)/g,'^($1t)').replace(/-/g,'−');
+  /* simulate */
+  const T=6,N=3000,dt=T/N;let x=0.2,v=0;const xs=[[0,x]];const acc=(t,x,v)=>(F*Math.cos(w*t)-d*v-k*x)/m;
+  for(let i=0;i<N;i++){const t=i*dt;const k1x=v,k1v=acc(t,x,v),k2x=v+dt/2*k1v,k2v=acc(t+dt/2,x+dt/2*k1x,v+dt/2*k1v),k3x=v+dt/2*k2v,k3v=acc(t+dt/2,x+dt/2*k2x,v+dt/2*k2v),k4x=v+dt*k3v,k4v=acc(t+dt,x+dt*k3x,v+dt*k3v);
+    x+=dt/6*(k1x+2*k2x+2*k3x+k4x);v+=dt/6*(k1v+2*k2v+2*k3v+k4v);if(i%3===2)xs.push([(i+1)*dt,x]);}
+  let mx=Math.max(0.25,...xs.map(p=>Math.abs(p[1])))*1.1;
+  const [g,W,H]=fit($('msx'));const ax=axes(g,W,H,{x0:0,x1:T,y0:-mx,y1:mx,xt:[0,1,2,3,4,5,6],yt:[+(-mx/1.1).toFixed(2),0,+(mx/1.1).toFixed(2)],title:'位移 x(t) / m',xl:'t / s',pl:44});
+  g.save();g.beginPath();g.rect(ax.pl,ax.pt,W-ax.pl-ax.pr,H-ax.pt-ax.pb);g.clip();
+  if(F===0&&d>0&&disc<0){g.setLineDash([4,4]);plot(g,ax.X,ax.Y,t=>0.2*Math.exp(al*t)/Math.cos(Math.atan(-al/Math.sqrt(-disc)*2*m)),0,T,css('--muted'),1,200);plot(g,ax.X,ax.Y,t=>-0.2*Math.exp(al*t)/Math.cos(Math.atan(-al/Math.sqrt(-disc)*2*m)),0,T,css('--muted'),1,200);g.setLineDash([]);}
+  g.strokeStyle=css('--blue');g.lineWidth=2.2;g.beginPath();xs.forEach((p,i)=>i?g.lineTo(ax.X(p[0]),ax.Y(p[1])):g.moveTo(ax.X(p[0]),ax.Y(p[1])));g.stroke();g.restore();
+  /* roots plane */
+  const [r,W2,H2]=fit($('msr'));const R=Math.max(10,...roots.map(q=>Math.max(Math.abs(q[0]),Math.abs(q[1]))))*1.25;const S=Math.min(W2,H2-20)/(2*R),ox=W2*0.62,oy=(H2+10)/2;const P=(a,b)=>[ox+a*S,oy-b*S];
+  r.strokeStyle=css('--muted');r.lineWidth=1;r.beginPath();r.moveTo(4,oy);r.lineTo(W2-4,oy);r.moveTo(ox,14);r.lineTo(ox,H2-4);r.stroke();
+  r.fillStyle=css('--fillB');r.fillRect(4,14,ox-4,H2-18);text(r,'左半平面：衰减',8,H2-8,css('--muted'),11);text(r,'Re',W2-22,oy-6,css('--muted'),11);text(r,'Im',ox+5,26,css('--muted'),11);text(r,'特征根 r（复平面）',8,12,css('--muted'),12);
+  roots.forEach((q,i)=>{r.fillStyle=css('--red');r.beginPath();r.arcS(...P(q[0],q[1]),6,0,7);r.fill();});
+  if(Math.abs(disc)<1e-6*Math.max(1,d*d))label(r,'×2',P(al,0)[0]+8,P(al,0)[1]-8,css('--red'),12);
+  /* resonance curve */
+  const [a,W3,H3]=fit($('msa'));const wm=20;const A=om=>F>0?F/Math.sqrt((k-m*om*om)**2+(d*om)**2):1/Math.sqrt((k-m*om*om)**2+(d*om)**2)*k;
+  let am=0;for(let i=1;i<=400;i++){const o=wm*i/400;am=Math.max(am,A(o));}const top=Math.min(am,F>0?F/k*12:12)*1.08;
+  const a3=axes(a,W3,H3,{x0:0,x1:wm,y0:0,y1:top,xt:[0,5,10,15,20],yt:[0,+(top/1.08).toFixed(2)],title:F>0?'稳态振幅 F₀/√((k − mω²)² + (dω)²) 随外力频率 ω':'相对振幅（设 F₀ > 0 看实际振幅）',xl:'ω / rad/s',pl:44});
+  a.save();a.beginPath();a.rect(a3.pl,a3.pt,W3-a3.pl-a3.pr,H3-a3.pt-a3.pb);a.clip();plot(a,a3.X,a3.Y,A,0.01,wm,css('--purple'),2,500);a.restore();
+  a.strokeStyle=css('--amp');a.lineWidth=1.5;a.beginPath();a.moveTo(a3.X(w),a3.pt);a.lineTo(a3.X(w),H3-a3.pb);a.stroke();a.setLineDash([3,4]);a.strokeStyle=css('--muted');a.beginPath();a.moveTo(a3.X(w0),a3.pt);a.lineTo(a3.X(w0),H3-a3.pb);a.stroke();a.setLineDash([]);text(a,'ω₀',a3.X(w0)+3,a3.pt+12,css('--muted'),11);
+  let nt;
+  if(F>0&&d===0&&Math.abs(w-w0)<0.05)nt=`<b>共振</b>：没有阻尼，外力频率等于固有频率 ω₀ = ${fmt(w0,3)}。特解变成 x_p = F₀/(2mω₀)·t·sin ω₀t（L19 笔记），振幅随时间线性增长，没有上限——这就是共振破坏结构的原因。`;
+  else if(F>0)nt=`受迫振动：解 = 余函数（自由振动，${d>0?'随时间衰减':'一直存在'}）+ 特解（以外力频率 ω = ${fmt(w,2)} 振动）。${d>0?'过一段时间只剩下稳态振动，振幅 '+fmt(F/Math.sqrt((k-m*w*w)**2+(d*w)**2),4)+' m。':''}ω 越接近 ω₀，振幅越大（下图）；阻尼越大，共振峰越低。`;
+  else if(d===0)nt=`没有阻尼：特征方程 mr² + k = 0 的根是纯虚数 ±jω₀，解是 x = 0.2 cos ${fmt(w0,3)}t，永远振下去（L18 笔记的弹簧例题，ω₀ = 8）。`;
+  else if(disc>0)nt=`过阻尼：d² − 4mk = ${fmt(disc,4)} > 0，两个负实根，x(t) 是两个衰减指数之和，不振荡，慢慢回到 0（课件 d = 40 的例子：根 −4、−16）。`;
+  else if(Math.abs(disc)<1e-6*Math.max(1,d*d))nt=`临界阻尼：d = 2√(mk) = ${fmt(2*Math.sqrt(m*k),3)}，重根 r = −d/2m。这是不振荡的前提下回到平衡最快的阻尼（汽车减振器的设计目标）。`;
+  else nt=`欠阻尼：d² − 4mk < 0，共轭复根 −d/2m ± jω。运动是振荡，振幅按 e^(−d t/2m) 衰减（灰色虚线是包络）。根越靠近虚轴，衰减越慢。`;
+  $('msNote').innerHTML='<strong>读图：</strong>'+nt;
+}
+['msM','msD','msK','msF','msW'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(13)));
+document.querySelectorAll('#lab13 [data-ms]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.ms.split(',');['msM','msD','msK','msF','msW'].forEach((id,i)=>$(id).value=q[i]);Lab.draw(13);}));
+Lab.add(13,lab13,{msx:240,msr:240,msa:150});
 Lab.start();
 </script>
 </body></html>
