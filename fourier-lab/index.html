@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>傅里叶实验室</title>
-<meta name="description" content="五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2…">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
+<meta name="description" content="七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}</style>
+<style>.ctl select{width:100%}html.embed #lab7 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
   <h1>傅里叶实验室</h1>
-  <p>五个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2。配合 EE 傅里叶页和 Year 2 Maths Part B 的 Fourier。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a></nav>
+  <p>七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；矩形 / 半余弦 / 三角 / 高斯脉冲的频谱与旁瓣；DFT 第 k 个点对应的频率、对称性和泄漏。配合 EE 傅里叶页、Year 2 Maths Part B 的 Fourier 和通信系统 Week 4。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a><a href="#lab6">实验 6 常见脉冲的频谱</a><a href="#lab7">实验 7 DFT 频率轴</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -87,6 +87,37 @@
   <div class="stage even"><canvas id="hr" height="250" aria-label="cos 平方的面积"></canvas><canvas id="hf" height="250" aria-label="f 与常数项"></canvas></div>
   <div class="read"><div><small>∫ cos² nx dx（一个周期）</small><b id="hA"></b></div><div><small>a₀ = (1/π)∫ f dx</small><b id="h0"></b></div><div><small>真正的平均值 (1/2π)∫ f dx</small><b id="hM"></b></div><div><small>所以常数项</small><b id="hC"></b></div></div>
   <p class="note"><strong>一句话：</strong>求 aₙ 时两边乘 cos nx 再积分，右边剩下 aₙ·∫cos² nx dx = aₙ·π，所以除以 π。常数项那一项乘的是 1，∫1·1 dx = 2π，本该除以 2π。课件为了只记一个公式，统一除以 π，代价就是 n = 0 时多了一倍，于是在级数里写 a₀/2 把它除回来。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · 常见脉冲的傅里叶变换（Communication Systems · Week 4 第 2 讲）</div>
+  <h2>脉冲边沿越平滑，旁瓣越低；脉冲越窄，频谱越宽</h2>
+  <p class="lead">四种脉冲都在 |t| &lt; T/2 内（高斯除外）。左边是 w(t)，右边是 W(f)：矩形 T·sinc(fT)，半余弦 (2T/π)·cos(πfT)/(1 − 4f²T²)，三角 (T/2)·sinc²(fT/2)，高斯 T·e<sup>−πf²T²</sup>。切到 dB 看旁瓣：旁瓣就是会漏到相邻信道里的能量。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-pu="all,1,lin">四种一起比（线性）</button><button data-pu="all,1,db">四种一起比（dB）</button><button data-pu="rect,0.5,lin">矩形 T = 0.5：第一零点 2</button><button data-pu="tri,1,lin">三角：第一零点 2/T</button><button data-pu="gauss,0.5,lin">高斯：变换还是高斯</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="puS">脉冲</label><select id="puS"><option value="all">四种一起</option><option value="rect">矩形 rect</option><option value="hcos">半余弦</option><option value="tri">三角</option><option value="gauss">高斯</option></select><span></span></div>
+    <div class="ctl"><label for="puT">宽度 T</label><input id="puT" type="range" min="0.25" max="2" step="0.05" value="1"><output id="puTO"></output></div>
+    <div class="ctl"><label for="puY">频谱纵轴</label><select id="puY"><option value="lin">线性 W(f)</option><option value="db">dB：20 log₁₀|W(f)/W(0)|</option></select><span></span></div>
+  </div>
+  <div class="stage even"><canvas id="pt" height="250" aria-label="时域脉冲"></canvas><canvas id="pf" height="250" aria-label="脉冲频谱"></canvas></div>
+  <div class="read"><div><small>W(0) = 脉冲面积</small><b id="pu0"></b></div><div><small>第一零点</small><b id="puZ"></b></div><div><small>最高旁瓣</small><b id="puL"></b></div><div><small>|f| &lt; 1/T 内的能量</small><b id="puE"></b></div></div>
+  <p class="note"><strong>为什么三角的频谱是 sinc²：</strong>底宽 T 的三角 = 两个宽 T/2 的矩形卷积（再乘 2/T）。时域卷积 = 频域相乘，所以 sinc 变成 sinc²：旁瓣按 1/f² 衰减，第一零点推到 2/T。</p>
+</section>
+
+<section class="panel" id="lab7">
+  <div class="tag">实验 7 · DFT 的第 k 个点是多少赫兹（Communication Systems · Week 4 第 2 讲）</div>
+  <h2>f<sub>k</sub> = k·F<sub>s</sub>/N；实信号的频谱左右对称，k 和 N − k 是同一个频率的正负两半</h2>
+  <p class="lead">采样率 F<sub>s</sub>、取 N 个点，算 X[k] = (1/N)Σx[n]e<sup>−j2πkn/N</sup>（课件的定义，前面有 1/N）。上图是采样点，下图是 |X[k]|，底下同时标出 k 和对应的频率。频率正好落在格点上时只有两根线；落在两格之间就会「泄漏」到旁边的格点。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-dk="250,0,32,0">250 Hz 落在 k = 8</button><button data-dk="265,0,32,0">265 Hz：落在两格之间 → 泄漏</button><button data-dk="125,375,32,1">125 Hz + 375 Hz 两个频率</button><button data-dk="700,0,32,0">700 Hz &gt; F<sub>s</sub>/2 → 混叠到 300 Hz</button><button data-dk="250,0,32,2">MATLAB fft 的幅度（×N）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="dkF">频率 f₁</label><input id="dkF" type="range" min="0" max="1000" step="5" value="250"><output id="dkFO"></output></div>
+    <div class="ctl"><label for="dkG">第二个频率 f₂（0 = 不加）</label><input id="dkG" type="range" min="0" max="500" step="5" value="0"><output id="dkGO"></output></div>
+    <div class="ctl"><label for="dkN">点数 N</label><select id="dkN"><option value="16">16</option><option value="32" selected>32</option><option value="64">64</option></select><span></span></div>
+    <div class="ctl"><label for="dkM">显示方式</label><select id="dkM"><option value="0">k = 0…N−1（课件，1/N）</option><option value="1">移到 −F<sub>s</sub>/2…F<sub>s</sub>/2（1/N）</option><option value="2">k = 0…N−1，MATLAB fft（不除 N）</option></select><span></span></div>
+  </div>
+  <div class="stage one"><canvas id="dkx" height="200" aria-label="采样信号"></canvas><canvas id="dkX" height="230" aria-label="DFT 幅度"></canvas></div>
+  <div class="read"><div><small>格点间距 Δf = F<sub>s</sub>/N</small><b id="dkD"></b></div><div><small>f₁ 落在 k =</small><b id="dkK"></b></div><div><small>最高的 |X[k]|</small><b id="dkP"></b></div><div><small>看到的频率</small><b id="dkS"></b></div></div>
+  <p class="note" id="dkNote"></p>
 </section>
 </div>
 
@@ -238,6 +269,57 @@ function lab5(){
 $('hn').addEventListener('input',()=>Lab.draw(5));
 document.querySelectorAll('#lab5 [data-fh]').forEach(b=>b.addEventListener('click',()=>{fh=b.dataset.fh;Lab.draw(5);}));
 Lab.add(5,lab5,{hr:220,hf:220});
+
+/* ---------- Lab 6: common pulses ---------- */
+const PU={rect:{n:'矩形',c:'--blue',w:(t,T)=>Math.abs(t)<T/2?1:0,W:(f,T)=>T*sinc(f*T),z:1,sl:-13.26,e:90.3},
+  hcos:{n:'半余弦',c:'--amp',w:(t,T)=>Math.abs(t)<T/2?Math.cos(Math.PI*t/T):0,W:(f,T)=>{const d=1-4*f*f*T*T;return Math.abs(d)<1e-9?T/2:(2*T/Math.PI)*Math.cos(Math.PI*f*T)/d;},z:1.5,sl:-23.0,e:97.0},
+  tri:{n:'三角',c:'--green',w:(t,T)=>Math.abs(t)<T/2?1-2*Math.abs(t)/T:0,W:(f,T)=>(T/2)*sinc(f*T/2)**2,z:2,sl:-26.5,e:95.0},
+  gauss:{n:'高斯',c:'--purple',w:(t,T)=>Math.exp(-Math.PI*(t/T)**2),W:(f,T)=>T*Math.exp(-Math.PI*f*f*T*T),z:null,sl:null,e:99.96}};
+function lab6(){
+  const sh=$('puS').value,T=val('puT'),db=$('puY').value==='db';$('puTO').textContent=T;
+  pressGroup('#lab6 [data-pu]',b=>b.dataset.pu===`${sh},${T},${db?'db':'lin'}`);
+  const keys=sh==='all'?Object.keys(PU):[sh];
+  const [x,W,H]=fit($('pt'));const a=axes(x,W,H,{x0:-1.5,x1:1.5,y0:-0.1,y1:1.2,xt:[-1.5,-1,-0.5,0,0.5,1,1.5],yt:[0,0.5,1],title:'w(t)，横轴单位：秒（T 可调）',pl:32});
+  keys.forEach(k=>plot(x,a.X,a.Y,t=>PU[k].w(t,T),-1.5,1.5,css(PU[k].c),2.2,1500));
+  if(sh==='all')keys.forEach((k,i)=>text(x,PU[k].n,a.X(1.45),a.pt+14+i*15,css(PU[k].c),11,'right'));
+  const fm=6,[y,W2,H2]=fit($('pf'));
+  if(db){const b=axes(y,W2,H2,{x0:0,x1:fm,y0:-80,y1:5,xt:[0,1,2,3,4,5,6],yt:[0,-20,-40,-60,-80],title:'20 log₁₀|W(f)/W(0)|（dB），横轴 f',pl:36});
+    keys.forEach(k=>plot(y,b.X,b.Y,f=>{const r=Math.abs(PU[k].W(f,T)/PU[k].W(0,T));return Math.max(20*Math.log10(r+1e-12),-80);},0.0005,fm,css(PU[k].c),1.8,2400));
+  }else{const top=Math.max(...keys.map(k=>PU[k].W(0,T)));const b=axes(y,W2,H2,{x0:-fm,x1:fm,y0:-0.25*top,y1:1.12*top,xt:[-6,-4,-2,0,2,4,6],yt:[0,top],yf:v=>fmt(v,2),title:'W(f)，横轴 f',pl:40});
+    keys.forEach(k=>plot(y,b.X,b.Y,f=>PU[k].W(f,T),-fm,fm,css(PU[k].c),2.2,2000));
+    if(keys.length===1&&PU[keys[0]].z){const z=PU[keys[0]].z/T;y.setLineDash([4,4]);y.strokeStyle=css('--red');[z,-z].forEach(v=>{if(Math.abs(v)<fm){y.beginPath();y.moveTo(b.X(v),b.pt);y.lineTo(b.X(v),H2-b.pb);y.stroke();}});y.setLineDash([]);}}
+  if(keys.length===1){const P=PU[keys[0]];$('pu0').textContent=fmt(P.W(0,T),3);$('puZ').textContent=P.z?`${P.z}/T = ${fmt(P.z/T,3)}`:'没有零点';$('puL').textContent=P.sl?P.sl+' dB':'没有旁瓣';$('puE').textContent=P.e+' %';}
+  else{$('pu0').textContent='矩形 '+fmt(T,2)+'，三角 '+fmt(T/2,2);$('puZ').textContent='1/T, 1.5/T, 2/T, 无';$('puL').textContent='−13, −23, −26.5 dB';$('puE').textContent='90, 97, 95, 99.96 %';}
+}
+['puS','puT','puY'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(6)));
+document.querySelectorAll('#lab6 [data-pu]').forEach(b=>b.addEventListener('click',()=>{const [s1,t1,y1]=b.dataset.pu.split(',');$('puS').value=s1;$('puT').value=t1;$('puY').value=y1;Lab.draw(6);}));
+Lab.add(6,lab6,{pt:220,pf:220});
+
+/* ---------- Lab 7: DFT bins ---------- */
+const DFS=1000;
+function lab7(){
+  const f1=val('dkF'),f2=val('dkG'),N=+$('dkN').value,mode=$('dkM').value;$('dkFO').textContent=f1+' Hz';$('dkGO').textContent=f2?f2+' Hz':'不加';
+  pressGroup('#lab7 [data-dk]',b=>b.dataset.dk===`${f1},${f2},${N},${mode}`);
+  const xs=n=>Math.cos(2*Math.PI*f1*n/DFS)+(f2?Math.cos(2*Math.PI*f2*n/DFS):0);
+  const X=[];for(let k=0;k<N;k++){let re=0,im=0;for(let n=0;n<N;n++){const v=xs(n),a=-2*Math.PI*k*n/N;re+=v*Math.cos(a);im+=v*Math.sin(a);}const s=mode==='2'?1:1/N;X.push(Math.hypot(re,im)*s);}
+  const df=DFS/N;$('dkD').textContent=fmt(df,4)+' Hz';const kk=f1/df;$('dkK').textContent=Number.isInteger(+kk.toFixed(6))?String(Math.round(kk)):fmt(kk,3)+'（不在格点上）';
+  const pk=Math.max(...X);const onb=Number.isInteger(+kk.toFixed(6))&&f1<=DFS/2;$('dkP').textContent=fmt(pk,3)+(onb?(mode==='2'?'（= N/2 × 振幅）':'（= 振幅/2）'):'（泄漏后变小）');
+  const fa=Math.abs(((f1+DFS/2)%DFS+DFS)%DFS-DFS/2);$('dkS').textContent=fmt(fa,3)+' Hz'+(f1>DFS/2?'（混叠）':'');
+  const [x,W,H]=fit($('dkx'));const ymax=f2?2.2:1.2;const a=axes(x,W,H,{x0:-0.5,x1:N-0.5,y0:-ymax,y1:ymax,xt:[0,N/4,N/2,3*N/4,N-1],yt:[-1,0,1],title:`x[n] = cos(2π·${f1}·n/${DFS})${f2?` + cos(2π·${f2}·n/${DFS})`:''}，F_s = ${DFS} Hz`,pl:30});
+  plot(x,a.X,a.Y,xs,0,N-1,css('--grid'),1.4,N*20);
+  x.strokeStyle=css('--blue');x.fillStyle=css('--blue');x.lineWidth=2;for(let n=0;n<N;n++){x.beginPath();x.moveTo(a.X(n),a.Y(0));x.lineTo(a.X(n),a.Y(xs(n)));x.stroke();x.beginPath();x.arc(a.X(n),a.Y(xs(n)),3,0,7);x.fill();}
+  const [y,W2,H2]=fit($('dkX'));const shift=mode==='1';const ks=[...Array(N).keys()].map(k=>shift?(k<N/2?k:k-N):k);
+  const kmin=shift?-N/2:0,kmax=shift?N/2-1:N-1,ytop=Math.max(pk*1.2,mode==='2'?N/2:0.6);
+  const tick=shift?[-N/2,-N/4,0,N/4,N/2-1]:[0,N/4,N/2,3*N/4,N-1];
+  const b=axes(y,W2,H2,{x0:kmin-0.5,x1:kmax+0.5,y0:0,y1:ytop,xt:tick,xf:v=>W2<560?`${v}`:`k=${v} | ${fmt(v*df,4)} Hz`,yt:[0,mode==='2'?N/2:0.5],yf:v=>fmt(v,3),title:(shift?'|X[k]|，已移到 −F_s/2…F_s/2':'|X[k]|，k = 0…N−1')+(W2<560?`（横轴 k，f = k × ${fmt(df,4)} Hz）`:''),pl:40,pb:34});
+  if(!shift){y.fillStyle=css('--amp');y.globalAlpha=.08;y.fillRect(b.X(N/2),b.pt,b.X(N-0.5)-b.X(N/2),H2-b.pt-b.pb);y.globalAlpha=1;text(y,'这一半是负频率 k − N',b.X(N-1),b.pt+14,css('--muted'),11,'right');}
+  ks.forEach((kd,i)=>{const v=X[i];y.strokeStyle=css('--red');y.fillStyle=css('--red');y.lineWidth=2;y.beginPath();y.moveTo(b.X(kd),b.Y(0));y.lineTo(b.X(kd),b.Y(v));y.stroke();y.beginPath();y.arc(b.X(kd),b.Y(v),2.6,0,7);y.fill();});
+  const nt=f1>DFS/2?`f₁ = ${f1} Hz 超过 F_s/2 = ${DFS/2} Hz，采样后和 ${fmt(fa,3)} Hz 分不出来（实验 3 讲过的混叠）。`:(Number.isInteger(+kk.toFixed(6))?`f₁ 正好是 Δf 的 ${Math.round(kk)} 倍，只在 k = ${Math.round(kk)} 和 N − k = ${N-Math.round(kk)} 有值。`:`f₁ ÷ Δf = ${fmt(kk,3)} 不是整数：N 个点里不是整数个周期，能量漏到附近的格点（频谱泄漏）。`);
+  $('dkNote').innerHTML='<strong>读图：</strong>'+nt+(mode==='2'?' MATLAB 的 fft 前面没有 1/N，所以同一个余弦的峰值是 N/2 而不是 ½；做 Lab 时要自己除以 N。':' 课件定义带 1/N：振幅为 1 的余弦在 +f 和 −f 各分到 ½，和 cos = ½e<sup>jωt</sup> + ½e<sup>−jωt</sup> 一致。');
+}
+['dkF','dkG','dkN','dkM'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
+document.querySelectorAll('#lab7 [data-dk]').forEach(b=>b.addEventListener('click',()=>{const [a1,a2,a3,a4]=b.dataset.dk.split(',');$('dkF').value=a1;$('dkG').value=a2;$('dkN').value=a3;$('dkM').value=a4;Lab.draw(7);}));
+Lab.add(7,lab7,{dkx:180,dkX:210});
 Lab.start();
 </script>
 </body></html>
