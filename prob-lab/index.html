@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>概率实验室</title>
-<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。五个实验对应 A · Week 1–4，按钮里的预设就是讲义和 Tutorial 的原题数字。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。五个实验对应 A · Week 1–4，按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
+<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · PROBABILITY</div>
   <h1>概率实验室</h1>
-  <p>自己动手调骰子、抽骰子、取平均、做检验。五个实验对应 A · Week 1–4，按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a></nav>
+  <p>自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a><a href="#lab6">实验 6 最大值的极限</a><a href="#lab7">实验 7 GEV 与重现水平</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -86,6 +86,33 @@
   <div class="read"><div><small>P<sup>k</sup>（第 k 步）</small><b id="mk_p" style="font-size:14px"></b></div><div><small>稳态 P = A<sup>T</sup>P</small><b id="mk_s" style="font-size:14px"></b></div><div><small>P(x | M)</small><b id="mk_x"></b></div><div><small>连乘</small><b id="mk_xs" style="font-size:12px"></b></div></div>
   <p class="note"><strong>看点：</strong>讲义的 5 个网页里，网页 3 没有任何箭头指向它，所以第 1 步之后它的概率就是 0，PageRank 也是 0；网页 5 被三个网页指向，PageRank 最高（7/22）。Tutorial Q3 的两行一样，所以一步就到稳态；Q4 的退出态只进不出，最后所有概率都流进去。</p>
 </section>
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · 最大值的极限分布（Week 5）</div>
+  <h2>n 个数里取最大值：平移、缩放之后，n 越大越像三种极值分布之一</h2>
+  <p class="lead">M<sub>n</sub> = max(X<sub>1</sub>, …, X<sub>n</sub>) 的分布函数正好是 F(x)<sup>n</sup>。按 (M<sub>n</sub> − b<sub>n</sub>) / a<sub>n</sub> 平移缩放之后，蓝线（精确分布）会随 n 增大贴到紫色虚线（极限分布 G）上。四个按钮对应四种「母分布」，前两个就是 Tutorial 5 的 Q2、Q3。</p>
+  <div class="btns" role="group" aria-label="母分布"><button data-mx="exp">指数 Exp(1)（Q2 → Gumbel）</button><button data-mx="fre">Fréchet(1)（Q3 → Fréchet）</button><button data-mx="uni">均匀 U(0, 1)（→ Weibull）</button><button data-mx="nor">正态 N(0, 1)（→ Gumbel，很慢）</button></div>
+  <div class="controls"><div class="ctl"><label for="mxN">每块的个数 n</label><input id="mxN" type="range" min="0" max="10" step="1" value="0"><output id="mxNO"></output></div></div>
+  <div class="stage even"><canvas id="mxc" height="250" aria-label="分布函数"></canvas><canvas id="mxp" height="250" aria-label="概率密度"></canvas></div>
+  <div class="read"><div><small>归一化常数 a<sub>n</sub> / b<sub>n</sub></small><b id="mx_ab"></b></div><div><small>极限分布 G</small><b id="mx_g"></b></div><div><small>最大差距 max|Fⁿ − G|</small><b id="mx_d"></b></div><div><small>P(M<sub>n</sub> ≤ a<sub>n</sub>·1 + b<sub>n</sub>)</small><b id="mx_p1"></b></div></div>
+  <p class="note"><strong>看什么：</strong>指数分布 n = 1 时蓝线和 G 差得很远，n = 10 已经很接近，n = 100 几乎重合。正态分布要到 n = 8760（一年的小时数）还差一点：极值理论说的是「极限」，收敛快慢取决于母分布的尾巴。均匀分布有上界 1，所以极限是有上界的 Weibull 型。</p>
+</section>
+
+<section class="panel" id="lab7">
+  <div class="tag">实验 7 · GEV 分布与 Wassaw 海浪数据（Week 5）</div>
+  <h2>一个形状参数 ξ 把三种极值分布连成一族：ξ &lt; 0 有上界，ξ = 0 指数尾巴，ξ &gt; 0 尾巴最重</h2>
+  <p class="lead">左图：Tutorial 5 Q1 的 50 个年最大浪涌（直方图）和 GEV 概率密度（曲线）。右图：重现水平图，横轴是重现期 T（对数刻度），曲线是「平均 T 年超过一次」的高度，圆点是数据自己给的经验值。拖动三个参数，或者按「最大似然拟合」看计算机选的参数。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-gv="8.636,1.275,0">Gumbel（ξ = 0）</button><button data-gv="8.7,1.3,0.3">Fréchet 型（ξ = 0.3）</button><button data-gv="8.7,1.3,-0.3">Weibull 型（ξ = −0.3）</button><button data-gv="8.711,1.312,-0.109">最大似然拟合（补充）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="gvM">位置 μ（英尺）</label><input id="gvM" type="range" min="7" max="10.5" step="0.01" value="8.711"><output id="gvMO"></output></div>
+    <div class="ctl"><label for="gvS">尺度 σ</label><input id="gvS" type="range" min="0.4" max="2.5" step="0.01" value="1.312"><output id="gvSO"></output></div>
+    <div class="ctl"><label for="gvX">形状 ξ</label><input id="gvX" type="range" min="-0.5" max="0.5" step="0.001" value="-0.109"><output id="gvXO"></output></div>
+  </div>
+  <p class="verdict" id="gv_v"></p>
+  <div class="stage even"><canvas id="gvp" height="260" aria-label="直方图与 GEV 密度"></canvas><canvas id="gvr" height="260" aria-label="重现水平图"></canvas></div>
+  <div class="read"><div><small>P(&gt; 8.75 / 11.25 / 14 ft) 模型</small><b id="gv_e"></b></div><div><small>数据（数个数）</small><b>0.66 / 0.12 / 0</b></div><div><small>10 年 / 100 年重现水平</small><b id="gv_r"></b></div><div><small>对数似然 ℓ（越大越贴合）</small><b id="gv_l"></b></div></div>
+  <p class="note"><strong>为什么需要模型：</strong>50 年的数据里最大的是 13.0 ft，只靠数个数，「100 年一遇」根本没法回答（justAnswers 原话：Need extreme value theory）。拟合出 GEV 之后就能外推。注意：数据前 30 年和后 20 年的平均差了约 1.5 ft，「各年同分布」这个假设本身值得怀疑（讲义第 3 页提到的非平稳性）。</p>
+</section>
+
 </div>
 
 <script>
@@ -221,6 +248,68 @@ function lab5(){
 $('mkK').addEventListener('input',()=>Lab.draw(5));$('mkS').addEventListener('input',()=>Lab.draw(5));
 document.querySelectorAll('#lab5 [data-mk]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.mk;$('mkS').value=MK[mk].seq;$('mkK').value=0;Lab.draw(5);}));
 Lab.add(5,lab5,{mkg:260,mkb:260});
+
+/* ---------- Lab 6: block maxima ---------- */
+const erfc=z=>{const t=1/(1+0.5*Math.abs(z)),r=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277)))))))));return z>=0?r:2-r;};
+const MXN=[1,2,3,5,10,20,50,100,365,1000,8760];
+const MX={
+ exp:{n:'Exp(1)',lnF:x=>x<=0?-Infinity:Math.log1p(-Math.exp(-x)),lnf:x=>x<0?-Infinity:-x,ab:n=>[1,Math.log(n)],G:z=>Math.exp(-Math.exp(-z)),g:z=>Math.exp(-z-Math.exp(-z)),gn:'Gumbel：exp(−e⁻ᶻ)',r:[-2.5,6]},
+ fre:{n:'Fréchet(1)',lnF:x=>x<=0?-Infinity:-1/x,lnf:x=>x<=0?-Infinity:-2*Math.log(x)-1/x,ab:n=>[n,0],G:z=>z<=0?0:Math.exp(-1/z),g:z=>z<=0?0:Math.exp(-1/z)/(z*z),gn:'Fréchet α = 1：exp(−1/z)',r:[0,8]},
+ uni:{n:'U(0,1)',lnF:x=>x<=0?-Infinity:x>=1?0:Math.log(x),lnf:x=>x<0||x>1?-Infinity:0,ab:n=>[1/n,1],G:z=>z>=0?1:Math.exp(z),g:z=>z>=0?0:Math.exp(z),gn:'Weibull α = 1：eᶻ（z ≤ 0）',r:[-5,0.6]},
+ nor:{n:'N(0,1)',lnF:x=>Math.log1p(-0.5*erfc(x/Math.SQRT2)),lnf:x=>-x*x/2-0.5*Math.log(2*Math.PI),ab:n=>{if(n<2)return[1,0];const L=Math.sqrt(2*Math.log(n));return[1/L,L-(Math.log(Math.log(n))+Math.log(4*Math.PI))/(2*L)];},G:z=>Math.exp(-Math.exp(-z)),g:z=>Math.exp(-z-Math.exp(-z)),gn:'Gumbel：exp(−e⁻ᶻ)',r:[-2.5,6]}};
+let mx='exp';
+function lab6(){
+  const n=MXN[+$('mxN').value],D=MX[mx],[an,bn]=D.ab(n);$('mxNO').textContent=n;pressGroup('#lab6 [data-mx]',b=>b.dataset.mx===mx);
+  const Fn=z=>{const l=D.lnF(an*z+bn);return l===-Infinity?0:Math.exp(n*l);};
+  const fn=z=>{const l1=D.lnF(an*z+bn),l2=D.lnf(an*z+bn);if(l1===-Infinity||l2===-Infinity)return 0;return n*an*Math.exp((n-1)*l1+l2);};
+  const [z0,z1]=D.r;let dmax=0;for(let i=0;i<=600;i++){const z=z0+(z1-z0)*i/600;dmax=Math.max(dmax,Math.abs(Fn(z)-D.G(z)));}
+  $('mx_ab').textContent=`${fmt(an,4)} / ${fmt(bn,4)}`;$('mx_g').textContent=D.gn;$('mx_d').textContent=fmt(dmax,4);$('mx_p1').textContent=`${fmt(Fn(1),4)}（极限 ${fmt(D.G(1),4)}）`;
+  const xt=mx==='uni'?[-5,-4,-3,-2,-1,0]:mx==='fre'?[0,2,4,6,8]:[-2,0,2,4,6];
+  const [x,W,H]=fit($('mxc'));const a=axes(x,W,H,{x0:z0,x1:z1,y0:0,y1:1.05,xt,yt:[0,0.5,1],title:`P((Mₙ − bₙ)/aₙ ≤ z)，母分布 ${D.n}，n = ${n}`,xl:'z',pl:36});
+  plot(x,a.X,a.Y,Fn,z0,z1,css('--blue'),2.6,500);
+  x.setLineDash([6,4]);plot(x,a.X,a.Y,D.G,z0,z1,css('--purple'),2.4,500);x.setLineDash([]);
+  label(x,'蓝：精确 F(aₙz + bₙ)ⁿ',a.pl+6,a.pt+16,css('--blue'),12);label(x,'紫虚线：极限 G(z)',a.pl+6,a.pt+32,css('--purple'),12);
+  let ym=0;for(let i=0;i<=400;i++){const z=z0+(z1-z0)*i/400;ym=Math.max(ym,fn(z),D.g(z));}ym=Math.min(ym*1.12,3);
+  const [y,W2,H2]=fit($('mxp'));const b=axes(y,W2,H2,{x0:z0,x1:z1,y0:0,y1:ym,xt,yt:[0,+(ym/2).toFixed(2)],title:'概率密度（同样的颜色）',xl:'z',pl:36});
+  plot(y,b.X,b.Y,z=>Math.min(fn(z),ym),z0,z1,css('--blue'),2.6,500);y.setLineDash([6,4]);plot(y,b.X,b.Y,z=>Math.min(D.g(z),ym),z0,z1,css('--purple'),2.4,500);y.setLineDash([]);
+}
+$('mxN').addEventListener('input',()=>Lab.draw(6));
+document.querySelectorAll('#lab6 [data-mx]').forEach(b=>b.addEventListener('click',()=>{mx=b.dataset.mx;Lab.draw(6);}));
+Lab.add(6,lab6,{mxc:210,mxp:210});
+
+/* ---------- Lab 7: GEV & Wassaw ---------- */
+const WS=[8.5,8.9,9.1,8.9,8.4,9.7,9.1,9.6,8.7,9.3,9.6,9.3,8.7,9.0,8.8,8.9,8.9,12.2,7.8,7.7,8.3,8.1,7.3,6.8,6.7,7.3,7.6,8.2,8.6,9.8,9.5,7.4,7.3,10.2,10.3,10.4,8.8,9.7,10.0,10.8,11.1,12.7,11.5,11.8,12.6,13.0,10.5,10.5,10.0,9.4];
+const gevT=(x,m,s,k)=>{if(Math.abs(k)<1e-6)return Math.exp(-(x-m)/s);const u=1+k*(x-m)/s;return u<=0?(k>0?Infinity:0):Math.pow(u,-1/k);};
+const gevF=(x,m,s,k)=>Math.exp(-gevT(x,m,s,k));
+const gevf=(x,m,s,k)=>{const t=gevT(x,m,s,k);if(!isFinite(t)||t===0)return 0;return Math.pow(t,k+1)*Math.exp(-t)/s;};
+const gevZ=(T,m,s,k)=>{const y=-Math.log(1-1/T);return Math.abs(k)<1e-6?m-s*Math.log(y):m-s/k*(1-Math.pow(y,-k));};
+function lab7(){
+  const m=+$('gvM').value,s=+$('gvS').value,k=+$('gvX').value;$('gvMO').textContent=m.toFixed(2);$('gvSO').textContent=s.toFixed(2);$('gvXO').textContent=k.toFixed(3);
+  pressGroup('#lab7 [data-gv]',b=>{const [a,c,d]=b.dataset.gv.split(',').map(Number);return Math.abs(a-m)<1e-6&&Math.abs(c-s)<1e-6&&Math.abs(d-k)<1e-6;});
+  const ex=[8.75,11.25,14].map(v=>1-gevF(v,m,s,k));$('gv_e').textContent=ex.map(v=>v.toFixed(3)).join(' / ');
+  $('gv_r').textContent=`${gevZ(10,m,s,k).toFixed(2)} / ${gevZ(100,m,s,k).toFixed(2)} ft`;
+  let ll=0;for(const v of WS){const f=gevf(v,m,s,k);ll+=f>0?Math.log(f):-1e9;}$('gv_l').textContent=ll<-1e8?'−∞（有数据点落在分布范围外）':ll.toFixed(2);
+  const v=$('gv_v'),typ=Math.abs(k)<5e-4?'Gumbel（Type I）：没有上界，尾巴按指数衰减':k>0?`Fréchet 型（Type II，α = 1/ξ = ${(1/k).toFixed(2)}）：没有上界，尾巴最重`:`Weibull 型（Type III，α = −1/ξ = ${(-1/k).toFixed(2)}）：有上界 μ − σ/ξ = ${(m-s/k).toFixed(2)} ft`;
+  v.textContent=`ξ = ${k.toFixed(3)} → ${typ}`;v.style.color=Math.abs(k)<5e-4?css('--purple'):k>0?css('--red'):css('--blue');
+  /* histogram + pdf */
+  const [x,W,H]=fit($('gvp'));const bw=0.5,b0=6.5,nb=14,cnt=new Array(nb).fill(0);WS.forEach(t=>{const i=Math.min(nb-1,Math.floor((t-b0)/bw));cnt[i]++;});
+  let ym=0.5;for(let i=0;i<=300;i++)ym=Math.max(ym,gevf(5+10*i/300,m,s,k));ym=Math.min(ym*1.1,1.2);
+  const a=axes(x,W,H,{x0:5,x1:15,y0:0,y1:ym,xt:[6,8,10,12,14],yt:[0,0.2,0.4].filter(t=>t<ym),title:'年最大浪涌（英尺）：直方图 = 数据，曲线 = GEV 密度',xl:'英尺',pl:36});
+  cnt.forEach((c,i)=>{const d=c/(WS.length*bw);x.fillStyle=css('--fillA');x.fillRect(a.X(b0+i*bw)+1,a.Y(d),a.X(b0+(i+1)*bw)-a.X(b0+i*bw)-2,a.Y(0)-a.Y(d));});
+  plot(x,a.X,a.Y,t=>Math.min(gevf(t,m,s,k),ym),5,15,css('--blue'),2.6,600);
+  [[8.75,'8.75'],[11.25,'11.25'],[14,'14']].forEach(([t,l])=>{x.strokeStyle=css('--red');x.setLineDash([4,4]);x.lineWidth=1.2;x.beginPath();x.moveTo(a.X(t),a.pt+20);x.lineTo(a.X(t),H-a.pb);x.stroke();x.setLineDash([]);label(x,l,a.X(t)+3,a.pt+30,css('--red'),11);});
+  if(k<0){const ub=m-s/k;if(ub<15){x.strokeStyle=css('--purple');x.lineWidth=2;x.beginPath();x.moveTo(a.X(ub),a.pt);x.lineTo(a.X(ub),H-a.pb);x.stroke();label(x,'上界',Math.min(a.X(ub)+3,W-36),a.pt+48,css('--purple'),11);}}
+  /* return level plot */
+  const [y,W2,H2]=fit($('gvr'));const L0=Math.log10(1.1),L1=3;
+  const b=axes(y,W2,H2,{x0:L0,x1:L1,y0:6,y1:18,xt:[Math.log10(2),1,2,3],xf:t=>String(Math.round(Math.pow(10,t))),yt:[6,9,12,15,18],title:'重现水平：平均每 T 年超过一次',xl:'重现期 T（年，对数刻度）',pl:36});
+  plot(y,b.X,b.Y,t=>{const z=gevZ(Math.pow(10,t),m,s,k);return z>18.5?NaN:z;},L0,L1,css('--blue'),2.6,400);
+  const srt=[...WS].sort((p,q)=>q-p);srt.forEach((z,i)=>{const T=(WS.length+1)/(i+1);if(T<1.1)return;y.fillStyle=css('--amp');y.beginPath();y.arc(b.X(Math.log10(T)),b.Y(z),3.2,0,2*Math.PI);y.fill();});
+  [10,100].forEach(T=>{const z=gevZ(T,m,s,k);if(z>18)return;y.strokeStyle=css('--red');y.setLineDash([4,4]);y.lineWidth=1.2;y.beginPath();y.moveTo(b.X(Math.log10(T)),b.Y(6));y.lineTo(b.X(Math.log10(T)),b.Y(z));y.lineTo(b.X(L0),b.Y(z));y.stroke();y.setLineDash([]);label(y,`${T} 年 ${z.toFixed(2)}`,b.X(L0)+4,b.Y(z)-5,css('--red'),11);});
+  text(y,'圆点：第 i 大的数据画在 T = 51 / i',b.pl+4,b.pt+14,css('--muted'),11);
+}
+['gvM','gvS','gvX'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
+document.querySelectorAll('#lab7 [data-gv]').forEach(b=>b.addEventListener('click',()=>{const [a,c,d]=b.dataset.gv.split(',');$('gvM').value=a;$('gvS').value=c;$('gvX').value=d;Lab.draw(7);}));
+Lab.add(7,lab7,{gvp:220,gvr:220});
 Lab.start();
 </script>
 </body></html>
