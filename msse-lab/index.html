@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Python 与系统工程实验室</title>
-<meta name="description" content="MSSE 的五个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名和异常）、Vee 模型的验证与确认。讲义里 Python 2 写法和笔误都标出来了。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的五个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名和异常）、Vee 模型的验证与确认。讲义里 Python 2 写法和笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
+<meta name="description" content="MSSE 的六个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错。讲义里 Python 2 写法和笔误都标出来了。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的六个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错。讲义里 Python 2 写法和笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,8 +47,8 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <header>
   <div class="tag">MULTIDISCIPLINARY SYSTEMS AND SOFTWARE ENGINEERING · PYTHON · SYSML</div>
   <h1>Python 与系统工程实验室</h1>
-  <p>对应 MSSE 的 Python 两讲（Basics 1 / 2）和课程概览里的系统开发流程。实验 1–3 纯网页即时运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a></nav>
+  <p>对应 MSSE 的 Python 三讲（Basics 1 / 2 / 3）和课程概览里的系统开发流程。实验 1–3、6 纯网页即时运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子，包括类、self 和继承。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a><a href="#lab6">实验 6 常见误区</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -93,16 +93,17 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </section>
 
 <section class="panel" id="lab4">
-  <div class="tag">实验 4 · Lecture 2 Control flow / Functions / Sequences / Exceptions</div>
+  <div class="tag">实验 4 · Lecture 2 Control flow / Functions / Sequences / Exceptions · Lecture 3 Classes</div>
   <h2>在浏览器里逐行执行真正的 Python 3：看变量怎么变</h2>
   <p class="lead">选一个讲义里的例子（已改成 Python 3）或自己写，点「运行并记录」。程序跑完后可以前后拖动：<span style="color:var(--amp)">▶</span> 是<strong>即将执行</strong>的那一行，右边是此刻每一层函数里的变量（刚变过的标橙色）。同色的小方块 <span class="oid" style="background:var(--purple)">L1</span> 表示<strong>同一个对象</strong>——两个名字指向同一个列表就是「别名」。程序要用 <code>input()</code> 时依次从「输入」框里取。</p>
-  <div class="btns" role="group" aria-label="例子"><button data-p="prime">for … else 找素数</button><button data-p="fib">Fibonacci 与多重赋值</button><button data-p="alias">列表、别名与复制</button><button data-p="dict">字典与 del</button><button data-p="tryex">try / except 读数字</button><button data-p="lambda">lambda 闭包</button><button data-p="py2">讲义原样（Python 2）</button></div>
+  <div class="btns" role="group" aria-label="例子"><button data-p="prime">for … else 找素数</button><button data-p="fib">Fibonacci 与多重赋值</button><button data-p="alias">列表、别名与复制</button><button data-p="dict">字典与 del</button><button data-p="tryex">try / except 读数字</button><button data-p="lambda">lambda 闭包</button><button data-p="py2">讲义原样（Python 2）</button><button data-p="cls">类与 self（student）</button><button data-p="attr">类属性与实例属性</button><button data-p="bag">Bag 与方法对象</button><button data-p="inherit">继承 Cs_student</button><button data-p="struct">空类当结构体</button></div>
   <textarea id="pSrc" spellcheck="false" aria-label="Python 代码"></textarea>
   <div class="controls"><div class="ctl"><label for="pIn">输入（逗号分隔）</label><input id="pIn" type="text" value="" spellcheck="false"><span></span></div></div>
   <div class="btns"><button id="pRun" class="play">运行并记录</button><button id="pFirst" aria-label="第一步">⏮</button><button id="pPrev" aria-label="上一步">◀</button><button id="pNext" aria-label="下一步">▶</button><button id="pLast" aria-label="最后一步">⏭</button><button id="pAuto">自动播放</button></div>
   <div class="ctl" style="grid-template-columns:auto 1fr auto"><label for="pStep">步</label><input id="pStep" type="range" min="0" max="0" value="0" disabled><output id="pStepO">—</output></div>
   <p class="status" id="pStat" aria-live="polite">还没运行。第一次点「运行并记录」会下载 Python（约 10 MB），之后就快了。</p>
   <div class="two"><pre class="code" id="pView" aria-label="执行位置"></pre><div><table class="vars" id="pVars"><thead><tr><th>名字</th><th>值</th><th>类型</th></tr></thead><tbody></tbody></table><div class="tag" style="margin-top:10px">输出</div><pre class="out" id="pOut"></pre></div></div>
+  <p class="note"><strong>类的例子：</strong>「类与 self」里跟着 ▶ 看：<code>student("Bob", 21)</code> 先跳进「方法 student.__init__()」，那一层的 <code>self</code> 就是正在创建的新对象（带编号的徽章），执行完两行赋值它才有了 full_name 和 age，回到全局后才绑定到名字 b。<code>f.get_age()</code> 和 <code>student.get_age(f)</code> 进入同一个方法、self 是同一个对象。「类属性与实例属性」里 <code>x.i = 5</code> 只给 x 自己加了一个 i，类上的 i 还是 123。</p>
   <p class="note"><strong>看点：</strong>「for … else」的 else 只在循环<strong>没被 break</strong> 时执行；讲义里 <code>n/x</code> 在 Python 3 会打印 2.0，改成了 <code>n//x</code>。「别名」例子里 <code>a = b = [1, 2]</code> 之后改 b，a 也变，因为它们是同一个对象；<code>a[:]</code> 才是复制。「try / except」里 <code>int('abc')</code> 抛 ValueError，直接跳到 except，try 里剩下的行不执行。最后一个是讲义第一讲的原代码 <code>print x</code>，Python 3 直接 SyntaxError。</p>
 </section>
 
@@ -114,6 +115,20 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="stage even"><canvas id="vc" height="300" aria-label="Vee 模型，点击阶段查看说明" style="cursor:pointer"></canvas><div class="info" id="vInfo"></div></div>
   <p class="note"><strong>两个容易混的词：</strong>verification 问「我们是不是<strong>把东西做对了</strong>」（符合规格书，右腿下面三层主要在做这个）；validation 问「我们是不是<strong>做了对的东西</strong>」（真的满足用户需要，最上面的验收测试）。越早发现的错误越便宜：需求错了要到最后的验收才暴露，整条 V 都要返工。课程后半段的 SysML 就是左腿用的建模语言：需求图、块定义图 / 内部块图（结构）、活动图 / 状态机图（行为）。</p>
 </section>
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · Lecture 3 Common Misconceptions in Python（Kohn 2017）</div>
+  <h2>常见误区：先猜 Python 3 会怎样，再看真正的报错</h2>
+  <p class="lead">讲义最后 25 页列了新手最常犯的错。每题一段有问题的代码，先判断 Python 3 会怎样：<strong>语法错误</strong>（编译时就发现，一行都不运行）、<strong>运行到那一行才报错</strong>、<strong>能运行但结果不对 / 白做</strong>，还是<strong>死循环</strong>。选完显示 Python 3.11 的真实报错原文、原因和改正后的代码（都实际运行过）。</p>
+  <div class="btns" role="group" aria-label="筛选"><button data-mf="all">全部 33 题</button><button data-mf="syn">只看语法错误</button><button data-mf="run">只看运行时报错</button><button data-mf="logic">只看不报错的坑</button><button id="mRnd">随机一题</button></div>
+  <div class="btns" role="group" aria-label="题目" id="mList"></div>
+  <div class="two">
+    <div><div class="tag" id="mTag"></div><pre class="code" id="mCode" aria-label="有问题的代码"></pre></div>
+    <div><div class="tag">你觉得 Python 3 会怎样？</div><div class="btns" role="group" aria-label="你的判断" id="mOpts"></div><div class="info" id="mAns" aria-live="polite"></div></div>
+  </div>
+  <div class="read"><div><small>已答 / 答对</small><b id="mScore" style="font-size:15px"></b></div><div><small>这一题属于</small><b id="mCat" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>规律：</strong>语法错误在<strong>编译</strong>时就被发现，哪怕错在最后一行，第一行也不会运行；名字拼错（NameError）、类型用错（TypeError）要<strong>运行到那一行</strong>才暴露，那一行没被执行就永远发现不了（「拼错名字」那题）；最难查的是<strong>不报错的</strong>：<code>x =+ 2</code>、<code>a and b &gt; 0</code>、<code>x &lt; 3 == True</code>。页码是讲义 PDF 的页码（幻灯片右下角的编号不同）。</p>
+</section>
+
 </div>
 
 <script>
@@ -299,6 +314,79 @@ print(f(0))
 print(f(1))
 g = make_incrementor(-1)
 print(g(f(0)))`,inp:''},
+cls:{src:`class student:
+    """A class representing a student"""
+    def __init__(self, n, a):
+        self.full_name = n      # 给这个实例加属性
+        self.age = a
+    def get_age(self):
+        return self.age
+
+b = student("Bob", 21)          # 调用 __init__(新对象, "Bob", 21)
+f = student("Bob Smith", 23)
+print(f.full_name)
+print(f.get_age())              # 等价于 student.get_age(f)
+print(student.get_age(b))`,inp:''},
+attr:{src:`class MyClass:
+    "A simple example class"
+    i = 123                     # 类属性：所有实例共享
+    def f(self):
+        return 'hello world'
+
+x = MyClass()                   # 有括号：创建实例
+y = MyClass                     # 没括号：只是类本身的另一个名字
+print(x.f(), MyClass.f(x))
+x.counter = 1                   # 数据属性可以随时加
+while x.counter < 10:
+    x.counter = x.counter * 2
+print(x.counter)
+del x.counter
+x.i = 5                         # 实例属性遮住类属性
+print(x.i, MyClass.i, y().i)`,inp:''},
+bag:{src:`class Bag:
+    def __init__(self):
+        self.data = []
+    def add(self, x):
+        self.data.append(x)
+    def addtwice(self, x):
+        self.add(x)             # 方法里调用同一对象的方法要写 self.
+        self.add(x)
+
+l = Bag()
+l.add('first')
+l.addtwice('second')
+xf = l.add                      # 方法对象：记住了 l
+xf('third')
+print(l.data)`,inp:''},
+inherit:{src:`class Student:
+    """A class representing a student."""
+    def __init__(self, n, a):
+        self.full_name = n
+        self.age = a
+    def get_age(self):
+        return self.age
+
+class Cs_student(Student):      # 括号里是父类
+    """A class extending Student."""
+    def __init__(self, n, a, s):
+        super().__init__(n, a)  # 先让父类初始化
+        self.section_num = s
+    def get_age(self):          # 重写（override）父类的方法
+        return "Age: " + str(self.age)
+
+c = Cs_student("Ann", 19, 3)
+print(c.get_age())
+print(Student.get_age(c), isinstance(c, Student))`,inp:''},
+struct:{src:`class Employee:
+    pass                        # 空类，当 C 的 struct 用
+
+john = Employee()
+john.name = 'John Doe'
+john.dept = 'CS'
+john.salary = 1000
+mary = Employee()
+mary.name = 'Mary'
+print(john.name, john.salary, vars(mary))`,inp:''},
 py2:{src:`x = 34 - 23            # A comment.
 y = "Hello"            # Another one.
 z = 3.45
@@ -322,9 +410,16 @@ def __run(src, inputs):
         k=id(v)
         if k not in ids: ids[k]=len(ids)+1; keep.append(v)
         return ids[k]
-    def show(v):
+    def show(v, depth=0):
         t=type(v).__name__
+        if isinstance(v, type): return '<class '+v.__name__+'>', 'class', 0
+        if t=='method': return '<bound method '+v.__func__.__qualname__+' of '+show(v.__self__,1)[0]+'>', t, 0
         if callable(v) and hasattr(v,'__name__'): return ('<function '+v.__name__+'>' if t=='function' else '<'+t+' '+v.__name__+'>'), t, 0
+        if type(v).__module__=='__main__' and hasattr(v,'__dict__'):
+            if depth: return t+'#'+str(oid(v)), t, oid(v)
+            r=t+'('+', '.join(k+'='+show(x,1)[0] for k,x in vars(v).items())+')'
+            if len(r)>80: r=r[:77]+'...'
+            return r, t, oid(v)
         try: r=repr(v)
         except Exception: r='<?>'
         if len(r)>80: r=r[:77]+'...'
@@ -334,8 +429,9 @@ def __run(src, inputs):
         fr=[]; f=frame
         while f is not None and f.f_code.co_filename=='<程序>':
             loc=f.f_locals if f.f_code.co_name!='<module>' else f.f_globals
-            vs=[[k]+list(show(v)) for k,v in loc.items() if not k.startswith('__') and k not in ('input','print') and type(v).__name__!='module']
-            fr.append({'name':f.f_code.co_name,'vars':vs}); f=f.f_back
+            vs=[[k]+list(show(v)) for k,v in loc.items() if (not k.startswith('__') or type(v).__name__=='function') and k not in ('input','print') and type(v).__name__!='module']
+            kind='module' if f.f_code.co_name=='<module>' else ('class' if '__qualname__' in f.f_locals and '__module__' in f.f_locals else ('method' if 'self' in f.f_locals else 'func'))
+            fr.append({'name':getattr(f.f_code,'co_qualname',f.f_code.co_name),'kind':kind,'vars':vs}); f=f.f_back
         return fr[::-1]
     def tracer(frame, event, arg):
         if frame.f_code.co_filename!='<程序>': return None
@@ -384,7 +480,7 @@ function lab4(){
   $('pView').innerHTML=lines.map((l,i)=>{let c='';if(st&&st.line===i+1)c=st.ev==='exception'?'err':'cur';if(run&&!stale&&!run.steps.length&&run.eline===i+1)c='err';if(last&&run.err&&run.eline===i+1)c='err';return `<div class="${c}">${esc(l)||' '}</div>`;}).join('');
   $('pStepO').textContent=st?`${pK+1} / ${run.steps.length}`:'—';$('pStep').value=pK;
   let rows='';if(st){const prev=pK>0?run.steps[pK-1]:null;const pv={};if(prev)prev.frames.forEach(f=>f.vars.forEach(v=>pv[f.name+'.'+v[0]]=v[1]));
-    st.frames.forEach(f=>{rows+=`<tr class="fr"><td colspan="3">${f.name==='<module>'?'全局（模块）':'函数 '+esc(f.name)+'()'}</td></tr>`;
+    st.frames.forEach(f=>{rows+=`<tr class="fr"><td colspan="3">${f.kind==='module'||f.name==='<module>'?'全局（模块）':f.kind==='class'?'类 '+esc(f.name)+' 的定义体':f.kind==='method'?'方法 '+esc(f.name)+'()（self 是调用它的实例）':'函数 '+esc(f.name)+'()'}</td></tr>`;
       f.vars.forEach(([k,r,t,o])=>{const ch=prev&&pv[f.name+'.'+k]!==r;rows+=`<tr class="${ch?'chg':''}"><td>${esc(k)}</td><td>${o?`<span class="oid" style="background:var(${OIDC[(o-1)%OIDC.length]})">${t[0].toUpperCase()}${o}</span>`:''}${esc(r)}</td><td>${t}</td></tr>`;});
       if(!f.vars.length)rows+='<tr><td colspan="3" style="color:var(--muted)">（还没有变量）</td></tr>';});
     if(st.ev==='return')rows+=`<tr><td colspan="3" style="color:var(--accent)">${st.frames.length>1?'函数返回 '+esc(st.ret):'程序结束'}</td></tr>`;
@@ -403,7 +499,7 @@ $('pAuto').addEventListener('click',()=>{if(!run||!run.steps.length)return;pAuto
 $('pSrc').addEventListener('input',()=>Lab.draw(4));$('pIn').addEventListener('input',()=>Lab.draw(4));
 $('pSrc').addEventListener('keydown',e=>{if(e.key==='Tab'&&!e.shiftKey){e.preventDefault();const t=e.target,s=t.selectionStart;t.setRangeText('    ',s,t.selectionEnd,'end');Lab.draw(4);}});
 document.querySelectorAll('#lab4 [data-p]').forEach(b=>b.addEventListener('click',()=>{const P=PROGS[b.dataset.p];$('pSrc').value=P.src;$('pIn').value=P.inp;pAuto=false;Lab.draw(4);}));
-$('pSrc').value=PROGS.prime.src;
+{const q=new URLSearchParams(location.search).get('p');const P=PROGS[q]||PROGS.prime;$('pSrc').value=P.src;$('pIn').value=P.inp;}
 Lab.add(4,lab4);
 
 /* ---------- Lab 5: Vee model ---------- */
@@ -436,6 +532,33 @@ function lab5(){
 $('vc').addEventListener('click',ev=>{const r=$('vc').getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;const i=vRects.findIndex(([px,py,w,h])=>mx>=px&&mx<=px+w&&my>=py&&my<=py+h);if(i>=0){vSel=i;Lab.draw(5);}});
 document.querySelectorAll('#lab5 [data-v]').forEach(b=>b.addEventListener('click',()=>{vSel=+b.dataset.v;Lab.draw(5);}));
 Lab.add(5,lab5,{vc:260});
+
+/* ---------- Lab 6: common misconceptions ---------- */
+const MIS=[{"p": 32, "t": "非法名字", "code": "n-gon = 5", "k": "syn", "err": "SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?", "why": "名字只能用字母、数字、下划线，不能以数字开头。n-gon 被读成「n 减 gon」，是个表达式，表达式不能放在 = 左边。", "fix": "n_gon = 5"}, {"p": 33, "t": "从右往左赋值", "code": "123 = n", "k": "syn", "err": "SyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?", "why": "= 不是数学里的「相等」，而是「把右边的值绑定到左边的名字」。左边必须是名字（或下标、属性），不能是数字。计算器上习惯写「1 + 2·3 → x」，Python 正好反过来。", "fix": "n = 123"}, {"p": 34, "t": "表达式里用 *=", "code": "x = 1\ny = (x *= 2)", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "x *= 2 是一条语句，不是有值的表达式，不能放进括号或别的式子里。", "fix": "x = 1\nx *= 2\ny = x"}, {"p": 35, "t": "形参写成表达式", "code": "def foo(2*x, y/2):\n    return x + y", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "def 后面括号里是形参（parameter），只能是名字；要算 2*x 应该在调用时把算好的值作为实参（argument）传进去。", "fix": "def foo(a, b):\n    return a + b\n\nx, y = 123, 456\nprint(foo(2*x, y/2))"}, {"p": 36, "t": "for 后面写字面量", "code": "word = \"eel\"\ncount = 0\nfor \"e\" in word:\n    count += 1", "k": "syn", "err": "SyntaxError: cannot assign to literal", "why": "for 后面是一个循环变量，每一轮会被赋值为下一个元素，所以必须是名字。想数 e 的个数要在循环里判断。", "fix": "word = \"eel\"\ncount = 0\nfor ch in word:\n    if ch == \"e\":\n        count += 1\nprint(count)     # 或者 word.count(\"e\")"}, {"p": 37, "t": "多余或缺少空格", "code": "x = 0\nif x = = 0:\n    print(\"zero\")", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "== 是一个运算符，中间不能有空格；反过来 deffoo() 把关键字和名字粘在一起也不行。", "fix": "x = 0\nif x == 0:\n    print(\"zero\")"}, {"p": 38, "t": "else 后面写条件", "code": "x = 5\nif x >= 0:\n    print(\"positive\")\nelse x < 0:\n    print(\"negative\")", "k": "syn", "err": "SyntaxError: expected ':'", "why": "else 表示「其他所有情况」，不带条件；需要条件就写 elif。", "fix": "x = 5\nif x >= 0:\n    print(\"positive\")\nelse:\n    print(\"negative\")"}, {"p": 38, "t": "else 缩进进了 if 体", "code": "x = 5\nif x >= 0:\n    print(\"positive\")\n    else:\n        print(\"negative\")", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "else 必须和它配对的 if 对齐，不能写在 if 的代码块里面。", "fix": "x = 5\nif x >= 0:\n    print(\"positive\")\nelse:\n    print(\"negative\")"}, {"p": 39, "t": "名字和字符串分不清", "code": "def setPenColor(c):\n    print(\"colour:\", c)\n\nsetPenColor(blue)", "k": "run", "err": "NameError: name 'blue' is not defined", "why": "没有引号的 blue 是一个名字，Python 去找叫 blue 的变量，找不到；颜色应该是字符串 \"blue\"。反过来 def \"foo\"(): 把函数名写成字符串，是语法错误。", "fix": "def setPenColor(c):\n    print(\"colour:\", c)\n\nsetPenColor(\"blue\")"}, {"p": 40, "t": "// 和 % 混用", "code": "x = 4\nif x // 2 == 0:\n    print(x, \"is even\")\nelse:\n    print(x, \"is odd\")", "k": "logic", "err": "输出：4 is odd（错了；x = 1 时反而说 even）", "why": "// 是整除，4 // 2 = 2；判断奇偶要看余数 %。% 也不是百分号。", "fix": "x = 4\nif x % 2 == 0:\n    print(x, \"is even\")\nelse:\n    print(x, \"is odd\")"}, {"p": 41, "t": "and 不会自动分配", "code": "a, b = -5, 3\nif a and b > 0:\n    print(\"both positive\")", "k": "logic", "err": "输出：both positive（错了，a 是负数）", "why": "a and b > 0 的意思是 a and (b > 0)。非零数 −5 本身当作 True，所以整个条件成立。每个比较都要写完整。", "fix": "a, b = -5, 3\nif a > 0 and b > 0:\n    print(\"both positive\")\nelse:\n    print(\"not both positive\")"}, {"p": 42, "t": "把 for 当 if 用", "code": "x = 3\nfor x > 0:\n    print(\"positive\")", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "for 只能写成 for 名字 in 序列；判断条件用 if，按条件重复用 while。", "fix": "x = 3\nif x > 0:\n    print(\"positive\")"}, {"p": 42, "t": "调用时写了 def", "code": "def foo(x):\n    return 2 * x\n\ndef foo(123)", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "def 只在定义函数时用；调用直接写名字加括号。", "fix": "def foo(x):\n    return 2 * x\n\nprint(foo(123))"}, {"p": 44, "t": "括号不配对", "code": "x = abs(-12\ny = 3\nprint(x, y)", "k": "syn", "err": "SyntaxError: '(' was never closed", "why": "Python 会一直往后找右括号，所以报错位置可能落在后面某一行。看到莫名其妙的语法错误，先往上找没关的括号。", "fix": "x = abs(-12)\ny = 3\nprint(x, y)"}, {"p": 45, "t": "拼错名字：运行到才发现", "code": "x = 5\nif x < 0:\n    pint(\"negative\", x)\nprint(\"done\")", "k": "logic", "err": "输出：done（没有报错！）", "why": "pint 拼错了，但这一行只有 x < 0 时才执行。Python 运行到那一行才去找名字，所以这个错误这次根本没被发现，等 x 变成负数才会 NameError。", "fix": "x = 5\nif x < 0:\n    print(\"negative\", x)\nprint(\"done\")"}, {"p": 45, "t": "大小写不同就是不同名字", "code": "x = 1\nfor i in range(5):\n    X = 2 * x\nprint(x)", "k": "logic", "err": "输出：1（x 一直没变）", "why": "Python 区分大小写，X 和 x 是两个变量，循环一直在给新的 X 赋值。同理 If 不是关键字 if，会 SyntaxError。", "fix": "x = 1\nfor i in range(5):\n    x = 2 * x\nprint(x)       # 32"}, {"p": 46, "t": "关键字当名字", "code": "pass = True\nprint(pass)", "k": "syn", "err": "SyntaxError: invalid syntax", "why": "pass、class、def、for、if、in、is、not、and、or、global 等是关键字，不能当变量名。", "fix": "passed = True\nprint(passed)"}, {"p": 47, "t": "= 写成了 ==", "code": "x = 0\nif x = 0:\n    print(\"zero\")", "k": "syn", "err": "SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?", "why": "一个 = 是赋值，两个 == 是比较。Python 不允许在 if 里写普通赋值，所以直接报语法错误（C 语言会悄悄通过）。", "fix": "x = 0\nif x == 0:\n    print(\"zero\")"}, {"p": 48, "t": "=* 写反", "code": "x = 3\nx =* 2", "k": "syn", "err": "SyntaxError: can't use starred expression here", "why": "增强赋值的符号在等号左边：*=、+=、!=。=* 被读成「= *2」，*2 是解包语法，放这里不合法。", "fix": "x = 3\nx *= 2\nprint(x)"}, {"p": 48, "t": "=+ 写反：最危险", "code": "x = 3\nx =+ 2\nprint(x)", "k": "logic", "err": "输出：2（不是 5）", "why": "=+ 2 被读成 = (+2)，也就是把 x 重新赋值为正 2，不会报错，所以最难发现。", "fix": "x = 3\nx += 2\nprint(x)"}, {"p": 49, "t": "字符串没关", "code": "s = \"abc\nprint(s)", "k": "syn", "err": "SyntaxError: unterminated string literal (detected at line 1)", "why": "字符串必须用同一种引号开始和结束。另外从 PPT 复制来的弯引号 “ ” 也不行：invalid character '“' (U+201C)。", "fix": "s = \"abc\"\nprint(s)"}, {"p": 50, "t": "少了冒号", "code": "x = 2\nif x != 0\n    print(\"result\", 1 / x)", "k": "syn", "err": "SyntaxError: expected ':'", "why": "if、elif、else、for、while、def、class、try、except 这些复合语句的第一行都以冒号结尾。", "fix": "x = 2\nif x != 0:\n    print(\"result\", 1 / x)"}, {"p": 50, "t": "少了逗号", "code": "x = 2\nprint(\"The result is\" 1 / x)", "k": "syn", "err": "SyntaxError: invalid syntax. Perhaps you forgot a comma?", "why": "print 的多个参数之间要用逗号分开。", "fix": "x = 2\nprint(\"The result is\", 1 / x)"}, {"p": 50, "t": "按代数习惯省略乘号", "code": "x = 2\nprint(2x + 1)", "k": "syn", "err": "SyntaxError: invalid decimal literal", "why": "数学里 2x 是 2 乘 x，Python 里乘号不能省：2x 被当成一个写错的数字。", "fix": "x = 2\nprint(2*x + 1)"}, {"p": 51, "t": "没有缩进", "code": "x = 1\nwhile True:\nif x**3 > 1000:\nbreak\nx += 1", "k": "syn", "err": "IndentationError: expected an indented block after 'while' statement on line 2", "why": "Python 用缩进表示代码块，冒号后面的块必须缩进（习惯 4 个空格）。IndentationError 是 SyntaxError 的一种。", "fix": "x = 1\nwhile True:\n    if x**3 > 1000:\n        break\n    x += 1\nprint(x)       # 11"}, {"p": 52, "t": "break 后面的代码 + 漏缩进", "code": "x = 9\nt = 2\nwhile t < x:\n    if x % t == 0:\n        break\n    print(\"Not a prime\")\nt += 1", "k": "loop", "err": "输出无数行 Not a prime，程序停不下来", "why": "t += 1 没缩进，在循环外面，t 永远是 2，条件永远成立。另外 print 放在循环里会每试一个数就打印一次。判断素数用 for … else（Week 3）。", "fix": "x = 9\nfor t in range(2, x):\n    if x % t == 0:\n        print(x, \"is not prime:\", t, \"divides it\")\n        break\nelse:\n    print(x, \"is prime\")"}, {"p": 52, "t": "函数里的 break", "code": "def foo(x):\n    return x**2\n    break", "k": "syn", "err": "SyntaxError: 'break' outside loop", "why": "break 只能在循环里用；离开函数用 return，而且 return 之后的语句永远不会执行。", "fix": "def foo(x):\n    return x**2\n\nprint(foo(3))"}, {"p": 53, "t": "调用忘了括号", "code": "def foo():\n    for i in range(3):\n        print(i**2)\n\nfoo", "k": "logic", "err": "什么都不输出", "why": "foo 只是这个函数对象本身，写 foo 相当于「提到它」但没有调用；要加括号 foo()。", "fix": "def foo():\n    for i in range(3):\n        print(i**2)\n\nfoo()"}, {"p": 54, "t": "没用的计算", "code": "from math import sqrt\nx = 0.25\nsqrt(x)\nif 0 < sqrt(x) < 1:\n    print(\"between 0 and 1\")", "k": "logic", "err": "能运行，但第 3 行算完就被丢掉了", "why": "函数用到时才算，不用「提前算一遍」。单独一行 sqrt(x) 的结果没存到任何名字里，白算。", "fix": "from math import sqrt\nx = 0.25\nr = sqrt(x)\nif 0 < r < 1:\n    print(\"between 0 and 1\")"}, {"p": 55, "t": "永远不成立的范围", "code": "x = -5\nif -3 <= x < -12:\n    print(\"in range\")\nprint(\"done\")", "k": "logic", "err": "输出：done（条件永远是 False）", "why": "-3 <= x < -12 要求 x 既 ≥ −3 又 < −12，不可能；负数范围要从小写到大：-12 <= x < -3。", "fix": "x = -5\nif -12 <= x < -3:\n    print(\"in range\")\nprint(\"done\")"}, {"p": 55, "t": "和 True 比较", "code": "x = 1\nif x < 3 == True:\n    print(\"small\")\nelse:\n    print(\"big?\")", "k": "logic", "err": "输出：big?（错了）", "why": "x < 3 == True 是链式比较：(x < 3) and (3 == True)，3 == True 是 False。条件本身已经是布尔值，不用再和 True 比。", "fix": "x = 1\nif x < 3:\n    print(\"small\")\nelse:\n    print(\"big\")"}, {"p": 56, "t": "名字被覆盖（shadowing）", "code": "def left(angle):\n    print(\"turn left\", angle)\n\ndef move(left):\n    if left == \"Yes\":\n        left(90)\n\nmove(\"Yes\")", "k": "run", "err": "TypeError: 'str' object is not callable", "why": "参数名 left 在函数里盖住了外面的函数 left，此时 left 是字符串 \"Yes\"，不能调用。一个名字只做一件事。", "fix": "def left(angle):\n    print(\"turn left\", angle)\n\ndef move(turn_left):\n    if turn_left == \"Yes\":\n        left(90)\n\nmove(\"Yes\")"}, {"p": 30, "t": "方法忘了 self", "code": "class Student:\n    def __init__(self, n, a):\n        self.full_name = n\n        self.age = a\n    def get_age():\n        return self.age\n\ns = Student(\"Bob\", 21)\nprint(s.get_age())", "k": "run", "err": "TypeError: Student.get_age() takes 0 positional arguments but 1 was given", "why": "s.get_age() 实际执行的是 Student.get_age(s)，Python 自动把 s 作为第一个参数传进去；定义时没有 self 来接，就多了一个参数。", "fix": "class Student:\n    def __init__(self, n, a):\n        self.full_name = n\n        self.age = a\n    def get_age(self):\n        return self.age\n\ns = Student(\"Bob\", 21)\nprint(s.get_age())"}];
+const MOPT=[['syn','语法错误：一行都不运行'],['run','运行到那一行才报错'],['logic','能运行，但结果不对 / 白做'],['loop','死循环']];
+const MCAT={syn:'语法错误（编译时）',run:'运行时错误',logic:'不报错的逻辑错误',loop:'死循环'};
+let mI=0,mF='all';const mPick={};
+function mVis(){return MIS.map((m,i)=>i).filter(i=>mF==='all'||MIS[i].k===mF||(mF==='logic'&&MIS[i].k==='loop'));}
+function mBuild(){const v=mVis();if(!v.includes(mI))mI=v[0];
+  $('mList').innerHTML=v.map(i=>`<button data-mi="${i}" title="${esc(MIS[i].t)}">${i+1}</button>`).join('');
+  $('mList').querySelectorAll('[data-mi]').forEach(b=>b.addEventListener('click',()=>{mI=+b.dataset.mi;Lab.draw(6);}));}
+function lab6(){
+  pressGroup('#lab6 [data-mf]',b=>b.dataset.mf===mF);pressGroup('#mList [data-mi]',b=>+b.dataset.mi===mI);
+  $('mList').querySelectorAll('[data-mi]').forEach(b=>{const p=mPick[b.dataset.mi];b.style.borderColor=p===undefined?'':(p===MIS[+b.dataset.mi].k?'var(--green)':'var(--red)');});
+  const m=MIS[mI],pk=mPick[mI];
+  $('mTag').textContent=`第 ${mI+1} 题 · 讲义第 ${m.p} 页 · ${m.t}`;
+  $('mCode').innerHTML=m.code.split('\n').map(l=>`<div>${esc(l)||' '}</div>`).join('');
+  $('mOpts').innerHTML=MOPT.map(([k,l])=>`<button data-mo="${k}" aria-pressed="false" style="${pk===undefined?'':k===m.k?'border-color:var(--green);color:var(--green);font-weight:600'+(pk===k?';border-width:2px':''):pk===k?'border-color:var(--red);color:var(--red);border-width:2px;text-decoration:line-through':''}">${pk!==undefined&&k===m.k?'✓ ':pk===k?'✗ ':''}${l}</button>`).join('');
+  $('mOpts').querySelectorAll('[data-mo]').forEach(b=>b.addEventListener('click',()=>{mPick[mI]=b.dataset.mo;Lab.draw(6);}));
+  if(pk===undefined){$('mAns').innerHTML='<p style="color:var(--muted)">先选一个，再看答案。</p>';$('mCat').textContent='—';}
+  else{const ok=pk===m.k;$('mAns').innerHTML=`<p class="lbl">${ok?'✓ 判断对了':'✗ 实际是：'+MCAT[m.k]}</p><h3 style="font-family:var(--mono);font-size:14px;color:${m.k==='logic'?'var(--amp)':'var(--red)'}">${esc(m.err)}</h3><p>${esc(m.why)}</p><p class="lbl">改正后</p><pre class="code">${m.fix.split('\n').map(l=>`<div>${esc(l)||' '}</div>`).join('')}</pre>`;$('mCat').textContent=MCAT[m.k];}
+  const ks=Object.keys(mPick);$('mScore').textContent=`${ks.length} / ${ks.filter(i=>mPick[i]===MIS[i].k).length}（共 ${MIS.length} 题）`;
+}
+document.querySelectorAll('#lab6 [data-mf]').forEach(b=>b.addEventListener('click',()=>{mF=b.dataset.mf;mBuild();Lab.draw(6);}));
+$('mRnd').addEventListener('click',()=>{const v=mVis().filter(i=>mPick[i]===undefined);const pool=v.length?v:mVis();mI=pool[Math.floor(Math.random()*pool.length)];Lab.draw(6);});
+{const q=new URLSearchParams(location.search).get('m');if(q&&+q>=1&&+q<=MIS.length)mI=+q-1;}
+mBuild();
+Lab.add(6,lab6);
 Lab.start();
 </script>
 </body></html>
