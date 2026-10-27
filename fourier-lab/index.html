@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>傅里叶实验室</title>
-<meta name="description" content="七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
+<meta name="description" content="八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}html.embed #lab7 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+<style>.ctl select{width:100%}html.embed #lab7 .stage.one,html.embed #lab8 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
   <h1>傅里叶实验室</h1>
-  <p>七个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；矩形 / 半余弦 / 三角 / 高斯脉冲的频谱与旁瓣；DFT 第 k 个点对应的频率、对称性和泄漏。配合 EE 傅里叶页、Year 2 Maths Part B 的 Fourier 和通信系统 Week 4。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a><a href="#lab6">实验 6 常见脉冲的频谱</a><a href="#lab7">实验 7 DFT 频率轴</a></nav>
+  <p>八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；矩形 / 半余弦 / 三角 / 高斯脉冲的频谱与旁瓣；DFT 第 k 个点对应的频率、对称性和泄漏。配合 EE 傅里叶页、Year 2 Maths Part B 的 Fourier 和通信系统 Week 4。实验 8 对应 Part B Week 5：周期不是 2π 的级数、奇偶分解与线谱（Tutorial 2 全部题目）。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a><a href="#lab6">实验 6 常见脉冲的频谱</a><a href="#lab7">实验 7 DFT 频率轴</a><a href="#lab8">实验 8 任意周期与奇偶</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -119,6 +119,19 @@
   <div class="read"><div><small>格点间距 Δf = F<sub>s</sub>/N</small><b id="dkD"></b></div><div><small>f₁ 落在 k =</small><b id="dkK"></b></div><div><small>最高的 |X[k]|</small><b id="dkP"></b></div><div><small>看到的频率</small><b id="dkS"></b></div></div>
   <p class="note" id="dkNote"></p>
 </section>
+<section class="panel" id="lab8">
+  <div class="tag">实验 8 · 任意周期 2L、奇偶分解与线谱（Maths Part B · Week 5）</div>
+  <h2>周期不是 2π 也一样：cos(nπt/L)、sin(nπt/L)；偶的部分给 cos，奇的部分给 sin</h2>
+  <p class="lead">上图：虚线是 f(t)，蓝线是到第 N 次谐波的部分和（跳变处穿过中点）。中图：f 拆成偶部分 [f(t) + f(−t)]/2（紫，只含 cos 和 a₀/2）和奇部分 [f(t) − f(−t)]/2（橙，只含 sin）。下图：每个 n 的 aₙ、bₙ 和总幅度 Rₙ = √(aₙ² + bₙ²)，横轴是角频率 nπ/L。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-fl="t1">Tut 2 Q1：t²</button><button data-fl="t2">Q2：0 / t</button><button data-fl="t3">Q3：3 / −5</button><button data-fl="t4">Q4：−1 / 2t</button><button data-fl="s42">课件：x（L = 1）</button><button data-fl="s48">课件：锯齿 x/2</button><button data-fl="s55">课件：Try this</button><button data-fl="e1">课上例 1：x（0…2）</button><button data-fl="e2">课上例 2：4x / 0</button></div>
+  <div class="controls"><div class="ctl"><label for="flN">部分和最高次数 N</label><input id="flN" type="range" min="1" max="40" step="1" value="6"><output id="flNO"></output></div></div>
+  <p class="verdict" id="fl_v"></p>
+  <div class="stage one"><canvas id="fls" height="230" aria-label="函数与部分和"></canvas></div>
+  <div class="stage even"><canvas id="fle" height="210" aria-label="偶部分与奇部分"></canvas><canvas id="flp" height="210" aria-label="线谱"></canvas></div>
+  <div class="read"><div><small>半周期 L / 基波角频率 π/L</small><b id="fl_L"></b></div><div><small>a₀/2（平均值）</small><b id="fl_0"></b></div><div><small>a₁…a₄</small><b id="fl_a" style="font-size:12px"></b></div><div><small>b₁…b₄</small><b id="fl_b" style="font-size:12px"></b></div></div>
+  <p class="note" id="fl_t"></p>
+</section>
+
 </div>
 
 <script>
@@ -320,6 +333,53 @@ function lab7(){
 ['dkF','dkG','dkN','dkM'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
 document.querySelectorAll('#lab7 [data-dk]').forEach(b=>b.addEventListener('click',()=>{const [a1,a2,a3,a4]=b.dataset.dk.split(',');$('dkF').value=a1;$('dkG').value=a2;$('dkN').value=a3;$('dkM').value=a4;Lab.draw(7);}));
 Lab.add(7,lab7,{dkx:180,dkX:210});
+
+/* ---------- Lab 8: period 2L, even/odd parts, line spectrum ---------- */
+const FL={
+ t1:{c:0,L:1,f:t=>t*t,n:'f(t) = t²（0 ≤ t < 2），f(t + 2) = f(t）',t:'F = 4/3 + (4/π²)(cos πt + ¼cos 2πt + 1/9·cos 3πt + …) − (4/π)(sin πt + ½sin 2πt + ⅓sin 3πt + …)'},
+ t2:{c:-2,L:2,f:t=>t>0?t:0,n:'0（−2 < t < 0），t（0 < t < 2），周期 4',t:'F = ½ − (4/π²)(cos(πt/2) + 1/9·cos(3πt/2) + …) + (2/π)(sin(πt/2) − ½sin πt + ⅓sin(3πt/2) − …)。偶部分 |t|/2 给 cos 项，奇部分 t/2 给 sin 项'},
+ t3:{c:-2,L:2,f:t=>t<0?3:-5,n:'3（−2 < t < 0），−5（0 < t < 2），周期 4',t:'F = −1 − (16/π)(sin(πt/2) + ⅓sin(3πt/2) + ⅕sin(5πt/2) + …)。减去平均 −1 后是奇函数，而且 f(t + 2) − (−1) = −[f(t) − (−1)] → 只有奇次谐波'},
+ t4:{c:-1,L:1,f:t=>t<0?-1:2*t,n:'−1（−1 < t < 0），2t（0 < t < 1），周期 2',t:'F = 0 − (4/π²)(cos πt + 1/9·cos 3πt + …) + (2/π)(2sin πt − ½sin 2πt + ⅔sin 3πt − ¼sin 4πt + …)'},
+ s42:{c:-1,L:1,f:t=>t,n:'f(x) = x（−1 < x < 1），周期 2（课件第 42–46 页）',t:'奇函数：f = (2/π)(sin πx − ½sin 2πx + ⅓sin 3πx − …)，bₙ = 2(−1)ⁿ⁺¹/(nπ)'},
+ s48:{c:0,L:Math.PI,f:t=>t/2,n:'f(x) = x/2（0 ≤ x ≤ 2π），周期 2π（课件第 47–54 页）',t:'f = π/2 − (sin x + ½sin 2x + ⅓sin 3x + …)：a₀ = π，aₙ = 0，bₙ = −1/n'},
+ s55:{c:-Math.PI,L:Math.PI,f:t=>t<0?-t:0,n:'课件第 55 页的图：−x（−π < x < 0），0（0 < x < π）',t:'按图算：f = π/4 − (2/π)(cos x + 1/9·cos 3x + …) − (sin x − ½sin 2x + ⅓sin 3x − …)。课件第 57 页给的 sin 部分符号相反，那是 Week 4 Tutorial Q4（0 / x）的答案'},
+ e1:{c:0,L:1,f:t=>t,n:'f(x) = x（0 < x < 2），周期 2（课上手写例 1）',t:'减去平均 1 后是奇函数：f = 1 − (2/π)(sin πx + ½sin 2πx + ⅓sin 3πx + …)'},
+ e2:{c:0,L:1,f:t=>t<1?4*t:0,n:'4x（0 ≤ x ≤ 1），0（1 ≤ x ≤ 2），周期 2（课上手写例 2）',t:'f = 1 − (8/π²)(cos πx + 1/9·cos 3πx + …) + (4/π)(sin πx − ½sin 2πx + ⅓sin 3πx − …)；线谱 R₁ = 1.51、R₂ = 0.64、R₃ = 0.43'}};
+let fl='t2',flC={};
+const flPer=(F,t)=>F.f(F.c+((((t-F.c)%(2*F.L))+2*F.L)%(2*F.L)));
+function flCoef(k){if(flC[k])return flC[k];const F=FL[k],M=8192,h=2*F.L/M,a=[],b=[];
+  for(let n=0;n<=40;n++){let sa=0,sb=0;for(let i=0;i<M;i++){const t=F.c+(i+0.5)*h,v=F.f(t),w=n*Math.PI*t/F.L;sa+=v*Math.cos(w);sb+=v*Math.sin(w);}a.push(sa*h/F.L);b.push(sb*h/F.L);}
+  return flC[k]={a,b};}
+function lab8(){
+  const F=FL[fl],N=val('flN'),C=flCoef(fl),L=F.L;$('flNO').textContent=N;pressGroup('#lab8 [data-fl]',b=>b.dataset.fl===fl);
+  const r=v=>Math.abs(v)<5e-4?'0':(+v.toFixed(3)).toString();
+  const Lt=Math.abs(L-Math.PI)<1e-9?'π':String(L);$('fl_L').textContent=`L = ${Lt} / ω₀ = ${Math.abs(L-Math.PI)<1e-9?'1':(Math.abs(L-1)<1e-9?'π':'π/'+L)} rad/s`;
+  $('fl_0').textContent=r(C.a[0]/2);$('fl_a').textContent=C.a.slice(1,5).map(r).join(', ');$('fl_b').textContent=C.b.slice(1,5).map(r).join(', ');
+  $('fl_t').innerHTML='<strong>答案：</strong>'+F.t;
+  const m=C.a[0]/2,g=t=>flPer(F,t);let de=0,dO=0,dH=0,dE=0;for(let i=0;i<997;i++){const t=F.c+2*L*(i+0.3137)/997;de=Math.max(de,Math.abs(g(t)-g(-t)));dO=Math.max(dO,Math.abs(g(t)+g(-t)-2*m));dH=Math.max(dH,Math.abs(g(t+L)+g(t)-2*m));dE=Math.max(dE,Math.abs(g(t+L)-g(t)));}
+  const tol=1e-6,parts=[];parts.push(de<tol?'偶函数 → 只有 cos':dO<tol?(Math.abs(m)<5e-4?'奇函数 → 只有 sin':`减去平均 ${r(m)} 后是奇函数 → 只有 sin`):'既不奇也不偶 → cos、sin 都有');
+  if(dH<tol)parts.push('f(t + L) − 平均 = −[f(t) − 平均] → 只有奇次谐波');else if(dE<tol)parts.push('f(t + L) = f(t) → 只有偶次谐波');else parts.push('奇次、偶次谐波都有');
+  $('fl_v').textContent=F.n+'：'+parts.join('；');
+  const S=t=>{let y=m;for(let k=1;k<=N;k++){const w=k*Math.PI*t/L;y+=C.a[k]*Math.cos(w)+C.b[k]*Math.sin(w);}return y;};
+  const x0=F.c-L,x1=F.c+5*L;let lo=1e9,hi=-1e9;for(let i=0;i<=600;i++){const v=g(x0+(x1-x0)*i/600);lo=Math.min(lo,v);hi=Math.max(hi,v);}const pad=(hi-lo)*0.22+0.2;
+  const tk=[];const st=L===Math.PI?Math.PI:L;for(let v=Math.ceil(x0/st)*st;v<=x1+1e-9;v+=st)tk.push(+v.toFixed(6));
+  const tf=v=>L===Math.PI?(({0:'0'})[Math.round(v/Math.PI)]??(Math.round(v/Math.PI)+'π').replace('1π','π').replace('-π','−π').replace('-','−')):String(+v.toFixed(2)).replace('-','−');
+  const [x,W,H]=fit($('fls'));const a=axes(x,W,H,{x0,x1,y0:lo-pad,y1:hi+pad,xt:tk,xf:tf,yt:[],title:`f（虚线）与部分和 S_N（N = ${N}），紫色点线 = 平均值 a₀/2`,pl:14});
+  x.setLineDash([5,4]);plot(x,a.X,a.Y,g,x0,x1,css('--muted'),1.4,2400);x.setLineDash([2,4]);plot(x,a.X,a.Y,()=>m,x0,x1,css('--purple'),1.4,2);x.setLineDash([]);
+  plot(x,a.X,a.Y,S,x0,x1,css('--blue'),2.4,1800);
+  /* even / odd parts */
+  const fe=t=>(g(t)+g(-t))/2,fo=t=>(g(t)-g(-t))/2;let l2=1e9,h2=-1e9;for(let i=0;i<=600;i++){const t=x0+(x1-x0)*i/600;l2=Math.min(l2,fe(t),fo(t));h2=Math.max(h2,fe(t),fo(t));}const p2=(h2-l2)*0.2+0.2;
+  const [y,W2,H2]=fit($('fle'));const b=axes(y,W2,H2,{x0,x1,y0:l2-p2,y1:h2+p2,xt:tk,xf:tf,yt:[],title:'偶部分（紫）+ 奇部分（橙）= f',pl:14});
+  plot(y,b.X,b.Y,fe,x0,x1,css('--purple'),2.2,1800);plot(y,b.X,b.Y,fo,x0,x1,css('--amp'),2.2,1800);
+  /* line spectrum */
+  const K=8;let mx=0;for(let k=1;k<=K;k++)mx=Math.max(mx,Math.abs(C.a[k]),Math.abs(C.b[k]),Math.hypot(C.a[k],C.b[k]));mx*=1.18;
+  const [z,W3,H3]=fit($('flp'));const c=axes(z,W3,H3,{x0:0.3,x1:K+0.7,y0:-mx,y1:mx,xt:[1,2,3,4,5,6,7,8],yt:[0],title:'aₙ（紫）、bₙ（橙）、Rₙ（蓝点）',xl:'n（角频率 nπ/L）',pl:22});
+  for(let k=1;k<=K;k++){const bw=Math.max(4,(c.X(1.25)-c.X(1)));z.fillStyle=css('--purple');z.globalAlpha=.7;z.fillRect(c.X(k)-bw,Math.min(c.Y(C.a[k]),c.Y(0)),bw-1,Math.abs(c.Y(C.a[k])-c.Y(0)));z.fillStyle=css('--amp');z.fillRect(c.X(k)+1,Math.min(c.Y(C.b[k]),c.Y(0)),bw-1,Math.abs(c.Y(C.b[k])-c.Y(0)));z.globalAlpha=1;
+    const R=Math.hypot(C.a[k],C.b[k]);z.fillStyle=css('--blue');z.beginPath();z.arc(c.X(k),c.Y(R),4,0,2*Math.PI);z.fill();if(k<=4&&R>5e-4)label(z,R.toFixed(2),c.X(k)-12,c.Y(R)-8,css('--blue'),11);}
+}
+$('flN').addEventListener('input',()=>Lab.draw(8));
+document.querySelectorAll('#lab8 [data-fl]').forEach(b=>b.addEventListener('click',()=>{fl=b.dataset.fl;Lab.draw(8);}));
+Lab.add(8,lab8,{fls:200,fle:190,flp:190});
 Lab.start();
 </script>
 </body></html>
