@@ -50,4 +50,28 @@ D('SE4','序列、模块与异常','3ea202737d7a8120a8f0d3e1344dce5e',[
 ['q',r`‹import fibo› 和 ‹from fibo import fib› 的区别？`,r`前者要写 ‹fibo.fib()›，不会冲突；后者直接 ‹fib()›，但会覆盖当前同名的东西，且只导入了 fib。`],
 ['q',r`try / except 的执行流程？`,r`先执行 try → 没异常跳过 except → 有异常则 try 剩下的不执行，跳到匹配的 except → 没匹配就交给外层，最终未处理则程序终止。只捕获预料到的异常类型。`],
 ]);
+D('SE5','面向对象与常见误区','3ea202737d7a81f2a6ceccc0045ede91',[
+['q',r`类 class 和实例 instance 是什么关系？讲义用了什么比喻？`,r`类是模板（cookie cutter 饼干模具），实例是按模板造出来的对象（饼干）。每个实例有自己的数据；方法只在类里放一份，大家共用。`],
+['q',r`‹__init__› 是做什么的？什么时候被调用？`,r`构造（初始化）方法。写 ‹student("Bob", 21)› 时 Python 先造一个空对象，再自动调用 ‹__init__(新对象, "Bob", 21)› 给它加属性。Python 没有 new 关键字。`],
+['q',r`‹self› 是什么？为什么定义时要写、调用时不写？`,r`每个方法的第一个参数，指向调用这个方法的实例（类似 Java/C++ 的 this）。‹f.get_age()› 等价于 ‹student.get_age(f)›，Python 自动把 f 传给 self。`],
+['q',r`方法定义漏了 self（‹def get_age():›）会怎样？`,r`调用 ‹s.get_age()› 时 Python 仍然传入 s，多出一个参数 → ‹TypeError: get_age() takes 0 positional arguments but 1 was given›（讲义第 30 页就漏了）。`],
+['q',r`‹x = MyClass› 和 ‹x = MyClass()› 有什么区别？`,r`没括号：x 只是类本身的另一个名字；有括号：创建一个新实例。同理 ‹foo› 只是函数对象，‹foo()› 才是调用。`],
+['q',r`类属性和实例属性有什么区别？‹x.i = 5› 之后 ‹MyClass.i› 是多少？`,r`类属性写在类体里，所有实例共享；实例属性用 ‹self.x = …› 或 ‹x.attr = …› 加在某个对象上。‹x.i = 5› 只给 x 自己加了 i，‹MyClass.i› 仍是 123。`],
+['q',r`Python 查找名字的顺序？赋值写到哪一层？`,r`L → E → G → B：局部、外层函数、模块全局、内置。赋值默认只写最内层；改全局要 ‹global›，改外层函数的要 ‹nonlocal›。`],
+['q',r`怎样定义子类？子类的 ‹__init__› 里通常先做什么？`,r`‹class Cs_student(student):›——父类写在括号里（没有 extends）。先调用父类初始化：‹super().__init__(n, a)›（或 ‹student.__init__(self, n, a)›），再加自己的属性。子类可重写（override）父类方法。`],
+['q',r`Python 要不要手动释放对象？讲义说「没有析构函数」对吗？`,r`不用，引用全部消失后自动垃圾回收。但有 ‹__del__›（对象被回收前调用），只是时机不保证、很少用，所以讲义的说法不准确。`],
+['q',r`讲义说的四种编程风格是什么？`,r`函数式（等式驱动，如 ‹functools.reduce›）、命令式（改变状态的语句）、面向对象（数据和方法打包在对象里）、过程式（步骤放进函数）。注意例子里 ‹sum = …› 会遮住内置函数 sum。`],
+['q',r`下面哪些是语法错误（一行都不运行）？‹n-gon = 5› ‹123 = n› ‹if x = 0:› ‹setPenColor(blue)›`,r`前三个是 SyntaxError，编译时就报；‹setPenColor(blue)› 语法没问题，运行到那一行才 ‹NameError: name 'blue' is not defined›。`],
+['q',r`‹x = 3; x =+ 2› 之后 x 是多少？‹a and b > 0› 的意思？`,r`x = 2（‹=+ 2› 是赋值为正 2，不报错）。‹a and b > 0› 是 ‹a and (b > 0)›，a 只要非零就算真；要写 ‹a > 0 and b > 0›。`],
+['q',r`‹if x < 3 == True:› 在 x = 1 时为什么是 False？`,r`这是链式比较：‹(x < 3) and (3 == True)›，后半是 False。条件本身已是布尔值，不要再和 True 比。`],
+['err',r`本讲最容易犯的错？`,r`- 方法漏写 self；方法里访问属性漏写 ‹self.›
+- ‹MyClass› 和 ‹MyClass()› 混用
+- 参数名、变量名遮住同名函数（‹left(90)› → 'str' object is not callable）
+- ‹=+› / ‹=*› 写反，‹//› 当 ‹%› 用
+- 拼错的名字只有运行到那一行才报错`],
+['fix',r`讲义第 30 页的子类代码有哪些问题？`,r`- ‹Class› 首字母大写 → SyntaxError（第 14、29 页同）
+- 父类定义成 ‹Student›，子类却写 ‹(student)›、‹student.__init__›
+- ‹def get_age():› 漏了 self；用 print 而不是 return
+- 弯引号 “ ” → invalid character`],
+]);
 })();
