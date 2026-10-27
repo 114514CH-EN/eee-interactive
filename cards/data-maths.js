@@ -157,4 +157,24 @@ $\dfrac{x^2\sin nx}{n}+\dfrac{2x\cos nx}{n^2}-\dfrac{2\sin nx}{n^3}$`],
 ['q',r`为什么方波系数按 $1/n$ 衰减，而 $|\sin x|$ 按 $1/n^2$？`,r`函数越光滑，高频成分越少。方波有跳变 → $\frac{8}{n\pi}$；$|\sin x|$ 连续、只有尖角 → $\frac{4}{\pi(n^2-1)}$，用 3 个谐波就几乎重合。`],
 ['q',r`全波整流 $V_p|\sin\omega t|$ 的直流分量和最低纹波频率？`,r`直流 $\frac{2}{\pi}V_p\approx0.64V_p$（DC 表读数）；最低交流成分在 $2\omega$（50 Hz 电网 → 100 Hz），幅度 $\frac{4}{3\pi}V_p\approx0.42V_p$。`],
 ]);
+D('MB','MB5','傅里叶级数 2：任意周期与奇偶对称','3eb202737d7a811c9b11d75f76c08d4c',[
+['q',r`周期为 2L 的函数，傅里叶级数和系数公式是什么？`,r`$f=\frac{a_0}{2}+\sum\big[a_n\cos\frac{n\pi x}{L}+b_n\sin\frac{n\pi x}{L}\big]$，$a_n=\frac1L\int_C^{C+2L}f\cos\frac{n\pi x}{L}dx$，$b_n=\frac1L\int_C^{C+2L}f\sin\frac{n\pi x}{L}dx$。L = π 时就是 Week 4 的公式。`],
+['q',r`周期 2L 的公式是怎么推出来的？`,r`换变量 $x'=\pi x/L$：x 走一个周期 2L 时 x′ 正好走 2π。在 x′ 里套 2π 的公式，再把 $dx'=\frac\pi L dx$ 代回去，$\frac1\pi\cdot\frac\pi L=\frac1L$。`],
+['q',r`周期 2L 时第 n 次谐波的角频率和频率？`,r`$\omega_n=\frac{n\pi}{L}$（rad/s），$f_n=\frac{n}{2L}$（Hz）。基波 $\omega_0=\pi/L=2\pi/T$，T = 2L。`],
+['q',r`奇函数、偶函数的定义？各只剩哪些项？`,r`偶：$f(-x)=f(x)$（关于 y 轴对称）→ 只有 cos 和 $a_0$，$b_n=0$。奇：$f(-x)=-f(x)$（关于原点对称）→ 只有 sin，$a_0=a_n=0$。`],
+['q',r`为什么偶函数的 $b_n=0$？`,r`$f(x)\sin nx$ 是偶 × 奇 = 奇，在对称区间 $[-\pi,\pi]$ 上积分正负抵消为 0。同理奇函数 × cos = 奇，所以 $a_n=0$。`],
+['q',r`偶函数的 $a_n$ 为什么可以写成 $\frac2\pi\int_0^\pi$？`,r`$f\cos nx$ 是偶 × 偶 = 偶，左右两半面积相等，只积右半边再乘 2。奇函数的 $b_n=\frac2\pi\int_0^\pi f\sin nx\,dx$ 同理（奇 × 奇 = 偶）。`],
+['q',r`既不奇也不偶的函数怎么办？`,r`① 先看减去平均值 $a_0/2$ 后是不是奇函数（如 3 / −5 的方波、x/2 锯齿），是就只有 sin；② 一般情况拆成偶部分 $\frac{f(x)+f(-x)}2$（给 cos）+ 奇部分 $\frac{f(x)-f(-x)}2$（给 sin）。`],
+['q',r`什么时候只有奇次谐波？什么时候只有偶次？`,r`去掉平均值后 $f(x+\pi)=-f(x)$（平移半个周期上下翻转）→ 只有奇次；$f(x+\pi)=f(x)$（实际周期是一半）→ 只有偶次。原因：平移半个周期，第 n 次谐波乘 $(-1)^n$。`],
+['q',r`傅里叶级数在跳变点等于什么？Dirichlet 条件是什么？`,r`等于两侧极限的平均 $\frac12[f(x_1^-)+f(x_1^+)]$。条件：周期、单值、只有有限个有限跳变、一个周期内有限个极值、一个周期上的积分收敛。`],
+['q',r`线谱怎么画？$a_n\cos+b_n\sin$ 怎样合成一项？`,r`$a_n\cos\omega x+b_n\sin\omega x=R_n\cos(\omega x-\alpha_n)$，$R_n=\sqrt{a_n^2+b_n^2}$，$\tan\alpha_n=b_n/a_n$（按 $a_n$、$b_n$ 的正负判断象限）。在 $\omega_n=n\pi/L$ 处画高 $R_n$ 的竖线。`],
+['q',r`Tutorial 2 Q1：$t^2$（0 ≤ t < 2，周期 2）的级数？`,r`L = 1：$a_0/2=4/3$，$a_n=\frac{4}{n^2\pi^2}$，$b_n=-\frac{4}{n\pi}$。$F=\frac43+\frac4{\pi^2}\sum\frac{\cos n\pi t}{n^2}-\frac4\pi\sum\frac{\sin n\pi t}{n}$；$R_1\approx1.34$、$R_2\approx0.64$。`],
+['q',r`Tutorial 2 Q3：3（−2…0）、−5（0…2），周期 4？`,r`平均 −1；减掉后是 ±4 的奇方波，且半波反对称 → 只有奇次 sin：$F=-1-\frac{16}{\pi}\big(\sin\frac{\pi t}2+\frac13\sin\frac{3\pi t}2+\cdots\big)$。`],
+['err',r`这一讲最常错的地方？`,r`- 周期 2L 时角度是 $n\pi x/L$，系数前面是 $1/L$，别还写 $1/\pi$
+- 判断奇偶要看整个周期延拓后的图，不是只看定义的那一段
+- 「只有奇次谐波」的判据要先减去平均值
+- $\tan\alpha=b/a$ 求相位时注意象限（$a_n<0$ 时要加 180°）`],
+['fix',r`Fourier 2 课件有哪些地方要改？`,r`第 57 页「Try this」的答案 sin 部分符号与第 55 页的图相反（图是 −x / 0，答案是 0 / x 的）；第 20、34 页奇方波级数末尾「− …」应为「+ …」；第 36 页标题「sawtooth (triangle)」实为锯齿波；课上例题扫描件页眉写 Week 9。`],
+]);
+
 })();
