@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>电机与变压器实验室</title>
-<meta name="description" content="三个实验对应一年级 EE 的 Electrical Machines：直流电机的转矩–转速特性（吊重物例题）、用变压器做阻抗匹配（n = N₂/N₁）、桥式整流加电容滤波。预设就是讲义例题。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="电机与变压器实验室"><meta property="og:description" content="三个实验对应一年级 EE 的 Electrical Machines：直流电机的转矩–转速特性（吊重物例题）、用变压器做阻抗匹配（n = N₂/N₁）、桥式整流加电容滤波。预设就是讲义例题。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/machines-lab/">
+<meta name="description" content="四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="电机与变压器实验室"><meta property="og:description" content="四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/machines-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <header>
   <div class="tag">ELECTRICAL ENGINEERING 1 · ELECTRICAL MACHINES</div>
   <h1>电机与变压器实验室</h1>
-  <p>三个实验对应一年级 EE 的 Electrical Machines：直流电机的转矩–转速特性（吊重物例题）、用变压器做阻抗匹配（n = N₂/N₁）、桥式整流加电容滤波。预设就是讲义例题。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 直流电机</a><a href="#lab2">实验 2 变压器匹配</a><a href="#lab3">实验 3 整流滤波</a></nav>
+  <p>四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 直流电机</a><a href="#lab2">实验 2 变压器匹配</a><a href="#lab3">实验 3 整流滤波</a><a href="#lab4">实验 4 并励与串励</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -63,6 +63,24 @@
   <div class="read"><div><small>平均输出 V<sub>DC</sub></small><b id="rA"></b></div><div><small>纹波（峰–峰）</small><b id="rP"></b></div><div><small>RC 与 T/2 之比</small><b id="rT"></b></div><div><small>（无电容时）DC 功率 / 交流功率</small><b>8/π² = 0.81</b></div></div>
   <p class="note"><strong>估算纹波：</strong>两次充电之间（全波整流约 T/2 = 10 ms）电容独自给负载供电，ΔV ≈ I<sub>DC</sub>·(T/2)/C。讲义例 2 用 RC = 5·T/2 得 2 mF，但这样 ΔV ≈ 0.2 A × 10 ms / 2 mF = 1 V（这里逐点仿真约 0.75 V，因为电容在峰值前就开始充电），都大于题目要求的 0.2 V；要 0.2 V 需要约 10 mF。</p>
 </section>
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 并励与串励有刷直流电机（Year 2 EM Week 5）</div>
+  <h2>并励：转矩随转速直线下降、转速很稳；串励：起动转矩极大，空载会飞车</h2>
+  <p class="lead">都从电枢回路的基尔霍夫电压定律出发：V<sub>s</sub> = E<sub>A</sub> + I<sub>A</sub>R<sub>A</sub>。并励的磁通恒定，E<sub>A</sub> = k<sub>v</sub>ω、T = k<sub>v</sub>I<sub>A</sub>；串励的磁通跟着电流走，E<sub>A</sub> = KIω、T = KI²。左图：转矩（蓝）、功率（橙）随转速，橙色横线是负载转矩，红点是运行点。右图：电流（紫）和效率（绿）。「其他损耗」代表铁损（磁滞、涡流）和摩擦。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-dm="sh,200,0.4,1.0504,5.252,0">2026 Q3 并励：200 V、0.4 Ω、1800 rpm</button><button data-dm="sh,150,0.1,1.4,252.7,0">习题 Q2：150 V、900 rpm</button><button data-dm="sh,200,0.4,1.0504,40,600">并励 + 600 W 其他损耗</button><button data-dm="se,200,0.4,0.036,90,0">串励示例：100 rad/s 时 50 A</button><button data-dm="se,200,0.4,0.036,5,0">串励轻载：转速飙升</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="dV">电源 V<sub>s</sub> (V)</label><input id="dV" type="range" min="5" max="250" step="1" value="200"><output id="dVO"></output></div>
+    <div class="ctl"><label for="dR">电阻 R（串励含励磁绕组）(Ω)</label><input id="dR" type="range" min="0.05" max="2" step="0.01" value="0.4"><output id="dRO"></output></div>
+    <div class="ctl"><label for="dK" id="dKL">电机常数 k<sub>v</sub> (V·s/rad)</label><input id="dK" type="range" min="0.005" max="2" step="0.0001" value="1.0504"><output id="dKO"></output></div>
+    <div class="ctl"><label for="dT">负载转矩 T<sub>L</sub> (N·m)</label><input id="dT" type="range" min="0" max="600" step="0.001" value="5.252"><output id="dTO"></output></div>
+    <div class="ctl"><label for="dP">其他损耗 P<sub>c</sub> (W)</label><input id="dP" type="range" min="0" max="2000" step="10" value="0"><output id="dPO"></output></div>
+  </div>
+  <p class="verdict" id="d_v"></p>
+  <div class="stage even"><canvas id="dts" height="260" aria-label="转矩与功率随转速"></canvas><canvas id="die" height="260" aria-label="电流与效率随转速"></canvas></div>
+  <div class="read"><div><small>运行点转速</small><b id="d_w" style="font-size:15px"></b></div><div><small>电流 I / 反电动势 E</small><b id="d_i" style="font-size:15px"></b></div><div><small>输入 / 输出 / 铜损 / 其他</small><b id="d_p" style="font-size:13px"></b></div><div><small>效率 η · 转速调整率</small><b id="d_e" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>对照 2026 Q3：</strong>k<sub>v</sub> = (200 − 5×0.4)/188.5 = 1.05；堵转电流 500 A、堵转转矩 525 N·m；空载转速 190.4 rad/s（1818 rpm）；最大功率 V²/4R = 25 kW 出现在一半转速；只算电枢铜损时效率 = ω/ω<sub>0</sub>，转速越高效率越高。</p>
+</section>
+
 </div>
 
 <script>
@@ -133,6 +151,47 @@ function lab3(){
 ['rV','rR','rC'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
 document.querySelectorAll('#lab3 [data-r]').forEach(b=>b.addEventListener('click',()=>{b.dataset.r.split(',').forEach((v,i)=>$(['rV','rR','rC'][i]).value=v);Lab.draw(3);}));
 Lab.add(3,lab3,{rw:230});
+
+/* ---------- Lab 4: shunt vs series brushed DC motor ---------- */
+let dm='sh';
+function lab4(){
+  const V=val('dV'),R=val('dR'),k=val('dK'),TL=val('dT'),Pc=val('dP'),sh=dm==='sh';
+  $('dVO').textContent=V+' V';$('dRO').textContent=R+' Ω';$('dKO').textContent=k;$('dTO').textContent=TL+' N·m';$('dPO').textContent=Pc+' W';
+  $('dKL').innerHTML=sh?'电机常数 k<sub>v</sub> (V·s/rad)':'串励常数 K（E = KIω）';
+  pressGroup('#lab4 [data-dm]',b=>{const q=b.dataset.dm.split(',');return q[0]===dm&&+q[1]===V&&+q[2]===R&&Math.abs(+q[3]-k)<1e-9&&Math.abs(+q[4]-TL)<1e-9&&+q[5]===Pc;});
+  const I=w=>sh?Math.max((V-k*w)/R,0):V/(R+k*w), T=w=>sh?k*I(w):k*I(w)**2, P=w=>T(w)*w;
+  const eta=w=>{const i=I(w);return i>1e-9?Math.max((P(w)-Pc)/(V*i),0):NaN;};
+  const w0=sh?V/k:Infinity;
+  let w=sh?(V-R*TL/k)/k:(TL>0?(V/Math.sqrt(TL/k)-R)/k:Infinity);const stall=w<=0;if(stall)w=0;
+  const wmax=sh?w0*1.08:Math.max(8*R/k,isFinite(w)?w*1.3:0,1);
+  const Ti=stall?T(0):TL,Ii=I(w),Ei=V-Ii*R,Pin=V*Ii,Pout=Ti*w,Pcu=Ii*Ii*R,eta_=Pin>0?Math.max((Pout-Pc)/Pin,0):0;
+  $('d_w').textContent=!isFinite(w)?'∞（没有负载，串励会飞车）':stall?'堵转（负载转矩超过最大转矩）':`${fmt(w,4)} rad/s（${Math.round(w*60/(2*Math.PI))} rpm）`;
+  $('d_i').textContent=isFinite(w)?`${fmt(Ii,4)} A / ${fmt(Ei,4)} V`:'0 A / —';
+  $('d_p').textContent=isFinite(w)?`${Pin.toFixed(0)} / ${Math.max(Pout-Pc,0).toFixed(0)} / ${Pcu.toFixed(0)} / ${Pc} W`:'—';
+  const reg=sh&&isFinite(w)?((w0-w)/w0*100):NaN;
+  $('d_e').textContent=isFinite(w)?`${(eta_*100).toFixed(1)} %`+(sh?` · ${reg.toFixed(1)} %`:' · 无空载转速'):'—';
+  const v=$('d_v');v.textContent=sh?`并励：堵转转矩 k_vV/R = ${fmt(k*V/R,4)} N·m（电流 ${fmt(V/R,4)} A），空载转速 V/k_v = ${fmt(w0,4)} rad/s，最大功率 V²/4R = ${fmt(V*V/(4*R),4)} W 出现在 ${fmt(w0/2,4)} rad/s`
+    :`串励：堵转转矩 KV²/R² = ${fmt(k*V*V/(R*R),4)} N·m（实际受磁饱和和限流限制），转矩随转速约按 1/ω² 下降，T → 0 时 ω → ∞`;
+  v.style.color=sh?css('--blue'):css('--red');
+  /* torque + power */
+  let Tmax=0,Pmx=0;for(let i=0;i<=400;i++){const u=wmax*i/400;if(u>=0.04*wmax||sh)Tmax=Math.max(Tmax,T(u));Pmx=Math.max(Pmx,P(u));}
+  Tmax=Math.max(Tmax,TL)*1.12;Pmx*=1.12;
+  const [x,W,H]=fit($('dts'));const a=axes(x,W,H,{x0:0,x1:wmax,y0:0,y1:Tmax,xt:[0,wmax/4,wmax/2,3*wmax/4].map(t=>+t.toPrecision(2)),yt:[0,Tmax/2,Tmax].map(t=>+t.toPrecision(2)),title:'转矩 T（蓝，N·m）与功率 P（橙，按右侧比例）',xl:'ω (rad/s)',pl:46});
+  plot(x,a.X,a.Y,u=>{const t=T(u);return t<=Tmax?t:NaN;},0,wmax,css('--blue'),2.6,400);
+  plot(x,a.X,a.Y,u=>P(u)/Pmx*Tmax,0,wmax,css('--amp'),2.2,400);
+  x.strokeStyle=css('--amp');x.setLineDash([5,4]);x.lineWidth=1.4;x.beginPath();x.moveTo(a.X(0),a.Y(TL));x.lineTo(a.X(wmax),a.Y(TL));x.stroke();x.setLineDash([]);
+  if(isFinite(w)&&w<=wmax){x.fillStyle=css('--red');x.beginPath();x.arc(a.X(w),a.Y(Math.min(Ti,Tmax)),6,0,7);x.fill();}
+  label(x,`P 最大 ${(sh?V*V/(4*R):Pmx/1.12).toPrecision(4)} W`,W-150,a.pt+14,css('--amp'),11);
+  /* current + efficiency */
+  let Imx=0;for(let i=0;i<=400;i++){const u=wmax*i/400;if(u>=0.04*wmax||sh)Imx=Math.max(Imx,I(u));}Imx*=1.12;
+  const [y,W2,H2]=fit($('die'));const b=axes(y,W2,H2,{x0:0,x1:wmax,y0:0,y1:Imx,xt:[0,wmax/2].map(t=>+t.toPrecision(2)),yt:[0,Imx/2,Imx].map(t=>+t.toPrecision(2)),title:'电流 I（紫，A）与效率 η（绿）',xl:'ω (rad/s)',pl:46});
+  plot(y,b.X,b.Y,u=>{const i=I(u);return i<=Imx?i:NaN;},0,wmax,css('--purple'),2.4,400);
+  plot(y,b.X,b.Y,u=>eta(u)*Imx,0,wmax,css('--green'),2.4,400);
+  if(isFinite(w)&&w<=wmax){y.fillStyle=css('--red');y.beginPath();y.arc(b.X(w),b.Y(Math.min(Ii,Imx)),5,0,7);y.fill();y.beginPath();y.arc(b.X(w),b.Y(eta_*Imx),5,0,7);y.fill();}
+}
+['dV','dR','dK','dT','dP'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-dm]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.dm.split(',');dm=q[0];['dV','dR','dK','dT','dP'].forEach((id,i)=>$(id).value=q[i+1]);Lab.draw(4);}));
+Lab.add(4,lab4,{dts:230,die:230});
 Lab.start();
 </script>
 </body></html>

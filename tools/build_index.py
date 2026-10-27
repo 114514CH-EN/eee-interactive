@@ -47,7 +47,7 @@ BLURB = {
     'acpower-lab': ('AC Power', '瞬时功率、功率因数校正、最大功率传输、三相功率'),
     'alu-lab': ('Programmable Circuits / Lab 2', '补码转盘、4 位 ALU 与标志位、硬件 PWM、光敏电阻 + ADC'),
     'filter-lab': ('Communications Circuits', 'RC / RL 滤波器 Bode 图、串联 RLC 谐振、三种阻尼'),
-    'machines-lab': ('Electrical Machines', '直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波'),
+    'machines-lab': ('EE1 Electrical Machines / DEEM EM Week 5', '直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波、并励与串励直流电机'),
     'bench-lab': ('实验课 Lab 1 / 3 / 5', '分压器、示波器读数、RC 相移、热敏电阻温度计、LED 限流、机器人蛇'),
 }
 
@@ -75,7 +75,7 @@ KEYWORDS = {
     'acpower-lab': '功率 power 功率因数 power factor 无功 视在 三相 three-phase 最大功率传输',
     'alu-lab': '补码 complement alu 加法器 标志位 pwm adc arduino 光敏电阻',
     'filter-lab': '滤波 filter bode 谐振 resonance q 带宽 阻尼 damping rc rl rlc 低通 高通',
-    'machines-lab': '电机 motor 直流 转矩 torque 转速 变压器 匹配 整流 rectifier 电容滤波',
+    'machines-lab': '电机 motor 直流 转矩 torque 转速 变压器 匹配 整流 rectifier 电容滤波 并励 shunt 串励 series 有刷 brushed 反电动势 back emf 效率 efficiency 调整率 regulation deem',
     'bench-lab': '实验 lab 实验课 virtualbench 分压器 voltage divider 示波器 oscilloscope 触发 trigger 探头 probe 电容 capacitor 相位 phase 热敏电阻 thermistor ntc 运放 op-amp led 数据表 datasheet 限流 机器人 robot snake arduino 光敏三极管',
 }
 
