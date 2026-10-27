@@ -67,18 +67,18 @@
   <div class="tag">实验 4 · 并励与串励有刷直流电机（Year 2 EM Week 5）</div>
   <h2>并励：转矩随转速直线下降、转速很稳；串励：起动转矩极大，空载会飞车</h2>
   <p class="lead">都从电枢回路的基尔霍夫电压定律出发：V<sub>s</sub> = E<sub>A</sub> + I<sub>A</sub>R<sub>A</sub>。并励的磁通恒定，E<sub>A</sub> = k<sub>v</sub>ω、T = k<sub>v</sub>I<sub>A</sub>；串励的磁通跟着电流走，E<sub>A</sub> = KIω、T = KI²。左图：转矩（蓝）、功率（橙）随转速，橙色横线是负载转矩，红点是运行点。右图：电流（紫）和效率（绿）。「其他损耗」代表铁损（磁滞、涡流）和摩擦。</p>
-  <div class="btns" role="group" aria-label="预设"><button data-dm="sh,200,0.4,1.0504,5.252,0">2026 Q3 并励：200 V、0.4 Ω、1800 rpm</button><button data-dm="sh,150,0.1,1.4,252.7,0">习题 Q2：150 V、900 rpm</button><button data-dm="sh,200,0.4,1.0504,40,600">并励 + 600 W 其他损耗</button><button data-dm="se,200,0.4,0.036,90,0">串励示例：100 rad/s 时 50 A</button><button data-dm="se,200,0.4,0.036,5,0">串励轻载：转速飙升</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-dm="sh,200,0.4,1.0504,5.252,0">2026 Q3 并励：200 V、0.4 Ω、1800 rpm</button><button data-dm="sh,150,0.1,1.4,252.7,0">习题 Q2：150 V、900 rpm</button><button data-dm="sh,200,0.4,1.0504,40,600">并励 + 600 W 其他损耗</button><button data-dm="se,200,0.4,0.036,90,0">串励示例：100 rad/s 时 50 A</button><button data-dm="se,200,0.4,0.036,5,0">串励轻载：转速飙升</button><button data-dm="sh,24,1,2.88,13.6,0">讲义并励图：24 V、1 Ω</button><button data-dm="se,120,1.2,0.048,100,0">讲义串励图：120 V、1.2 Ω</button></div>
   <div class="controls">
     <div class="ctl"><label for="dV">电源 V<sub>s</sub> (V)</label><input id="dV" type="range" min="5" max="250" step="1" value="200"><output id="dVO"></output></div>
     <div class="ctl"><label for="dR">电阻 R（串励含励磁绕组）(Ω)</label><input id="dR" type="range" min="0.05" max="2" step="0.01" value="0.4"><output id="dRO"></output></div>
-    <div class="ctl"><label for="dK" id="dKL">电机常数 k<sub>v</sub> (V·s/rad)</label><input id="dK" type="range" min="0.005" max="2" step="0.0001" value="1.0504"><output id="dKO"></output></div>
+    <div class="ctl"><label for="dK" id="dKL">电机常数 k<sub>v</sub> (V·s/rad)</label><input id="dK" type="range" min="0.005" max="3" step="0.0001" value="1.0504"><output id="dKO"></output></div>
     <div class="ctl"><label for="dT">负载转矩 T<sub>L</sub> (N·m)</label><input id="dT" type="range" min="0" max="600" step="0.001" value="5.252"><output id="dTO"></output></div>
     <div class="ctl"><label for="dP">其他损耗 P<sub>c</sub> (W)</label><input id="dP" type="range" min="0" max="2000" step="10" value="0"><output id="dPO"></output></div>
   </div>
   <p class="verdict" id="d_v"></p>
   <div class="stage even"><canvas id="dts" height="260" aria-label="转矩与功率随转速"></canvas><canvas id="die" height="260" aria-label="电流与效率随转速"></canvas></div>
   <div class="read"><div><small>运行点转速</small><b id="d_w" style="font-size:15px"></b></div><div><small>电流 I / 反电动势 E</small><b id="d_i" style="font-size:15px"></b></div><div><small>输入 / 输出 / 铜损 / 其他</small><b id="d_p" style="font-size:13px"></b></div><div><small>效率 η · 转速调整率</small><b id="d_e" style="font-size:15px"></b></div></div>
-  <p class="note"><strong>对照 2026 Q3：</strong>k<sub>v</sub> = (200 − 5×0.4)/188.5 = 1.05；堵转电流 500 A、堵转转矩 525 N·m；空载转速 190.4 rad/s（1818 rpm）；最大功率 V²/4R = 25 kW 出现在一半转速；只算电枢铜损时效率 = ω/ω<sub>0</sub>，转速越高效率越高。</p>
+  <p class="note"><strong>对照 2026 Q3：</strong>k<sub>v</sub> = (200 − 5×0.4)/188.5 = 1.05；堵转电流 500 A、堵转转矩 525 N·m；空载转速 190.4 rad/s（1818 rpm）；最大功率 V²/4R = 25 kW 出现在一半转速；只算电枢铜损时效率 = ω/ω<sub>0</sub>，转速越高效率越高。<strong>讲义两张图</strong>可由「讲义」两个预设复现：并励图是 24 V、1 Ω、k<sub>v</sub> ≈ 2.88（堵转 24 A、69 N·m，空载 8.33 rad/s，最大功率 144 W）；串励图是 120 V、1.2 Ω、K = 0.048（最大功率 V²/4R = 3 kW 出现在 ω = R/K = 25 rad/s，效率 Kω/(R+Kω) 在 94 rad/s 时 79%）。</p>
 </section>
 
 </div>
@@ -171,7 +171,7 @@ function lab4(){
   const reg=sh&&isFinite(w)?((w0-w)/w0*100):NaN;
   $('d_e').textContent=isFinite(w)?`${(eta_*100).toFixed(1)} %`+(sh?` · ${reg.toFixed(1)} %`:' · 无空载转速'):'—';
   const v=$('d_v');v.textContent=sh?`并励：堵转转矩 k_vV/R = ${fmt(k*V/R,4)} N·m（电流 ${fmt(V/R,4)} A），空载转速 V/k_v = ${fmt(w0,4)} rad/s，最大功率 V²/4R = ${fmt(V*V/(4*R),4)} W 出现在 ${fmt(w0/2,4)} rad/s`
-    :`串励：堵转转矩 KV²/R² = ${fmt(k*V*V/(R*R),4)} N·m（实际受磁饱和和限流限制），转矩随转速约按 1/ω² 下降，T → 0 时 ω → ∞`;
+    :`串励：堵转转矩 KV²/R² = ${fmt(k*V*V/(R*R),4)} N·m（实际受磁饱和与限流限制），转矩随转速约按 1/ω² 下降，T → 0 时 ω → ∞`;
   v.style.color=sh?css('--blue'):css('--red');
   /* torque + power */
   let Tmax=0,Pmx=0;for(let i=0;i<=400;i++){const u=wmax*i/400;if(u>=0.04*wmax||sh)Tmax=Math.max(Tmax,T(u));Pmx=Math.max(Pmx,P(u));}
