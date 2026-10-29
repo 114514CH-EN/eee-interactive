@@ -13,6 +13,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验、马尔可夫过程与 PageRank、极值理论（最大值的极限分布、GEV 与重现水平） |
 | [信息与编码实验室](https://114514ch-en.github.io/eee-interactive/coding-lab/) | Communication Systems Week 1 / 3 / 4 | 熵、Huffman / Fano / Shannon、分贝、Hamming 码与交织 |
 | [通信链路实验室](https://114514ch-en.github.io/eee-interactive/comms-lab/) | 通信系统 · Lab 1 + Week 3 + Useful Equations | 官方 Lab 1 配套：编码器 / 解码器 / 码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半；另有前缀码解码、分组编码、香农容量、链路预算、量化噪声、误码率、滤波器 |
+| [调制实验室](https://114514ch-en.github.io/eee-interactive/modulation-lab/) | 通信系统 · Week 5 模拟调制 | AM 包络、边带与带宽（含 Tutorial 两音题）、整流 vs 乘本地载波解调、PM 与 FM 的波形 / 瞬时频率 / 频谱与 Carson 带宽、正交调幅 QAM 的相位误差串扰 |
 | [Python 与系统工程实验室](https://114514ch-en.github.io/eee-interactive/msse-lab/) | MSSE · Python Lecture 1–3 / Module Overview | 切片边界模型、Python 2 vs 3 除法逐步求值、列表推导式展开、浏览器里逐行执行 Python（Pyodide，含类、self、继承）、Vee 模型、33 个常见误区的真实报错 |
 | [同步状态机实验室](https://114514ch-en.github.io/eee-interactive/fsm-lab/) | DEEM · DE ①② | 布尔函数的几种写法、Moore vs Mealy、用 X 触发器实现 Y、编码分配 |
 | [异步状态机实验室](https://114514ch-en.github.io/eee-interactive/afsm-lab/) | DEEM · DE ③ | 继电器河道闸门、竞争与虚拟状态、门级 AFSM 触发器（静态 / 本质冒险） |

@@ -1,0 +1,279 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>调制实验室</title>
+<meta name="description" content="通信系统 Week 5 模拟调制的四个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="调制实验室"><meta property="og:description" content="通信系统 Week 5 模拟调制的四个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/modulation-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>html.embed .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">COMMUNICATION SYSTEMS · MODULATION</div>
+  <h1>调制实验室</h1>
+  <p>对应通信系统 Week 5 第 1 讲「模拟调制」：把消息装到高频载波上，改的是幅度（AM）、相位（PM）还是频率（FM）。实验 1 看 AM 的包络、边带和带宽（含讲义 Tutorial 的两音题）；实验 2 用讲义的两种方法把 AM 解调回来；实验 3 对比 PM 和 FM 的波形、瞬时频率和频谱；实验 4 是正交调幅 QAM：两路消息共用同一段频谱。为了看得清，载波频率都画得比实际低很多。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 AM 波形与频谱</a><a href="#lab2">实验 2 AM 解调</a><a href="#lab3">实验 3 PM 与 FM</a><a href="#lab4">实验 4 正交调幅 QAM</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · Amplitude Modulation · Modulation Index · Tutorial Question</div>
+  <h2>AM：包络就是消息；频谱是载波加两条边带，带宽 2f<sub>m</sub></h2>
+  <p class="lead">s(t) = A<sub>c</sub>[1 + m₁cos(2πf₁t) + m₂cos(2πf₂t)]·cos(2πf<sub>c</sub>t)，这里 A<sub>c</sub> = 1 V。上图：已调信号（蓝）和它的包络（橙色虚线），包络降到 0 以下的地方就是过调制（红色）。下图左边是消息本身的频谱（基带），右边是已调信号的频谱：每条消息谱线都被复制到 f<sub>c</sub> 两侧，高度变成 A<sub>c</sub>m/2，中间还有一条不带信息的载波。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-am="0.5,1,0,1,20">单音 m = 0.5</button><button data-am="1,1,0,1,20">m = 1（刚好不过调）</button><button data-am="1.5,1,0,1,20">m = 1.5 过调制</button><button data-am="0.4,0.9,0.4,1.2,200">Tutorial：0.9 + 1.2 kHz，载波 200 kHz</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="aM1">调制指数 m₁</label><input id="aM1" type="range" min="0" max="1.6" step="0.01" value="0.5"><output id="aM1O"></output></div>
+    <div class="ctl"><label for="aF1">音调 f₁ (kHz)</label><input id="aF1" type="range" min="0.2" max="5" step="0.1" value="1"><output id="aF1O"></output></div>
+    <div class="ctl"><label for="aM2">第二个音 m₂（0 = 没有）</label><input id="aM2" type="range" min="0" max="1" step="0.01" value="0"><output id="aM2O"></output></div>
+    <div class="ctl"><label for="aF2">第二个音 f₂ (kHz)</label><input id="aF2" type="range" min="0.2" max="5" step="0.1" value="1"><output id="aF2O"></output></div>
+    <div class="ctl"><label for="aFc">载波 f<sub>c</sub> (kHz)</label><input id="aFc" type="range" min="5" max="300" step="1" value="20"><output id="aFcO"></output></div>
+  </div>
+  <p class="verdict" id="a_v"></p>
+  <div class="stage one"><canvas id="amt" height="220" aria-label="AM 已调信号和包络"></canvas><canvas id="amf" height="220" aria-label="消息频谱和 AM 频谱"></canvas></div>
+  <div class="read"><div><small>已调信号里的频率</small><b id="a_f" style="font-size:14px"></b></div><div><small>带宽 B = 2f<sub>max</sub></small><b id="a_b" style="font-size:15px"></b></div><div><small>功率 载波 / 边带（1 Ω）</small><b id="a_p" style="font-size:15px"></b></div><div><small>边带功率占比</small><b id="a_e" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>讲义 Tutorial：</strong>0.9 kHz 和 1.2 kHz 两个音、载波 200 kHz 的双边带 AM，发送信号里有 <strong>198.8、199.1、200、200.9、201.2 kHz</strong> 五个频率，带宽 2 × 1.2 = 2.4 kHz。注意边带功率占比：m = 1 时也只有 1/3，剩下 2/3 的功率花在不带信息的载波上（讲义「High power requirements」）。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · Demodulation of AM: Recovering the Audio Signal</div>
+  <h2>解调：整流或乘本地载波，再用滑动平均滤掉高频</h2>
+  <p class="lead">讲义两种方法：① 全波整流 |s(t)|（二极管桥，软件里用 abs），② 乘本地产生的载波 2cos(2πf<sub>c</sub>t + φ)。两种都会留下 2f<sub>c</sub> 附近的高频成分，再用「滑动平均」这个最简单的低通滤波去掉（窗口长度按载波周期算，相当于 MATLAB 的 movmean）。上图：收到的信号（灰）和整流或相乘之后（蓝）；下图：滤波输出（绿）和理想输出（黑虚线）。这里 f<sub>m</sub> = 1 kHz，f<sub>c</sub> = 20 kHz。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-dd="env,0.5,1,0">讲义：整流 + 滑动平均</button><button data-dd="env,0.5,0.25,0">窗口太短</button><button data-dd="env,0.5,8,0">窗口太长</button><button data-dd="env,1.5,1,0">过调制 m = 1.5：整流失真</button><button data-dd="coh,1.5,1,0">同一个 m = 1.5 用乘载波</button><button data-dd="coh,0.5,1,60">乘载波，相位差 60°</button><button data-dd="coh,0.5,1,90">相位差 90°</button></div>
+  <div class="btns" role="group" aria-label="方法"><button data-dm="env">方法 ①：全波整流 |s|</button><button data-dm="coh">方法 ②：乘本地载波</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="dM">调制指数 m</label><input id="dM" type="range" min="0" max="1.6" step="0.01" value="0.5"><output id="dMO"></output></div>
+    <div class="ctl"><label for="dL">平均窗口（载波周期数）</label><input id="dL" type="range" min="0.25" max="10" step="0.25" value="1"><output id="dLO"></output></div>
+    <div class="ctl"><label for="dP">本地载波相位差 φ（只对方法 ②）</label><input id="dP" type="range" min="0" max="180" step="1" value="0"><output id="dPO"></output></div>
+  </div>
+  <p class="verdict" id="d_v"></p>
+  <div class="stage one"><canvas id="dmA" height="200" aria-label="收到的信号和整流或相乘后的信号"></canvas><canvas id="dmB" height="200" aria-label="滤波后的输出和理想输出"></canvas></div>
+  <div class="read"><div><small>输出的直流分量</small><b id="d_dc" style="font-size:15px"></b></div><div><small>输出里 1 kHz 的幅度</small><b id="d_ac" style="font-size:15px"></b></div><div><small>剩余纹波 + 失真（相对 1 kHz）</small><b id="d_th" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>看点：</strong>整流后平均得到 (2/π)A<sub>c</sub>|1 + m cos(2πf<sub>m</sub>t)|，前面多了 2/π ≈ 0.64，还有一个直流（去掉直流就是讲义下图那条绿线）。窗口取 1 个载波周期正好把 2f<sub>c</sub> 的纹波抹平；太短纹波还在，太长会把消息本身也抹小。整流法要求 m ≤ 1：过调制时包络翻折，输出失真；乘载波的方法不怕过调制，但本地载波必须和发送端<strong>同频同相</strong>，输出按 cos φ 缩小，相差 90° 时什么都收不到。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · Angle Modulation · Instantaneous Frequency · PM · FM</div>
+  <h2>PM 让相位跟着消息走，FM 让频率跟着消息走</h2>
+  <p class="lead">载波 A<sub>c</sub>cos(2πf<sub>c</sub>t + φ(t))。PM：φ(t) = k<sub>p</sub>s<sub>m</sub>(t)；FM：瞬时频率 f<sub>i</sub>(t) = f<sub>c</sub> + k<sub>f</sub>s<sub>m</sub>(t)，所以 φ(t) = 2πk<sub>f</sub>∫s<sub>m</sub>dτ。下面消息幅度为 1、f<sub>m</sub> = 1 kHz、f<sub>c</sub> = 10 kHz，滑块直接调峰值相位偏移 Δφ = k<sub>p</sub>A<sub>m</sub> 和峰值频率偏移 Δf = k<sub>f</sub>A<sub>m</sub>。上图三条：消息、PM、FM；中图：两者的瞬时频率 f<sub>i</sub> = f<sub>c</sub> + (1/2π)dφ/dt；下图：所选信号的频谱，阴影是 Carson 带宽 2(Δf + f<sub>m</sub>)。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-ff="sq,3,1.5,fm">讲义 FM 波形（方波消息）</button><button data-ff="sin,0.5,0.5,fm">正弦 β = 0.5：窄带</button><button data-ff="sin,5,5,fm">正弦 β = 5：宽带</button><button data-ff="sin,2,2,pm">正弦：PM 和 FM 只差 90°</button><button data-ff="tri,2,2,pm">三角波：PM 的频率是方波</button></div>
+  <div class="btns" role="group" aria-label="消息波形"><button data-fs="sin">正弦消息</button><button data-fs="sq">方波消息</button><button data-fs="tri">三角波消息</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="fD">FM 峰值频偏 Δf (kHz)</label><input id="fD" type="range" min="0" max="5" step="0.1" value="3"><output id="fDO"></output></div>
+    <div class="ctl"><label for="pD">PM 峰值相偏 Δφ (rad)</label><input id="pD" type="range" min="0" max="5" step="0.05" value="1.5"><output id="pDO"></output></div>
+  </div>
+  <div class="btns" role="group" aria-label="频谱显示"><button data-fv="fm">频谱看 FM</button><button data-fv="pm">频谱看 PM</button></div>
+  <div class="stage one"><canvas id="anA" height="250" aria-label="消息、PM 和 FM 波形"></canvas><canvas id="anB" height="170" aria-label="瞬时频率"></canvas><canvas id="anC" height="200" aria-label="频谱和 Carson 带宽"></canvas></div>
+  <div class="read"><div><small>FM 调制指数 β = Δf/f<sub>m</sub></small><b id="f_b" style="font-size:15px"></b></div><div><small>峰值频偏 FM / PM</small><b id="f_d" style="font-size:14px"></b></div><div><small>Carson 带宽 2(Δf + f<sub>m</sub>)</small><b id="f_c" style="font-size:15px"></b></div><div><small>Carson 带宽内的功率</small><b id="f_p" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>看点：</strong>FM 的频率直接跟着消息：方波消息就在两个频率之间切换（讲义那张图）。PM 的频率跟着消息的<strong>导数</strong>：消息是正弦时 PM 和 FM 波形一样，只差 90°；消息是三角波时 PM 的频率变成方波；消息是方波时 PM 的相位突然跳一下。幅度始终不变，所以噪声改了幅度也不影响信息（讲义：AM 更容易受噪声影响）。代价是带宽：β 越大，边带越多，Carson 规则 2(Δf + f<sub>m</sub>) 比 AM 的 2f<sub>m</sub> 宽得多。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · Quadrature Amplitude Modulation</div>
+  <h2>QAM：cos 和 sin 两个载波正交，两路消息挤在同一段频谱里</h2>
+  <p class="lead">发送 s(t) = I(t)cos(2πf<sub>c</sub>t) − Q(t)sin(2πf<sub>c</sub>t)。接收端分别乘 2cos(2πf<sub>c</sub>t + φ) 和 −2sin(2πf<sub>c</sub>t + φ)，滑动平均（一个载波周期，做两遍）滤掉 2f<sub>c</sub>，得到 I′ = I cos φ + Q sin φ、Q′ = Q cos φ − I sin φ。φ = 0 时两路互不干扰；本地载波相位一偏，两路就互相串。I 是正弦（蓝），Q 是三角波（橙），f<sub>c</sub> = 20 kHz。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-qq="1,1.5,0">相位对齐：两路完美分开</button><button data-qq="1,1.5,30">相位差 30°：开始串扰</button><button data-qq="1,1.5,90">相位差 90°：I、Q 互换</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="qI">I 路频率 (kHz)</label><input id="qI" type="range" min="0.5" max="3" step="0.1" value="1"><output id="qIO"></output></div>
+    <div class="ctl"><label for="qQ">Q 路频率 (kHz)</label><input id="qQ" type="range" min="0.5" max="3" step="0.1" value="1.5"><output id="qQO"></output></div>
+    <div class="ctl"><label for="qP">本地载波相位差 φ (°)</label><input id="qP" type="range" min="0" max="180" step="1" value="0"><output id="qPO"></output></div>
+  </div>
+  <p class="verdict" id="q_v"></p>
+  <div class="stage one"><canvas id="qmA" height="200" aria-label="I、Q 消息和 QAM 信号"></canvas><canvas id="qmB" height="200" aria-label="解调出来的 I 和 Q"></canvas></div>
+  <div class="read"><div><small>I′ 里自己的幅度 cos φ</small><b id="q_a" style="font-size:15px"></b></div><div><small>串进来的另一路 sin φ</small><b id="q_x" style="font-size:15px"></b></div><div><small>占用带宽</small><b id="q_b" style="font-size:14px"></b></div></div>
+  <p class="note"><strong>为什么能分开：</strong>cos 和 sin 在一个载波周期上乘起来积分为 0（正交），所以乘 cos 再平均只留下 I，乘 sin 再平均只留下 Q。一路普通 AM 的两条边带占 2f<sub>m</sub>，QAM 在同样的 2f<sub>m</sub> 里放了两路独立的信息（讲义：「two independent pieces of information in the same part of the spectrum」）。下一讲的数字 QAM 就是让 I、Q 取几个离散的值。</p>
+</section>
+</div>
+
+<script>
+const val=id=>+$(id).value;
+const TAU=2*Math.PI;
+/* draw a fast oscillating signal: per-sample polyline, or a filled band between ±env when too dense */
+function wave(x,a,t0,t1,f,col,lw,n){x.strokeStyle=col;x.lineWidth=lw;x.beginPath();for(let i=0;i<=n;i++){const t=t0+(t1-t0)*i/n,v=f(t);i?x.lineTo(a.X(t),a.Y(v)):x.moveTo(a.X(t),a.Y(v));}x.stroke();}
+function band(x,a,t0,t1,env,col,n){x.fillStyle=col;x.beginPath();for(let i=0;i<=n;i++){const t=t0+(t1-t0)*i/n;x.lineTo(a.X(t),a.Y(Math.abs(env(t))));}for(let i=n;i>=0;i--){const t=t0+(t1-t0)*i/n;x.lineTo(a.X(t),a.Y(-Math.abs(env(t))));}x.closePath();x.fill();}
+function vline(x,a,f,h,col,lw=3){x.strokeStyle=col;x.lineWidth=lw;x.beginPath();x.moveTo(a.X(f),a.Y(0));x.lineTo(a.X(f),a.Y(h));x.stroke();x.fillStyle=col;x.beginPath();x.arc(a.X(f),a.Y(h),3.5,0,7);x.fill();}
+const nice=(v,n=4)=>{const s=+v.toPrecision(n);return String(s);};
+/* centered moving average (like MATLAB movmean) */
+function movmean(y,N){const n=y.length,out=new Float64Array(n),h=N/2;const c=new Float64Array(n+1);for(let i=0;i<n;i++)c[i+1]=c[i]+y[i];
+  for(let i=0;i<n;i++){const lo=Math.max(0,Math.round(i-h)),hi=Math.min(n,Math.round(i+h));out[i]=(c[hi]-c[lo])/Math.max(1,hi-lo);}return out;}
+/* in-place radix-2 FFT */
+function fft(re,im){const n=re.length;for(let i=1,j=0;i<n;i++){let b=n>>1;for(;j&b;b>>=1)j^=b;j^=b;if(i<j){[re[i],re[j]]=[re[j],re[i]];[im[i],im[j]]=[im[j],im[i]];}}
+  for(let len=2;len<=n;len<<=1){const ang=-TAU/len,wr=Math.cos(ang),wi=Math.sin(ang);for(let i=0;i<n;i+=len){let cr=1,ci=0;for(let k=0;k<len/2;k++){const a=i+k,b=a+len/2,tr=re[b]*cr-im[b]*ci,ti=re[b]*ci+im[b]*cr;re[b]=re[a]-tr;im[b]=im[a]-ti;re[a]+=tr;im[a]+=ti;const t=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=t;}}}}
+
+/* ---------- Lab 1: AM waveform and spectrum ---------- */
+function lab1(){
+  const m1=val('aM1'),f1=val('aF1'),m2=val('aM2'),f2=val('aF2'),fc=val('aFc');
+  $('aM1O').textContent=m1.toFixed(2);$('aF1O').textContent=f1.toFixed(1)+' kHz';$('aM2O').textContent=m2.toFixed(2);$('aF2O').textContent=f2.toFixed(1)+' kHz';$('aFcO').textContent=fc+' kHz';
+  pressGroup('#lab1 [data-am]',b=>{const q=b.dataset.am.split(',').map(Number);return Math.abs(q[0]-m1)<1e-9&&Math.abs(q[1]-f1)<1e-9&&Math.abs(q[2]-m2)<1e-9&&(q[2]===0||Math.abs(q[3]-f2)<1e-9)&&q[4]===fc;});
+  const two=m2>0,tones=[[m1,f1]].concat(two?[[m2,f2]]:[]).filter(t=>t[0]>0);
+  const env=t=>1+m1*Math.cos(TAU*f1*t)+(two?m2*Math.cos(TAU*f2*t):0);
+  const fmin=Math.min(f1,two?f2:f1),T1=2/fmin,fmax=tones.length?Math.max(...tones.map(t=>t[1])):0;
+  let emin=Infinity;for(let i=0;i<=2000;i++)emin=Math.min(emin,env(T1*i/2000));
+  const over=emin<-1e-9,v=$('a_v');
+  v.textContent=over?`过调制：包络 1 + Σm·cos 最低降到 ${emin.toFixed(2)}（小于 0），包络被「翻折」，整流解调会失真`:`包络最低 ${emin.toFixed(2)} ≥ 0，没有过调制：包络的形状就是消息`;
+  v.style.color=over?css('--red'):css('--accent');
+  /* time plot */
+  const [x,W,H]=fit($('amt'));const Y=(1+m1+m2)*1.12;
+  const a=axes(x,W,H,{x0:0,x1:T1,y0:-Y,y1:Y,xt:[0,T1/4,T1/2,3*T1/4,T1].map(t=>+t.toPrecision(3)),yt:[-1,0,1],title:'已调信号 s(t)（蓝）与包络 ±Ac(1 + Σm·cos)（橙）',xl:'t (ms)',pl:40});
+  for(let i=0;i<600;i++){const t0=T1*i/600,t1=T1*(i+1)/600;if(env((t0+t1)/2)<0){x.fillStyle='rgba(196,58,49,.16)';x.fillRect(a.X(t0),a.pt,a.X(t1)-a.X(t0)+0.5,H-a.pt-a.pb);}}
+  const cycles=fc*T1,px=W-a.pl-a.pr;
+  if(cycles*5>px){x.globalAlpha=.45;band(x,a,0,T1,env,css('--blue'),900);x.globalAlpha=1;const note=`载波 ${fc} kHz 在 ${nice(T1,3)} ms 里有 ${Math.round(cycles)} 个周期，画成填满的带（示波器上看到的也是这样）`;x.font=`11px ${css('--body')}`;const nw=x.measureText(note).width;x.fillStyle=css('--panel');x.globalAlpha=.85;x.fillRect(a.pl+2,a.pt+2,nw+8,16);x.globalAlpha=1;text(x,note,a.pl+6,a.pt+14,css('--muted'),11);}
+  else wave(x,a,0,T1,t=>env(t)*Math.cos(TAU*fc*t),css('--blue'),1.6,Math.min(16000,Math.max(1200,Math.round(cycles*40))));
+  x.setLineDash([6,4]);plot(x,a.X,a.Y,env,0,T1,css('--amp'),1.8,800);plot(x,a.X,a.Y,t=>-env(t),0,T1,css('--amp'),1.8,800);x.setLineDash([]);
+  /* spectrum: message (left) and AM (right) */
+  const [y,W2,H2]=fit($('amf'));const split=Math.round(W2*0.34);
+  const L1=Math.max(fmax*1.5,0.5),ymL=Math.max(0.6,...tones.map(t=>t[0]))*1.25;
+  y.save();const aL=axes(y,split,H2,{x0:0,x1:L1,y0:0,y1:ymL,xt:[0,+(L1/2).toPrecision(2),+L1.toPrecision(2)],yt:[0,+(ymL/2).toPrecision(2)],title:'消息的频谱（基带）',xl:'f (kHz)',pl:36,pr:8});
+  tones.forEach(([m,f])=>{vline(y,aL,f,m,css('--ink'));label(y,nice(f),aL.X(f)-10,aL.Y(m)-8,css('--ink'),11,'600');});
+  y.restore();
+  const hw=Math.max(fmax*1.7,0.8),xr0=fc-hw,xr1=fc+hw;
+  y.save();y.translate(split,0);
+  const aR=axes(y,W2-split,H2,{x0:xr0,x1:xr1,y0:0,y1:1.25,xt:[+(fc-hw/1.7).toPrecision(5),fc,+(fc+hw/1.7).toPrecision(5)],yt:[0,0.5,1],title:'× cos 2πfct 之后：载波 + 下边带 + 上边带',xl:'f (kHz)',pl:44,pr:10});
+  vline(y,aR,fc,1,css('--muted'));label(y,`载波 ${nice(fc,5)}`,aR.X(fc)+6,aR.Y(1)+4,css('--muted'),11,'600');
+  const lines=[];tones.forEach(([m,f])=>{lines.push([fc-f,m/2,css('--purple')],[fc+f,m/2,css('--blue')]);});lines.sort((p,q)=>p[0]-q[0]);
+  y.font=`600 11px ${css('--mono')}`;let lastR=-1e9,lift=0;
+  lines.forEach(([g,h,col])=>{vline(y,aR,g,h,col);const s=nice(g,5),w=y.measureText(s).width,px=aR.X(g)-w/2;lift=px<lastR+4?lift+14:0;label(y,s,px,aR.Y(h)-8-lift,col,11,'600');lastR=px+w;});
+  if(tones.length){const yb=1.13;y.strokeStyle=css('--amp');y.lineWidth=1.4;y.beginPath();y.moveTo(aR.X(fc-fmax),aR.Y(yb));y.lineTo(aR.X(fc+fmax),aR.Y(yb));y.stroke();
+    [fc-fmax,fc+fmax].forEach(g=>{y.beginPath();y.moveTo(aR.X(g),aR.Y(yb)-5);y.lineTo(aR.X(g),aR.Y(yb)+5);y.stroke();});
+    label(y,`B = ${nice(2*fmax)} kHz`,aR.X(fc+fmax)+6,aR.Y(yb)+4,css('--amp'),11,'600');}
+  y.restore();
+  /* readouts */
+  const freqs=[fc];tones.forEach(([m,f])=>{freqs.push(fc-f,fc+f);});freqs.sort((p,q)=>p-q);
+  $('a_f').textContent=[...new Set(freqs.map(f=>nice(f,5)))].join('、')+' kHz';
+  $('a_b').textContent=tones.length?`2 × ${nice(fmax)} = ${nice(2*fmax)} kHz`:'0（没调制）';
+  const Pc=0.5,Ps=tones.reduce((s,[m])=>s+m*m/4,0);
+  $('a_p').textContent=`${Pc} / ${Ps.toFixed(3)} W`;
+  $('a_e').textContent=`${(Ps/(Pc+Ps)*100).toFixed(1)} %`+(tones.length===1?`（m²/(2+m²)）`:'');
+}
+['aM1','aF1','aM2','aF2','aFc'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(1)));
+document.querySelectorAll('#lab1 [data-am]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.am.split(',');['aM1','aF1','aM2','aF2','aFc'].forEach((id,i)=>$(id).value=q[i]);Lab.draw(1);}));
+Lab.add(1,lab1,{amt:200,amf:200});
+
+/* ---------- Lab 2: AM demodulation ---------- */
+let dm='env';
+function lab2(){
+  const m=val('dM'),L=val('dL'),ph=val('dP')*Math.PI/180,coh=dm==='coh';
+  $('dMO').textContent=m.toFixed(2);$('dLO').textContent=L+' 个';$('dPO').textContent=val('dP')+'°';
+  pressGroup('#lab2 [data-dm]',b=>b.dataset.dm===dm);
+  pressGroup('#lab2 [data-dd]',b=>{const q=b.dataset.dd.split(',');return q[0]===dm&&+q[1]===m&&+q[2]===L&&+q[3]===val('dP');});
+  $('dP').disabled=!coh;
+  const fm=1,fc=20,spc=40,fs=fc*spc,T=3,pad=12/fc,t0=-pad,n=Math.round((T+2*pad)*fs);
+  const tt=new Float64Array(n),s=new Float64Array(n),p=new Float64Array(n);
+  for(let i=0;i<n;i++){const t=t0+i/fs;tt[i]=t;const e=1+m*Math.cos(TAU*fm*t);s[i]=e*Math.cos(TAU*fc*t);p[i]=coh?s[i]*2*Math.cos(TAU*fc*t+ph):Math.abs(s[i]);}
+  const yv=movmean(p,Math.max(1,Math.round(L*spc)));
+  const ideal=t=>coh?(1+m*Math.cos(TAU*fm*t))*Math.cos(ph):(2/Math.PI)*Math.abs(1+m*Math.cos(TAU*fm*t));
+  const want=t=>coh?(1+m*Math.cos(TAU*fm*t))*Math.cos(ph):(2/Math.PI)*(1+m*Math.cos(TAU*fm*t));
+  /* analyse the output over exactly 3 message periods */
+  let a0=0,a1=0,b1=0,cnt=0;const i0=Math.round(pad*fs),i1=i0+Math.round(T*fs);
+  for(let i=i0;i<i1;i++){a0+=yv[i];a1+=yv[i]*Math.cos(TAU*fm*tt[i]);b1+=yv[i]*Math.sin(TAU*fm*tt[i]);cnt++;}
+  a0/=cnt;a1*=2/cnt;b1*=2/cnt;const A1=Math.hypot(a1,b1);let r2=0;
+  for(let i=i0;i<i1;i++){const r=yv[i]-(a0+a1*Math.cos(TAU*fm*tt[i])+b1*Math.sin(TAU*fm*tt[i]));r2+=r*r;}
+  const thd=A1>1e-6?Math.sqrt(r2/cnt)/(A1/Math.SQRT2):NaN;
+  $('d_dc').textContent=a0.toFixed(3)+' V';$('d_ac').textContent=A1.toFixed(3)+' V';$('d_th').textContent=isFinite(thd)?(thd*100).toFixed(1)+' %':'—（没有 1 kHz 成分）';
+  const v=$('d_v');let msg,col=css('--accent');
+  if(coh&&Math.abs(Math.cos(ph))<0.05){msg=`相位差 ${val('dP')}°：cos φ ≈ 0，乘出来的低频部分几乎为零，什么都收不到`;col=css('--red');}
+  else if(!coh&&m>1){msg=`过调制：整流得到的是 |1 + m cos|，负的部分被翻上来，输出失真 ${(thd*100).toFixed(0)} %`;col=css('--red');}
+  else if(L<1){msg=`窗口只有 ${L} 个载波周期：2fc = 40 kHz 的纹波没滤干净`;col=css('--amp');}
+  else if(L>3){msg=`窗口 ${L} 个载波周期太长：把 1 kHz 的消息也抹小了（幅度只剩理想的 ${(A1/(coh?m*Math.abs(Math.cos(ph)):2*m/Math.PI)*100).toFixed(0)} %）`;col=css('--amp');}
+  else msg=coh?`乘本地载波：输出 = Ac(1 + m cos)·cos φ，相位差 ${val('dP')}° 让幅度变成 ${Math.cos(ph).toFixed(2)} 倍`+(m>1?'；过调制也不怕':''):`整流 + 滑动平均：输出 ≈ (2/π)Ac(1 + m cos)，消息恢复正常`;
+  v.textContent=msg;v.style.color=col;
+  /* plots */
+  const [x,W,H]=fit($('dmA'));const Ym=(1+m)*(coh?2.2:1.15);
+  const a=axes(x,W,H,{x0:0,x1:T,y0:coh?-Ym:-(1+m)*1.15,y1:Ym,xt:[0,1,2,3],yt:coh?[-2,0,2]:[-1,0,1],title:coh?'收到的 s(t)（灰）× 2cos(2πfct + φ)（蓝）':'收到的 s(t)（灰）和全波整流 |s(t)|（蓝）',xl:'t (ms)',pl:40});
+  const seg=(arr,col,lw)=>{x.strokeStyle=col;x.lineWidth=lw;x.beginPath();for(let i=i0;i<=i1&&i<n;i++){const X=a.X(tt[i]),Y=a.Y(arr[i]);i===i0?x.moveTo(X,Y):x.lineTo(X,Y);}x.stroke();};
+  seg(s,css('--muted'),1);seg(p,css('--blue'),1.3);
+  const [y,W2,H2]=fit($('dmB'));let lo=Infinity,hi=-Infinity;for(let i=i0;i<i1;i++){lo=Math.min(lo,yv[i],want(tt[i]));hi=Math.max(hi,yv[i],want(tt[i]));}
+  const pad2=(hi-lo)*0.15+0.05;const b=axes(y,W2,H2,{x0:0,x1:T,y0:Math.min(lo-pad2,-0.1),y1:hi+pad2,xt:[0,1,2,3],yt:[0,+(hi/2).toPrecision(2),+hi.toPrecision(2)],title:'滑动平均后的输出（绿）和理想输出（黑虚线）',xl:'t (ms)',pl:40});
+  y.strokeStyle=css('--green');y.lineWidth=2.4;y.beginPath();for(let i=i0;i<=i1&&i<n;i++){const X=b.X(tt[i]),Y=b.Y(yv[i]);i===i0?y.moveTo(X,Y):y.lineTo(X,Y);}y.stroke();
+  y.setLineDash([6,4]);plot(y,b.X,b.Y,want,0,T,css('--ink'),1.6,600);y.setLineDash([]);
+  if(!coh&&m>1){y.setLineDash([2,3]);plot(y,b.X,b.Y,ideal,0,T,css('--red'),1.4,600);y.setLineDash([]);text(y,'红点线：(2/π)|1 + m cos|，整流实际得到的',b.pl+4,H2-b.pb-6,css('--red'),11);}
+}
+['dM','dL','dP'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+document.querySelectorAll('#lab2 [data-dm]').forEach(b=>b.addEventListener('click',()=>{dm=b.dataset.dm;Lab.draw(2);}));
+document.querySelectorAll('#lab2 [data-dd]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.dd.split(',');dm=q[0];$('dM').value=q[1];$('dL').value=q[2];$('dP').value=q[3];Lab.draw(2);}));
+Lab.add(2,lab2,{dmA:180,dmB:180});
+
+/* ---------- Lab 3: PM vs FM ---------- */
+let fsh='sq',fview='fm';
+const FM_=1,FC_=10;  /* kHz */
+function msg(t){const u=((t*FM_)%1+1)%1;if(fsh==='sin')return Math.cos(TAU*u);if(fsh==='sq')return Math.cos(TAU*u)>=0?1:-1;return u<0.5?1-4*u:-3+4*u;}
+function msgInt(t){/* ∫0^t msg, in ms·(unit) */const T=1/FM_,k=Math.floor(t/T),u=t-k*T;
+  if(fsh==='sin')return Math.sin(TAU*FM_*t)/(TAU*FM_);
+  if(fsh==='sq')return u<T/4?u:u<3*T/4?T/2-u:u-T;
+  return u<=T/2?u-2*u*u/T:-3*u+2*u*u/T+T;}
+function msgDer(t){const T=1/FM_,u=((t%T)+T)%T;if(fsh==='sin')return -TAU*FM_*Math.sin(TAU*FM_*t);if(fsh==='tri')return u<T/2?-4/T:4/T;return 0;}
+function lab3(){
+  const Df=val('fD'),Dp=val('pD');$('fDO').textContent=Df.toFixed(1)+' kHz';$('pDO').textContent=Dp.toFixed(2)+' rad';
+  pressGroup('#lab3 [data-fs]',b=>b.dataset.fs===fsh);pressGroup('#lab3 [data-fv]',b=>b.dataset.fv===fview);
+  pressGroup('#lab3 [data-ff]',b=>{const q=b.dataset.ff.split(',');return q[0]===fsh&&+q[1]===Df&&+q[2]===Dp&&q[3]===fview;});
+  const phPM=t=>Dp*msg(t),phFM=t=>TAU*Df*msgInt(t);
+  const T=2;
+  /* waveforms */
+  const [x,W,H]=fit($('anA'));const a=axes(x,W,H,{x0:0,x1:T,y0:-4.1,y1:4.1,xt:[0,0.5,1,1.5,2],yt:[],title:'消息（黑）、PM（紫）、FM（蓝）',xl:'t (ms)',pl:44,zero:false});
+  const off=[2.8,0,-2.8];off.forEach(o=>{x.strokeStyle=css('--grid');x.beginPath();x.moveTo(a.pl,a.Y(o));x.lineTo(W-a.pr,a.Y(o));x.stroke();});
+  plot(x,a.X,a.Y,t=>off[0]+msg(t),0,T,css('--ink'),2,1600);
+  plot(x,a.X,a.Y,t=>off[1]+Math.cos(TAU*FC_*t+phPM(t)),0,T,css('--purple'),1.5,2400);
+  plot(x,a.X,a.Y,t=>off[2]+Math.cos(TAU*FC_*t+phFM(t)),0,T,css('--blue'),1.5,2400);
+  label(x,'消息',4,a.Y(off[0])+4,css('--ink'),11);label(x,'PM',8,a.Y(off[1])+4,css('--purple'),11);label(x,'FM',8,a.Y(off[2])+4,css('--blue'),11);
+  /* instantaneous frequency */
+  const fiFM=t=>FC_+Df*msg(t),fiPM=t=>FC_+Dp*msgDer(t)/TAU;
+  let fmax=FC_+Math.max(Df,fsh==='sq'?0:Dp*(fsh==='sin'?TAU*FM_:4*FM_)/TAU)*1.0;const span=Math.max(fmax-FC_,1)*1.35;
+  const [y,W2,H2]=fit($('anB'));const b=axes(y,W2,H2,{x0:0,x1:T,y0:FC_-span,y1:FC_+span,xt:[0,0.5,1,1.5,2],yt:[+(FC_-span*0.7).toFixed(1),FC_,+(FC_+span*0.7).toFixed(1)],title:'瞬时频率 fᵢ(t)（kHz）：FM 跟着消息，PM 跟着消息的导数',xl:'t (ms)',pl:44,zero:false});
+  y.setLineDash([4,4]);y.strokeStyle=css('--muted');y.beginPath();y.moveTo(b.pl,b.Y(FC_));y.lineTo(W2-b.pr,b.Y(FC_));y.stroke();y.setLineDash([]);
+  if(fsh==='sq'){plot(y,b.X,b.Y,t=>FC_,0,T,css('--purple'),2,10);if(Dp>0)[0.25,0.75,1.25,1.75].forEach((t,k)=>{const up=k%2===1;arrow(y,b.X(t),b.Y(FC_),b.X(t),b.Y(up?FC_+span*0.95:FC_-span*0.95),css('--purple'),2,8);});
+    if(Dp>0)text(y,'PM：相位跳变处频率是冲激（↑↓）',b.pl+4,b.pt+12,css('--purple'),11);}
+  else plot(y,b.X,b.Y,fiPM,0,T,css('--purple'),2,1600);
+  plot(y,b.X,b.Y,fiFM,0,T,css('--blue'),2.2,1600);
+  /* spectrum by FFT */
+  const N=4096,fsamp=64;/* kHz → bins of 15.625 Hz, 64 whole message periods */
+  const re=new Float64Array(N),im=new Float64Array(N);const ph=fview==='fm'?phFM:phPM;
+  for(let i=0;i<N;i++){const t=i/fsamp;re[i]=Math.cos(TAU*FC_*t+ph(t));}
+  fft(re,im);const amp=new Float64Array(N/2);let tot=0;for(let k=0;k<N/2;k++){amp[k]=Math.hypot(re[k],im[k])/N*2;tot+=amp[k]*amp[k];}
+  const pkDev=fview==='fm'?Df:(fsh==='sq'?Infinity:Dp*(fsh==='sin'?FM_:4*FM_/TAU));
+  const B=2*(pkDev+FM_);let inb=0;for(let k=0;k<N/2;k++){const f=k*fsamp/N;if(Math.abs(f-FC_)<=B/2+1e-9)inb+=amp[k]*amp[k];}
+  const [z,W3,H3]=fit($('anC'));const c=axes(z,W3,H3,{x0:0,x1:20,y0:0,y1:1.05,xt:[0,5,10,15,20],yt:[0,0.5,1],title:`${fview==='fm'?'FM':'PM'} 的频谱（单边幅度）；阴影 = Carson 带宽`,xl:'f (kHz)',pl:44});
+  if(isFinite(B)){z.fillStyle=css('--fillA');z.fillRect(c.X(Math.max(0,FC_-B/2)),c.pt,c.X(Math.min(20,FC_+B/2))-c.X(Math.max(0,FC_-B/2)),H3-c.pt-c.pb);}
+  z.strokeStyle=fview==='fm'?css('--blue'):css('--purple');z.lineWidth=2;
+  for(let k=0;k<N/2;k++){const f=k*fsamp/N;if(f>20)break;if(amp[k]<0.004)continue;z.beginPath();z.moveTo(c.X(f),c.Y(0));z.lineTo(c.X(f),c.Y(Math.min(amp[k],1.05)));z.stroke();}
+  $('f_b').textContent=`${(Df/FM_).toFixed(2)}`+(fsh!=='sin'?'（非正弦消息只是粗略值）':'');
+  const pmDevTxt=fsh==='sq'?'∞（相位跳变）':`${(Dp*(fsh==='sin'?FM_:4*FM_/TAU)).toFixed(2)} kHz`;
+  $('f_d').textContent=`${Df.toFixed(2)} kHz / ${pmDevTxt}`;
+  $('f_c').textContent=isFinite(B)?`${fview==='fm'?'FM':'PM'}：2(${pkDev.toFixed(2)} + ${FM_}) = ${B.toFixed(2)} kHz（AM 只要 2 kHz）`:'PM 方波：带宽理论上无限';
+  $('f_p').textContent=isFinite(B)?`${(inb/tot*100).toFixed(1)} %`:'—';
+}
+['fD','pD'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(3)));
+document.querySelectorAll('#lab3 [data-fs]').forEach(b=>b.addEventListener('click',()=>{fsh=b.dataset.fs;Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-fv]').forEach(b=>b.addEventListener('click',()=>{fview=b.dataset.fv;Lab.draw(3);}));
+document.querySelectorAll('#lab3 [data-ff]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.ff.split(',');fsh=q[0];$('fD').value=q[1];$('pD').value=q[2];fview=q[3];Lab.draw(3);}));
+Lab.add(3,lab3,{anA:220,anB:150,anC:170});
+
+/* ---------- Lab 4: QAM ---------- */
+function lab4(){
+  const fI=val('qI'),fQ=val('qQ'),phd=val('qP'),ph=phd*Math.PI/180;
+  $('qIO').textContent=fI.toFixed(1)+' kHz';$('qQO').textContent=fQ.toFixed(1)+' kHz';$('qPO').textContent=phd+'°';
+  pressGroup('#lab4 [data-qq]',b=>{const q=b.dataset.qq.split(',').map(Number);return q[0]===fI&&q[1]===fQ&&q[2]===phd;});
+  const tri=t=>{const u=((t%1)+1)%1;return u<0.5?1-4*u:-3+4*u;};
+  const I=t=>Math.cos(TAU*fI*t),Q=t=>tri(fQ*t);
+  const fc=20,spc=40,fs=fc*spc,T=2,pad=2/fc,n=Math.round((T+2*pad)*fs);
+  const tt=new Float64Array(n),pi=new Float64Array(n),pq=new Float64Array(n),s=new Float64Array(n);
+  for(let i=0;i<n;i++){const t=-pad+i/fs;tt[i]=t;s[i]=I(t)*Math.cos(TAU*fc*t)-Q(t)*Math.sin(TAU*fc*t);pi[i]=s[i]*2*Math.cos(TAU*fc*t+ph);pq[i]=-s[i]*2*Math.sin(TAU*fc*t+ph);}
+  const Ir=movmean(movmean(pi,spc),spc),Qr=movmean(movmean(pq,spc),spc),i0=Math.round(pad*fs),i1=i0+Math.round(T*fs);
+  const [x,W,H]=fit($('qmA'));const a=axes(x,W,H,{x0:0,x1:T,y0:-1.6,y1:1.6,xt:[0,0.5,1,1.5,2],yt:[-1,0,1],title:'QAM 信号 s(t)（灰）、I(t)（蓝）、Q(t)（橙）',xl:'t (ms)',pl:40});
+  x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();for(let i=i0;i<=i1;i++){const X=a.X(tt[i]),Y=a.Y(s[i]);i===i0?x.moveTo(X,Y):x.lineTo(X,Y);}x.stroke();
+  plot(x,a.X,a.Y,I,0,T,css('--blue'),2.4,600);plot(x,a.X,a.Y,Q,0,T,css('--amp'),2.4,600);
+  const [y,W2,H2]=fit($('qmB'));const b=axes(y,W2,H2,{x0:0,x1:T,y0:-1.6,y1:1.6,xt:[0,0.5,1,1.5,2],yt:[-1,0,1],title:'解调出来的 I′（蓝）和 Q′（橙）；虚线是发送的原样',xl:'t (ms)',pl:40});
+  y.setLineDash([5,4]);plot(y,b.X,b.Y,I,0,T,css('--blue'),1.3,600);plot(y,b.X,b.Y,Q,0,T,css('--amp'),1.3,600);y.setLineDash([]);
+  const seg=(arr,col)=>{y.strokeStyle=col;y.lineWidth=2.6;y.beginPath();for(let i=i0;i<=i1;i++){const X=b.X(tt[i]),Y=b.Y(arr[i]);i===i0?y.moveTo(X,Y):y.lineTo(X,Y);}y.stroke();};
+  seg(Ir,css('--blue'));seg(Qr,css('--amp'));
+  $('q_a').textContent=Math.cos(ph).toFixed(3);$('q_x').textContent=Math.sin(ph).toFixed(3);
+  $('q_b').textContent=`≈ 2 × ${Math.max(fI,fQ).toFixed(1)} = ${(2*Math.max(fI,fQ)).toFixed(1)} kHz（按基波算），装两路`;
+  const v=$('q_v');v.textContent=phd===0?'本地载波和发送端同相：I′ = I、Q′ = Q，两路完全分开':Math.abs(phd-90)<1?'相位差 90°：I′ = Q、Q′ = −I，两路互换了':`相位差 ${phd}°：每一路只剩 cos φ = ${Math.cos(ph).toFixed(2)} 倍，另一路串进来 sin φ = ${Math.sin(ph).toFixed(2)} 倍`;
+  v.style.color=phd===0?css('--accent'):css('--red');
+}
+['qI','qQ','qP'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+document.querySelectorAll('#lab4 [data-qq]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.qq.split(',');$('qI').value=q[0];$('qQ').value=q[1];$('qP').value=q[2];Lab.draw(4);}));
+Lab.add(4,lab4,{qmA:180,qmB:180});
+Lab.start();
+</script>
+</body></html>
