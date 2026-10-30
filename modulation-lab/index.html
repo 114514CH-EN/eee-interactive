@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>调制实验室</title>
-<meta name="description" content="通信系统 Week 5 模拟调制的四个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="调制实验室"><meta property="og:description" content="通信系统 Week 5 模拟调制的四个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/modulation-lab/">
+<meta name="description" content="通信系统 Week 5 调制的六个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰；数字键控 OOK / BFSK / BPSK 的波形与加噪声后的相干解调；星座图（BPSK、QPSK、8PSK、16-QAM、64-QAM）与噪声、Gray 码。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="调制实验室"><meta property="og:description" content="通信系统 Week 5 调制的六个实验：AM 的包络、边带与带宽（含讲义 Tutorial 两音题）；AM 解调（整流 + 滑动平均 vs 乘本地载波）；PM 与 FM 的波形、瞬时频率和频谱（Carson 带宽）；正交调幅 QAM 的 I/Q 两路与相位误差串扰；数字键控 OOK / BFSK / BPSK 的波形与加噪声后的相干解调；星座图（BPSK、QPSK、8PSK、16-QAM、64-QAM）与噪声、Gray 码。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/modulation-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">COMMUNICATION SYSTEMS · MODULATION</div>
   <h1>调制实验室</h1>
-  <p>对应通信系统 Week 5 第 1 讲「模拟调制」：把消息装到高频载波上，改的是幅度（AM）、相位（PM）还是频率（FM）。实验 1 看 AM 的包络、边带和带宽（含讲义 Tutorial 的两音题）；实验 2 用讲义的两种方法把 AM 解调回来；实验 3 对比 PM 和 FM 的波形、瞬时频率和频谱；实验 4 是正交调幅 QAM：两路消息共用同一段频谱。为了看得清，载波频率都画得比实际低很多。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 AM 波形与频谱</a><a href="#lab2">实验 2 AM 解调</a><a href="#lab3">实验 3 PM 与 FM</a><a href="#lab4">实验 4 正交调幅 QAM</a></nav>
+  <p>对应通信系统 Week 5「模拟调制与数字调制」：把消息装到高频载波上，改的是幅度（AM）、相位（PM）还是频率（FM）。实验 1 看 AM 的包络、边带和带宽（含讲义 Tutorial 的两音题）；实验 2 用讲义的两种方法把 AM 解调回来；实验 3 对比 PM 和 FM 的波形、瞬时频率和频谱；实验 4 是正交调幅 QAM：两路消息共用同一段频谱。实验 5、6 对应第 2 讲「数字调制」：OOK、BFSK、BPSK 的波形和相干解调，以及星座图上点越多越怕噪声。为了看得清，载波频率都画得比实际低很多。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 AM 波形与频谱</a><a href="#lab2">实验 2 AM 解调</a><a href="#lab3">实验 3 PM 与 FM</a><a href="#lab4">实验 4 正交调幅 QAM</a><a href="#lab5">实验 5 数字键控与解调</a><a href="#lab6">实验 6 星座图与噪声</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -83,6 +83,40 @@
   <div class="stage one"><canvas id="qmA" height="200" aria-label="I、Q 消息和 QAM 信号"></canvas><canvas id="qmB" height="200" aria-label="解调出来的 I 和 Q"></canvas></div>
   <div class="read"><div><small>I′ 里自己的幅度 cos φ</small><b id="q_a" style="font-size:15px"></b></div><div><small>串进来的另一路 sin φ</small><b id="q_x" style="font-size:15px"></b></div><div><small>占用带宽</small><b id="q_b" style="font-size:14px"></b></div></div>
   <p class="note"><strong>为什么能分开：</strong>cos 和 sin 在一个载波周期上乘起来积分为 0（正交），所以乘 cos 再平均只留下 I，乘 sin 再平均只留下 Q。一路普通 AM 的两条边带占 2f<sub>m</sub>，QAM 在同样的 2f<sub>m</sub> 里放了两路独立的信息（讲义：「two independent pieces of information in the same part of the spectrum」）。下一讲的数字 QAM 就是让 I、Q 取几个离散的值。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · Digital Modulation (Keying) · OOK · BFSK · BPSK · Coherent Demodulation</div>
+  <h2>数字键控：比特决定载波的幅度、频率还是相位；接收端乘载波、滤波、每位采样一次</h2>
+  <p class="lead">讲义第 11–17 页的例子：比特 1 0 1 0 1 1 0 1 0 1，每位 T<sub>b</sub> = 0.1 s，载波 50 Hz（每位 5 个周期）。<strong>OOK</strong>：1 发载波、0 不发；<strong>BFSK</strong>：1 用 50 Hz、0 用 25 Hz；<strong>BPSK</strong>：1 发 +cos、0 发 −cos（相位差 180°）。上图：发送的波形（彩色）和加了白高斯噪声后收到的波形（灰）。下图：接收机把收到的信号乘本地载波 cos(2πf<sub>c</sub>t)，再用滑动平均滤掉载波（BFSK 用 25 Hz、50 Hz 两路，看哪一路大），每一位结束时采样一次和门限比较。比特可以自己改。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-kk="ook,1010110101,0">讲义 OOK</button><button data-kk="fsk,1010110101,0">讲义 BFSK</button><button data-kk="psk,1010110101,0">讲义 BPSK</button><button data-kk="ook,1010110101,0.6">OOK + 噪声 0.6</button><button data-kk="psk,1010110101,0.6">BPSK + 同样的噪声</button><button data-kk="ook,1010110101,2">噪声很大：开始判错</button></div>
+  <div class="btns" role="group" aria-label="键控方式"><button data-ks="ook">OOK（ASK）</button><button data-ks="fsk">BFSK</button><button data-ks="psk">BPSK</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="kBits">要发的比特（最多 16 位）</label><input id="kBits" type="text" value="1010110101" maxlength="16" inputmode="numeric" spellcheck="false" style="font-family:var(--mono)"><span></span></div>
+    <div class="ctl"><label for="kN">噪声标准差 σ (V)</label><input id="kN" type="range" min="0" max="2.5" step="0.05" value="0"><output id="kNO"></output></div>
+  </div>
+  <div class="btns"><button id="kR" type="button">换一组噪声</button></div>
+  <p class="verdict" id="k_v"></p>
+  <div class="stage one"><canvas id="kA" height="210" aria-label="发送和收到的键控波形"></canvas><canvas id="kB" height="210" aria-label="乘载波滤波后的输出、采样点和门限"></canvas></div>
+  <div class="read"><div><small>判决出的比特</small><b id="k_d" style="font-size:15px"></b></div><div><small>判错几位</small><b id="k_e" style="font-size:15px"></b></div><div><small>采样值离门限最近的距离</small><b id="k_m" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>看点：</strong>三种键控都可以「乘本地载波 → 低通滤波 → 每位采样一次 → 和门限比」。OOK 的两个电平是 0.5 和 0，门限放在中间 0.25；BPSK 的两个电平是 +0.5 和 −0.5，门限是 0。同样的噪声下，BPSK 两个电平离门限更远（0.5 对 0.25），所以更不容易判错；这就是第 6 个实验里「星座点之间距离」的意思。乘本地载波相当于只留下和载波「同频同相」的那部分，噪声里大部分被平均掉了，所以噪声看起来比信号还大时，照样能判对。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · Constellation Diagrams · PSK · QAM · Noise</div>
+  <h2>星座图：点越多，每个符号带的位越多，但点挨得越近，越怕噪声</h2>
+  <p class="lead">每个符号是 A cos(2πf<sub>c</sub>t + θ) = I cos(2πf<sub>c</sub>t) − Q sin(2πf<sub>c</sub>t)，把 (I, Q) 画成平面上的一个点就是星座图（讲义第 18–20 页）。这里所有星座都按「平均功率 = 1」缩放，所以可以公平比较。随机发 2000 个符号，每个点在 I、Q 两个方向各加标准差 σ 的高斯噪声；接收机把每个点判成离它最近的那个星座点（虚线是判决边界）。绿点判对，红叉判错。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-cc="qpsk,0.15,gray">QPSK，σ = 0.15</button><button data-cc="8psk,0.15,gray">8PSK，同样噪声</button><button data-cc="16qam,0.15,gray">16-QAM，同样噪声</button><button data-cc="16qam,0.15,lec">16-QAM 讲义的标号</button><button data-cc="64qam,0.05,gray">64-QAM，σ = 0.05</button></div>
+  <div class="btns" role="group" aria-label="调制方式"><button data-cs="ook">OOK</button><button data-cs="bpsk">BPSK</button><button data-cs="qpsk">QPSK</button><button data-cs="8psk">8PSK</button><button data-cs="16qam">16-QAM</button><button data-cs="64qam">64-QAM</button></div>
+  <div class="btns" role="group" aria-label="比特标号"><button data-cl="gray">标号：Gray 码（相邻只差 1 位）</button><button data-cl="lec">标号：自然二进制（讲义 16-QAM 的写法）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="cN">噪声标准差 σ（每个方向）</label><input id="cN" type="range" min="0" max="0.5" step="0.01" value="0.15"><output id="cNO"></output></div>
+  </div>
+  <div class="btns"><button id="cR" type="button">换一组符号和噪声</button></div>
+  <p class="verdict" id="c_v"></p>
+  <div class="stage one"><canvas id="cA" height="380" aria-label="星座图和收到的点"></canvas></div>
+  <div class="read"><div><small>每个符号几位 log₂M</small><b id="c_k" style="font-size:15px"></b></div><div><small>相邻点最小距离 d</small><b id="c_d" style="font-size:15px"></b></div><div><small>信噪比 E<sub>s</sub>/N<sub>0</sub> = 1/(2σ²)</small><b id="c_s" style="font-size:15px"></b></div><div><small>符号错误率</small><b id="c_e" style="font-size:15px"></b></div><div><small>比特错误率</small><b id="c_b" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>讲义第 20 页的标号：</strong>前两位决定在哪一行（从上到下 11、10、01、00），后两位决定在哪一列（从左到右 00、01、10、11），但左下象限上面那一行第二个点写成了 0001（和下面一行重复），应为 <strong>0101</strong>。这种自然二进制标号在相邻两列 01 | 10、相邻两行 10 | 01 之间差 2 位，噪声把点推到邻居时会错 2 位；Gray 码让任何两个相邻点只差 1 位，同样的符号错误率下比特错误率更低（切换两种标号看「比特错误率」）。</p>
 </section>
 </div>
 
@@ -274,6 +308,117 @@ function lab4(){
 ['qI','qQ','qP'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 document.querySelectorAll('#lab4 [data-qq]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.qq.split(',');$('qI').value=q[0];$('qQ').value=q[1];$('qP').value=q[2];Lab.draw(4);}));
 Lab.add(4,lab4,{qmA:180,qmB:180});
+
+/* ---------- shared: seeded RNG + Gaussian ---------- */
+function rngGen(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+function gaussGen(r){let spare=null;return()=>{if(spare!==null){const v=spare;spare=null;return v;}let u=0,v=0;while(u<1e-12)u=r();v=r();const m=Math.sqrt(-2*Math.log(u));spare=m*Math.sin(TAU*v);return m*Math.cos(TAU*v);};}
+
+/* ---------- Lab 5: binary keying + coherent demodulation ---------- */
+let ks='ook',kSeed=1;
+function kBits(){const raw=($('kBits').value||'').replace(/[^01]/g,'').slice(0,16);return raw.length?raw.split('').map(Number):[1];}
+function lab5(){
+  const bits=kBits(),sig=val('kN'),nb=bits.length;$('kNO').textContent=sig.toFixed(2)+' V';
+  pressGroup('#lab5 [data-ks]',b=>b.dataset.ks===ks);
+  pressGroup('#lab5 [data-kk]',b=>{const q=b.dataset.kk.split(',');return q[0]===ks&&q[1]===bits.join('')&&+q[2]===sig;});
+  const Tb=0.1,fc=50,f0=25,fs=2000,n=Math.round(Tb*fs),N=nb*n,T=nb*Tb;
+  const g=gaussGen(rngGen(9173*kSeed+nb));
+  const tx=new Float64Array(N),rx=new Float64Array(N),z=new Float64Array(N);
+  for(let i=0;i<N;i++){const t=i/fs,bt=bits[Math.floor(i/n)];
+    tx[i]=ks==='ook'?bt*Math.cos(TAU*fc*t):ks==='psk'?(bt?1:-1)*Math.cos(TAU*fc*t):Math.cos(TAU*(bt?fc:f0)*t);
+    rx[i]=tx[i]+(sig>0?sig*g():0);}
+  /* coherent branches, trailing moving average (window: one 50 Hz period, or one 25 Hz period for FSK) */
+  const W=ks==='fsk'?Math.round(fs/f0):Math.round(fs/fc);
+  const p1=new Float64Array(N+1),p0=new Float64Array(N+1);
+  for(let i=0;i<N;i++){const t=i/fs;p1[i+1]=p1[i]+rx[i]*Math.cos(TAU*fc*t);p0[i+1]=p0[i]+(ks==='fsk'?rx[i]*Math.cos(TAU*f0*t):0);}
+  for(let i=0;i<N;i++){const lo=Math.max(0,i+1-W);z[i]=((p1[i+1]-p1[lo])-(p0[i+1]-p0[lo]))/W;}
+  const thr=ks==='ook'?0.25:0,samp=[],dec=[];
+  for(let k=0;k<nb;k++){const v=z[(k+1)*n-1];samp.push(v);dec.push(v>thr?1:0);}
+  const errs=dec.reduce((s,d,k)=>s+(d!==bits[k]?1:0),0),margin=Math.min(...samp.map(v=>Math.abs(v-thr)));
+  /* top plot */
+  const [x,W1,H1]=fit($('kA'));const yr=Math.max(1.6,1+2.2*sig);
+  const a=axes(x,W1,H1,{x0:0,x1:T,y0:-yr,y1:yr,xt:Array.from({length:nb+1},(_,k)=>+(k*Tb).toFixed(1)).filter((v,k)=>nb<=10||k%2===0),yt:[-1,0,1],title:sig>0?'发送（彩色）和收到的信号（灰，加了噪声）':'发送的波形',xl:'t (s)',pl:40});
+  x.strokeStyle=css('--line');x.setLineDash([2,3]);for(let k=0;k<=nb;k++){x.beginPath();x.moveTo(a.X(k*Tb),a.pt);x.lineTo(a.X(k*Tb),H1-a.pb);x.stroke();}x.setLineDash([]);
+  const col=ks==='ook'?css('--blue'):ks==='fsk'?css('--green'):css('--purple');
+  const seg=(c,arr,cl,lw,y0=0)=>{c.strokeStyle=cl;c.lineWidth=lw;c.beginPath();const step=Math.max(1,Math.floor(N/((W1-a.pl-a.pr)*3)));for(let i=0;i<N;i+=step){const X=a.X(i/fs),Y=a.Y(arr[i]);i?c.lineTo(X,Y):c.moveTo(X,Y);}c.stroke();};
+  if(sig>0)seg(x,rx,css('--muted'),1);
+  seg(x,tx,col,sig>0?1.6:1.4);
+  for(let k=0;k<nb;k++)label(x,String(bits[k]),a.X((k+0.5)*Tb)-4,a.pt+14,bits[k]?css('--blue'):css('--red'),13,'700');
+  if(ks==='psk'){x.strokeStyle=css('--red');x.lineWidth=1.6;x.setLineDash([5,4]);for(let k=1;k<nb;k++)if(bits[k]!==bits[k-1]){x.beginPath();x.moveTo(a.X(k*Tb),a.pt+18);x.lineTo(a.X(k*Tb),H1-a.pb);x.stroke();}x.setLineDash([]);}
+  /* bottom plot */
+  const [y,W2,H2]=fit($('kB'));const lo=Math.min(-0.25,...samp)-0.12,hi=Math.max(0.75,...samp)+0.22;
+  const b=axes(y,W2,H2,{x0:0,x1:T,y0:lo,y1:hi,xt:Array.from({length:nb+1},(_,k)=>+(k*Tb).toFixed(1)).filter((v,k)=>nb<=10||k%2===0),yt:ks==='ook'?[0,0.25,0.5]:[-0.5,0,0.5],title:ks==='fsk'?'50 Hz 支路 − 25 Hz 支路（各自乘本地载波、滑动平均），每位结束时采样':'乘 cos(2πfct) 再滑动平均（一个载波周期），每位结束时采样',xl:'t (s)',pl:40});
+  y.strokeStyle=css('--green');y.lineWidth=2;y.beginPath();for(let i=0;i<N;i+=2){const X=b.X(i/fs),Y=b.Y(z[i]);i?y.lineTo(X,Y):y.moveTo(X,Y);}y.stroke();
+  y.strokeStyle=css('--red');y.lineWidth=1.4;y.setLineDash([6,4]);y.beginPath();y.moveTo(b.pl,b.Y(thr));y.lineTo(W2-b.pr,b.Y(thr));y.stroke();y.setLineDash([]);
+  text(y,`门限 ${thr}`,W2-b.pr-4,b.Y(thr)-4,css('--red'),11,'right');
+  for(let k=0;k<nb;k++){const X=b.X((k+1)*Tb),ok=dec[k]===bits[k],c=ok?css('--purple'):css('--red');y.strokeStyle=c;y.lineWidth=2.4;y.beginPath();y.moveTo(X,b.Y(0));y.lineTo(X,b.Y(samp[k]));y.stroke();y.fillStyle=c;y.beginPath();y.arc(X,b.Y(samp[k]),4,0,7);y.fill();
+    label(y,ok?String(dec[k]):dec[k]+'✗',b.X((k+0.5)*Tb)-(ok?4:9),b.pt+12,ok?(dec[k]?css('--blue'):css('--red')):css('--red'),13,'700');}
+  $('k_d').innerHTML=dec.map((d,k)=>d===bits[k]?d:`<span style="color:var(--red)">${d}</span>`).join('');
+  $('k_e').textContent=`${errs} / ${nb}`;$('k_m').textContent=margin.toFixed(3);
+  const v=$('k_v'),names={ook:'OOK',fsk:'BFSK',psk:'BPSK'};
+  v.textContent=errs?`噪声 σ = ${sig} V：有 ${errs} 位被噪声推过了门限，判错了（红色）。换几组噪声看看错得多不多`:sig>0?`${names[ks]}：噪声 σ = ${sig} V，全部判对；采样值离门限最近 ${margin.toFixed(2)}（越大越安全）`:`${names[ks]}：没有噪声，${ks==='ook'?'「1」滤波后是 0.5、「0」是 0':ks==='psk'?'「1」滤波后是 +0.5、「0」是 −0.5':'50 Hz 支路比 25 Hz 支路大 → 1，反过来 → 0'}，每一位都判对`;
+  v.style.color=errs?css('--red'):css('--accent');
+}
+$('kN').addEventListener('input',()=>Lab.draw(5));$('kBits').addEventListener('input',()=>Lab.draw(5));
+$('kR').addEventListener('click',()=>{kSeed++;Lab.draw(5);});
+document.querySelectorAll('#lab5 [data-ks]').forEach(b=>b.addEventListener('click',()=>{ks=b.dataset.ks;Lab.draw(5);}));
+document.querySelectorAll('#lab5 [data-kk]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.kk.split(',');ks=q[0];$('kBits').value=q[1];$('kN').value=q[2];Lab.draw(5);}));
+Lab.add(5,lab5,{kA:180,kB:180});
+
+/* ---------- Lab 6: constellations + noise ---------- */
+let cs='16qam',cl='gray',cSeed=1;
+const grayOf=k=>k^(k>>1);
+function constel(name,lab){/* returns [{z:[I,Q],bits:'..'}], average energy 1 */
+  let pts=[];
+  if(name==='ook'){pts=[{z:[0,0],v:0},{z:[Math.SQRT2,0],v:1}];return pts.map(p=>({z:p.z,bits:String(p.v)}));}
+  if(/psk$/.test(name)){const M={bpsk:2,qpsk:4,'8psk':8}[name],k=Math.log2(M);
+    for(let i=0;i<M;i++){const v=lab==='gray'?grayOf(i):i;pts.push({z:[Math.cos(TAU*i/M),Math.sin(TAU*i/M)],bits:v.toString(2).padStart(k,'0')});}
+    if(name==='bpsk'){pts[0].bits='1';pts[1].bits='0';}return pts;}
+  const M=name==='16qam'?16:64,L=Math.sqrt(M),k2=Math.log2(L),s=Math.sqrt(2*(M-1)/3);
+  for(let r=0;r<L;r++)for(let c=0;c<L;c++){/* r = 0 is the top row */
+    const I=(2*c-(L-1))/s,Q=((L-1)-2*r)/s;const cv=lab==='gray'?grayOf(c):c,rv=lab==='gray'?grayOf(L-1-r):(L-1-r);
+    pts.push({z:[I,Q],bits:rv.toString(2).padStart(k2,'0')+cv.toString(2).padStart(k2,'0')});}
+  return pts;}
+function lab6(){
+  const sig=val('cN');$('cNO').textContent=sig.toFixed(2);
+  pressGroup('#lab6 [data-cs]',b=>b.dataset.cs===cs);pressGroup('#lab6 [data-cl]',b=>b.dataset.cl===cl);
+  pressGroup('#lab6 [data-cc]',b=>{const q=b.dataset.cc.split(',');return q[0]===cs&&+q[1]===sig&&q[2]===cl;});
+  const P=constel(cs,cl),M=P.length,k=Math.log2(M);
+  let dmin=Infinity;for(let i=0;i<M;i++)for(let j=i+1;j<M;j++)dmin=Math.min(dmin,Math.hypot(P[i].z[0]-P[j].z[0],P[i].z[1]-P[j].z[1]));
+  const r=rngGen(7919*cSeed+M),g=gaussGen(r),NS=2000,rec=[];let se=0,be=0;
+  for(let i=0;i<NS;i++){const s=Math.floor(r()*M),I=P[s].z[0]+sig*g(),Q=P[s].z[1]+sig*g();let best=0,bd=Infinity;
+    for(let j=0;j<M;j++){const d=(I-P[j].z[0])**2+(Q-P[j].z[1])**2;if(d<bd){bd=d;best=j;}}
+    const ok=best===s;if(!ok){se++;for(let q=0;q<k;q++)if(P[s].bits[q]!==P[best].bits[q])be++;}rec.push([I,Q,ok]);}
+  const [x,W,H]=fit($('cA'));const R=1.75,pl=40,pr=12,pt=24,pb=30;const ph=H-pt-pb,scale=ph/(2*R),half=(W-pl-pr)/2/scale;
+  const a=axes(x,W,H,{x0:-half,x1:half,y0:-R,y1:R,xt:[-1,0,1],yt:[-1,0,1],title:`${cs.toUpperCase().replace('QAM','-QAM').replace('8PSK','8PSK')}：${M} 个点，每个符号 ${k} 位；绿 = 判对，红 = 判错`,xl:'I',pl,pr,pt,pb});
+  x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();x.moveTo(a.X(0),pt);x.lineTo(a.X(0),H-pb);x.stroke();
+  /* unit circle */
+  x.setLineDash([3,4]);x.strokeStyle=css('--line');x.beginPath();x.arc(a.X(0),a.Y(0),scale,0,7);x.stroke();
+  /* decision boundaries */
+  x.strokeStyle=css('--muted');x.setLineDash([6,5]);x.lineWidth=1.1;
+  if(/psk$/.test(cs)){for(let i=0;i<M;i++){const ang=TAU*(i+0.5)/M;x.beginPath();x.moveTo(a.X(0),a.Y(0));x.lineTo(a.X(3*Math.cos(ang)),a.Y(3*Math.sin(ang)));x.stroke();}}
+  else if(cs==='ook'){const m=Math.SQRT2/2;x.beginPath();x.moveTo(a.X(m),pt);x.lineTo(a.X(m),H-pb);x.stroke();}
+  else{const L=Math.sqrt(M),s=Math.sqrt(2*(M-1)/3);for(let c=1;c<L;c++){const v=(2*c-L)/s;x.beginPath();x.moveTo(a.X(v),pt);x.lineTo(a.X(v),H-pb);x.stroke();x.beginPath();x.moveTo(pl,a.Y(v));x.lineTo(W-pr,a.Y(v));x.stroke();}}
+  x.setLineDash([]);
+  x.save();x.beginPath();x.rect(pl,pt,W-pl-pr,H-pt-pb);x.clip();
+  rec.forEach(([I,Q,ok])=>{if(ok){x.fillStyle=css('--green');x.globalAlpha=.35;x.fillRect(a.X(I)-1,a.Y(Q)-1,2.2,2.2);}});x.globalAlpha=1;
+  x.strokeStyle=css('--red');x.lineWidth=1.6;rec.forEach(([I,Q,ok])=>{if(!ok){const X=a.X(I),Y=a.Y(Q);x.beginPath();x.moveTo(X-3.5,Y-3.5);x.lineTo(X+3.5,Y+3.5);x.moveTo(X+3.5,Y-3.5);x.lineTo(X-3.5,Y+3.5);x.stroke();}});
+  x.restore();
+  P.forEach(p=>{x.fillStyle=css('--ink');x.beginPath();x.arc(a.X(p.z[0]),a.Y(p.z[1]),M>16?3:4.5,0,7);x.fill();});
+  if(M<=16){x.font=`600 ${M>8?11:12}px ${css('--mono')}`;P.forEach(p=>{const s=p.bits,w=x.measureText(s).width,X=a.X(p.z[0]),Y=a.Y(p.z[1]);
+    const ox=/psk$/.test(cs)?Math.cos(Math.atan2(p.z[1],p.z[0]))*22:0,oy=/psk$/.test(cs)?-Math.sin(Math.atan2(p.z[1],p.z[0]))*18:-9;
+    x.fillStyle=css('--panel');x.globalAlpha=.8;x.fillRect(X+ox-w/2-2,Y+oy-11,w+4,14);x.globalAlpha=1;label(x,s,X+ox-w/2,Y+oy,css('--blue'),M>8?11:12,'600');});}
+  $('c_k').textContent=`log₂${M} = ${k}`;$('c_d').textContent=dmin.toFixed(3);
+  $('c_s').textContent=sig>0?`${(10*Math.log10(1/(2*sig*sig))).toFixed(1)} dB`:'∞（没有噪声）';
+  $('c_e').textContent=`${se} / ${NS} = ${(se/NS*100).toFixed(1)} %`;$('c_b').textContent=`${(be/(NS*k)*100).toFixed(2)} %`;
+  const v=$('c_v');
+  v.textContent=se===0?`σ = ${sig}：全部判对。相邻点距离 d = ${dmin.toFixed(2)}，噪声要把点推过 d/2 = ${(dmin/2).toFixed(2)} 才会判错`:`σ = ${sig}：${NS} 个符号里判错 ${se} 个。d/2 = ${(dmin/2).toFixed(2)} 只有噪声标准差的 ${(dmin/2/sig).toFixed(1)} 倍`+(cs==='16qam'&&cl==='lec'?'；自然二进制标号下，判到相邻列 01 | 10 时一次错 2 位':'');
+  v.style.color=se===0?css('--accent'):(se/NS>0.02?css('--red'):css('--amp'));
+}
+$('cN').addEventListener('input',()=>Lab.draw(6));$('cR').addEventListener('click',()=>{cSeed++;Lab.draw(6);});
+document.querySelectorAll('#lab6 [data-cs]').forEach(b=>b.addEventListener('click',()=>{cs=b.dataset.cs;Lab.draw(6);}));
+document.querySelectorAll('#lab6 [data-cl]').forEach(b=>b.addEventListener('click',()=>{cl=b.dataset.cl;Lab.draw(6);}));
+document.querySelectorAll('#lab6 [data-cc]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.cc.split(',');cs=q[0];$('cN').value=q[1];cl=q[2];Lab.draw(6);}));
+Lab.add(6,lab6,{cA:330});
 Lab.start();
 </script>
 </body></html>
