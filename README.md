@@ -26,7 +26,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [傅里叶实验室](https://114514ch-en.github.io/eee-interactive/fourier-lab/) | EE1 Fourier / Maths Part B / 通信 Week 4 | 级数合成与吉布斯现象、rect ⟷ sinc 与线性相位、采样与混叠、傅里叶系数怎么来（正交性）、常数项为什么是 a₀/2、常见脉冲的频谱、DFT 频率轴、任意周期 2L 与奇偶分解（Week 5） |
 | [电机与变压器实验室](https://114514ch-en.github.io/eee-interactive/machines-lab/) | EE1 · Electrical Machines / DEEM EM Week 5 | 直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波、并励与串励有刷直流电机 |
 | [EE1 实验课实验室](https://114514ch-en.github.io/eee-interactive/bench-lab/) | EE1 · Lab 1 / 3 / 5 | 分压器与负载效应、示波器读数（耦合 / 探头 / 触发）、RC 相移记录表、热敏电阻温度计与反推、LED 负载线与额定值、机器人蛇追光 |
-| [工程数学 1 实验室](https://114514ch-en.github.io/eee-interactive/math1-lab/) | Year 1 · Engineering Mathematics 1 | 单位圆与三角函数、参数求导、最大功率、黎曼和与平均值、双曲函数、Taylor 多项式、点积与叉积、矩阵变换与特征向量、高斯消元、振动与振型、复数与 Argand 图、微分方程（斜率场、Euler 法、阻尼与共振） |
+| [工程数学 1 实验室](https://114514ch-en.github.io/eee-interactive/math1-lab/) | Year 1 · Engineering Mathematics 1 | 单位圆与三角函数、参数求导、最大功率、黎曼和与平均值、双曲函数、Taylor 多项式、点积与叉积、矩阵变换与特征向量、高斯消元、振动与振型、复数与 Argand 图、微分方程（斜率场、Euler 法、阻尼与共振）、Newton–Raphson 求根 |
 | [复习卡片](https://114514ch-en.github.io/eee-interactive/cards/) | Year 1 EE、工程数学 1 + Year 2 全部 | 自测题、易错点、勘误卡片，间隔重复（`?c=DE&l=DE5` 只看某一讲） |
 | [电路模拟器](https://114514ch-en.github.io/eee-interactive/circuit-sim/) | 模拟器 | 画电路仿真：运放、三极管、稳压管、LED、变压器；自动查错、极点 / 时间常数、戴维宁等效、Bode 图 |
 | [逻辑模拟器](https://114514ch-en.github.io/eee-interactive/logic-sim/) | 模拟器 | 门电路 / 触发器仿真；表达式化简：1–6 变量卡诺图、完全和、所有最简式、Q–M 表格法和代数推导步骤，检查自己的答案；自动生成电路、状态图 |

@@ -1,6 +1,6 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>工程数学 1 实验室</title>
-<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型；复平面上的复数运算与 n 次根；一阶微分方程的斜率场与 Euler 法；二阶弹簧–质量–阻尼系统与共振。">
+<meta name="description" content="大一工程数学 1（Engineering Mathematics 1）的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和、定积分与平均值；双曲函数与单位双曲线；Taylor 多项式和收敛范围；向量的点积与叉积；2×2 矩阵变换、行列式与特征向量；高斯消元与高斯-约当法逐步演示；两自由度振动的特征值与振型；复平面上的复数运算与 n 次根；一阶微分方程的斜率场与 Euler 法；二阶弹簧–质量–阻尼系统与共振；Newton–Raphson 求根。">
 <meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="工程数学 1 实验室"><meta property="og:description" content="大一工程数学 1 的互动实验：三角函数、参数求导、最大功率。">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -22,14 +22,17 @@ table.aug td.pv{box-shadow:inset 0 0 0 2px var(--amp);font-weight:600}
 table.aug tr.zr td:not(.rl){color:var(--red);font-weight:600}
 @media (max-width:560px){table.aug{font-size:13px}table.aug td{padding:4px 5px;min-width:38px}}
 html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min-width:44px}
+#nrT th,#nrT td{padding:3px 6px;white-space:nowrap}
+@media (max-width:560px){#nrT{font-size:11px}#nrT th,#nrT td{padding:3px 4px}#nrT th:nth-child(6),#nrT td:nth-child(6),#nrT th:nth-child(4),#nrT td:nth-child(4){display:none}}
+html.embed #nrT{font-size:12px}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 1 · YEAR 1</div>
   <h1>工程数学 1 实验室</h1>
-  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型；在复平面上看复数的加减乘除、共轭和 n 次根；斜率场、Euler 法和弹簧–质量–阻尼系统的共振。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a><a href="#lab11">实验 11 复平面</a><a href="#lab12">实验 12 斜率场与 Euler 法</a><a href="#lab13">实验 13 弹簧–质量–阻尼</a></nav>
+  <p>大一工程数学 1 的互动实验：单位圆上的六个三角函数和象限符号；参数曲线的切线 dy/dx = (dy/dt)/(dx/dt)；最大功率定理用导数的符号找最大值；黎曼和怎样逼近定积分，平均值和 rms；双曲函数和单位双曲线；Taylor 多项式和收敛范围；向量的加减、点积与叉积；2×2 矩阵变换、行列式、逆矩阵与特征向量；高斯消元和高斯-约当法一步一步做；两层楼振动里特征向量就是振型；在复平面上看复数的加减乘除、共轭和 n 次根；斜率场、Euler 法和弹簧–质量–阻尼系统的共振；Newton–Raphson 切线迭代求根。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 单位圆与三角函数</a><a href="#lab2">实验 2 参数求导</a><a href="#lab3">实验 3 最大功率</a><a href="#lab4">实验 4 黎曼和与平均值</a><a href="#lab5">实验 5 双曲函数</a><a href="#lab6">实验 6 Taylor 多项式</a><a href="#lab7">实验 7 点积与叉积</a><a href="#lab8">实验 8 2×2 矩阵变换</a><a href="#lab9">实验 9 高斯消元</a><a href="#lab10">实验 10 振动与特征向量</a><a href="#lab11">实验 11 复平面</a><a href="#lab12">实验 12 斜率场与 Euler 法</a><a href="#lab13">实验 13 弹簧–质量–阻尼</a><a href="#lab14">实验 14 Newton–Raphson</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -227,6 +230,22 @@ html.embed table.aug{font-size:14px} html.embed table.aug td{padding:4px 7px;min
   <div class="stage one"><canvas id="msa" height="170" aria-label="共振曲线"></canvas></div>
   <div class="read"><div><small>特征方程的根</small><b id="msR" style="font-size:14px"></b></div><div><small>类型</small><b id="msT" style="font-size:14px"></b></div><div><small>固有频率 ω₀ = √(k/m)，阻尼比 ζ</small><b id="msW0" style="font-size:14px"></b></div><div><small>通解（余函数）</small><b id="msG" style="font-size:14px"></b></div></div>
   <p class="note" id="msNote"></p>
+</section>
+
+<section class="panel" id="lab14">
+  <div class="tag">实验 14 · Newton–Raphson 求根（D5）</div>
+  <h2>在当前点作切线，切线和 x 轴的交点就是下一个估计：x₍ₙ₊₁₎ = xₙ − f(xₙ)/f′(xₙ)</h2>
+  <p class="lead">选一个预设或拖动起点 x₀，再拖「迭代次数」一步一步看。橙色线是每一步的切线，绿色方块是新的估计。下面的表和讲义的表格式一样：x、f(x)、f′(x)、下一个 x。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-nr="exp,2,4">eˣ − 2x − 5，x₀ = 2（讲义）</button><button data-nr="exp,3,4">x₀ = 3（讲义第二张表）</button><button data-nr="exp,-2,3">x₀ = −2（另一个根）</button><button data-nr="exp,0.75,6">x₀ = 0.75（坏起点）</button><button data-nr="sq2,1,4">x² − 2：求 √2</button><button data-nr="cyc,0,6">x³ − 2x + 2，x₀ = 0（来回打转）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="nrF">函数</label><select id="nrF"><option value="exp">f(x) = eˣ − 2x − 5（L20 讲义）</option><option value="sq2">f(x) = x² − 2</option><option value="cyc">f(x) = x³ − 2x + 2</option></select><span></span></div>
+    <div class="ctl"><label for="nrX">起点 x₀</label><input id="nrX" type="range" min="-3" max="3.5" step="0.05" value="2"><output id="nrXO"></output></div>
+    <div class="ctl"><label for="nrN">迭代次数 n</label><input id="nrN" type="range" min="0" max="8" step="1" value="4"><output id="nrNO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="nrc" height="340" aria-label="Newton–Raphson 切线迭代"></canvas></div>
+  <div class="gewrap"><table class="mini" id="nrT" aria-label="迭代表"></table></div>
+  <div class="read"><div><small>当前估计</small><b id="nrR" style="font-size:14px"></b></div><div><small>|f(x)|</small><b id="nrE" style="font-size:14px"></b></div><div><small>判断</small><b id="nrS" style="font-size:14px"></b></div></div>
+  <p class="note" id="nrNote"></p>
 </section>
 </div>
 
@@ -812,6 +831,54 @@ function lab13(){
 ['msM','msD','msK','msF','msW'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(13)));
 document.querySelectorAll('#lab13 [data-ms]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.ms.split(',');['msM','msD','msK','msF','msW'].forEach((id,i)=>$(id).value=q[i]);Lab.draw(13);}));
 Lab.add(13,lab13,{msx:240,msr:240,msa:150});
+/* ---------- Lab 14: Newton-Raphson ---------- */
+const NR={
+  exp:{f:x=>Math.exp(x)-2*x-5,d:x=>Math.exp(x)-2,dom:[-3.2,3.6],yr:[-6,12],eq:'f(x) = eˣ − 2x − 5，f′(x) = eˣ − 2',roots:[2.2516362031,-2.4571610807]},
+  sq2:{f:x=>x*x-2,d:x=>2*x,dom:[-0.6,3.2],yr:[-2.6,8],eq:'f(x) = x² − 2，f′(x) = 2x',roots:[Math.SQRT2,-Math.SQRT2]},
+  cyc:{f:x=>x**3-2*x+2,d:x=>3*x*x-2,dom:[-2.6,2.2],yr:[-5,7],eq:'f(x) = x³ − 2x + 2，f′(x) = 3x² − 2',roots:[-1.7692923542]}};
+function lab14(){
+  const key=$('nrF').value,P=NR[key],x0=val('nrX'),n=val('nrN');
+  $('nrXO').textContent=fmt(x0,2);$('nrNO').textContent=n;
+  pressGroup('#lab14 [data-nr]',b=>{const q=b.dataset.nr.split(',');return q[0]===key&&Math.abs(+q[1]-x0)<1e-9&&+q[2]===n;});
+  const it=[];let x=x0;
+  for(let i=0;i<n;i++){const fx=P.f(x),dx=P.d(x);if(!isFinite(fx)||Math.abs(dx)<1e-12){it.push({x,fx,dx,nx:NaN});break;}const nx=x-fx/dx;it.push({x,fx,dx,nx});x=nx;if(!isFinite(x)||Math.abs(x)>1e6)break;}
+  const [x1,x2]=P.dom,[y1,y2]=P.yr;const [g,W,H]=fit($('nrc'));
+  const ax=axes(g,W,H,{x0:x1,x1:x2,y0:y1,y1:y2,xt:[Math.ceil(x1),0,Math.floor(x2)].filter((v,i,a)=>a.indexOf(v)===i),yt:[y1,0,y2],title:P.eq,xl:'x',pl:40});
+  g.save();g.beginPath();g.rect(ax.pl,ax.pt,W-ax.pl-ax.pr,H-ax.pt-ax.pb);g.clip();
+  g.strokeStyle=css('--muted');g.lineWidth=1;g.beginPath();g.moveTo(ax.X(x1),ax.Y(0));g.lineTo(ax.X(x2),ax.Y(0));g.stroke();
+  plot(g,ax.X,ax.Y,P.f,x1,x2,css('--blue'),2.6,500);
+  it.forEach((s,i)=>{const last=i===it.length-1;g.globalAlpha=last?1:.5;
+    if(isFinite(s.nx)){g.setLineDash([]);plot(g,ax.X,ax.Y,t=>s.fx+s.dx*(t-s.x),x1,x2,css('--amp'),last?2:1.4,2);}
+    g.setLineDash([3,4]);g.strokeStyle=css('--muted');g.lineWidth=1;g.beginPath();g.moveTo(ax.X(s.x),ax.Y(0));g.lineTo(ax.X(s.x),ax.Y(s.fx));g.stroke();g.setLineDash([]);
+    g.fillStyle=css('--red');g.beginPath();g.arcS(ax.X(s.x),ax.Y(s.fx),4.5,0,7);g.fill();g.globalAlpha=1;});
+  const pts=[x0,...it.map(s=>s.nx)].filter(isFinite);
+  const lab=[];pts.forEach((p,i)=>{g.fillStyle=css('--green');g.fillRect(ax.X(p)-4,ax.Y(0)-4,8,8);const px=ax.X(p);if(i<9&&p>=x1&&p<=x2&&lab.every(q=>Math.abs(q-px)>18)){lab.push(px);text(g,'x'+'₀₁₂₃₄₅₆₇₈'[i],px-6,ax.Y(0)+(i%2?18:-10),css('--green'),12);}});
+  g.restore();
+  const off=pts.filter(p=>p<x1||p>x2);if(off.length)text(g,`有 ${off.length} 个估计跑出了画面（最远 x = ${fmt(off.reduce((a,b)=>Math.abs(b)>Math.abs(a)?b:a),4)}）`,ax.pl+6,H-ax.pb-8,css('--red'),12);
+  const dfm=v=>v===0?'0':v<1e-3?v.toExponential(1):(+v.toPrecision(2)).toString();
+  const rows=it.map((s,i)=>`<tr><td>${i}</td><td>${fmt(s.x,6)}</td><td>${fmt(s.fx,5)}</td><td>${fmt(s.dx,5)}</td><td>${isFinite(s.nx)?fmt(s.nx,6):'f′ = 0，停'}</td><td>${isFinite(s.nx)?dfm(Math.abs(s.nx-s.x)):'—'}</td></tr>`).join('');
+  $('nrT').innerHTML=`<tr><th>n</th><th>xₙ</th><th>f(xₙ)</th><th>f′(xₙ)</th><th>xₙ₊₁</th><th>|xₙ₊₁ − xₙ|</th></tr>`+(rows||'<tr><td colspan="6">把迭代次数调到 1 以上</td></tr>');
+  const xe=pts[pts.length-1],sub=v=>String(v).replace(/\d/g,c=>'₀₁₂₃₄₅₆₇₈₉'[c]);$('nrR').textContent=`x${sub(pts.length-1)} = ${fmt(xe,6)}`;
+  $('nrE').textContent=fmt(Math.abs(P.f(xe)),3);
+  const steps=it.filter(s=>isFinite(s.nx)).map(s=>Math.abs(s.nx-s.x));let st;
+  const near=P.roots.find(r=>Math.abs(r-xe)<1e-6);
+  if(!it.length)st='还没开始';
+  else if(near!==undefined)st=`收敛到根 ${fmt(near,6)}`;
+  else if(pts.length>=3&&Math.abs(pts[pts.length-1]-pts[pts.length-3])<1e-9&&steps[steps.length-1]>1e-6)st='来回打转（不收敛）';
+  else if(steps.length>=2&&steps[steps.length-1]>steps[steps.length-2]*1.01)st='步子变大：可能发散';
+  else if(steps.length>=2&&steps[steps.length-1]>0.5*steps[steps.length-2])st='步子几乎不变小：离根很远，收敛很慢';
+  else st='还在逼近，再多迭代几步';
+  $('nrS').textContent=st;
+  const notes={exp:x0===0.75||Math.abs(x0-0.7)<0.12?'<strong>为什么 0.75 是坏起点：</strong>f′(x) = eˣ − 2 在 x = ln 2 ≈ 0.693 处为 0，0.75 附近切线几乎水平，交点跳到 x ≈ 38.2。那里 eˣ 远大于 2x + 5，每步只往回挪大约 1，要 42 步才收敛到 2.2516。':(x0<Math.log(2)?'<strong>读图：</strong>从 ln 2 左边出发，切线把你带向负的那个根 −2.4572；讲义说从 −2、−2.5、−3 出发都只能得到这个根。':'<strong>读图：</strong>从右边出发收敛到 2.2516。注意 |xₙ₊₁ − xₙ| 每一步大约平方：0.3 → 0.046 → 0.0014 → 0.0000012（看表最后一列），正确的小数位数一步大约翻一倍。'),
+    sq2:'<strong>读图：</strong>x² − 2 = 0 的正根是 √2。Newton 公式化简成 xₙ₊₁ = (xₙ + 2/xₙ)/2，就是古巴比伦人开平方的方法：从 1 出发，1.5、1.41667、1.414216……',
+    cyc:'<strong>失败的例子：</strong>从 x₀ = 0 出发，x₁ = 1，x₂ = 0，x₃ = 1……永远在 0 和 1 之间来回，找不到真正的根 −1.769。换一个起点（比如 −2）就能收敛。'};
+  $('nrNote').innerHTML=notes[key];
+}
+$('nrF').addEventListener('change',()=>{const P=NR[$('nrF').value];$('nrX').value=$('nrF').value==='sq2'?1:($('nrF').value==='cyc'?-2:2);Lab.draw(14);});
+['nrX','nrN'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(14)));
+document.querySelectorAll('#lab14 [data-nr]').forEach(e=>e.addEventListener('click',()=>{const q=e.dataset.nr.split(',');$('nrF').value=q[0];$('nrX').value=q[1];$('nrN').value=q[2];Lab.draw(14);}));
+Lab.add(14,lab14,{nrc:300});
+
 Lab.start();
 </script>
 </body></html>
