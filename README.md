@@ -10,7 +10,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [功率与变压器实验室](https://114514ch-en.github.io/eee-interactive/power-lab/) | DEEM · EM Week 1–2 | 平均值与 RMS、电感伏秒平衡、理想变压器与折算阻抗 |
 | [数字逻辑实验室](https://114514ch-en.github.io/eee-interactive/logic-lab/) | DEEM · DE ①②③ | K-map 最小化、触发器时序、同步状态机、静态冒险 |
 | [拉普拉斯实验室](https://114514ch-en.github.io/eee-interactive/laplace-lab/) | Maths Part B | s 平面极点与响应、第二平移定理、卷积 |
-| [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验、马尔可夫过程与 PageRank、极值理论（最大值的极限分布、GEV 与重现水平） |
+| [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验、马尔可夫过程与 PageRank、极值理论（最大值的极限分布、GEV 与重现水平、QQ 图与 Tutorial 6 的 Boston 风速） |
 | [信息与编码实验室](https://114514ch-en.github.io/eee-interactive/coding-lab/) | Communication Systems Week 1 / 3 / 4 | 熵、Huffman / Fano / Shannon、分贝、Hamming 码与交织 |
 | [通信链路实验室](https://114514ch-en.github.io/eee-interactive/comms-lab/) | 通信系统 · Lab 1 + Week 3 + Useful Equations | 官方 Lab 1 配套：编码器 / 解码器 / 码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半；另有前缀码解码、分组编码、香农容量、链路预算、量化噪声、误码率、滤波器 |
 | [调制实验室](https://114514ch-en.github.io/eee-interactive/modulation-lab/) | 通信系统 · Week 5 模拟与数字调制 | AM 包络、边带与带宽（含 Tutorial 两音题）、整流 vs 乘本地载波解调、PM 与 FM 的波形 / 瞬时频率 / 频谱与 Carson 带宽、正交调幅 QAM 的相位误差串扰；OOK / BFSK / BPSK 键控与加噪声的相干解调、星座图与噪声（PSK、16-QAM、Gray 码） |

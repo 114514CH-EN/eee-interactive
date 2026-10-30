@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>概率实验室</title>
-<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
+<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · PROBABILITY</div>
   <h1>概率实验室</h1>
-  <p>自己动手调骰子、抽骰子、取平均、做检验。七个实验对应 A · Week 1–5（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论），按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a><a href="#lab6">实验 6 最大值的极限</a><a href="#lab7">实验 7 GEV 与重现水平</a></nav>
+  <p>自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a><a href="#lab6">实验 6 最大值的极限</a><a href="#lab7">实验 7 GEV 与重现水平</a><a href="#lab8">实验 8 QQ 图与 Tutorial 6</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -111,6 +111,26 @@
   <div class="stage even"><canvas id="gvp" height="260" aria-label="直方图与 GEV 密度"></canvas><canvas id="gvr" height="260" aria-label="重现水平图"></canvas></div>
   <div class="read"><div><small>P(&gt; 8.75 / 11.25 / 14 ft) 模型</small><b id="gv_e"></b></div><div><small>数据（数个数）</small><b>0.66 / 0.12 / 0</b></div><div><small>10 年 / 100 年重现水平</small><b id="gv_r"></b></div><div><small>对数似然 ℓ（越大越贴合）</small><b id="gv_l"></b></div></div>
   <p class="note"><strong>为什么需要模型：</strong>50 年的数据里最大的是 13.0 ft，只靠数个数，「100 年一遇」根本没法回答（justAnswers 原话：Need extreme value theory）。拟合出 GEV 之后就能外推。注意：数据前 30 年平均 8.7 ft、后 20 年平均 10.4 ft，「各年同分布」这个假设本身值得怀疑（讲义第 3 页提到的非平稳性）。</p>
+</section>
+
+<section class="panel" id="lab8">
+  <div class="tag">实验 8 · PDF Tails 2：QQ 图、重现水平与 Tutorial 6（Boston 风速）</div>
+  <h2>拟合得好不好看 QQ 图；拟合好了，就能回答「r 年一遇有多大」和「这么大是多少年一遇」</h2>
+  <p class="lead">左图是 QQ 图（MATLAB 的 <code>qqplot(data, pd)</code>）：第 i 小的数据画在纵轴，横轴是模型在累积概率 (i − 0.5)/n 处的分位数，点贴着虚线就说明模型合适。右图是重现水平图：曲线是模型的 r 年一遇水平 z<sub>r</sub> = μ + (σ/ξ)[(−ln(1 − 1/r))<sup>−ξ</sup> − 1]（讲座 MATLAB 文件里的 <code>rlevel</code>），圆点是数据（第 i 大画在 r = (n + 1)/i）。数据可以选讲座的 Wassaw 海浪，或者 Tutorial 6 的 Boston 风速。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-qp="sea,gev,8.7113,1.3115,-0.1084,100,13">讲座例子：Wassaw 海浪</button><button data-qp="bos,gev,51.7037,6.8866,0.0457,150,100">Tutorial 6：Boston，150 年和 100 mph</button><button data-qp="bos,gev,51.874,7.0015,0,150,100">Boston 硬设 ξ = 0（Gumbel）</button><button data-qp="bos,norm,51.7037,6.8866,0.0457,150,100">Boston 硬套正态分布</button></div>
+  <div class="btns" role="group" aria-label="数据"><button data-qs="sea">Wassaw 海浪 1955–2004（ft）</button><button data-qs="bos">Boston 风速 1936–1985（mph）</button></div>
+  <div class="btns" role="group" aria-label="模型"><button data-qm="gev">模型：GEV（滑块调参数）</button><button data-qm="norm">对比：正态分布（样本均值、标准差）</button><button id="qqFit" type="button">GEV 最大似然拟合（= fitdist）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="qqM">位置 μ</label><input id="qqM" type="range" min="7" max="10.5" step="0.0001" value="8.7113"><output id="qqMO"></output></div>
+    <div class="ctl"><label for="qqS">尺度 σ</label><input id="qqS" type="range" min="0.4" max="2.5" step="0.0001" value="1.3115"><output id="qqSO"></output></div>
+    <div class="ctl"><label for="qqX">形状 ξ</label><input id="qqX" type="range" min="-0.5" max="0.5" step="0.0001" value="-0.1084"><output id="qqXO"></output></div>
+    <div class="ctl"><label for="qqR">重现期 r（年）</label><input id="qqR" type="range" min="0.3" max="3.3" step="0.01" value="2"><output id="qqRO"></output></div>
+    <div class="ctl"><label for="qqZ">某个水平 z</label><input id="qqZ" type="range" min="9" max="16" step="0.1" value="13"><output id="qqZO"></output></div>
+  </div>
+  <p class="verdict" id="qq_v"></p>
+  <div class="stage even"><canvas id="qqA" height="280" aria-label="QQ 图"></canvas><canvas id="qqB" height="280" aria-label="重现水平图"></canvas></div>
+  <div class="read"><div><small>r 年一遇的水平 z<sub>r</sub></small><b id="qq_r"></b></div><div><small>z 每年被超过的概率 / 重现期</small><b id="qq_z"></b></div><div><small>QQ 图相关系数（越接近 1 越直）</small><b id="qq_c"></b></div><div><small>对数似然 ℓ</small><b id="qq_l"></b></div></div>
+  <p class="note"><strong>Tutorial 6 答案（自己用最大似然算的，官方 Solution6.m 11 月 6 日才解锁）：</strong>Boston 风速拟合出 ξ ≈ 0.046、μ ≈ 51.70、σ ≈ 6.89；150 年一遇约 <strong>90.5 mph</strong>；100 mph 每年被超过的概率约 0.0023，约 <strong>439 年一遇</strong>。把 ξ 硬设成 0（Gumbel，重新拟合 μ、σ），100 mph 就变成约 965 年一遇：ξ 一点点的差别，外推到几百年以后差好几倍，所以讲座最后要看参数的协方差（不确定性）。</p>
 </section>
 
 </div>
@@ -310,6 +330,67 @@ function lab7(){
 ['gvM','gvS','gvX'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(7)));
 document.querySelectorAll('#lab7 [data-gv]').forEach(b=>b.addEventListener('click',()=>{const [a,c,d]=b.dataset.gv.split(',');$('gvM').value=a;$('gvS').value=c;$('gvX').value=d;Lab.draw(7);}));
 Lab.add(7,lab7,{gvp:220,gvr:220});
+
+/* ---------- Lab 8: QQ plot, return levels, Tutorial 6 (Boston) ---------- */
+const BOS=[50,55,79,56,53,41,51,51,65,62,45,66,47,45,73,51,57,67,85,57,60,63,75,47,57,49,49,52,48,46,51,54,58,55,61,59,52,53,66,43,49,60,66,48,52,54,54,50,48,66];
+const QD={sea:{x:WS,u:'ft',mle:[8.7113,1.3115,-0.1084],mu:[7,10.5],sg:[0.4,2.5],z:[9,16,0.1,13],lo:6,hi:14.5,rl:[6,18],name:'Wassaw 海浪'},
+          bos:{x:BOS,u:'mph',mle:[51.7037,6.8866,0.0457],mu:[45,60],sg:[3,12],z:[60,120,1,100],lo:38,hi:95,rl:[40,130],name:'Boston 风速'}};
+let qds='sea',qdm='gev';
+const gevQ=(p,m,s,k)=>{const y=-Math.log(p);return Math.abs(k)<1e-6?m-s*Math.log(y):m+s/k*(Math.pow(y,-k)-1);};
+function invNorm(p){/* Acklam */const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924],b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857],c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878],d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
+  const pl=0.02425;let q,r;if(p<pl){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  q=p-0.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+const erfc_=x=>{const t=1/(1+0.5*Math.abs(x)),y=t*Math.exp(-x*x-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277)))))))));return x>=0?y:2-y;};
+const normF=(x,m,s)=>0.5*erfc_(-(x-m)/(s*Math.SQRT2));
+function qdSet(ds){qds=ds;const D=QD[ds];[['qqM',D.mu],['qqS',D.sg]].forEach(([id,r])=>{$(id).min=r[0];$(id).max=r[1];});$('qqZ').min=D.z[0];$('qqZ').max=D.z[1];$('qqZ').step=D.z[2];}
+function lab8(){
+  const D=QD[qds],x=D.x,n=x.length,srt=[...x].sort((p,q)=>p-q);
+  const m=+$('qqM').value,s=+$('qqS').value,k=+$('qqX').value,r=+Math.pow(10,+$('qqR').value).toPrecision(2),z=+$('qqZ').value;
+  const mean=x.reduce((a,b)=>a+b,0)/n,sd=Math.sqrt(x.reduce((a,b)=>a+(b-mean)**2,0)/n),isN=qdm==='norm',dp=qds==='sea'?2:1;
+  ['qqM','qqS','qqX'].forEach(id=>$(id).disabled=isN);
+  $('qqMO').textContent=m.toFixed(2);$('qqSO').textContent=s.toFixed(2);$('qqXO').textContent=k.toFixed(3);$('qqRO').textContent=(r<10?r.toFixed(1):Math.round(r))+' 年';$('qqZO').textContent=z+' '+D.u;
+  pressGroup('#lab8 [data-qs]',b=>b.dataset.qs===qds);pressGroup('#lab8 [data-qm]',b=>b.dataset.qm===qdm);
+  pressGroup('#lab8 [data-qp]',b=>{const q=b.dataset.qp.split(',');return q[0]===qds&&q[1]===qdm&&(isN||(Math.abs(+q[2]-m)<1e-6&&Math.abs(+q[3]-s)<1e-6&&Math.abs(+q[4]-k)<1e-6))&&Math.abs(r-+q[5])<0.6&&+q[6]===z;});
+  const Qm=p=>isN?mean+sd*invNorm(p):gevQ(p,m,s,k),Fm=v=>isN?normF(v,mean,sd):gevF(v,m,s,k),zr=T=>Qm(1-1/T);
+  /* QQ plot */
+  const q=srt.map((v,i)=>Qm((i+0.5)/n));
+  const mq=q.reduce((a,b)=>a+b,0)/n;let sxy=0,sxx=0,syy=0;q.forEach((v,i)=>{sxy+=(v-mq)*(srt[i]-mean);sxx+=(v-mq)**2;syy+=(srt[i]-mean)**2;});const corr=sxy/Math.sqrt(sxx*syy);
+  const [a,W,H]=fit($('qqA'));const lo=D.lo,hi=D.hi,tk=qds==='sea'?[6,8,10,12,14]:[40,50,60,70,80,90];
+  const ax=axes(a,W,H,{x0:lo,x1:hi,y0:lo,y1:hi,xt:tk,yt:tk,title:`QQ 图：${D.name}（${isN?'正态分布':'GEV'}）`,xl:`模型分位数（${D.u}）`,pl:40});
+  a.setLineDash([6,4]);a.strokeStyle=css('--muted');a.lineWidth=1.3;a.beginPath();a.moveTo(ax.X(lo),ax.Y(lo));a.lineTo(ax.X(hi),ax.Y(hi));a.stroke();a.setLineDash([]);
+  a.save();a.beginPath();a.rect(ax.pl,ax.pt,W-ax.pl-ax.pr,H-ax.pt-ax.pb);a.clip();
+  a.fillStyle=isN?css('--red'):css('--blue');q.forEach((v,i)=>{a.beginPath();a.arc(ax.X(v),ax.Y(srt[i]),3.4,0,7);a.fill();});a.restore();
+  text(a,'纵轴：数据（从小到大排好）；虚线 y = x',ax.pl+6,ax.pt+14,css('--muted'),11);
+  /* return level plot */
+  const [b,W2,H2]=fit($('qqB'));const L0=Math.log10(1.1),L1=Math.log10(3000),y0=D.rl[0],y1=D.rl[1];
+  const bx=axes(b,W2,H2,{x0:L0,x1:L1,y0,y1,xt:[Math.log10(2),1,2,3],xf:t=>String(Math.round(Math.pow(10,t))),yt:qds==='sea'?[6,9,12,15,18]:[40,60,80,100,120],title:'重现水平 z_r：平均每 r 年被超过一次',xl:'重现期 r（年，对数刻度）',pl:40});
+  b.save();b.beginPath();b.rect(bx.pl,bx.pt,W2-bx.pl-bx.pr,H2-bx.pt-bx.pb);b.clip();
+  plot(b,bx.X,bx.Y,t=>zr(Math.pow(10,t)),L0,L1,isN?css('--red'):css('--blue'),2.6,400);
+  [...x].sort((p,q2)=>q2-p).forEach((v,i)=>{const T=(n+1)/(i+1);if(T<1.1)return;b.fillStyle=css('--amp');b.beginPath();b.arc(bx.X(Math.log10(T)),bx.Y(v),3,0,7);b.fill();});
+  const zR=zr(r);b.strokeStyle=css('--red');b.setLineDash([4,4]);b.lineWidth=1.3;b.beginPath();b.moveTo(bx.X(Math.log10(r)),bx.Y(y0));b.lineTo(bx.X(Math.log10(r)),bx.Y(zR));b.lineTo(bx.X(L0),bx.Y(zR));b.stroke();
+  const pz=1-Fm(z),Tz=pz>0?1/pz:Infinity;b.strokeStyle=css('--purple');b.beginPath();b.moveTo(bx.X(L0),bx.Y(z));b.lineTo(W2-bx.pr,bx.Y(z));b.stroke();
+  if(isFinite(Tz)&&Tz<3000&&Tz>1.1){b.beginPath();b.moveTo(bx.X(Math.log10(Tz)),bx.Y(z));b.lineTo(bx.X(Math.log10(Tz)),bx.Y(y0));b.stroke();}
+  b.setLineDash([]);b.restore();
+  label(b,`${r<10?r.toFixed(1):Math.round(r)} 年：${zR.toFixed(dp)}`,bx.X(L0)+4,bx.Y(zR)-5,css('--red'),11);
+  text(b,'圆点：第 i 大的数据画在 r = (n + 1)/i',bx.pl+4,bx.pt+14,css('--muted'),11);
+  /* readouts */
+  $('qq_r').textContent=`${r<10?r.toFixed(1):Math.round(r)} 年一遇 = ${zR.toFixed(dp)} ${D.u}`;
+  $('qq_z').textContent=pz<=0?`${z} ${D.u} 超过上界，模型说不可能`:`${pz<0.001?pz.toExponential(2):pz.toFixed(4)} / 约 ${Tz<100?Tz.toFixed(1):Math.round(Tz)} 年一遇`;
+  $('qq_c').textContent=corr.toFixed(4);
+  let ll=0;for(const v of x){const f=isN?Math.exp(-(((v-mean)/sd)**2)/2)/(sd*Math.sqrt(2*Math.PI)):gevf(v,m,s,k);ll+=f>0?Math.log(f):-1e9;}$('qq_l').textContent=ll<-1e8?'−∞（有数据落在分布范围外）':ll.toFixed(2);
+  const v=$('qq_v'),dmax=Math.max(...q.map((t,i)=>Math.abs(t-srt[i])));
+  if(isN){v.textContent=`正态分布：QQ 图两头弯离虚线，最大的数据比正态模型说的大 ${(srt[n-1]-q[n-1]).toFixed(1)} ${D.u}：右尾太短，会低估极端值`;v.style.color=css('--red');}
+  else{const mle=D.mle,isM=Math.abs(m-mle[0])<1e-4&&Math.abs(s-mle[1])<1e-4&&Math.abs(k-mle[2])<1e-4;
+    v.textContent=(isM?'最大似然参数：':'')+`QQ 点离虚线最远 ${dmax.toFixed(2)} ${D.u}，相关系数 ${corr.toFixed(3)}`+(isM?'。点基本贴着对角线，GEV 合适':corr>0.99?'':'。点明显弯离对角线：参数不合适，按「GEV 最大似然拟合」看看');
+    v.style.color=isM||corr>0.99?css('--accent'):css('--amp');}
+}
+['qqM','qqS','qqX','qqR','qqZ'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(8)));
+document.querySelectorAll('#lab8 [data-qs]').forEach(b=>b.addEventListener('click',()=>{qdSet(b.dataset.qs);const D=QD[qds];$('qqM').value=D.mle[0];$('qqS').value=D.mle[1];$('qqX').value=D.mle[2];$('qqZ').value=D.z[3];Lab.draw(8);}));
+document.querySelectorAll('#lab8 [data-qm]').forEach(b=>b.addEventListener('click',()=>{qdm=b.dataset.qm;Lab.draw(8);}));
+$('qqFit').addEventListener('click',()=>{qdm='gev';const D=QD[qds];$('qqM').value=D.mle[0];$('qqS').value=D.mle[1];$('qqX').value=D.mle[2];Lab.draw(8);});
+document.querySelectorAll('#lab8 [data-qp]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.qp.split(',');qdSet(q[0]);qdm=q[1];$('qqM').value=q[2];$('qqS').value=q[3];$('qqX').value=q[4];$('qqR').value=Math.log10(+q[5]);$('qqZ').value=q[6];Lab.draw(8);}));
+Lab.add(8,lab8,{qqA:250,qqB:250});
 Lab.start();
 </script>
 </body></html>
