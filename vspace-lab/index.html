@@ -1,0 +1,127 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>向量空间实验室</title>
+<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.ctl select{width:100%}html.embed #lab2 .scroll{display:none}html.embed #lab2 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · VECTOR SPACES</div>
+  <h1>向量空间实验室</h1>
+  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 度量 d₁、d₂、d∞ 与单位球（Week 7）</div>
+  <h2>同样两个点，三种「距离」</h2>
+  <p class="lead">左图拖动 x、y 两个点。橙色折线是 d₁（城市街区：只能横着、竖着走，横竖加起来）；紫色直线是 d₂（普通直线距离）；蓝色是 d∞（只算差得最多的那一个坐标）。右图是到原点距离为 1 的点组成的「单位球」：d₁ 是菱形、d₂ 是圆、d∞ 是正方形，p 越大越接近正方形。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-m="1,4,-5,2">Tutorial Q1(a)</button><button data-m="0,-5,-3,5">讲义例：x₁ 与 c₁⁰</button><button data-m="3,1,2,2">讲义例：x₅ 与 c₂⁰</button><button data-m="-2,-1,3,3">随便两个点</button></div>
+  <div class="controls"><div class="ctl"><label for="pp">右图的 p</label><input id="pp" type="range" min="0" max="6" step="1" value="1"><output id="ppO"></output></div></div>
+  <div class="stage even"><canvas id="mp" height="320" aria-label="两个点和三种距离，可拖动" style="touch-action:none;cursor:grab"></canvas><canvas id="us" height="320" aria-label="单位球"></canvas></div>
+  <div class="read"><div><small>x − y</small><b id="r1v"></b></div><div><small>d₁ = |Δx₁| + |Δx₂|</small><b id="r1a"></b></div><div><small>d₂ = √(Δx₁² + Δx₂²)</small><b id="r1b"></b></div><div><small>d∞ = max |Δxₙ|</small><b id="r1c"></b></div><div><small>d_p（右图的 p）</small><b id="r1p"></b></div></div>
+  <p class="note"><strong>总是成立：</strong>d∞ ≤ d₂ ≤ d₁。p 越大，最大的那个差占的比重越大，所以 d_p 从 d₁ 一路降到 d∞。单位球的形状就是「距离为 1」在这种度量下长什么样。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · k-means 聚类（Week 7）</div>
+  <h2>分配到最近的中心，再把中心挪到平均位置</h2>
+  <p class="lead">每按一次「走一步」：① 每个数据点找最近的中心（按选定的度量），连线并染色；② 每个中心挪到属于它的点的平均位置（虚线是移动轨迹）。中心不再移动就收敛了。换不同的初始中心，会收敛到不同的结果：k-means 只保证局部最优。</p>
+  <div class="btns" role="group" aria-label="数据"><button data-k="lec">讲义例题（8 点，K = 2）</button><button data-k="good">三团数据 · 好的初值</button><button data-k="bad">三团数据 · 坏的初值</button></div>
+  <div class="controls"><div class="ctl"><label for="km">度量</label><select id="km"><option value="1">d₁ 城市街区（讲义例题用的）</option><option value="2">d₂ 欧氏距离</option></select><span></span></div></div>
+  <div class="btns"><button id="kstep" class="play">走一步 →</button><button id="kplay">▶ 自动</button><button id="kreset">重置初值</button></div>
+  <p class="verdict" id="v2"></p>
+  <div class="stage one"><canvas id="km2" height="330" aria-label="k-means 迭代"></canvas></div>
+  <div class="read"><div><small>迭代次数 i</small><b id="r2i"></b></div><div><small>Distortion（到最近中心的平均距离）</small><b id="r2d"></b></div><div><small>这一步改了归属的点数</small><b id="r2c"></b></div><div><small>当前中心</small><b id="r2k"></b></div></div>
+  <div class="scroll"><table class="mini" id="dtab"></table></div>
+  <p class="note"><strong>为什么取平均：</strong>中心取簇内点的平均，正好让「平方欧氏距离之和」最小（讲义式 (16)–(17)）。讲义例题用 d₁ 分配、用平均更新，Tutorial Q3 第 4 问也这样做。坏初值的例子里左上一团被两个中心瓜分、另外两团共用一个中心，distortion 更大，但算法已经停住了，这就是「只保证局部最优」（Tutorial Q4）。</p>
+</section>
+</div>
+
+<script>
+const m=v=>fmt(v,3).replace(/^-/,'−');
+const dot=(x,px,py,col,r=5)=>{x.fillStyle=col;x.beginPath();x.arcS(px,py,r,0,7);x.fill();x.strokeStyle=css('--panel');x.lineWidth=1.5;x.stroke();};
+/* equal-aspect frame centred at (cx,cy) showing half-height R */
+function frame(cv,cx,cy,R,o={}){const [x,W,H]=fit(cv),pl=34,pr=10,pt=10,pb=24,pw=W-pl-pr,ph=H-pt-pb,Rx=R*pw/ph;
+  const x0=cx-Rx,x1=cx+Rx,y0=cy-R,y1=cy+R,X=v=>pl+pw*(v-x0)/(x1-x0),Y=v=>pt+ph*(y1-v)/(y1-y0),iX=p=>x0+(p-pl)/pw*(x1-x0),iY=p=>y1-(p-pt)/ph*(y1-y0);
+  const st=o.step||1;x.strokeStyle=css('--grid');x.lineWidth=1;x.fillStyle=css('--muted');x.font=`11px ${css('--mono')}`;
+  for(let v=Math.ceil(x0/st)*st;v<=x1;v+=st){x.beginPath();x.moveTo(X(v),pt);x.lineTo(X(v),H-pb);x.stroke();if(Math.abs(v)%(st*(o.lab||1))<1e-9){const s=String(+v.toFixed(2)).replace('-','−');x.fillText(s,X(v)-x.measureText(s).width/2,H-pb+14);}}
+  for(let v=Math.ceil(y0/st)*st;v<=y1;v+=st){x.beginPath();x.moveTo(pl,Y(v));x.lineTo(W-pr,Y(v));x.stroke();if(Math.abs(v)%(st*(o.lab||1))<1e-9){const s=String(+v.toFixed(2)).replace('-','−');x.fillText(s,pl-5-x.measureText(s).width,Y(v)+4);}}
+  x.strokeStyle=css('--muted');x.beginPath();x.moveTo(X(0),pt);x.lineTo(X(0),H-pb);x.moveTo(pl,Y(0));x.lineTo(W-pr,Y(0));x.stroke();
+  return {x,W,H,X,Y,iX,iY,pl,pr,pt,pb,x0,x1,y0,y1};}
+
+/* ---------- Lab 1 ---------- */
+const PS=[1,2,3,4,10,Infinity,1.5],PL=['1','2','3','4','10','∞','1.5'];
+let A1=[1,4],B1=[-5,2],g1=null,drag1=-1;
+const dp=(v,p)=>p===Infinity?Math.max(...v.map(Math.abs)):Math.pow(v.reduce((s,t)=>s+Math.pow(Math.abs(t),p),0),1/p);
+function lab1(){
+  const pi=+$('pp').value,p=PS[pi];$('ppO').textContent='p = '+PL[pi];
+  pressGroup('#lab1 [data-m]',b=>b.dataset.m===[...A1,...B1].join(','));
+  const g=frame($('mp'),0,0.5,6.5,{step:1,lab:2});g1=g;const {x,X,Y}=g;
+  const [a,b]=A1,[c,d]=B1,v=[a-c,b-d];
+  /* d1 staircase */
+  x.strokeStyle=css('--amp');x.lineWidth=3;x.beginPath();x.moveTo(X(c),Y(d));x.lineTo(X(a),Y(d));x.lineTo(X(a),Y(b));x.stroke();
+  tag(x,`|Δx₁| = ${m(Math.abs(v[0]))}`,X(c),Y(d),X(a),Y(d),b>d?1:-1,css('--amp'),14,12);
+  tag(x,`|Δx₂| = ${m(Math.abs(v[1]))}`,X(a),Y(d),X(a),Y(b),a>c?1:-1,css('--amp'),14,12);
+  x.strokeStyle=css('--purple');x.lineWidth=2.4;x.setLineDash([]);x.beginPath();x.moveTo(X(c),Y(d));x.lineTo(X(a),Y(b));x.stroke();
+  dot(x,X(a),Y(b),css('--accent'),6.5);dot(x,X(c),Y(d),css('--blue'),6.5);
+  label(x,`x (${m(a)}, ${m(b)})`,Math.min(X(a)+8,g.W-110),Y(b)-8,css('--accent'),12);{x.font=`600 12px ${css('--mono')}`;const ys=`y (${m(c)}, ${m(d)})`,w=x.measureText(ys).width;label(x,ys,X(c)-w-10>g.pl?X(c)-w-10:X(c)+10,Y(d)-10,css('--blue'),12);}
+  text(x,'橙 = d₁ 路线　紫 = d₂ 直线',g.pl+6,g.pt+14,css('--ink'),12);
+  /* unit spheres */
+  const u=frame($('us'),0,0,1.35,{step:0.5,lab:2});const ux=u.x;
+  const ball=(pp,col,lw,dash)=>{ux.strokeStyle=col;ux.lineWidth=lw;ux.setLineDash(dash||[]);ux.beginPath();for(let i=0;i<=720;i++){const t=i/720*2*Math.PI,q=[Math.cos(t),Math.sin(t)],r=1/dp(q,pp);i?ux.lineTo(u.X(q[0]*r),u.Y(q[1]*r)):ux.moveTo(u.X(q[0]*r),u.Y(q[1]*r));}ux.closePath();ux.stroke();ux.setLineDash([]);};
+  ball(1,css('--amp'),1.4,[4,4]);ball(2,css('--purple'),1.4,[4,4]);ball(Infinity,css('--blue'),1.4,[4,4]);ball(p,css('--accent'),3.2);
+  text(ux,'虚线：',u.pl+4,u.pt+12,css('--muted'),11);text(ux,'d₁ 菱形',u.pl+40,u.pt+12,css('--amp'),11);text(ux,'d₂ 圆',u.pl+92,u.pt+12,css('--purple'),11);text(ux,'d∞ 正方形',u.pl+132,u.pt+12,css('--blue'),11);
+  text(ux,`粗线：p = ${PL[pi]} 的单位球 {x : d_p(x, 0) = 1}`,u.pl+4,u.H-u.pb-6,css('--accent'),11);
+  $('r1v').textContent=`(${m(v[0])}, ${m(v[1])})`;$('r1a').textContent=m(dp(v,1));$('r1b').textContent=m(dp(v,2));$('r1c').textContent=m(dp(v,Infinity));$('r1p').textContent=`p = ${PL[pi]}：${m(dp(v,p))}`;
+}
+(function(){const cv=$('mp');const pick=e=>{const r=cv.getBoundingClientRect();return [Math.round(g1.iX(e.clientX-r.left)*2)/2,Math.round(g1.iY(e.clientY-r.top)*2)/2];};
+  cv.addEventListener('pointerdown',e=>{if(!g1)return;const [px,py]=pick(e);drag1=Math.hypot(px-A1[0],py-A1[1])<=Math.hypot(px-B1[0],py-B1[1])?0:1;cv.setPointerCapture(e.pointerId);(drag1?B1:A1).splice(0,2,px,py);Lab.draw(1);});
+  cv.addEventListener('pointermove',e=>{if(drag1<0)return;const [px,py]=pick(e);(drag1?B1:A1).splice(0,2,Math.max(-9,Math.min(9,px)),Math.max(-6,Math.min(7,py)));Lab.draw(1);});
+  cv.addEventListener('pointerup',()=>drag1=-1);})();
+document.querySelectorAll('#lab1 [data-m]').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.m.split(',').map(Number);A1=v.slice(0,2);B1=v.slice(2);Lab.draw(1);}));
+$('pp').addEventListener('input',()=>Lab.draw(1));
+Lab.add(1,lab1,{mp:250,us:250});
+
+/* ---------- Lab 2 ---------- */
+const rng=s=>()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};
+const gauss=r=>{const u=r()||1e-9,v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+const BLOB=(()=>{const r=rng(7),pts=[];[[-4,3],[4,3.5],[0,-3.5]].forEach(([cx,cy])=>{for(let i=0;i<14;i++)pts.push([+(cx+gauss(r)*0.9).toFixed(2),+(cy+gauss(r)*0.9).toFixed(2)]);});return pts;})();
+const KS={lec:{X:[[0,-5],[1,2],[-2,3],[-4,7],[3,1],[4,-2],[-1,6],[5,-6]],C:[[-3,5],[2,2]],R:7.5,c:[0,0.5]},
+  good:{X:BLOB,C:[[-3,1],[3,1],[0,-1]],R:7,c:[0,0.3]},bad:{X:BLOB,C:[[-4.5,3],[-3.5,3],[2,0]],R:7,c:[0,0.3]}};
+let kk='lec',S2=null,play2=false;
+const dist2=(a,b)=>$('km').value==='1'?Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]):Math.hypot(a[0]-b[0],a[1]-b[1]);
+function reset2(){const K=KS[kk];S2={C:K.C.map(c=>[...c]),trail:K.C.map(c=>[[...c]]),i:0,asg:null,changed:null,done:false};assign2();}
+function assign2(){const K=KS[kk],old=S2.asg;S2.asg=K.X.map(x=>{let b=0,bd=Infinity;S2.C.forEach((c,k)=>{const d=dist2(x,c);if(d<bd-1e-12){bd=d;b=k;}});return b;});
+  S2.changed=old?S2.asg.filter((a,i)=>a!==old[i]).length:null;}
+function step2(){if(S2.done)return;const K=KS[kk];const nc=S2.C.map((c,k)=>{const mem=K.X.filter((_,i)=>S2.asg[i]===k);return mem.length?[mem.reduce((s,p)=>s+p[0],0)/mem.length,mem.reduce((s,p)=>s+p[1],0)/mem.length]:c;});
+  const moved=nc.some((c,k)=>Math.hypot(c[0]-S2.C[k][0],c[1]-S2.C[k][1])>1e-9);S2.C=nc;nc.forEach((c,k)=>S2.trail[k].push([...c]));S2.i++;assign2();if(!moved)S2.done=true;Lab.draw(2);}
+const COL=()=>[css('--amp'),css('--blue'),css('--green')];
+function lab2(){
+  if(!S2)reset2();const K=KS[kk];pressGroup('#lab2 [data-k]',b=>b.dataset.k===kk);
+  const g=frame($('km2'),K.c[0],K.c[1],K.R,{step:1,lab:2}),{x,X,Y}=g,cols=COL();
+  K.X.forEach((p,i)=>{const c=S2.C[S2.asg[i]];x.strokeStyle=cols[S2.asg[i]];x.globalAlpha=.35;x.lineWidth=1.2;x.beginPath();x.moveTo(X(p[0]),Y(p[1]));x.lineTo(X(c[0]),Y(c[1]));x.stroke();x.globalAlpha=1;});
+  K.X.forEach((p,i)=>{dot(x,X(p[0]),Y(p[1]),cols[S2.asg[i]],K.X.length>10?4:5.5);if(K.X.length<=10)label(x,'x'+(i+1),X(p[0])+7,Y(p[1])-6,css('--muted'),11);});
+  S2.trail.forEach((tr,k)=>{x.strokeStyle=cols[k];x.setLineDash([4,4]);x.lineWidth=1.6;x.beginPath();tr.forEach((c,j)=>j?x.lineTo(X(c[0]),Y(c[1])):x.moveTo(X(c[0]),Y(c[1])));x.stroke();x.setLineDash([]);
+    const c=S2.C[k],px=X(c[0]),py=Y(c[1]);x.fillStyle=cols[k];x.strokeStyle=css('--ink');x.lineWidth=2;x.beginPath();x.moveTo(px,py-10);x.lineTo(px+9,py+7);x.lineTo(px-9,py+7);x.closePath();x.fill();x.stroke();
+    label(x,`c${k+1}`,px+10,py+4,cols[k],13);});
+  const D=K.X.reduce((s,p,i)=>s+dist2(p,S2.C[S2.asg[i]]),0)/K.X.length;
+  $('r2i').textContent=S2.i;$('r2d').textContent=m(D);$('r2c').textContent=S2.changed===null?'—':S2.changed;$('r2k').textContent=S2.C.map(c=>`(${m(c[0])}, ${m(c[1])})`).join(' ');
+  const v=$('v2');if(S2.done){v.textContent=`已收敛（第 ${S2.i} 步中心没有再动）：distortion = ${m(D)}`;v.style.color=kk==='bad'?css('--red'):css('--green');}else{v.textContent=S2.i===0?'初始中心：每个点已连到最近的中心，按「走一步」更新中心':'继续：中心还在移动';v.style.color=css('--muted');}
+  const tb=$('dtab');if(K.X.length<=10){const mt=$('km').value==='1'?'d₁':'d₂';tb.innerHTML=`<tr><th>${mt}(xₙ, cₖ)</th>${K.X.map((_,i)=>`<th>x${i+1}</th>`).join('')}</tr>`+S2.C.map((c,k)=>`<tr><td>c${k+1}</td>${K.X.map((p,i)=>{const d=dist2(p,c);return `<td style="${S2.asg[i]===k?'font-weight:700;color:'+cols[k]:''}">${m(d)}</td>`;}).join('')}</tr>`).join('');}else tb.innerHTML='';
+}
+$('kstep').addEventListener('click',step2);$('kreset').addEventListener('click',()=>{reset2();Lab.draw(2);});
+$('km').addEventListener('input',()=>{reset2();Lab.draw(2);});
+document.querySelectorAll('#lab2 [data-k]').forEach(b=>b.addEventListener('click',()=>{kk=b.dataset.k;reset2();Lab.draw(2);}));
+let acc2=0;const a2=Lab.anim(2,$('km2'),dt=>{acc2+=dt;if(acc2>0.9){acc2=0;if(S2.done){play2=false;$('kplay').textContent='▶ 自动';}else step2();}},()=>play2);
+$('kplay').addEventListener('click',()=>{if(S2.done)reset2();play2=!play2;$('kplay').textContent=play2?'⏸ 暂停':'▶ 自动';Lab.kick(a2);Lab.draw(2);});
+Lab.add(2,lab2,{km2:300});
+Lab.start();
+</script>
+</body></html>
