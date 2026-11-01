@@ -218,4 +218,38 @@ D('MB','MB5','傅里叶级数 2：任意周期与奇偶对称','3eb202737d7a811c
 ['fix',r`Fourier 2 课件有哪些地方要改？`,r`第 57 页「Try this」的答案 sin 部分符号与第 55 页的图相反（图是 −x / 0，答案是 0 / x 的）；第 20、34 页奇方波级数末尾「− …」应为「+ …」；第 36 页标题「sawtooth (triangle)」实为锯齿波；课上例题扫描件页眉写 Week 9。`],
 ]);
 
+D('MB','MB6','傅里叶变换','3eb202737d7a812cbd7fd41f10bd32db',[
+['q',r`写出本课用的傅里叶变换和逆变换（讲义第 39 页）。ω 是什么？`,r`$$F(\omega)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}f(t)e^{-j\omega t}dt,\qquad f(t)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}F(\omega)e^{j\omega t}d\omega$$
+ω 是角频率（rad/s，空间问题里是空间频率）。两边都放 $1/\sqrt{2\pi}$ 是 Kreyszig 的对称写法；别的书（通信课）可能用 $2\pi f$ 或把 $1/2\pi$ 全放在逆变换里`],
+['q',r`傅里叶级数和傅里叶变换是什么关系？为什么周期变成无穷大以后求和变成积分？`,r`- 周期 2L 的函数只含 $\omega_n=n\pi/L$ 这些离散频率（线谱），间隔 $\pi/L$
+- L → ∞：间隔 → 0，线越来越密，连成连续的 F(ω)；求和 $\sum\cdot\delta\omega$ 变成积分 $\int d\omega$
+- 精确关系：$c_n=\frac{\sqrt{2\pi}}{2L}F(n\pi/L)$，复系数就是 F 在谐波处的取样`],
+['q',r`复数形式的傅里叶级数是什么？cₙ 和 aₙ、bₙ 什么关系？（不考，但要看懂）`,r`$$f(x)=\sum_{n=-\infty}^{\infty}c_ne^{jn\pi x/L},\qquad c_n=\frac{1}{2L}\int_{-L}^{L}f(x)e^{-jn\pi x/L}dx$$
+n ≥ 1 时 $c_n=\frac{a_n-jb_n}{2}$，$c_{-n}=c_n^*$，$c_0=\frac{a_0}{2}$。来源：$\cos x=\frac{e^{jx}+e^{-jx}}{2}$、$\sin x=\frac{e^{jx}-e^{-jx}}{2j}$ 代进实数形式`],
+['q',r`讲义例题：$f(t)=\sqrt{2\pi}H(t)e^{-t}$ 的 F(ω)、模和相位？`,r`$F(\omega)=\int_0^\infty e^{-t(1+j\omega)}dt=\frac{1}{1+j\omega}=\frac{1}{1+\omega^2}-j\frac{\omega}{1+\omega^2}$
+- $|F|=1/\sqrt{1+\omega^2}$（ω = 0 时 1，ω = 10 时约 0.1）
+- $\theta=\arctan(-\omega)$
+- 前面的 $\sqrt{2\pi}$ 正好和定义里的 $1/\sqrt{2\pi}$ 约掉`],
+['q',r`宽为 a、高为 1 的矩形脉冲（中心在 0）的傅里叶变换？`,r`$$F(\omega)=\frac{1}{\sqrt{2\pi}}\int_{-a/2}^{a/2}e^{-j\omega t}dt=\frac{2}{\sqrt{2\pi}}\frac{\sin(\omega a/2)}{\omega}=\frac{a}{\sqrt{2\pi}}\,\mathrm{sinc}\Big(\frac{\omega a}{2}\Big)$$
+sinc x = sin x / x。偶函数 → 实数；F(0) = 面积/√2π = a/√2π；第一个零点在 ω = 2π/a：脉冲越窄，频谱越宽`],
+['q',r`把矩形脉冲移到 0 ≤ t ≤ a（课上例 3），变换有什么变化？`,r`$F(\omega)=\frac{a}{\sqrt{2\pi}}\mathrm{sinc}\big(\frac{\omega a}{2}\big)e^{-j\omega a/2}$：模完全不变，只多了相位 $-\omega a/2$。时间上平移 $t_0$ → 乘 $e^{-j\omega t_0}$（线性相位）`],
+['q',r`课上例 2：$f(t)=\sqrt{2\pi}\,\delta(t-2)e^{-t}$ 的变换？`,r`用 δ 的取样性质 $\int\delta(t-a)g(t)dt=g(a)$：$F(\omega)=e^{-2(1+j\omega)}=e^{-2}e^{-2j\omega}$。模 $e^{-2}$ 对所有 ω 都一样（冲激含所有频率，强度相同），相位 $-2\omega$`],
+['q',r`Tutorial 3 四题的答案？`,r`- Q1 $e^{-at}H(t)$：$\frac{1}{\sqrt{2\pi}(a+j\omega)}$，$|F|=\frac{1}{\sqrt{2\pi}\sqrt{a^2+\omega^2}}$
+- Q2 1 / −1（$H(t+1)-2H(t)+H(t-1)$）：$\frac{4j}{\sqrt{2\pi}\omega}\sin^2(\omega/2)$
+- Q3 三角 $1-|t|$：$\frac{1}{\sqrt{2\pi}}\mathrm{sinc}^2(\omega/2)$
+- Q4 $e^{-a|t|}$：$\frac{2a}{\sqrt{2\pi}(a^2+\omega^2)}$`],
+['q',r`为什么偶函数的变换是实数、奇函数的是纯虚数？`,r`$e^{-j\omega t}=\cos\omega t-j\sin\omega t$。偶函数乘 sin 是奇函数，积分为 0，只剩 cos 部分（实数）；奇函数乘 cos 积分为 0，只剩 $-j\int f\sin\omega t\,dt$（纯虚数）。例：Q3、Q4 是实数，Q2 是纯虚数，而且 F(0) = 0`],
+['q',r`F(ω) 是复数，怎么画「幅度谱」？负频率有什么意义？`,r`写成极坐标 $F=|F|e^{j\theta}$，$|F|=\sqrt{\mathrm{Re}^2+\mathrm{Im}^2}$，$\tan\theta=\mathrm{Im}/\mathrm{Re}$，画 |F| 对 ω。实信号的 |F| 关于 ω = 0 对称：一个余弦 = 两个反向旋转的复指数 $e^{\pm j\omega t}$ 之和，负频率是这对里的另一半，不是「负的频率」`],
+['err',r`这一讲最容易错在哪？`,r`- 忘了前面的 $1/\sqrt{2\pi}$，或者把它和别的书的约定（$2\pi f$、$1/2\pi$）混用
+- $\int_0^\infty e^{-(a+j\omega)t}dt=\frac{1}{a+j\omega}$：上限代入是 0，下限代入要减，符号别丢
+- 求模时分母 $a+j\omega$ 的模是 $\sqrt{a^2+\omega^2}$，不是 $a+\omega$
+- sinc x 指 sin x / x（本课），numpy 的 sinc 是 sin(πx)/(πx)
+- 相位不能只写 arctan：要看实部的符号确定象限`],
+['fix',r`Fourier 3 讲义和答案有哪些要注意的地方？`,r`- 讲义第 45 页标题「Answer 4」应为「Answer (c)」
+- 第 13 页把求和直接写成带 dx 的积分，只是示意，严格推导在第 35–38 页（不要求会证明）
+- 课上手写例题标着「Week 10」，是往年的周次；例 4 第一行积分下限写成 ∞，应为 −∞
+- Tutorial 答案 Q1 的题干写「magnitude … is F(ω) = 1/(√2π(a+jω))」：那是 F 本身，模是 $1/(\sqrt{2\pi}\sqrt{a^2+\omega^2})$
+- 复数形式的傅里叶级数讲义注明不考`],
+]);
+
 })();

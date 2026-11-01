@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>傅里叶实验室</title>
-<meta name="description" content="八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
+<meta name="description" content="九个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="傅里叶实验室"><meta property="og:description" content="九个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；常见脉冲的频谱；DFT 频率轴…"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/fourier-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}html.embed #lab7 .stage.one,html.embed #lab8 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+<style>.ctl select{width:100%}html.embed #lab7 .stage.one,html.embed #lab8 .stage.one,html.embed #lab9 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">FOURIER · SERIES · TRANSFORM · SAMPLING</div>
   <h1>傅里叶实验室</h1>
-  <p>八个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；矩形 / 半余弦 / 三角 / 高斯脉冲的频谱与旁瓣；DFT 第 k 个点对应的频率、对称性和泄漏。配合 EE 傅里叶页、Year 2 Maths Part B 的 Fourier 和通信系统 Week 4。实验 8 对应 Part B Week 5：周期不是 2π 的级数、奇偶分解与线谱（Tutorial 2 全部题目）。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a><a href="#lab6">实验 6 常见脉冲的频谱</a><a href="#lab7">实验 7 DFT 频率轴</a><a href="#lab8">实验 8 任意周期与奇偶</a></nav>
+  <p>九个实验：用有限个谐波拼出方波 / 三角波 / 锯齿波 / 脉冲串（看线谱和吉布斯现象）；矩形脉冲与 sinc 的宽窄关系和时移带来的线性相位；采样与混叠；乘 cos nx 再积分，看正交性怎样把每个系数单独「挑」出来（讲义方波和 Tutorial 1 全部题目）；常数项为什么写成 a₀/2；矩形 / 半余弦 / 三角 / 高斯脉冲的频谱与旁瓣；DFT 第 k 个点对应的频率、对称性和泄漏。配合 EE 傅里叶页、Year 2 Maths Part B 的 Fourier 和通信系统 Week 4。实验 9 对应 Part B Week 6：周期拉到无穷大，线谱变成连续的傅里叶变换，并画出 Tutorial 3 的四个变换对。实验 8 对应 Part B Week 5：周期不是 2π 的级数、奇偶分解与线谱（Tutorial 2 全部题目）。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 傅里叶级数</a><a href="#lab2">实验 2 rect ⟷ sinc</a><a href="#lab3">实验 3 采样与混叠</a><a href="#lab4">实验 4 系数怎么来</a><a href="#lab5">实验 5 为什么 a₀/2</a><a href="#lab6">实验 6 常见脉冲的频谱</a><a href="#lab7">实验 7 DFT 频率轴</a><a href="#lab8">实验 8 任意周期与奇偶</a><a href="#lab9">实验 9 从级数到变换</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -130,6 +130,21 @@
   <div class="stage even"><canvas id="fle" height="210" aria-label="偶部分与奇部分"></canvas><canvas id="flp" height="210" aria-label="线谱"></canvas></div>
   <div class="read"><div><small>半周期 L / 基波角频率 π/L</small><b id="fl_L"></b></div><div><small>a₀/2（平均值）</small><b id="fl_0"></b></div><div><small>a₁…a₄</small><b id="fl_a" style="font-size:12px"></b></div><div><small>b₁…b₄</small><b id="fl_b" style="font-size:12px"></b></div></div>
   <p class="note" id="fl_t"></p>
+</section>
+
+<section class="panel" id="lab9">
+  <div class="tag">实验 9 · 从傅里叶级数到傅里叶变换（Maths Part B · Week 6）</div>
+  <h2>周期 2L 越拉越长，线谱越来越密，最后连成一条曲线：这就是傅里叶变换 F(ω)</h2>
+  <p class="lead">F(ω) = (1/√(2π))∫f(t)e<sup>−jωt</sup>dt（讲义的写法）。上图：把 f(t) 每隔 2L 复制一份，得到周期函数（L 选「∞」就只剩一个孤立的 f）。下图：周期函数的复系数 c<sub>n</sub> 乘上 2L/√(2π) 后画成竖线，竖线在 ω = nπ/L 处，正好落在 |F(ω)| 曲线上；L 越大，竖线间隔 π/L 越小。蓝 = Re F，橙 = Im F，黑 = |F|。</p>
+  <div class="btns" role="group" aria-label="函数"><button data-ft="rect">课上例 1：矩形 a = 2</button><button data-ft="lec">讲义例题：√(2π)H(t)e<sup>−t</sup></button><button data-ft="ex4">课上例 4：e<sup>−3t</sup>（t ≥ 0）</button><button data-ft="q1">Tut 3 Q1：e<sup>−at</sup>H(t)</button><button data-ft="q2">Q2：1 / −1</button><button data-ft="q3">Q3：三角</button><button data-ft="q4">Q4：e<sup>−a|t|</sup></button></div>
+  <div class="controls">
+    <div class="ctl"><label for="ftL">半周期 L（最右边 = ∞，孤立函数）</label><input id="ftL" type="range" min="0" max="6" step="1" value="2"><output id="ftLO"></output></div>
+    <div class="ctl"><label for="ftA">参数 a（只对 Q1、Q4、矩形）</label><input id="ftA" type="range" min="0.5" max="4" step="0.5" value="2"><output id="ftAO"></output></div>
+  </div>
+  <p class="verdict" id="ft_v"></p>
+  <div class="stage one"><canvas id="ftt" height="190" aria-label="时域函数及其周期延拓"></canvas><canvas id="ftw" height="240" aria-label="傅里叶变换和线谱"></canvas></div>
+  <div class="read"><div><small>F(ω) 的公式</small><b id="ft_f" style="font-size:13px"></b></div><div><small>F(0)（= 曲线下面积 / √2π）</small><b id="ft_0"></b></div><div><small>线谱间隔 π/L</small><b id="ft_d"></b></div></div>
+  <p class="note"><strong>看点：</strong>偶函数（矩形、三角、e<sup>−a|t|</sup>）的 F(ω) 是纯实数；奇函数（Q2）的 F(ω) 是纯虚数，而且 F(0) = 0（正负面积抵消）；不对称的 e<sup>−at</sup>H(t) 实部、虚部都有，写成极坐标 |F|e<sup>jθ</sup>。|F(ω)| 总是关于 ω = 0 对称（实信号的「负频率」只是数学上的另一半）。</p>
 </section>
 
 </div>
@@ -380,6 +395,41 @@ function lab8(){
 $('flN').addEventListener('input',()=>Lab.draw(8));
 document.querySelectorAll('#lab8 [data-fl]').forEach(b=>b.addEventListener('click',()=>{fl=b.dataset.fl;Lab.draw(8);}));
 Lab.add(8,lab8,{fls:200,fle:190,flp:190});
+
+/* ---------- Lab 9: series -> transform, Tutorial 3 pairs ---------- */
+const RT=Math.sqrt(2*Math.PI);
+const C_=(re,im)=>({re,im});
+const FTD={
+ rect:{n:'课上例 1：矩形，宽 a',usesA:true,f:(t,a)=>Math.abs(t)<=a/2?1:0,F:(w,a)=>C_(Math.abs(w)<1e-9?a/RT:2*Math.sin(w*a/2)/(w*RT),0),s:'(a/√2π)·sinc(ωa/2)',sym:'even',T:a=>a/2},
+ lec:{n:'讲义例题：f = √(2π)H(t)e^(−t)',usesA:false,f:t=>t>=0?RT*Math.exp(-t):0,F:w=>C_(1/(1+w*w),-w/(1+w*w)),s:'1/(1+jω)',sym:'none',T:()=>6},
+ ex4:{n:'课上例 4：e^(−3t)（t ≥ 0）',usesA:false,f:t=>t>=0?Math.exp(-3*t):0,F:w=>C_(3/(RT*(9+w*w)),-w/(RT*(9+w*w))),s:'1/[√2π(3+jω)]',sym:'none',T:()=>3},
+ q1:{n:'Tut 3 Q1：e^(−at)H(t)',usesA:true,f:(t,a)=>t>=0?Math.exp(-a*t):0,F:(w,a)=>C_(a/(RT*(a*a+w*w)),-w/(RT*(a*a+w*w))),s:'1/[√2π(a+jω)]',sym:'none',T:a=>8/a},
+ q2:{n:'Tut 3 Q2：1（−1 < t < 0），−1（0 < t < 1）',usesA:false,f:t=>t>-1&&t<0?1:(t>0&&t<1?-1:0),F:w=>C_(0,Math.abs(w)<1e-9?0:4*Math.sin(w/2)**2/(RT*w)),s:'4j·sin²(ω/2)/(√2π ω)',sym:'odd',T:()=>1},
+ q3:{n:'Tut 3 Q3：三角 1 − |t|（|t| < 1）',usesA:false,f:t=>Math.abs(t)<1?1-Math.abs(t):0,F:w=>C_(Math.abs(w)<1e-9?1/RT:(Math.sin(w/2)/(w/2))**2/RT,0),s:'sinc²(ω/2)/√2π',sym:'even',T:()=>1},
+ q4:{n:'Tut 3 Q4：e^(−a|t|)',usesA:true,f:(t,a)=>Math.exp(-a*Math.abs(t)),F:(w,a)=>C_(2*a/(RT*(a*a+w*w)),0),s:'2a/[√2π(a²+ω²)]',sym:'even',T:a=>8/a}};
+let ftk='rect';const FTL=[1.5,2,3,4,8,16,Infinity];
+function lab9(){
+  const D=FTD[ftk],a=val('ftA'),L=FTL[val('ftL')];$('ftLO').textContent=isFinite(L)?String(L):'∞';$('ftAO').textContent=D.usesA?String(a):'（不用）';$('ftA').disabled=!D.usesA;
+  pressGroup('#lab9 [data-ft]',b=>b.dataset.ft===ftk);
+  const F=w=>D.F(w,a),mag=w=>{const z=F(w);return Math.hypot(z.re,z.im);};
+  /* time domain */
+  const T0=-8,T1=8;const g=t=>{if(!isFinite(L))return D.f(t,a);let y=0;for(let k=-12;k<=12;k++)y+=D.f(t+2*k*L,a);return y;};
+  let lo=0,hi=0;for(let i=0;i<=800;i++){const v=g(T0+(T1-T0)*i/800);lo=Math.min(lo,v);hi=Math.max(hi,v);}const pd=(hi-lo)*0.15+0.1;
+  const [x,W,H]=fit($('ftt'));const ax=axes(x,W,H,{x0:T0,x1:T1,y0:lo-pd,y1:hi+pd,xt:[-8,-4,0,4,8],yt:[0,+hi.toFixed(2)],title:isFinite(L)?`每隔 2L = ${2*L} 复制一次的周期函数（灰）和原来的 f(t)（蓝）`:'L = ∞：只剩一个孤立的 f(t)',xl:'t',pl:40});
+  if(isFinite(L))plot(x,ax.X,ax.Y,g,T0,T1,css('--muted'),1.6,1600);plot(x,ax.X,ax.Y,t=>D.f(t,a),T0,T1,css('--blue'),2.4,1600);
+  /* spectrum */
+  const W0=15;let m=0.05;for(let i=0;i<=600;i++){const w=-W0+2*W0*i/600,z=F(w);m=Math.max(m,Math.abs(z.re),Math.abs(z.im),mag(w));}m*=1.15;
+  const [y,W2,H2]=fit($('ftw'));const b=axes(y,W2,H2,{x0:-W0,x1:W0,y0:-m,y1:m,xt:[-15,-10,-5,0,5,10,15],yt:[-+(m/1.15).toFixed(2),0,+(m/1.15).toFixed(2)],title:isFinite(L)?`(2L/√2π)·cₙ 画在 ω = nπ/L（紫色竖线${D.sym==='none'?'，取模':''}），连续曲线是 F(ω)`:'F(ω)：Re（蓝）、Im（橙）、|F|（黑）',xl:'ω (rad/s)',pl:48});
+  if(isFinite(L)){const dw=Math.PI/L;y.strokeStyle=css('--purple');y.lineWidth=Math.max(1.2,Math.min(3,dw*W2/(2*W0)*0.35));for(let n=-Math.floor(W0/dw);n<=Math.floor(W0/dw);n++){const w=n*dw,zz=F(w),h=D.sym==='even'?zz.re:D.sym==='odd'?zz.im:mag(w);y.beginPath();y.moveTo(b.X(w),b.Y(0));y.lineTo(b.X(w),b.Y(h));y.stroke();y.fillStyle=css('--purple');y.beginPath();y.arc(b.X(w),b.Y(h),2.6,0,7);y.fill();}}
+  if(D.sym!=='odd')plot(y,b.X,b.Y,w=>F(w).re,-W0,W0,css('--blue'),2,900);
+  if(D.sym!=='even')plot(y,b.X,b.Y,w=>F(w).im,-W0,W0,css('--amp'),2,900);
+  y.setLineDash([5,4]);plot(y,b.X,b.Y,mag,-W0,W0,css('--ink'),1.6,900);y.setLineDash([]);
+  $('ft_f').textContent='F(ω) = '+D.s;const z0=F(0);$('ft_0').textContent=(Math.abs(z0.im)>1e-9?z0.im.toFixed(3)+'j':z0.re.toFixed(3));$('ft_d').textContent=isFinite(L)?(Math.PI/L).toFixed(3)+' rad/s':'0（连续谱）';
+  const v=$('ft_v');v.textContent=D.n+'：'+(D.sym==='even'?'偶函数 → F(ω) 是纯实数（只有蓝线）':D.sym==='odd'?'奇函数 → F(ω) 是纯虚数（只有橙线），F(0) = 0':'不对称 → 实部、虚部都有，|F| = √(Re² + Im²)')+(isFinite(L)?`；周期 2L = ${2*L}，竖线间隔 π/L = ${(Math.PI/L).toFixed(2)}`:'');v.style.color=css('--accent');
+}
+['ftL','ftA'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(9)));
+document.querySelectorAll('#lab9 [data-ft]').forEach(b=>b.addEventListener('click',()=>{ftk=b.dataset.ft;Lab.draw(9);}));
+Lab.add(9,lab9,{ftt:170,ftw:220});
 Lab.start();
 </script>
 </body></html>
