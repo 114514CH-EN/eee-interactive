@@ -256,4 +256,24 @@ sinc x = sin x / x。偶函数 → 实数；F(0) = 面积/√2π = a/√2π；�
 - 复数形式的傅里叶级数讲义注明不考`],
 ]);
 
+D('MB','MB7','向量微积分 1：偏导数、梯度与方向导数','3eb202737d7a81a9aa1fc818e9350160',[
+['q',r`什么是偏导数？$\partial f/\partial x$ 和 $df/dx$ 有什么区别？`,r`多元函数只对一个变量求导，其他变量当常数。几何上：固定 y 把曲面切一刀，得到一条曲线，$\partial f/\partial x$ 就是这条曲线的切线斜率。记号用 ∂ 提醒「还有别的变量被固定住了」。例：$f=x^2+y^3$，$f_x=2x$，$f_y=3y^2$`],
+['q',r`二阶偏导有几个？混合偏导 $f_{xy}$ 和 $f_{yx}$ 什么关系？`,r`四个：$f_{xx},f_{yy},f_{xy},f_{yx}$。对课程里的光滑函数 $f_{xy}=f_{yx}$（先对谁求导结果一样），课上例 1、例 4 和 Tutorial Q1 都验证了。可以用它检查计算`],
+['q',r`小增量公式是什么？为什么成立？`,r`$$\delta f\approx\frac{\partial f}{\partial x}\delta x+\frac{\partial f}{\partial y}\delta y+\frac{\partial f}{\partial z}\delta z$$
+每个变量单独变一点，带来的变化 ≈ 斜率 × 变化量，再加起来。忽略了 $\delta x\,\delta y$ 这类二阶小量（圆柱 $\delta V=2\pi rh\,\delta r+\pi r^2\delta h$，角上的小块被忽略）`],
+['q',r`圆柱 $V=\pi r^2h$，r 误差 1%、h 误差 3%，V 的最大误差？`,r`$\frac{\delta V}{V}=2\frac{\delta r}{r}+\frac{\delta h}{h}=2(1\%)+3\%=5\%$。求「最大」误差时各项取同号相加（讲义第 26 页）。幂函数 $x^ay^b/z^c$ 的百分比误差就是 $a\%_x+b\%_y-c\%_z$`],
+['q',r`变化率问题（rate of change）怎么做？`,r`总微分除以 dt：$\frac{df}{dt}=\frac{\partial f}{\partial x}\frac{dx}{dt}+\frac{\partial f}{\partial y}\frac{dy}{dt}+\cdots$。例：斜边 $c=\sqrt{a^2+b^2}$，a = 20 以 4 cm/s 增加、b = 30 以 3 cm/s 增加：$\frac{dc}{dt}=\frac{20\cdot4+30\cdot3}{\sqrt{1300}}=4.71$ cm/s。减小的量代负的速率`],
+['q',r`怎样找曲面的驻点并判断类型？`,r`① 解 $f_x=0,\ f_y=0$；② 在驻点算 $D=f_{xx}f_{yy}-f_{xy}^2$；③ $D>0,f_{xx}>0$ 极小；$D>0,f_{xx}<0$ 极大；$D<0$ 鞍点。例 Tutorial Q4：驻点 (−1, 1)，$D=36-4=32$，$f_{xx}=6$ → 极小`],
+['err',r`$f_{xx}$、$f_{yy}$ 都是正的，一定是极小吗？`,r`不一定。$f=x^2+3xy+y^2$：$f_{xx}=f_{yy}=2$，但 $f_{xy}=3$，$D=4-9<0$，是鞍点（讲义第 36 页：鞍点不需要两个二阶导异号）。一定要算 D`],
+['q',r`Tutorial Q10 / 课上例 9：$z=2x^3-3xy+2y^3$ 的驻点？`,r`$6x^2=3y$、$6y^2=3x$ → $y=2x^2$，代入得 $x(8x^3-1)=0$ → (0, 0) 和 (½, ½)。(0, 0)：$D=0\cdot0-9<0$ 鞍点；(½, ½)：$D=6\cdot6-9=27>0$，$f_{xx}=6>0$ 极小。课上例 9 的 $3x^3-xy+3y^3$ 同理：(0, 0) 鞍点，(1/9, 1/9) 极小`],
+['q',r`梯度 grad φ 是什么？方向和大小各代表什么？`,r`$\nabla\phi=\frac{\partial\phi}{\partial x}\mathbf i+\frac{\partial\phi}{\partial y}\mathbf j+\frac{\partial\phi}{\partial z}\mathbf k$，作用在标量场上，结果是向量。方向 = φ 增加最快的方向（垂直于等值面）；大小 = 最大变化率。∇ 不能直接作用在向量上（讲义第 47 页）`],
+['q',r`方向导数怎么算？`,r`$$\frac{d\phi}{ds}=\hat a\cdot\nabla\phi,\qquad\hat a=\frac{\mathbf A}{|\mathbf A|}$$
+三步：求 ∇φ 代入 P → A 除以 |A| → 点乘。讲义例：∇φ = (10, 325, 146)，A = (2, 1, −2)，|A| = 3 → 53/3 = 17.67`],
+['err',r`方向导数最常见的错？`,r`- 忘了把 A 归一化（直接 A·∇φ）
+- |A| 算错：Tutorial Q12 答案写 77/√5，应为 77/√50（|A| = √(16+9+25)），数值 10.89 是对的
+- 先代点再求导（顺序反了）
+- 最陡方向写成 A 而不是 ∇φ`],
+['q',r`课上例 12：φ 在 P 处沿哪个方向变化最快？最大变化率？`,r`$\frac{d\phi}{ds}=|\hat a||\nabla\phi|\cos\theta$，θ = 0 时最大，所以方向就是 ∇φ 自己。例：∇φ(1, −1, −1) = (−4, −4, −5)，方向 $\frac{1}{\sqrt{57}}(-4,-4,-5)$，最大变化率 $|\nabla\phi|=\sqrt{57}\approx7.55$`],
+]);
+
 })();

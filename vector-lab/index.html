@@ -1,0 +1,167 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>向量微积分实验室</title>
+<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
+<meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/common.css">
+<script src="../assets/common.js"></script>
+<style>.col2{display:flex;flex-direction:column;gap:10px;min-width:0}.ctl select{width:100%}
+.calc{font-family:var(--mono);font-size:13px;line-height:1.75;border-top:1px solid var(--line);padding-top:8px;overflow-wrap:anywhere}
+.calc b{color:var(--accent);font-weight:600}</style>
+</head><body>
+<div class="wrap">
+<header>
+  <div class="tag">ENGINEERING MATHEMATICS 2 · PART B · VECTOR CALCULUS</div>
+  <h1>向量微积分实验室</h1>
+  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a></nav>
+</header>
+
+<section class="panel" id="lab1">
+  <div class="tag">实验 1 · 偏导数、驻点与 D 判别式（Week 7）</div>
+  <h2>偏导数 = 切一刀以后的斜率</h2>
+  <p class="lead">左图是 f(x, y) 的等高线图（颜色越暖越高）。拖动点 P：橙色横线是固定 y 切下去的那条曲线，它在 P 的斜率就是 ∂f/∂x；蓝色竖线固定 x，斜率是 ∂f/∂y。白圈是驻点（两个偏导都为 0），按 D 判断类型。</p>
+  <div class="btns" role="group" aria-label="函数"><button data-f1="q4">Tutorial Q4</button><button data-f1="q10">Tutorial Q10</button><button data-f1="ex9">课上例 9</button><button data-f1="lec">讲义第 35 页</button><button data-f1="sad">同号也是鞍点</button><button data-f1="ex4">课上例 4</button></div>
+  <p class="verdict" id="v1"></p>
+  <div class="stage"><canvas id="heat1" height="330" aria-label="等高线图，可拖动点 P" style="touch-action:none;cursor:crosshair"></canvas><div class="col2"><canvas id="sx" height="160" aria-label="固定 y 的切片"></canvas><canvas id="sy" height="160" aria-label="固定 x 的切片"></canvas></div></div>
+  <div class="btns" id="spBtns"></div>
+  <div class="read"><div><small>P</small><b id="r1p"></b></div><div><small>∂f/∂x（橙线斜率）</small><b id="r1fx"></b></div><div><small>∂f/∂y（蓝线斜率）</small><b id="r1fy"></b></div><div><small>f_xx, f_yy, f_xy</small><b id="r1h"></b></div><div><small>D = f_xx f_yy − f_xy²</small><b id="r1D"></b></div></div>
+  <p class="note"><strong>判别：</strong>先解 ∂f/∂x = 0、∂f/∂y = 0 找驻点，再在驻点算 D。D &gt; 0 且 f_xx &gt; 0 → 极小；D &gt; 0 且 f_xx &lt; 0 → 极大；D &lt; 0 → 鞍点（「同号也是鞍点」：f_xx、f_yy 都是 2，但 f_xy = 3 太大，D = 4 − 9 &lt; 0）。只看 f_xx、f_yy 的符号不够，讲义第 36 页专门提醒了这一点。</p>
+</section>
+
+<section class="panel" id="lab2">
+  <div class="tag">实验 2 · 梯度与方向导数（Week 7）</div>
+  <h2>梯度指向上坡最陡的方向</h2>
+  <p class="lead">紫色箭头是梯度 ∇f，总是垂直于等高线、指向上坡。橙色箭头是你选的单位方向 â。方向导数 df/ds = â·∇f = |∇f| cos θ，θ 是两个箭头的夹角：顺着梯度走最大，沿等高线走为 0，反着走最小。右图画出 df/ds 随方向的变化。</p>
+  <div class="btns" role="group" aria-label="函数"><button data-f2="q6">3x² + 2y²（Tutorial Q6 的 x-y 部分）</button><button data-f2="q4">Tutorial Q4 曲面</button><button data-f2="hill">温度场 100e^(−(x²+y²)/4)</button><button data-f2="lin">平面 2x + y</button></div>
+  <div class="controls"><div class="ctl"><label for="ang">方向 â 的角度</label><input id="ang" type="range" min="0" max="360" step="1" value="0"><output id="angO"></output></div></div>
+  <div class="btns"><button id="toGrad">让 â 顺着梯度</button><button id="toLevel">让 â 沿等高线</button></div>
+  <div class="stage even"><canvas id="heat2" height="320" aria-label="等高线与梯度，可拖动点 P" style="touch-action:none;cursor:crosshair"></canvas><canvas id="dd" height="320" aria-label="方向导数随方向变化"></canvas></div>
+  <div class="read"><div><small>P</small><b id="r2p"></b></div><div><small>∇f at P</small><b id="r2g"></b></div><div><small>|∇f|（最大变化率）</small><b id="r2m"></b></div><div><small>â</small><b id="r2a"></b></div><div><small>df/ds = â·∇f</small><b id="r2d"></b></div></div>
+  <div class="controls"><div class="ctl"><label for="ex3">三维例题计算器</label><select id="ex3"><option value="lec">讲义第 51–52 页：x²y + 3y³z² + 2xz</option><option value="e11">课上例 11：3x²y + 2xy²z² + y³z</option><option value="e12">课上例 12：同上，最陡方向</option><option value="q6">Tutorial Q6：3x² + 2y² − z</option><option value="q12">Tutorial Q12：x³y² + 3xz + 2y³z²</option></select><span></span></div></div>
+  <div class="calc" id="calc"></div>
+  <p class="note"><strong>三步走：</strong>① 求 ∇φ = (φ_x, φ_y, φ_z) 并代入点 P；② 方向向量 A 先除以 |A| 变成单位向量 â（最容易忘）；③ 点乘 â·∇φ。问「哪个方向变化最快」：就是 ∇φ 自己的方向，最大变化率是 |∇φ|。</p>
+</section>
+</div>
+
+<script>
+/* ---------- shared: colour map + contour heat map with equal aspect ---------- */
+const hex=c=>{c=c.trim();if(c[0]==='#'){const n=parseInt(c.slice(1),16);return [n>>16&255,n>>8&255,n&255];}const m=c.match(/[\d.]+/g)||[0,0,0];return m.slice(0,3).map(Number);};
+function heat(cv,F,dom,o={}){
+  const [x,W,H]=fit(cv),pl=40,pr=10,pt=10,pb=28,pw=W-pl-pr,ph=H-pt-pb;
+  const [cx,y0,y1]=dom,yspan=y1-y0,xspan=yspan*pw/ph,x0=cx-xspan/2,x1=cx+xspan/2;
+  const X=v=>pl+pw*(v-x0)/xspan,Y=v=>pt+ph*(y1-v)/yspan,iX=px=>x0+(px-pl)/pw*xspan,iY=py=>y1-(py-pt)/ph*yspan;
+  const s=2,nx=Math.ceil(pw/s),ny=Math.ceil(ph/s),vals=new Float32Array(nx*ny);let lo=Infinity,hi=-Infinity;
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const v=F(iX(pl+(i+.5)*s),iY(pt+(j+.5)*s));vals[j*nx+i]=v;if(isFinite(v)){lo=Math.min(lo,v);hi=Math.max(hi,v);}}
+  if(o.clip){const q=[...vals].filter(isFinite).sort((a,b)=>a-b);lo=q[Math.floor(q.length*0.02)];hi=q[Math.floor(q.length*0.98)];}
+  const nl=14,lev=v=>Math.max(0,Math.min(nl-1,Math.floor((v-lo)/(hi-lo+1e-12)*nl)));
+  const cLo=hex(css('--blue')),cHi=hex(css('--amp')),cMid=hex(css('--panel')),ln=hex(css('--muted'));
+  const off=document.createElement('canvas');off.width=nx;off.height=ny;const oc=off.getContext('2d'),img=oc.createImageData(nx,ny);
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const k=j*nx+i,v=vals[k],L=lev(v),t=(L+.5)/nl;
+    const c=t<.5?cLo.map((a,m)=>a+(cMid[m]-a)*(t/.5)):cMid.map((a,m)=>a+(cHi[m]-a)*((t-.5)/.5));
+    const edge=(i<nx-1&&lev(vals[k+1])!==L)||(j<ny-1&&lev(vals[k+nx])!==L);
+    const col=edge?ln:c,al=edge?150:200;img.data.set([col[0],col[1],col[2],al],k*4);}
+  oc.putImageData(img,0,0);x.imageSmoothingEnabled=false;x.drawImage(off,0,0,nx,ny,pl,pt,nx*s,ny*s);
+  x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(pl,pt,pw,ph);
+  x.fillStyle=css('--muted');x.font=`11px ${css('--mono')}`;
+  const tk=(a,b)=>{const st=[0.1,0.2,0.25,0.5,1,2,5][[0.1,0.2,0.25,0.5,1,2,5].findIndex(v=>(b-a)/v<=8)]||5;const r=[];for(let v=Math.ceil(a/st)*st;v<=b+1e-9;v+=st)r.push(+v.toFixed(3));return r;};
+  tk(x0,x1).forEach(v=>{const s2=String(v).replace('-','−');x.fillText(s2,X(v)-x.measureText(s2).width/2,H-pb+14);});
+  tk(y0,y1).forEach(v=>{const s2=String(v).replace('-','−');x.fillText(s2,pl-5-x.measureText(s2).width,Y(v)+4);});
+  text(x,'x',W-pr-6,H-4,css('--muted'),11);text(x,'y',4,pt+10,css('--muted'),11);
+  return {x,W,H,X,Y,iX,iY,pl,pr,pt,pb,x0,x1,y0,y1,lo,hi};
+}
+function dragP(cv,get,set){let on=false;const pick=e=>{const g=get();if(!g)return;const r=cv.getBoundingClientRect();set(g.iX(e.clientX-r.left),g.iY(e.clientY-r.top));};
+  cv.addEventListener('pointerdown',e=>{on=true;cv.setPointerCapture(e.pointerId);pick(e);});cv.addEventListener('pointermove',e=>{if(on)pick(e);});cv.addEventListener('pointerup',()=>on=false);}
+const m=v=>fmt(v,3).replace(/^-/,'−');
+const dot=(x,px,py,col,r=5)=>{x.fillStyle=col;x.beginPath();x.arcS(px,py,r,0,7);x.fill();x.strokeStyle=css('--panel');x.lineWidth=1.5;x.stroke();};
+
+/* ---------- Lab 1 ---------- */
+const F1={
+ q4:{n:'z = 3x² + 2xy + 3y² + 4x − 4y + 2',f:(x,y)=>3*x*x+2*x*y+3*y*y+4*x-4*y+2,g:(x,y)=>[6*x+2*y+4,2*x+6*y-4],h:()=>[6,6,2],dom:[-1,-1.5,3.5],sp:[[-1,1]],P:[0.5,2]},
+ q10:{n:'z = 2x³ − 3xy + 2y³',f:(x,y)=>2*x**3-3*x*y+2*y**3,g:(x,y)=>[6*x*x-3*y,-3*x+6*y*y],h:(x,y)=>[12*x,12*y,-3],dom:[0.25,-0.8,1.3],sp:[[0,0],[0.5,0.5]],P:[0.9,0.1]},
+ ex9:{n:'z = 3x³ − xy + 3y³',f:(x,y)=>3*x**3-x*y+3*y**3,g:(x,y)=>[9*x*x-y,-x+9*y*y],h:(x,y)=>[18*x,18*y,-1],dom:[0.05,-0.3,0.4],sp:[[0,0],[1/9,1/9]],P:[0.25,0.05]},
+ lec:{n:'f = 5x² + 4xy + 3y² + 4y + x',f:(x,y)=>5*x*x+4*x*y+3*y*y+4*y+x,g:(x,y)=>[10*x+4*y+1,4*x+6*y+4],h:()=>[10,6,4],dom:[0.2,-3,1.4],sp:[[5/22,-9/11]],P:[1.2,0.3]},
+ sad:{n:'f = x² + 3xy + y²',f:(x,y)=>x*x+3*x*y+y*y,g:(x,y)=>[2*x+3*y,3*x+2*y],h:()=>[2,2,3],dom:[0,-2,2],sp:[[0,0]],P:[1,-0.4]},
+ ex4:{n:'f = y cos x − x cos y',f:(x,y)=>y*Math.cos(x)-x*Math.cos(y),g:(x,y)=>[-y*Math.sin(x)-Math.cos(y),Math.cos(x)+x*Math.sin(y)],h:(x,y)=>[-y*Math.cos(x),x*Math.cos(y),-Math.sin(x)+Math.sin(y)],dom:[0,-4,4],sp:[],P:[1,2]}};
+let k1='q4',P1=[...F1.q4.P],g1=null;
+const kind=h=>{const D=h[0]*h[1]-h[2]*h[2];return D<-1e-12?['鞍点',css('--purple')]:D>1e-12?(h[0]>0?['极小',css('--blue')]:['极大',css('--red')]):['D = 0，判不了',css('--muted')];};
+function lab1(){
+  const F=F1[k1];pressGroup('#lab1 [data-f1]',b=>b.dataset.f1===k1);
+  const g=heat($('heat1'),F.f,F.dom);g1=g;const {x,X,Y}=g;
+  P1=[Math.max(g.x0,Math.min(g.x1,P1[0])),Math.max(g.y0,Math.min(g.y1,P1[1]))];const [px,py]=P1;
+  x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  x.lineWidth=2.2;x.strokeStyle=css('--amp');x.beginPath();x.moveTo(X(g.x0),Y(py));x.lineTo(X(g.x1),Y(py));x.stroke();
+  x.strokeStyle=css('--blue');x.beginPath();x.moveTo(X(px),Y(g.y0));x.lineTo(X(px),Y(g.y1));x.stroke();
+  F.sp.forEach(([a,b])=>{const [s,c]=kind(F.h(a,b));x.strokeStyle='#fff';x.lineWidth=3;x.beginPath();x.arcS(X(a),Y(b),7,0,7);x.stroke();x.strokeStyle=c;x.lineWidth=2;x.stroke();label(x,s,X(a)+9,Y(b)-8,c,12,'700',css('--body'));});
+  dot(x,X(px),Y(py),css('--ink'),5.5);label(x,'P',X(px)+7,Y(py)+14,css('--ink'),13);x.restore();
+  text(x,F.n,g.pl+6,g.pt+16,css('--ink'),12);
+  const [fx,fy]=F.g(px,py),h=F.h(px,py),D=h[0]*h[1]-h[2]*h[2];
+  /* slices */
+  const slice=(cv,a0,a1,fun,at,slope,col,lab,ax)=>{const [c,W,H]=fit(cv);const n=200,vs=Array.from({length:n+1},(_,i)=>fun(a0+(a1-a0)*i/n));let lo=Math.min(...vs),hi=Math.max(...vs);if(hi-lo<1e-9){lo-=1;hi+=1;}const pad=(hi-lo)*0.12;
+    const b=axes(c,W,H,{x0:a0,x1:a1,y0:lo-pad,y1:hi+pad,xt:[],yt:[],pl:12,pr:10,pt:22,pb:16,title:lab,zero:false});
+    c.save();c.beginPath();c.rect(b.pl,b.pt,W-b.pl-b.pr,H-b.pt-b.pb);c.clip();plot(c,b.X,b.Y,fun,a0,a1,col,2.4);
+    const d=(a1-a0)*0.22,v0=fun(at);c.setLineDash([5,4]);c.strokeStyle=css('--ink');c.lineWidth=1.6;c.beginPath();c.moveTo(b.X(at-d),b.Y(v0-slope*d));c.lineTo(b.X(at+d),b.Y(v0+slope*d));c.stroke();c.setLineDash([]);
+    dot(c,b.X(at),b.Y(v0),css('--ink'),4.5);c.restore();text(c,`切线斜率 = ${m(slope)}`,W-b.pr,H-4,css('--ink'),11,'right');text(c,ax,b.pl,H-4,css('--muted'),11);};
+  slice($('sx'),g.x0,g.x1,t=>F.f(t,py),px,fx,css('--amp'),`固定 y = ${m(py)}，f 随 x 变`,'x →');
+  slice($('sy'),g.y0,g.y1,t=>F.f(px,t),py,fy,css('--blue'),`固定 x = ${m(px)}，f 随 y 变`,'y →');
+  $('r1p').textContent=`(${m(px)}, ${m(py)})`;$('r1fx').textContent=m(fx);$('r1fy').textContent=m(fy);$('r1h').textContent=`${m(h[0])}, ${m(h[1])}, ${m(h[2])}`;$('r1D').textContent=m(D);
+  const gm=Math.hypot(fx,fy),v=$('v1');
+  if(gm<1e-6){const [s,c]=kind(h);v.textContent=`P 是驻点（两个偏导都为 0）：D = ${m(D)}，f_xx = ${m(h[0])} → ${s}`;v.style.color=c;}
+  else{v.textContent=`P 不是驻点：∂f/∂x = ${m(fx)}，∂f/∂y = ${m(fy)}，不全为 0（点下面的按钮跳到驻点）`;v.style.color=css('--muted');}
+  const sb=$('spBtns');const want=F.sp.map((p,i)=>`跳到驻点 (${m(p[0])}, ${m(p[1])})`).join('|');
+  if(sb.dataset.k!==k1+want){sb.dataset.k=k1+want;sb.innerHTML='';F.sp.forEach((p,i)=>{const b=document.createElement('button');b.textContent=`跳到驻点 (${m(p[0])}, ${m(p[1])})`;b.onclick=()=>{P1=[...p];Lab.draw(1);};sb.appendChild(b);});
+    if(!F.sp.length){const s=document.createElement('span');s.className='lead';s.textContent='这个函数有很多驻点，课上只要求求偏导；拖动 P 看斜率的变化。';sb.appendChild(s);}}
+}
+dragP($('heat1'),()=>g1,(a,b)=>{P1=[a,b];Lab.draw(1);});
+document.querySelectorAll('#lab1 [data-f1]').forEach(b=>b.addEventListener('click',()=>{k1=b.dataset.f1;P1=[...F1[k1].P];Lab.draw(1);}));
+Lab.add(1,lab1,{heat1:260,sx:125,sy:125});
+
+/* ---------- Lab 2 ---------- */
+const F2={
+ q6:{n:'f = 3x² + 2y²',f:(x,y)=>3*x*x+2*y*y,g:(x,y)=>[6*x,4*y],dom:[0,-3,3],P:[2,-1]},
+ q4:{n:'z = 3x² + 2xy + 3y² + 4x − 4y + 2',f:F1.q4.f,g:F1.q4.g,dom:[-1,-1.5,3.5],P:[0,2]},
+ hill:{n:'T = 100e^(−(x²+y²)/4)',f:(x,y)=>100*Math.exp(-(x*x+y*y)/4),g:(x,y)=>{const e=100*Math.exp(-(x*x+y*y)/4);return [-x/2*e,-y/2*e];},dom:[0,-4,4],P:[1.5,1]},
+ lin:{n:'f = 2x + y',f:(x,y)=>2*x+y,g:()=>[2,1],dom:[0,-3,3],P:[0.5,0.5]}};
+let k2='q6',P2=[...F2.q6.P],g2=null;
+function lab2(){
+  const F=F2[k2];pressGroup('#lab2 [data-f2]',b=>b.dataset.f2===k2);const th=+$('ang').value*D2R;$('angO').textContent=$('ang').value+'°';
+  const g=heat($('heat2'),F.f,F.dom);g2=g;const {x,X,Y}=g;P2=[Math.max(g.x0,Math.min(g.x1,P2[0])),Math.max(g.y0,Math.min(g.y1,P2[1]))];
+  const [px,py]=P2,[gx,gy]=F.g(px,py),gm=Math.hypot(gx,gy),a=[Math.cos(th),Math.sin(th)],dd=a[0]*gx+a[1]*gy;
+  const L=Math.min(g.W,g.H)*0.28,sc=(g.X(1)-g.X(0));
+  x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  if(gm>1e-9){const ux=gx/gm,uy=gy/gm;x.setLineDash([4,4]);x.strokeStyle=css('--ink');x.lineWidth=1.2;x.beginPath();x.moveTo(X(px)-uy*L,Y(py)-ux*L);x.lineTo(X(px)+uy*L,Y(py)+ux*L);x.stroke();x.setLineDash([]);
+    arrow(x,X(px),Y(py),X(px)+ux*L,Y(py)-uy*L,css('--purple'),3.4,13);label(x,'∇f',X(px)+ux*L+6,Y(py)-uy*L-4,css('--purple'),13);
+    const pr=dd/gm*L;x.strokeStyle=css('--amp');x.globalAlpha=.6;x.lineWidth=5;x.beginPath();x.moveTo(X(px),Y(py));x.lineTo(X(px)+ux*pr,Y(py)-uy*pr);x.stroke();x.globalAlpha=1;}
+  arrow(x,X(px),Y(py),X(px)+a[0]*L*0.8,Y(py)-a[1]*L*0.8,css('--amp'),3,12);label(x,'â',X(px)+a[0]*L*0.8+6,Y(py)-a[1]*L*0.8+12,css('--amp'),13);
+  dot(x,X(px),Y(py),css('--ink'),5);x.restore();text(x,F.n+'（虚线 = 过 P 的等高线方向）',g.pl+6,g.pt+16,css('--ink'),12);
+  /* D(theta) */
+  const [c,W,H]=fit($('dd')),M=Math.max(gm,1e-6)*1.15,b=axes(c,W,H,{x0:0,x1:360,y0:-M,y1:M,xt:[0,90,180,270,360],yt:[+(-gm).toFixed(2),0,+gm.toFixed(2)],title:'df/ds = |∇f| cos θ',xl:'â 的角度（°）',pl:52});
+  const tg=(Math.atan2(gy,gx)/D2R+360)%360;plot(c,b.X,b.Y,t=>gx*Math.cos(t*D2R)+gy*Math.sin(t*D2R),0,360,css('--amp'),2.6);
+  c.strokeStyle=css('--purple');c.setLineDash([3,3]);c.beginPath();c.moveTo(b.X(tg),b.pt);c.lineTo(b.X(tg),H-b.pb);c.stroke();c.setLineDash([]);text(c,'顺着 ∇f：最大',Math.min(b.X(tg)+4,W-100),b.pt+28,css('--purple'),11);
+  dot(c,b.X(+$('ang').value),b.Y(dd),css('--amp'),6);
+  $('r2p').textContent=`(${m(px)}, ${m(py)})`;$('r2g').textContent=`(${m(gx)}, ${m(gy)})`;$('r2m').textContent=m(gm);$('r2a').textContent=`(${m(a[0])}, ${m(a[1])})`;$('r2d').textContent=m(dd);
+  /* 3D calculator */
+  const E={lec:{n:'φ = x²y + 3y³z² + 2xz',g:(x,y,z)=>[2*x*y+2*z,x*x+9*y*y*z*z,6*y**3*z+2*x],P:[1,2,3],A:[2,1,-2]},
+    e11:{n:'φ = 3x²y + 2xy²z² + y³z',g:(x,y,z)=>[6*x*y+2*y*y*z*z,3*x*x+4*x*y*z*z+3*y*y*z,4*x*y*y*z+y**3],P:[2,1,-1],A:[2,1,-1]},
+    e12:{n:'φ = 3x²y + 2xy²z² + y³z',g:(x,y,z)=>[6*x*y+2*y*y*z*z,3*x*x+4*x*y*z*z+3*y*y*z,4*x*y*y*z+y**3],P:[1,-1,-1],A:null},
+    q6:{n:'f = 3x² + 2y² − z',g:(x,y,z)=>[6*x,4*y,-1],P:[2,-1,3],A:[2,0,-1]},
+    q12:{n:'f = x³y² + 3xz + 2y³z²',g:(x,y,z)=>[3*x*x*y*y+3*z,2*x**3*y+6*y*y*z*z,3*x+4*y**3*z],P:[1,-1,2],A:[4,3,5]}}[$('ex3').value];
+  const G=E.g(...E.P),n3=Math.hypot(...G),v3=a=>`(${a.map(m).join(', ')})`;let s=`${E.n}，P = ${v3(E.P)}<br>① ∇φ(P) = <b>${v3(G)}</b>`;
+  if(E.A){const nA=Math.hypot(...E.A),ah=E.A.map(t=>t/nA),d=ah.reduce((s2,t,i)=>s2+t*G[i],0),raw=E.A.reduce((s2,t,i)=>s2+t*G[i],0);
+    s+=`<br>② A = ${v3(E.A)}，|A| = √${E.A.reduce((s2,t)=>s2+t*t,0)} = ${m(nA)}，â = A/|A|<br>③ df/ds = (A·∇φ)/|A| = ${m(raw)}/√${E.A.reduce((s2,t)=>s2+t*t,0)} = <b>${m(d)}</b>`;}
+  else s+=`<br>② 变化最快的方向就是 ∇φ：â = ${v3(G)}/√${G.reduce((s2,t)=>s2+t*t,0)}<br>③ 最大变化率 |∇φ| = √${G.reduce((s2,t)=>s2+t*t,0)} = <b>${m(n3)}</b>`;
+  $('calc').innerHTML=s;
+}
+dragP($('heat2'),()=>g2,(a,b)=>{P2=[a,b];Lab.draw(2);});
+document.querySelectorAll('#lab2 [data-f2]').forEach(b=>b.addEventListener('click',()=>{k2=b.dataset.f2;P2=[...F2[k2].P];Lab.draw(2);}));
+['ang','ex3'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(2)));
+const setAng=d=>{$('ang').value=Math.round(((d%360)+360)%360);Lab.draw(2);};
+$('toGrad').addEventListener('click',()=>{const [gx,gy]=F2[k2].g(...P2);setAng(Math.atan2(gy,gx)/D2R);});
+$('toLevel').addEventListener('click',()=>{const [gx,gy]=F2[k2].g(...P2);setAng(Math.atan2(gy,gx)/D2R+90);});
+Lab.add(2,lab2,{heat2:250,dd:250});
+Lab.start();
+</script>
+</body></html>
