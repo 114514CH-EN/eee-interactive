@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量微积分实验室</title>
-<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
+<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART B · VECTOR CALCULUS</div>
   <h1>向量微积分实验室</h1>
-  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a><a href="#lab3">实验 3 线积分与做功</a></nav>
+  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a><a href="#lab3">实验 3 线积分与做功</a><a href="#lab4">实验 4 二重积分与切条</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -57,6 +57,19 @@
   <div class="stage even"><canvas id="fld" height="340" aria-label="力场与路径，可拖动紫色控制点" style="touch-action:none;cursor:crosshair"></canvas><canvas id="acc" height="340" aria-label="累计做功随路径进度的变化"></canvas></div>
   <div class="read"><div><small>W（当前路径）</small><b id="r3W"></b></div><div><small>走到 t 时已做功</small><b id="r3s"></b></div><div><small>此处 F·T（每走 1 单位做的功）</small><b id="r3ft"></b></div><div><small>回路 ∮ = W① − W②</small><b id="r3loop"></b></div></div>
   <p class="note"><strong>先判断保不保守：</strong>二维力场 F = P i + Q j，算 ∂Q/∂x − ∂P/∂y。处处为 0（区域里没有挖掉的洞）→ 保守场，F = ∇φ，W = φ(终点) − φ(起点)，走哪条路都一样，绕一圈回来 ∮ = 0。不为 0 → W 和路径有关，只能把路径参数化再积分。这个判别式是补充内容（讲义没讲），Week 10 的旋度会正式讲。</p>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · 二重积分：先切条，再把条加起来（Week 9）</div>
+  <h2>二重积分 = 先切条，再把条加起来</h2>
+  <p class="lead">左图的区域切成 N 条。竖着切（dy dx）：每一条 x 固定，y 从下边界积到上边界，得到这一条的值 S(x)；再把所有条沿 x 加起来。横着切（dx dy）就反过来。右图画的是每一条的值：它下面的面积就是二重积分。被积函数选 1 得面积，选 x、y 得一阶矩（除以面积就是形心），选 y²、x² 得二阶矩 I_xx、I_yy。</p>
+  <div class="btns" role="group" aria-label="区域"><button data-r4="tri">讲义例 4：y = 4x/5 下方</button><button data-r4="sin">讲义例 6：4 sin(x/2)</button><button data-r4="lens">x²/9 与 3√x（Q12、Q13）</button><button data-r4="para">x² 与 x + 2（Q10、Q14）</button><button data-r4="hw2">课上例 2：3x² 与 4x − 1</button></div>
+  <div class="btns" role="group" aria-label="被积函数"><button data-f4="1">f = 1（面积）</button><button data-f4="x">f = x</button><button data-f4="y">f = y</button><button data-f4="yy">f = y²（I_xx）</button><button data-f4="xx">f = x²（I_yy）</button></div>
+  <div class="controls"><div class="ctl"><label for="o4">切法</label><select id="o4"><option value="v">竖条：先 dy 后 dx</option><option value="h">横条：先 dx 后 dy</option></select><span></span></div><div class="ctl"><label for="n4">条数 N</label><input id="n4" type="range" min="2" max="60" step="1" value="8"><output id="n4O"></output></div><div class="ctl"><label for="k4">高亮第几条</label><input id="k4" type="range" min="0" max="1000" step="1" value="500"><output id="k4O"></output></div></div>
+  <p class="verdict" id="v4"></p>
+  <div class="stage even"><canvas id="rg" height="330" aria-label="区域和切条"></canvas><canvas id="sf" height="330" aria-label="每一条的积分值"></canvas></div>
+  <div class="read"><div><small>N 条近似</small><b id="r4n"></b></div><div><small>精确值</small><b id="r4e"></b></div><div><small>面积 A</small><b id="r4a"></b></div><div><small>形心 (x̄, ȳ)</small><b id="r4c"></b></div><div><small>I_xx = ∬y² dA</small><b id="r4ix"></b></div><div><small>I_yy = ∬x² dA</small><b id="r4iy"></b></div></div>
+  <p class="note"><strong>换积分次序：</strong>结果不变（讲义「Does order matter? No, just get limits right」），但上下限要重写：竖条的内层限是「下边界 y = … 到上边界 y = …」（x 的函数），外层是常数；横条反过来，有时一种切法要拆成两段（x² 与 x + 2 的横条在 y = 1 处要拆）。最外层的上下限一定是常数。</p>
 </section>
 </div>
 
@@ -262,6 +275,51 @@ $('s3').addEventListener('input',()=>{play3=false;$('p3').textContent='▶ 走�
 const a3=Lab.anim(3,$('fld'),dt=>{let v=+$('s3').value+dt*1000/3.5;if(v>=1000){v=1000;play3=false;$('p3').textContent='▶ 走一遍';}$('s3').value=Math.round(v);Lab.draw(3);},()=>play3);
 $('p3').addEventListener('click',()=>{play3=!play3;if(play3&&+$('s3').value>=1000)$('s3').value=0;$('p3').textContent=play3?'⏸ 暂停':'▶ 走一遍';Lab.kick(a3);Lab.draw(3);});
 Lab.add(3,lab3,{fld:250,acc:250});
+
+/* ---------- Lab 4: double integrals by strips ---------- */
+const sq=Math.sqrt,PI=Math.PI;
+const R4={
+ tri:{n:'y = 4x/5、x 轴、x = 5',xr:[-0.3,5.5],yr:[-0.3,4.6],V:[{a:0,b:5,lo:()=>0,hi:x=>4*x/5}],H:[{a:0,b:4,lo:y=>5*y/4,hi:()=>5}],tv:'∫₀⁵ ∫₀^(4x/5) f dy dx',th:'∫₀⁴ ∫_(5y/4)^5 f dx dy'},
+ sin:{n:'y = 4 sin(x/2)，π/3 ≤ x ≤ π',xr:[0.6,3.5],yr:[-0.3,4.4],V:[{a:PI/3,b:PI,lo:()=>0,hi:x=>4*Math.sin(x/2)}],H:[{a:0,b:2,lo:()=>PI/3,hi:()=>PI},{a:2,b:4,lo:y=>2*Math.asin(Math.min(1,y/4)),hi:()=>PI}],tv:'∫_(π/3)^π ∫₀^(4sin(x/2)) f dy dx',th:'∫₀² ∫_(π/3)^π f dx dy + ∫₂⁴ ∫_(2 asin(y/4))^π f dx dy'},
+ lens:{n:'y = x²/9 与 y = 3√x',xr:[-0.5,9.8],yr:[-0.5,9.8],V:[{a:0,b:9,lo:x=>x*x/9,hi:x=>3*sq(x)}],H:[{a:0,b:9,lo:y=>y*y/9,hi:y=>3*sq(y)}],tv:'∫₀⁹ ∫_(x²/9)^(3√x) f dy dx',th:'∫₀⁹ ∫_(y²/9)^(3√y) f dx dy'},
+ para:{n:'y = x² 与 y = x + 2',xr:[-1.6,2.6],yr:[-0.4,4.5],V:[{a:-1,b:2,lo:x=>x*x,hi:x=>x+2}],H:[{a:0,b:1,lo:y=>-sq(y),hi:y=>sq(y)},{a:1,b:4,lo:y=>y-2,hi:y=>sq(y)}],tv:'∫₋₁² ∫_(x²)^(x+2) f dy dx',th:'∫₀¹ ∫_(−√y)^(√y) f dx dy + ∫₁⁴ ∫_(y−2)^(√y) f dx dy'},
+ hw2:{n:'y = 3x² 与 y = 4x − 1',xr:[0.2,1.15],yr:[-0.1,3.3],V:[{a:1/3,b:1,lo:x=>3*x*x,hi:x=>4*x-1}],H:[{a:1/3,b:3,lo:y=>(y+1)/4,hi:y=>sq(y/3)}],tv:'∫_(1/3)^1 ∫_(3x²)^(4x−1) f dy dx',th:'∫_(1/3)^3 ∫_((y+1)/4)^(√(y/3)) f dx dy'}};
+const F4={'1':(x,y)=>1,x:(x,y)=>x,y:(x,y)=>y,yy:(x,y)=>y*y,xx:(x,y)=>x*x},F4n={'1':'1','x':'x','y':'y','yy':'y²','xx':'x²'};
+let k4='tri',f4='1';const EX4={};
+const strip=(pcs,f,t,vert)=>{const pc=pcs.find(q=>t>=q.a-1e-12&&t<=q.b+1e-12);if(!pc)return 0;const l=pc.lo(t),h=pc.hi(t);if(!(h>l))return 0;const n=24,d=(h-l)/n;let s2=0;for(let i=0;i<=n;i++){const w=i===0||i===n?1:i%2?4:2,v=l+i*d;s2+=w*(vert?f(t,v):f(v,t));}return s2*d/3;};
+const span=pcs=>[Math.min(...pcs.map(q=>q.a)),Math.max(...pcs.map(q=>q.b))];
+const riem=(pcs,f,N,vert)=>{const [a,b]=span(pcs),d=(b-a)/N;let s2=0;for(let i=0;i<N;i++)s2+=strip(pcs,f,a+(i+.5)*d,vert)*d;return s2;};
+function exact4(k){if(EX4[k])return EX4[k];const R=R4[k],o={};Object.keys(F4).forEach(q=>o[q]=riem(R.V,F4[q],1500,true));return EX4[k]=o;}
+function lab4(){
+  const R=R4[k4],vert=$('o4').value==='v',N=+$('n4').value,pcs=vert?R.V:R.H,f=F4[f4],[a,b]=span(pcs),d=(b-a)/N,ki=Math.min(N-1,Math.floor(+$('k4').value/1000*N));
+  pressGroup('#lab4 [data-r4]',q=>q.dataset.r4===k4);pressGroup('#lab4 [data-f4]',q=>q.dataset.f4===f4);$('n4O').textContent=N;$('k4O').textContent=`${ki+1} / ${N}`;
+  const g=frame3($('rg'),R),{x,X,Y}=g;x.save();x.beginPath();x.rect(g.pl,g.pt,g.pw,g.ph);x.clip();
+  /* region */
+  const V=R.V[0],M=200;x.fillStyle=css('--fillB');x.beginPath();for(let i=0;i<=M;i++){const t=V.a+(V.b-V.a)*i/M;i?x.lineTo(X(t),Y(V.hi(t))):x.moveTo(X(t),Y(V.hi(t)));}for(let i=M;i>=0;i--){const t=V.a+(V.b-V.a)*i/M;x.lineTo(X(t),Y(V.lo(t)));}x.closePath();x.fill();
+  x.strokeStyle=css('--blue');x.lineWidth=2;x.stroke();
+  /* strips */
+  for(let i=0;i<N;i++){const t=a+(i+.5)*d,pc=pcs.find(q=>t>=q.a-1e-12&&t<=q.b+1e-12);if(!pc)continue;const l=pc.lo(t),h=pc.hi(t);if(!(h>l))continue;
+    x.fillStyle=i===ki?css('--amp'):css('--accent');x.globalAlpha=i===ki?.75:.22;
+    if(vert)x.fillRect(X(a+i*d),Y(h),X(a+(i+1)*d)-X(a+i*d),Y(l)-Y(h));else x.fillRect(X(l),Y(a+(i+1)*d),X(h)-X(l),Y(a+i*d)-Y(a+(i+1)*d));
+    x.globalAlpha=1;x.strokeStyle=css('--panel');x.lineWidth=.8;if(vert)x.strokeRect(X(a+i*d),Y(h),X(a+(i+1)*d)-X(a+i*d),Y(l)-Y(h));else x.strokeRect(X(l),Y(a+(i+1)*d),X(h)-X(l),Y(a+i*d)-Y(a+(i+1)*d));}
+  if(pcs.length>1){x.setLineDash([4,4]);x.strokeStyle=css('--red');x.lineWidth=1.4;pcs.slice(1).forEach(q=>{x.beginPath();if(vert){x.moveTo(X(q.a),g.pt);x.lineTo(X(q.a),g.pt+g.ph);}else{x.moveTo(g.pl,Y(q.a));x.lineTo(g.pl+g.pw,Y(q.a));}x.stroke();});x.setLineDash([]);}
+  /* centroid */
+  const E=exact4(k4),A=E['1'],cx=E.x/A,cy=E.y/A;x.strokeStyle=css('--ink');x.lineWidth=2;x.beginPath();x.moveTo(X(cx)-7,Y(cy));x.lineTo(X(cx)+7,Y(cy));x.moveTo(X(cx),Y(cy)-7);x.lineTo(X(cx),Y(cy)+7);x.stroke();label(x,'形心',X(cx)+8,Y(cy)-6,css('--ink'),11);
+  /* highlighted strip limits */
+  {const t=a+(ki+.5)*d,pc=pcs.find(q=>t>=q.a-1e-12&&t<=q.b+1e-12);if(pc){const l=pc.lo(t),h=pc.hi(t);const lab=vert?`x = ${fmt(t,2)}：y 从 ${fmt(l,2)} 到 ${fmt(h,2)}`:`y = ${fmt(t,2)}：x 从 ${fmt(l,2)} 到 ${fmt(h,2)}`;x.restore();x.font=`12px ${css('--body')}`;const tw=x.measureText(lab).width;x.fillStyle=css('--panel');x.globalAlpha=.88;x.fillRect(g.pl+2,g.pt+22,tw+10,18);x.globalAlpha=1;text(x,lab,g.pl+6,g.pt+35,css('--amp'),12);}else x.restore();}
+  {x.font=`12px ${css('--body')}`;const tw=x.measureText(R.n).width;x.fillStyle=css('--panel');x.globalAlpha=.88;x.fillRect(g.pl+2,g.pt+3,tw+10,18);x.globalAlpha=1;text(x,R.n,g.pl+6,g.pt+16,css('--ink'),12);}
+  /* strip function */
+  const [c,W,H]=fit($('sf')),S=t=>strip(pcs,f,t,vert);let hi=0,lo=0;for(let i=0;i<=200;i++){const v=S(a+(b-a)*i/200);hi=Math.max(hi,v);lo=Math.min(lo,v);}const pd=(hi-lo)*0.12||1;
+  const bx=axes(c,W,H,{x0:a-(b-a)*0.04,x1:b+(b-a)*0.04,y0:lo-(lo<0?pd:0),y1:hi+pd,xt:tk3(a,b,5),yt:tk3(lo,hi,4),xf:v=>String(v).replace('-','−'),yf:v=>String(v).replace('-','−'),title:vert?`每条竖条的值 S(x) = ∫ ${F4n[f4]} dy`:`每条横条的值 S(y) = ∫ ${F4n[f4]} dx`,xl:vert?'x':'y',pl:48});
+  for(let i=0;i<N;i++){const t=a+(i+.5)*d,v=S(t);c.fillStyle=i===ki?css('--amp'):css('--accent');c.globalAlpha=i===ki?.7:.25;c.fillRect(bx.X(a+i*d),Math.min(bx.Y(v),bx.Y(0)),bx.X(a+(i+1)*d)-bx.X(a+i*d),Math.abs(bx.Y(v)-bx.Y(0)));c.globalAlpha=1;}
+  plot(c,bx.X,bx.Y,S,a,b,css('--blue'),2.2,300);
+  const rn=riem(pcs,f,N,vert),ex=E[f4];$('r4n').textContent=m(rn);$('r4e').textContent=m(ex);$('r4a').textContent=m(A);$('r4c').textContent=`(${m(cx)}, ${m(cy)})`;$('r4ix').textContent=m(E.yy);$('r4iy').textContent=m(E.xx);
+  const v=$('v4');v.textContent=(vert?R.tv:R.th).replace(/f/g,F4n[f4])+` = ${m(ex)}`;v.style.color=css('--ink');
+}
+document.querySelectorAll('#lab4 [data-r4]').forEach(q=>q.addEventListener('click',()=>{k4=q.dataset.r4;Lab.draw(4);}));
+document.querySelectorAll('#lab4 [data-f4]').forEach(q=>q.addEventListener('click',()=>{f4=q.dataset.f4;Lab.draw(4);}));
+['o4','n4','k4'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+Lab.add(4,lab4,{rg:250,sf:250});
 Lab.start();
 </script>
 </body></html>

@@ -331,4 +331,23 @@ D('MA','MA8','向量空间 2：向量空间、内积与范数','3eb202737d7a8103
 ['fix',r`讲义 Week 8 的笔误`,r`第 6 页两处「Equation (??)」是 LaTeX 引用断了：分别指式 (15)（三角不等式）和式 (20)（欧氏范数）；式 (20) 求和上限写成 n，应为 N；第 8 页 $u_1+\lambda_2u_2$ 多了下标 2，应为 $u_1+\lambda u_2$；第 3 页把 $u+v=v+u$ 叫 symmetry，通常叫交换律（commutativity）`],
 ]);
 
+D('MB','MB9','向量微积分 3：二重积分与三重积分','3eb202737d7a8114b808d8beba236430',[
+['q',r`二重积分 $\int_{y_1}^{y_2}\int_{x_1}^{x_2}f(x,y)\,dx\,dy$ 是怎么来的？`,r`把区域切成小块 $\delta a=\delta y\,\delta x$，先沿一个方向把小块加成一条，再把所有条加起来：$A=\sum\sum\delta y\,\delta x$。令 $\delta x,\delta y\to0$，求和变积分。f = 1 时得面积，一般 f 是「每单位面积上的量」（密度、y² 等）`],
+['q',r`多重积分从哪一层开始算？`,r`从最里层开始，一层一层往外（讲义第 37 页）。算里层时外层变量当常数。最外层的上下限必须是常数；里层的上下限可以含外层的变量`],
+['q',r`讲义例 4：$y=4x/5$、x 轴、x = 5 围成的面积，竖条和横条各怎么写？`,r`竖条（先 dy）：$\int_0^5\int_0^{4x/5}dy\,dx=\int_0^5\frac{4x}{5}dx=10$。横条（先 dx）：y 从 0 到 4，x 从 $\frac{5y}{4}$ 到 5：$\int_0^4\left(5-\frac{5y}{4}\right)dy=10$。次序不影响结果，「just get limits right」`],
+['q',r`两条曲线围成的面积怎么设积分限？以 $y=x^2/9$ 和 $y=3\sqrt x$ 为例`,r`① 联立求交点：$\frac{x^2}{9}=3\sqrt x$ → $x^{3/2}=27$ → x = 0 或 9；② 画图看谁在上：$3\sqrt x$ 在上；③ $A=\int_0^9\int_{x^2/9}^{3\sqrt x}dy\,dx=\left[2x^{3/2}-\frac{x^3}{27}\right]_0^9=27$`],
+['q',r`形心和二阶矩的公式？`,r`形心 $\bar x=\frac{\iint x\,dA}{A}$，$\bar y=\frac{\iint y\,dA}{A}$。二阶矩：$I_{xx}=\iint y^2\,dA$（绕 x 轴，用到 x 轴的距离 y），$I_{yy}=\iint x^2\,dA$，$I_{zz}=\iint(x^2+y^2)\,dA$（极惯性矩）`],
+['q',r`为什么绕 x 轴的二阶矩 $I_{xx}$ 积的是 $y^2$？有什么用？`,r`绕 x 轴转（或弯曲）时，一小块面积到 x 轴的距离是 y，贡献按距离的平方算。离轴越远影响越大：2 × 6 的矩形竖放 $I=36$，平放只有 4。梁的抗弯刚度是 EI，所以工字钢把材料放在远离中性轴的地方`],
+['q',r`极坐标下面积元是什么？为什么多一个 r？`,r`$dA=r\,dr\,d\theta$。小块的径向边长 dr，弧向边长是弧长 $r\,d\theta$（不是 dθ）。离原点越远，同样的 dθ 对应的弧越长。四分之一单位圆：$\int_0^{\pi/2}\int_0^1r\,dr\,d\theta=\frac\pi4$`],
+['q',r`雅可比（Jacobian）是什么？公式？`,r`换元 x = x(u, v)、y = y(u, v) 时面积的缩放倍数：$$dx\,dy=\left|\frac{\partial(x,y)}{\partial(u,v)}\right|du\,dv,\quad J=\begin{vmatrix}x_u&x_v\\y_u&y_v\end{vmatrix}=x_uy_v-x_vy_u$$
+要取绝对值（面积为正）。极坐标 J = r；三维球坐标 $r^2\sin\theta$`],
+['q',r`课上例 6：平行四边形 (0,0)、(3,1)、(4,0)、(1,−1) 的 $I_{yy}$ 怎么用雅可比算？`,r`边平行于 $y=\frac x3$ 和 $y=-x$，令 $u=x+y$（0 → 4）、$v=\frac x3-y$（0 → 4/3），限都变常数。反解 $x=\frac34(u+v)$、$y=\frac14(u-3v)$，$|J|=\left|\frac34\cdot(-\frac34)-\frac34\cdot\frac14\right|=\frac34$。$I_{yy}=\int_0^{4/3}\int_0^4\frac{9}{16}(u+v)^2\cdot\frac34\,du\,dv=\frac{58}{3}\approx19.33$`],
+['q',r`三重积分求体积：讲义例 1（z = 0 到 z = x + y，1 ≤ x ≤ 4，2 ≤ y ≤ 5）`,r`$V=\int_1^4\int_2^5\int_0^{x+y}dz\,dy\,dx$。先 z：$x+y$；再 y：$\left[xy+\frac{y^2}{2}\right]_2^5=3x+\frac{21}{2}$；再 x：$\left[\frac32x^2+\frac{21}{2}x\right]_1^4=54$。思路：小立方体 → 竖柱（z 方向）→ 片（y 方向）→ 整体（x 方向）`],
+['q',r`柱坐标和球坐标的体积元？球的体积怎么算？`,r`柱坐标 $dV=r\,dr\,d\theta\,dz$；球坐标 $dV=r^2\sin\theta\,dr\,d\theta\,d\phi$（θ 是和 z 轴的夹角，0 到 π；φ 绕 z 轴，0 到 2π）。球：$\int_0^R r^2dr\int_0^{2\pi}d\phi\int_0^\pi\sin\theta\,d\theta=\frac{R^3}{3}\cdot2\pi\cdot2=\frac43\pi R^3$`],
+['q',r`质量和质心的公式？`,r`$M=\iiint\rho\,dV$；一阶矩 $M_{yz}=\iiint x\rho\,dV$、$M_{xz}=\iiint y\rho\,dV$、$M_{xy}=\iiint z\rho\,dV$；质心 $(\bar x,\bar y,\bar z)=\left(\frac{M_{yz}}{M},\frac{M_{xz}}{M},\frac{M_{xy}}{M}\right)$。Tutorial Q20：单位立方体 ρ = x + 2y + 3z，M = 3，质心 $(\frac{19}{36},\frac59,\frac{7}{12})$`],
+['q',r`Tutorial Q22：均匀圆锥（半径 R、高 H、质量 m）绕轴的转动惯量？`,r`柱坐标，$I_z=\rho_0\int_0^{2\pi}\int_0^R\int_{rH/R}^{H}r^2\cdot r\,dz\,dr\,d\theta=\frac{\rho_0\pi HR^4}{10}$。$m=\rho_0\cdot\frac13\pi R^2H$ 代掉 $\rho_0$：$I_z=\frac{3}{10}mR^2$。z 的限含 r，所以 z 要先积`],
+['err',r`易错：二重积分的限和次序`,r`① 最外层限必须是常数，Tutorial Q2「$\int_0^x\int_1^2$」次序反了，结果还是 x 的函数；② 先画图确定谁在上、谁在下，联立求交点；③ 横条有时要拆段（$y=x^2$ 与 $y=x+2$ 在 y = 1 处）；④ 极坐标别忘了乘 r，球坐标别忘了 $r^2\sin\theta$`],
+['fix',r`本周资料里的错误`,r`Tutorial 答案 Q14(a) 的 $\bar y=1.64$ 应为 1.6（$\iint y\,dA=7.2$，A = 4.5）；Q19 答案说「y = x 总在 $y=x^2$ 下面」应为 $y=x^2+1$；Jacobian 手写第 18 页 $y=r\cos\theta$ 应为 $r\sin\theta$；课上例 6 扫描第 9 页 $(u^2+uv+v^2)$ 漏了 2；讲义第 57 页密度 ρ = 1 − x 在 x > 1 时为负，物理上不成立`],
+]);
+
 })();
