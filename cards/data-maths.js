@@ -388,4 +388,22 @@ D('MB','MB10','向量微积分 4：面积分、散度与旋度','3eb202737d7a810
 ['fix',r`本周资料里的错误`,r`Tutorial 4 答案 Q2 curl 的 j 分量写成 $-xy(2+x\cos(x^2yz))$，应为 $-xy(2-x\cos(x^2yz))$（在 P 点 y = 0，结果 i − 2k 不受影响）；讲义第 41 页 $\operatorname{div}\operatorname{grad}f=\nabla\cdot(\nabla\cdot f)$ 应为 $\nabla\cdot(\nabla f)$；第 45 页椭圆写成 $\frac{x^2}{a}+\frac{y^2}{b}=1$，应为 $a^2$、$b^2$；课上例 1 的 $\partial F_3/\partial z$ 漏了 y 的平方，散度应为 −34（扫描件上已有橙色批注）`],
 ]);
 
+D('MA','MA10','向量空间 4：线性变换、特征值与 PCA','3eb202737d7a81ef8865ff3160cf3626',[
+['q',r`什么是线性变换？`,r`T：𝕍 → 𝕎 是把每个 v 对应到 T(v) 的规则。线性：$T(v_1+v_2)=T(v_1)+T(v_2)$ 且 $T(\lambda v_1)=\lambda T(v_1)$，合起来 $T(\lambda v_1+v_2)=\lambda T(v_1)+T(v_2)$。例：旋转 $R_\theta=\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bmatrix}$`],
+['q',r`为什么每个线性变换都对应一个矩阵？矩阵怎么写？`,r`$v=v_1e_1+\cdots+v_Ne_N$，线性 ⇒ $T(v)=v_1T(e_1)+\cdots+v_NT(e_N)$，T 完全由它对基向量做了什么决定。把 $T(e_n)$ 作为第 n 列排成 M × N 矩阵 E，就有 $T(v)=Ev$。线性变换 ℝᴺ → ℝᴹ 和 M × N 矩阵一一对应`],
+['q',r`正交矩阵是什么？和基变换有什么关系？`,r`$U^TU=I_N=UU^T$ 的实方阵，列是一组标准正交基（$U^TU$ 的 (i, j) 元就是 $u_i\cdot u_j$）。U 把标准基 $e_n$ 变到新基 $u_n$（$Ue_n=u_n$）；v 在新基下的坐标是 $U^Tv$（讲义写成 Uv，见勘误）`],
+['q',r`特征值、特征向量的定义？为什么不唯一？`,r`$Av=\lambda v$，v ≠ 0：A 作用后方向不变（或反向），只被拉伸 λ 倍。v 的任意非零倍数也是特征向量，所以说「特征空间」，通常取单位向量 $\|v\|=1$。旋转矩阵（θ ≠ 0、π）没有实特征向量`],
+['q',r`2 × 2 矩阵的特征值怎么求？`,r`解特征方程 $\det(A-\lambda I)=0$：$\lambda^2-(\operatorname{tr}A)\lambda+\det A=0$。再对每个 λ 解 $(A-\lambda I)v=0$ 得特征向量，归一化。例：$\begin{bmatrix}1&2\\2&3\end{bmatrix}$：$\lambda^2-4\lambda-1=0$，$\lambda=2\pm\sqrt5=4.236,-0.236$`],
+['q',r`讲义的 $B=RDR^T$（D = diag(7, 4)，R 转 30°）的特征值和特征向量？为什么？`,r`$B=\begin{bmatrix}6.25&1.299\\1.299&4.75\end{bmatrix}$。特征值还是 7、4；特征向量是 R 的两列 $u_1=(\frac{\sqrt3}{2},\frac12)$、$u_2=(-\frac12,\frac{\sqrt3}{2})$。因为 $Bu_1=RDR^TRe_1=RDe_1=7Re_1=7u_1$`],
+['q',r`谱定理说什么？`,r`实对称 N × N 矩阵 A 一定能写成 $A=UDU^T$：U 是正交矩阵，列是单位特征向量；D 是对角阵，对角元是特征值。这叫特征值分解，A 可对角化。对称矩阵的特征值都是实数、不同特征值的特征向量互相垂直`],
+['q',r`样本均值、方差、协方差的公式？`,r`$\mu=\frac1N\sum x_n$；$\sigma^{ii}=\frac{1}{N-1}\sum(\mu^i-x_n^i)^2$；$\sigma^{ij}=\frac{1}{N-1}\sum(\mu^i-x_n^i)(\mu^j-x_n^j)$（Bessel 修正，除以 N − 1）。协方差矩阵 Σ 是 D × D 实对称矩阵；数据先减均值时 $\Sigma=\frac{1}{N-1}X^TX$（X 的第 n 行是 $x_n$）`],
+['q',r`PCA 在做什么？`,r`对协方差矩阵做特征值分解 $C=UDU^T$。U 的列是新基（主成分方向），$u_1$ 指向方差最大的方向；D 的对角元 $d_n$（特征值）是数据在 $u_n$ 方向上的方差，都 ≥ 0。保留前几个方向就是降维`],
+['q',r`为什么方差最大的方向就是 C 的第一特征向量？`,r`数据（减均值后）在单位方向 u 上的投影是 $x_n\cdot u$，方差 $=\frac{1}{N-1}\sum(x_n\cdot u)^2=u^TCu$。把 u 写成特征向量的组合 $u=\sum c_ku_k$（$\sum c_k^2=1$），$u^TCu=\sum c_k^2\lambda_k\le\lambda_1$，取 $u=u_1$ 时等号成立`],
+['q',r`讲义 PCA 例：$X=\{(1,1),(0,0),(-1,-1)\}$ 的结果？`,r`μ = (0, 0)，$C=\frac12\sum x_nx_n^T=\begin{bmatrix}1&1\\1&1\end{bmatrix}$。$\lambda(\lambda-2)=0$ → λ = 2、0；$u_1=(\frac{1}{\sqrt2},\frac{1}{\sqrt2})$。三个点都在 y = x 上，所有方差都在 $u_1$ 方向（$\frac12(2+0+2)=2$），垂直方向方差 0`],
+['q',r`Tutorial Q4 的协方差和主成分？`,r`μ = (2.5, 1.56)，$C=\begin{bmatrix}1.25&0.388\\0.388&0.243\end{bmatrix}$；λ₁ = 1.382，$u_1=(0.947,0.322)$；λ₂ = 0.111，$u_2=(-0.323,0.946)$。最大方差方向 $u_1$，方差 1.382`],
+['q',r`把数据投影到第一主成分上，误差有多大？（Q5 第 7 问）`,r`总方差 tr C = λ₁ + λ₂ 不随方向改变：方向上的方差 + 投影误差（平方和 / (N − 1)）= tr C。投影到 $u_1$ 时误差 = λ₂。Q5：λ₂ = 0.074（按 N − 1）；按 N 平均是 0.074 × 5/6 = 0.061`],
+['err',r`易错：$UDU^T$ 还是 $U^TDU$`,r`讲义约定 U 的列是特征向量，$C=UDU^T$。Tutorial Q4–Q6 写的是 $C=U^TDU$，那要求 U 的行是特征向量。Q4 答案给的 U 列是特征向量，按 $U^TDU$ 乘出来非对角元符号是错的（−0.389）；按 $UDU^T$ 才得到 0.388。Q5 的 U 恰好对称，两种乘法一样`],
+['fix',r`本周资料里的错误`,r`讲义第 4 页「Uv 是 v 在新基下的坐标」应为 $U^Tv$；第 8 页「the eigenvector (element of D)」应为 eigenvalue；第 9 页「just one eigenvalue」指只有一个非零特征值。Tutorial 答案 Q5 第 5 问「variance λ₁ = 2.979」应为 λ₂；Q6 第 5 个点 (−6, 28.5) 不在其他点所在的直线 y = −5x − 3.5 上（应为 26.5），所以 λ₂ = 0.0126 不是 0`],
+]);
+
 })();

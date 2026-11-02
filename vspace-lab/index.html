@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量空间实验室</title>
-<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
+<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基；特征向量是矩阵作用后方向不变的向量，PCA 找协方差矩阵的特征向量当新坐标轴。对应 A · Week 7 起的向量空间。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基；特征向量是矩阵作用后方向不变的向量，PCA 找协方差矩阵的特征向量当新坐标轴。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}.ctl input[type=text]{width:100%}#lab4 table.mini{margin-top:4px}#lab4 table.mini th{white-space:nowrap}html.embed #lab2 .scroll{display:none}html.embed #lab2 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+<style>.ctl select{width:100%}.ctl input[type=text]{width:100%}.mat{display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:0}.mat input{width:100%;min-width:0}#lab4 table.mini{margin-top:4px}#lab4 table.mini th{white-space:nowrap}html.embed #lab2 .scroll{display:none}html.embed #lab2 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · VECTOR SPACES</div>
   <h1>向量空间实验室</h1>
-  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a><a href="#lab3">实验 3 内积、夹角与投影</a><a href="#lab4">实验 4 TF-IDF 余弦相似度</a><a href="#lab5">实验 5 Gram–Schmidt</a></nav>
+  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基；特征向量是矩阵作用后方向不变的向量，PCA 找协方差矩阵的特征向量当新坐标轴。对应 A · Week 7 起的向量空间。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a><a href="#lab3">实验 3 内积、夹角与投影</a><a href="#lab4">实验 4 TF-IDF 余弦相似度</a><a href="#lab5">实验 5 Gram–Schmidt</a><a href="#lab6">实验 6 特征向量</a><a href="#lab7">实验 7 PCA</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -74,6 +74,31 @@
   <div class="ctl"><label for="g3a">v₁</label><input id="g3a" type="text"><span></span></div><div class="ctl"><label for="g3b">v₂</label><input id="g3b" type="text"><span></span></div><div class="ctl"><label for="g3c">v₃</label><input id="g3c" type="text"><span></span></div></div>
   <div class="calc" id="g3out"></div>
   <p class="note"><strong>为什么减掉影子就垂直：</strong>(v₂ − (v₂·e₁)e₁)·e₁ = v₂·e₁ − (v₂·e₁)(e₁·e₁) = 0，因为 e₁·e₁ = 1。三维时 v₃ 要减掉在 e₁、e₂ 两个方向上的影子。Q2 的两组 v₃ 不同，得到的 e₃ 却一样：e₁、e₂ 定了以后，ℝ³ 里和它们都垂直的单位向量只有 ±(e₁ × e₂) 两个，v₃ 只决定取哪个符号。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · 线性变换与特征向量（Week 10）</div>
+  <h2>特征向量：被矩阵作用后方向不变的那些向量</h2>
+  <p class="lead">矩阵 A 把单位圆（灰色虚线）变成蓝色椭圆。转动橙色的单位向量 v（橙色虚线标出它的方向），蓝色箭头是 Av。大多数时候 Av 和 v 方向不同；转到紫色虚线上时两者共线，这就是特征向量，长度之比就是特征值 λ（Av = λv）。右图是 v 和 Av 的叉积，过零点就是特征方向。旋转矩阵没有过零点：没有实特征向量。</p>
+  <div class="btns" role="group" aria-label="矩阵"><button data-a="7,0,0,4">讲义 D = diag(7, 4)</button><button data-a="6.25,1.299,1.299,4.75">讲义 B = RDRᵀ</button><button data-a="1,2,2,3">Tutorial Q3</button><button data-a="0.866,-0.5,0.5,0.866">旋转 30°</button><button data-a="1,1,0,1">剪切</button><button data-a="1,1,1,1">讲义 PCA 例的 C</button></div>
+  <div class="controls"><div class="ctl"><label for="a11">A =</label><span class="mat"><input id="a11" type="number" step="0.1" min="-50" max="50" aria-label="a11"><input id="a12" type="number" step="0.1" min="-50" max="50" aria-label="a12"><input id="a21" type="number" step="0.1" min="-50" max="50" aria-label="a21"><input id="a22" type="number" step="0.1" min="-50" max="50" aria-label="a22"></span><span></span></div><div class="ctl"><label for="phi6">v 的角度</label><input id="phi6" type="range" min="0" max="360" step="1" value="20"><output id="phi6O"></output></div></div>
+  <div class="btns" id="eigBtns"></div>
+  <p class="verdict" id="v6"></p>
+  <div class="stage even"><canvas id="tf" height="330" aria-label="单位圆、椭圆、v 和 Av"></canvas><canvas id="cr" height="330" aria-label="v 和 Av 的叉积随角度变化"></canvas></div>
+  <div class="read"><div><small>v（单位向量）</small><b id="r6v"></b></div><div><small>Av</small><b id="r6a"></b></div><div><small>|Av| / |v|</small><b id="r6r"></b></div><div><small>λ² − (tr A)λ + det A = 0</small><b id="r6c"></b></div><div><small>特征值 λ₁, λ₂</small><b id="r6l"></b></div></div>
+  <p class="note"><strong>对称矩阵的特点（谱定理）：</strong>实对称矩阵一定有实特征值，而且两条特征方向互相垂直，所以可以写成 A = UDUᵀ：U 的列是单位特征向量（一个旋转），D 是特征值组成的对角阵。讲义的 B 就是把 diag(7, 4) 转了 30°：特征值不变，特征向量变成 R 的两列。剪切矩阵只有一条特征方向；旋转矩阵一条都没有。</p>
+</section>
+
+<section class="panel" id="lab7">
+  <div class="tag">实验 7 · 主成分分析 PCA（Week 10）</div>
+  <h2>PCA：找方差最大的方向</h2>
+  <p class="lead">先把数据减去均值。转动紫色直线的方向 u：每个点投影到直线上（空心点），数据在这个方向上的方差 = uᵀCu（右图曲线）。最大值出现在协方差矩阵 C 的第一特征向量方向，大小就是最大特征值 λ₁；垂直方向是 λ₂。橙色短线是投影误差，它的平方和除以 N − 1 正好等于 tr C − uᵀCu，方向选在 u₁ 时最小（= λ₂）。</p>
+  <div class="btns" role="group" aria-label="数据"><button data-p="ex">讲义例（3 点）</button><button data-p="q4">Tutorial Q4</button><button data-p="q5">Tutorial Q5</button><button data-p="q6">Tutorial Q6</button><button data-p="rnd">随机一团</button></div>
+  <div class="controls"><div class="ctl"><label for="th7">方向 u 的角度</label><input id="th7" type="range" min="0" max="180" step="0.5" value="0"><output id="th7O"></output></div><div class="btns"><button id="toPC">转到第一主成分</button></div></div>
+  <p class="verdict" id="v7"></p>
+  <div class="stage even"><canvas id="pc" height="330" aria-label="数据、主轴和投影"></canvas><canvas id="vt" height="330" aria-label="各方向上的方差"></canvas></div>
+  <div class="read"><div><small>均值 μ</small><b id="r7m"></b></div><div><small>协方差 C</small><b id="r7c"></b></div><div><small>λ₁, λ₂</small><b id="r7l"></b></div><div><small>u₁（第一主成分）</small><b id="r7u"></b></div><div><small>当前方向的方差 uᵀCu</small><b id="r7v"></b></div><div><small>投影误差平方和 / (N − 1)</small><b id="r7e"></b></div></div>
+  <p class="note"><strong>注意分母：</strong>讲义和 Tutorial 都用 N − 1（Bessel 修正）。所以 Q5 第 7 问「平均平方误差」= λ₂ 是按 N − 1 算的；真正除以 N 是 λ₂(N − 1)/N。Q6 的点几乎都在一条直线上，λ₂ 接近 0：二维数据其实只有一个维度在变化，降成一维几乎不丢信息，这就是 PCA 降维的意思。</p>
 </section>
 </div>
 
@@ -243,6 +268,74 @@ const g3set=()=>{const P=$('g3p').value.split(';');['g3a','g3b','g3c'].forEach((
 $('g3p').addEventListener('input',()=>{g3set();Lab.draw(5);});['g3a','g3b','g3c'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(5)));g3set();
 const lab5all=()=>{lab5();gs3calc();};
 Lab.add(5,lab5all,{gs:260});
+
+/* ---------- Lab 6: linear map & eigenvectors ---------- */
+const eig2=(a,b,c,d)=>{const tr=a+d,dt=a*d-b*c,disc=tr*tr/4-dt;if(disc<-1e-12)return {tr,dt,re:tr/2,im:Math.sqrt(-disc),real:false};const r=Math.sqrt(Math.max(0,disc)),l1=tr/2+r,l2=tr/2-r;
+  const vec=l=>{let v=Math.abs(b)>1e-12?[b,l-a]:Math.abs(c)>1e-12?[l-d,c]:(Math.abs(a-l)<1e-9?[1,0]:[0,1]);const n=Math.hypot(...v);return v.map(t=>t/n);};return {tr,dt,real:true,l:[l1,l2],v:[vec(l1),vec(l2)]};};
+const getA=()=>['a11','a12','a21','a22'].map(id=>{const v=+$(id).value;return isFinite(v)?Math.max(-50,Math.min(50,v)):0;});
+function lab6(){
+  const [a,b,c,d]=getA(),ph=+$('phi6').value*D2R;$('phi6O').textContent=$('phi6').value+'°';pressGroup('#lab6 [data-a]',q=>q.dataset.a.split(',').map(Number).every((t,i)=>Math.abs(t-getA()[i])<1e-9));
+  const M=v=>[a*v[0]+b*v[1],c*v[0]+d*v[1]],v=[Math.cos(ph),Math.sin(ph)],Av=M(v),E=eig2(a,b,c,d);
+  let R=1;for(let t=0;t<360;t+=5){const w=M([Math.cos(t*D2R),Math.sin(t*D2R)]);R=Math.max(R,Math.hypot(...w));}R*=1.12;
+  const st6=[0.25,0.5,1,2,5,10,20,50,100].find(t=>2*R/t<=10)||200,g=frame($('tf'),0,0,R,{step:st6,lab:st6<1?2:1}),{x,X,Y}=g;x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  x.setLineDash([4,4]);x.strokeStyle=css('--muted');x.lineWidth=1.2;x.beginPath();for(let t=0;t<=360;t+=3){const p=[Math.cos(t*D2R),Math.sin(t*D2R)];t?x.lineTo(X(p[0]),Y(p[1])):x.moveTo(X(p[0]),Y(p[1]));}x.stroke();x.setLineDash([]);
+  x.strokeStyle=css('--blue');x.lineWidth=1.8;x.beginPath();for(let t=0;t<=360;t+=3){const p=M([Math.cos(t*D2R),Math.sin(t*D2R)]);t?x.lineTo(X(p[0]),Y(p[1])):x.moveTo(X(p[0]),Y(p[1]));}x.stroke();
+  if(E.real)E.v.forEach((e,i)=>{x.setLineDash([6,4]);x.strokeStyle=css('--purple');x.lineWidth=1.4;x.beginPath();x.moveTo(X(-e[0]*R*2),Y(-e[1]*R*2));x.lineTo(X(e[0]*R*2),Y(e[1]*R*2));x.stroke();x.setLineDash([]);
+    const sg=(e[1]<-1e-9||(Math.abs(e[1])<1e-9&&e[0]<0))?-1:1,q=[e[0]*sg*R*0.82,e[1]*sg*R*0.82];label(x,`λ${'₁₂'[i]} = ${m(E.l[i])}`,X(q[0])+(q[0]>0?-70:6),Y(q[1])+14,css('--purple'),12);});
+  const Lv=Math.max(1,R*0.42);x.globalAlpha=.35;x.strokeStyle=css('--amp');x.lineWidth=2;x.setLineDash([2,3]);x.beginPath();x.moveTo(X(0),Y(0));x.lineTo(X(v[0]*Lv),Y(v[1]*Lv));x.stroke();x.setLineDash([]);x.globalAlpha=1;
+  arrow(x,X(0),Y(0),X(v[0]),Y(v[1]),css('--amp'),3,9);label(x,'v',X(v[0]*Lv)+5,Y(v[1]*Lv)-5,css('--amp'),14);
+  arrow(x,X(0),Y(0),X(Av[0]),Y(Av[1]),css('--blue'),3,11);label(x,'Av',X(Av[0])+5,Y(Av[1])-5,css('--blue'),14);x.restore();
+  const cr=t=>{const u=[Math.cos(t*D2R),Math.sin(t*D2R)],w=M(u);return u[0]*w[1]-u[1]*w[0];};let hi=0;for(let t=0;t<=360;t+=2)hi=Math.max(hi,Math.abs(cr(t)));hi=hi*1.15||1;
+  const [cx,W,H]=fit($('cr')),bx=axes(cx,W,H,{x0:0,x1:360,y0:-hi,y1:hi,xt:[0,90,180,270,360],yt:[0],title:'v × Av（z 分量）：过零点 = 特征方向',xl:'v 的角度（°）',pl:30});
+  plot(cx,bx.X,bx.Y,cr,0,360,css('--accent'),2.4);
+  if(E.real)E.v.forEach(e=>{let t0=(Math.atan2(e[1],e[0])/D2R+360)%360;[t0,(t0+180)%360].forEach(t=>{cx.strokeStyle=css('--purple');cx.setLineDash([3,3]);cx.beginPath();cx.moveTo(bx.X(t),bx.pt);cx.lineTo(bx.X(t),H-bx.pb);cx.stroke();cx.setLineDash([]);});});
+  dot(cx,bx.X(+$('phi6').value),bx.Y(cr(+$('phi6').value)),css('--amp'),6);
+  $('r6v').textContent=`(${m(v[0])}, ${m(v[1])})`;$('r6a').textContent=`(${m(Av[0])}, ${m(Av[1])})`;$('r6r').textContent=m(Math.hypot(...Av));
+  $('r6c').textContent=`λ² − ${m(E.tr)}λ + ${m(E.dt)} = 0`.replace('+ −','− ');$('r6l').textContent=E.real?`${m(E.l[0])}, ${m(E.l[1])}`:`${m(E.re)} ± ${m(E.im)}j（复数）`;
+  const crs=Math.abs(cr(+$('phi6').value)),vv=$('v6');
+  if(!E.real){vv.textContent='没有实特征向量：Av 永远不和 v 同向（讲义第 4 页：旋转矩阵 θ ≠ 0 时没有实特征向量）';vv.style.color=css('--red');}
+  else if(crs<0.02*hi){const lam=(v[0]*Av[0]+v[1]*Av[1]);vv.textContent=`v 是特征向量：Av = ${m(lam)} v`;vv.style.color=css('--purple');}
+  else{vv.textContent=`Av 和 v 不共线（夹角 ${fmt(Math.acos(Math.max(-1,Math.min(1,(v[0]*Av[0]+v[1]*Av[1])/Math.hypot(...Av))))/D2R,1)}°）；转到紫线上试试`+(Math.abs(b-c)<1e-9?'':'（这个矩阵不对称，两条特征方向不垂直）');vv.style.color=css('--ink');}
+  const eb=$('eigBtns'),key=E.real?E.v.map(e=>e.map(t=>t.toFixed(3)).join()).join('|'):'none';if(eb.dataset.k!==key){eb.dataset.k=key;eb.innerHTML='';if(E.real)E.v.forEach((e,i)=>{const q=document.createElement('button');q.textContent=`v 转到特征向量 ${'₁₂'[i]}`;q.onclick=()=>{$('phi6').value=Math.round((Math.atan2(e[1],e[0])/D2R+360)%360);Lab.draw(6);};eb.appendChild(q);});}
+}
+const setA=a=>{['a11','a12','a21','a22'].forEach((id,i)=>$(id).value=a[i]);};
+document.querySelectorAll('#lab6 [data-a]').forEach(q=>q.addEventListener('click',()=>{setA(q.dataset.a.split(',').map(Number));Lab.draw(6);}));
+['a11','a12','a21','a22','phi6'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(6)));setA([6.25,1.299,1.299,4.75]);
+Lab.add(6,lab6,{tf:260,cr:260});
+/* ---------- Lab 7: PCA ---------- */
+const PD={ex:[[1,1],[0,0],[-1,-1]],q4:[[1,0.8],[4,2],[2,2],[2.5,1.5],[3,1.5]],q5:[[0.35,0.71],[0.25,-0.49],[-0.11,0.21],[-0.07,0.15],[0.74,-0.49],[-1.77,3.55]],q6:[[2.5,-16],[-3,11.5],[0,-3.5],[7,-38.5],[-6,28.5],[3.5,-21]],
+ rnd:(()=>{const r=rng(11),p=[];for(let i=0;i<40;i++){const a=gauss(r)*1.6,b=gauss(r)*0.5;p.push([+(a*0.8-b*0.6+1).toFixed(2),+(a*0.6+b*0.8+0.5).toFixed(2)]);}return p;})()};
+let k7='q4';
+function lab7(){
+  const X=PD[k7],N=X.length,mu=[X.reduce((s2,p)=>s2+p[0],0)/N,X.reduce((s2,p)=>s2+p[1],0)/N],Xc=X.map(p=>[p[0]-mu[0],p[1]-mu[1]]);pressGroup('#lab7 [data-p]',q=>q.dataset.p===k7);
+  const C=[[0,0],[0,0]];Xc.forEach(p=>{C[0][0]+=p[0]*p[0];C[0][1]+=p[0]*p[1];C[1][1]+=p[1]*p[1];});C[0][0]/=N-1;C[0][1]/=N-1;C[1][1]/=N-1;C[1][0]=C[0][1];
+  const E=eig2(C[0][0],C[0][1],C[1][0],C[1][1]),u1=E.v[0],th=+$('th7').value*D2R,u=[Math.cos(th),Math.sin(th)],vt=t=>{const w=[Math.cos(t),Math.sin(t)];return w[0]*w[0]*C[0][0]+2*w[0]*w[1]*C[0][1]+w[1]*w[1]*C[1][1];};
+  $('th7O').textContent=$('th7').value+'°';
+  const xs=X.map(p=>p[0]),ys=X.map(p=>p[1]),R=Math.max((Math.max(...ys)-Math.min(...ys))/2,(Math.max(...xs)-Math.min(...xs))/2/1.4,0.5)*1.25;
+  const span=R*2,st=[0.25,0.5,1,2,5,10,20,50].find(v=>span/v<=8)||100;
+  const g=frame($('pc'),(Math.max(...xs)+Math.min(...xs))/2,(Math.max(...ys)+Math.min(...ys))/2,R,{step:st,lab:1}),{x,X:Xp,Y:Yp}=g;x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  /* covariance ellipse (1 sd) */
+  const a1=Math.atan2(u1[1],u1[0]),s1=Math.sqrt(Math.max(E.l[0],0)),s2=Math.sqrt(Math.max(E.l[1],0));x.strokeStyle=css('--accent');x.globalAlpha=.6;x.lineWidth=1.4;x.beginPath();
+  for(let t=0;t<=360;t+=4){const c=Math.cos(t*D2R)*s1,s=Math.sin(t*D2R)*s2,px=mu[0]+c*Math.cos(a1)-s*Math.sin(a1),py=mu[1]+c*Math.sin(a1)+s*Math.cos(a1);t?x.lineTo(Xp(px),Yp(py)):x.moveTo(Xp(px),Yp(py));}x.stroke();x.globalAlpha=1;
+  x.strokeStyle=css('--purple');x.lineWidth=1.8;x.beginPath();x.moveTo(Xp(mu[0]-u[0]*R*3),Yp(mu[1]-u[1]*R*3));x.lineTo(Xp(mu[0]+u[0]*R*3),Yp(mu[1]+u[1]*R*3));x.stroke();
+  let err=0;Xc.forEach((p,i)=>{const t=p[0]*u[0]+p[1]*u[1],q=[mu[0]+t*u[0],mu[1]+t*u[1]];err+=(p[0]-t*u[0])**2+(p[1]-t*u[1])**2;x.strokeStyle=css('--amp');x.lineWidth=1.6;x.beginPath();x.moveTo(Xp(X[i][0]),Yp(X[i][1]));x.lineTo(Xp(q[0]),Yp(q[1]));x.stroke();
+    x.strokeStyle=css('--purple');x.lineWidth=1.4;x.beginPath();x.arcS(Xp(q[0]),Yp(q[1]),3.5,0,7);x.stroke();});
+  X.forEach(p=>dot(x,Xp(p[0]),Yp(p[1]),css('--blue'),4.5));
+  [[u1,s1,'u₁'],[E.v[1],s2,'u₂']].forEach(([e,sd,n])=>{if(sd>1e-6){arrow(x,Xp(mu[0]),Yp(mu[1]),Xp(mu[0]+e[0]*sd),Yp(mu[1]+e[1]*sd),css('--ink'),2.4,9);label(x,n,Xp(mu[0]+e[0]*sd)+5,Yp(mu[1]+e[1]*sd)-5,css('--ink'),12);}});
+  x.strokeStyle=css('--ink');x.lineWidth=2;x.beginPath();x.moveTo(Xp(mu[0])-6,Yp(mu[1]));x.lineTo(Xp(mu[0])+6,Yp(mu[1]));x.moveTo(Xp(mu[0]),Yp(mu[1])-6);x.lineTo(Xp(mu[0]),Yp(mu[1])+6);x.stroke();x.restore();
+  err/=N-1;
+  const [cx,W,H]=fit($('vt')),top=E.l[0]*1.15||1,bx=axes(cx,W,H,{x0:0,x1:180,y0:0,y1:top,xt:[0,45,90,135,180],yt:[0,+E.l[1].toFixed(3),+E.l[0].toFixed(3)],title:'方向 u 上的方差 uᵀCu',xl:'u 的角度（°）',pl:54});
+  plot(cx,bx.X,bx.Y,t=>vt(t*D2R),0,180,css('--accent'),2.4);
+  const t1=((Math.atan2(u1[1],u1[0])/D2R)%180+180)%180;cx.strokeStyle=css('--purple');cx.setLineDash([3,3]);cx.beginPath();cx.moveTo(bx.X(t1),bx.pt);cx.lineTo(bx.X(t1),H-bx.pb);cx.stroke();cx.setLineDash([]);
+  text(cx,`λ₁ = ${m(E.l[0])}`,Math.min(bx.X(t1)+4,W-80),bx.Y(E.l[0])+14,css('--purple'),11);dot(cx,bx.X(+$('th7').value),bx.Y(vt(th)),css('--amp'),6);
+  $('r7m').textContent=`(${m(mu[0])}, ${m(mu[1])})`;$('r7c').textContent=`[${m(C[0][0])}, ${m(C[0][1])}; ${m(C[1][0])}, ${m(C[1][1])}]`;$('r7l').textContent=`${m(E.l[0])}, ${m(E.l[1])}`;
+  $('r7u').textContent=`±(${m(u1[0])}, ${m(u1[1])})`;$('r7v').textContent=m(vt(th));$('r7e').textContent=m(err);
+  const v=$('v7');const at=Math.abs(vt(th)-E.l[0])<1e-3*Math.max(1,E.l[0]);v.textContent=at?`u 在第一主成分方向：方差最大 = λ₁ = ${m(E.l[0])}，误差最小 = λ₂ = ${m(E.l[1])}；两者之和 = tr C = ${m(C[0][0]+C[1][1])}`:`方差 ${m(vt(th))} + 误差 ${m(err)} = tr C = ${m(C[0][0]+C[1][1])}（总方差不变，方向只决定怎么分）`;v.style.color=at?css('--purple'):css('--ink');
+}
+document.querySelectorAll('#lab7 [data-p]').forEach(q=>q.addEventListener('click',()=>{k7=q.dataset.p;Lab.draw(7);}));
+$('th7').addEventListener('input',()=>Lab.draw(7));
+$('toPC').addEventListener('click',()=>{const X=PD[k7],N=X.length,mu=[0,1].map(i=>X.reduce((s2,p)=>s2+p[i],0)/N);let a=0,b=0,c=0;X.forEach(p=>{const dx=p[0]-mu[0],dy=p[1]-mu[1];a+=dx*dx;b+=dx*dy;c+=dy*dy;});const E=eig2(a,b,b,c),e=E.v[0];$('th7').value=(((Math.atan2(e[1],e[0])/D2R)%180+180)%180).toFixed(1);Lab.draw(7);});
+Lab.add(7,lab7,{pc:260,vt:260});
 Lab.start();
 </script>
 </body></html>
