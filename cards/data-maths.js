@@ -368,4 +368,24 @@ D('MA','MA9','向量空间 3：线性无关、基与 Gram–Schmidt','3eb202737d
 ['fix',r`讲义 Week 9（Spring Week 8）的笔误`,r`第 4 页最后一步消元写的是「$5r_1+3r_2,5r_3-7r_2$」，实际是两行各除以 5；第 5 页「ℝ² 两向量相关 ⇔ 同方向」应为同向或反向（共线）；第 12 页式 (52) 用 0.92 应为 0.93，式 (50)–(51) 多了右括号；第 5 页式 (19) 用 × 表示数乘，别和叉乘混；Tutorial 题目页头写「Tutorial sheet 18 (Spring term week 8)」，Q5 说「Extrapolating from Questions 4 and 5」应为 1 和 4`],
 ]);
 
+D('MB','MB10','向量微积分 4：面积分、散度与旋度','3eb202737d7a810481dfceb8a751f216',[
+['q',r`向量函数的面积分 $\iint_S\mathbf F\cdot\mathbf n\,dA$ 算的是什么？`,r`F 垂直穿过曲面的分量在整个曲面上的总和。n 是曲面的单位法向量，dA 是曲面上的一小块面积。F 是流速（乘密度）时，结果就是每秒穿过曲面的流量，叫通量（flux）`],
+['q',r`曲面怎么参数化？和曲线有什么区别？`,r`曲线用 1 个参数 t，曲面用 2 个参数 u、v：$\mathbf r(u,v)=[x(u,v),y(u,v),z(u,v)]$。例：半径 R 的圆柱侧面 $(R\cos u,R\sin u,v)$；竖直曲面 $y=g(x)$ 取 x = u、z = v，得 $\mathbf r=[u,g(u),v]$`],
+['q',r`曲面的法向量 N 怎么求？为什么用叉乘？`,r`$\mathbf r_u=\frac{\partial\mathbf r}{\partial u}$、$\mathbf r_v=\frac{\partial\mathbf r}{\partial v}$ 是曲面上两条切向量，张成切平面；叉乘垂直于两者，所以 $\mathbf N=\mathbf r_u\times\mathbf r_v$ 垂直于曲面。单位法向量 $\mathbf n=\mathbf N/|\mathbf N|$。尖点、棱上没有法向量`],
+['q',r`面积分的计算公式？为什么 dA 消失了？`,r`$$\iint_S\mathbf F\cdot\mathbf n\,dA=\iint_R\mathbf F(\mathbf r(u,v))\cdot\mathbf N(u,v)\,du\,dv$$
+因为 $\mathbf n\,dA=\mathbf n|\mathbf N|du\,dv=\mathbf N\,du\,dv$：|N| 是从 u-v 平面到曲面的面积放大倍数（雅可比），正好把 n 的分母约掉`],
+['q',r`讲义例 1：$y=x^2$（0 ≤ x ≤ 2，0 ≤ z ≤ 3），$\mathbf F=[3z^2,6,6xz]$ 的通量？`,r`$\mathbf r=[u,u^2,v]$，$\mathbf r_u=[1,2u,0]$，$\mathbf r_v=[0,0,1]$，$\mathbf N=[2u,-1,0]$。$\mathbf F(S)=[3v^2,6,6uv]$，$\mathbf F\cdot\mathbf N=6uv^2-6$。$\int_0^3\int_0^2(6uv^2-6)\,du\,dv=\int_0^3(12v^2-12)\,dv=108-36=72$ m³/s`],
+['q',r`通量算出来是负的说明什么？`,r`流体从 N 的反方向穿过曲面。N 的方向由 $\mathbf r_u\times\mathbf r_v$ 的顺序决定，换成 $\mathbf r_v\times\mathbf r_u$ 结果变号。课上例 4（$y=x$，F = (x, 2y, z)）：$\mathbf N=(1,-1,0)$，$\mathbf F\cdot\mathbf N=-u$，通量 −18`],
+['q',r`散度的定义和含义？`,r`$\operatorname{div}\mathbf F=\nabla\cdot\mathbf F=\frac{\partial F_1}{\partial x}+\frac{\partial F_2}{\partial y}+\frac{\partial F_3}{\partial z}$，作用在向量上、结果是标量。含义：一点处「流出 − 流入」的强度（每单位体积）。正 = 源，负 = 汇；不可压缩流体 $\nabla\cdot\mathbf v=0$`],
+['q',r`旋度的定义和含义？`,r`$$\operatorname{curl}\mathbf F=\nabla\times\mathbf F=\begin{vmatrix}\mathbf i&\mathbf j&\mathbf k\\\partial_x&\partial_y&\partial_z\\F_1&F_2&F_3\end{vmatrix}=\left(\tfrac{\partial F_3}{\partial y}-\tfrac{\partial F_2}{\partial z}\right)\mathbf i+\left(\tfrac{\partial F_1}{\partial z}-\tfrac{\partial F_3}{\partial x}\right)\mathbf j+\left(\tfrac{\partial F_2}{\partial x}-\tfrac{\partial F_1}{\partial y}\right)\mathbf k$$
+结果是向量：流体微团绕哪个轴转（方向）、转多快（大小 = 2 × 角速度）。保守场 curl F = 0`],
+['q',r`讲义例：$\mathbf F=2xy^2\mathbf i-3(x^2y+y^2z^3)\mathbf j+2y^2z\mathbf k$ 在 (2, 1, −1) 的散度和旋度？`,r`div F $=2y^2-3(x^2+2yz^3)+2y^2$，代入 $2-3(4-2)+2=-2$。curl F $=(4yz+9y^2z^2)\mathbf i+0\mathbf j-10xy\,\mathbf k$，代入 $5\mathbf i+0\mathbf j-20\mathbf k$`],
+['q',r`三个恒等式：curl grad、div curl、div grad？`,r`$\nabla\times(\nabla f)=0$（梯度场不转，也是保守场 curl = 0 的原因）；$\nabla\cdot(\nabla\times\mathbf F)=0$（Tutorial Q1 验证）；$\nabla\cdot(\nabla f)=\nabla^2f$（拉普拉斯算子）。curl div F 没有意义：div F 是标量`],
+['q',r`为什么剪切流 $\mathbf F=(y,0)$ 箭头都平行却有旋度？`,r`$\operatorname{curl}_z=\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}=0-1=-1$。上面流得快、下面流得慢，放一个小风车，上面的叶片被推得多，顺时针转。旋度看的是「速度在横向上的变化」，不是箭头是否绕圈；反过来 $(x,y)/r^2$ 箭头发散，除原点外散度却是 0`],
+['q',r`Tutorial Q5：点电荷场 $\mathbf F=A\frac{x\mathbf i+y\mathbf j+z\mathbf k}{(x^2+y^2+z^2)^{3/2}}$ 的散度和旋度？`,r`$\frac{\partial F_1}{\partial x}=A\frac{r^2-3x^2}{r^5}$，三项相加 $A\frac{3r^2-3r^2}{r^5}=0$（原点除外）；旋度各分量如 $\frac{\partial F_3}{\partial y}-\frac{\partial F_2}{\partial z}=-3Ayz/r^5+3Ayz/r^5=0$。静电场无旋（保守），电荷以外无源`],
+['q',r`高斯散度定理、格林定理、斯托克斯定理各说什么？（不考）`,r`高斯：$\iiint_T\operatorname{div}\mathbf F\,dV=\oiint_S\mathbf F\cdot\mathbf n\,dA$（体积内总的源 = 流出闭合曲面的通量）。格林：$\iint_R\left(\frac{\partial F_2}{\partial x}-\frac{\partial F_1}{\partial y}\right)dx\,dy=\oint_C(F_1dx+F_2dy)$。斯托克斯：$\iint_S(\operatorname{curl}\mathbf F)\cdot\mathbf n\,dA=\oint_C\mathbf F\cdot d\mathbf r$`],
+['err',r`易错：面积分和旋度的计算细节`,r`① F 要先代入曲面上的点（写成 u、v），再和 N 点乘；② 积分限：u、v 分别对应原来的变量范围，限里含 u 的那层先积（课上例 5 的 z 上限是 $xy=u^4$）；③ 旋度 j 分量是 $\frac{\partial F_1}{\partial z}-\frac{\partial F_3}{\partial x}$，行列式展开时 j 前面有负号，最容易错符号；④ 散度是标量，旋度是向量`],
+['fix',r`本周资料里的错误`,r`Tutorial 4 答案 Q2 curl 的 j 分量写成 $-xy(2+x\cos(x^2yz))$，应为 $-xy(2-x\cos(x^2yz))$（在 P 点 y = 0，结果 i − 2k 不受影响）；讲义第 41 页 $\operatorname{div}\operatorname{grad}f=\nabla\cdot(\nabla\cdot f)$ 应为 $\nabla\cdot(\nabla f)$；第 45 页椭圆写成 $\frac{x^2}{a}+\frac{y^2}{b}=1$，应为 $a^2$、$b^2$；课上例 1 的 $\partial F_3/\partial z$ 漏了 y 的平方，散度应为 −34（扫描件上已有橙色批注）`],
+]);
+
 })();

@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量微积分实验室</title>
-<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
+<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩；散度看一小团流体涨不涨，旋度看它转不转。对应 B · Week 7 起的向量微积分。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩；散度看一小团流体涨不涨，旋度看它转不转。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART B · VECTOR CALCULUS</div>
   <h1>向量微积分实验室</h1>
-  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩。对应 B · Week 7 起的向量微积分。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a><a href="#lab3">实验 3 线积分与做功</a><a href="#lab4">实验 4 二重积分与切条</a></nav>
+  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点；二重积分先切条再把条加起来，可以算面积、形心和二阶矩；散度看一小团流体涨不涨，旋度看它转不转。对应 B · Week 7 起的向量微积分。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a><a href="#lab3">实验 3 线积分与做功</a><a href="#lab4">实验 4 二重积分与切条</a><a href="#lab5">实验 5 散度与旋度</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -70,6 +70,18 @@
   <div class="stage even"><canvas id="rg" height="330" aria-label="区域和切条"></canvas><canvas id="sf" height="330" aria-label="每一条的积分值"></canvas></div>
   <div class="read"><div><small>N 条近似</small><b id="r4n"></b></div><div><small>精确值</small><b id="r4e"></b></div><div><small>面积 A</small><b id="r4a"></b></div><div><small>形心 (x̄, ȳ)</small><b id="r4c"></b></div><div><small>I_xx = ∬y² dA</small><b id="r4ix"></b></div><div><small>I_yy = ∬x² dA</small><b id="r4iy"></b></div></div>
   <p class="note"><strong>换积分次序：</strong>结果不变（讲义「Does order matter? No, just get limits right」），但上下限要重写：竖条的内层限是「下边界 y = … 到上边界 y = …」（x 的函数），外层是常数；横条反过来，有时一种切法要拆成两段（x² 与 x + 2 的横条在 y = 1 处要拆）。最外层的上下限一定是常数。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 散度与旋度（Week 10）</div>
+  <h2>散度看「涨不涨」，旋度看「转不转」</h2>
+  <p class="lead">灰色箭头是二维向量场 F = (P, Q)。拖动探针点：小圆周上的短线是 F·n（往外为绿、往里为红），往外的总量减往里的总量，除以面积就是散度 div F = ∂P/∂x + ∂Q/∂y。中间的小风车转速 = 旋度的一半，curl F 的 z 分量 = ∂Q/∂x − ∂P/∂y，逆时针为正。按「▶ 放一团墨水」看一小团流体随流动变形：面积按 e^(div·t) 涨缩，同时整体转动。</p>
+  <div class="btns" role="group" aria-label="向量场"><button data-f5="src">源 (x, y)</button><button data-f5="sink">汇 (−x, −y)</button><button data-f5="vort">旋转 (−y, x)</button><button data-f5="shear">剪切 (y, 0)</button><button data-f5="saddle">鞍形 (x, −y)</button><button data-f5="r2">点源 (x, y)/r²</button></div>
+  <div class="controls"><div class="ctl"><label for="t5">墨水流动时间 t</label><input id="t5" type="range" min="0" max="1000" step="1" value="0"><output id="t5O"></output></div><div class="btns"><button id="p5" class="play">▶ 放一团墨水</button></div></div>
+  <p class="verdict" id="v5"></p>
+  <div class="stage one"><canvas id="dc" height="360" aria-label="向量场、探针、风车和墨水团，可拖动探针" style="touch-action:none;cursor:crosshair"></canvas></div>
+  <div class="read"><div><small>探针 P</small><b id="r5p"></b></div><div><small>F(P)</small><b id="r5f"></b></div><div><small>div F = ∂P/∂x + ∂Q/∂y</small><b id="r5d"></b></div><div><small>curl F（z 分量）= ∂Q/∂x − ∂P/∂y</small><b id="r5c"></b></div><div><small>墨水面积 / 初始面积</small><b id="r5a"></b></div><div><small>e^(div·t)</small><b id="r5e"></b></div></div>
+  <p class="note"><strong>几个要点：</strong>「旋转」场的箭头绕圈但散度为 0（不涨不缩）；「剪切」场箭头全是平行的，却有旋度：上下流速不同，风车会转。「鞍形」散度、旋度都是 0：墨水被拉长压扁，但面积不变、不转。「点源」(x, y)/r² 在原点以外散度为 0，所有通量都来自原点那一点（Tutorial Q5 的三维点电荷场也一样）。保守场（F = ∇φ）的旋度一定为 0：curl grad φ = 0。</p>
 </section>
 </div>
 
@@ -320,6 +332,47 @@ document.querySelectorAll('#lab4 [data-r4]').forEach(q=>q.addEventListener('clic
 document.querySelectorAll('#lab4 [data-f4]').forEach(q=>q.addEventListener('click',()=>{f4=q.dataset.f4;Lab.draw(4);}));
 ['o4','n4','k4'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 Lab.add(4,lab4,{rg:250,sf:250});
+
+/* ---------- Lab 5: divergence and curl ---------- */
+const F5={src:{n:'F = (x, y)',f:(x,y)=>[x,y],P:[0.8,0.6]},sink:{n:'F = (−x, −y)',f:(x,y)=>[-x,-y],P:[1.4,0.9]},vort:{n:'F = (−y, x)',f:(x,y)=>[-y,x],P:[1,0.5]},
+ shear:{n:'F = (y, 0)',f:(x,y)=>[y,0],P:[-0.5,0.4]},saddle:{n:'F = (x, −y)',f:(x,y)=>[x,-y],P:[0.3,1.2]},r2:{n:'F = (x, y)/r²',f:(x,y)=>{const q=x*x+y*y;return [x/q,y/q];},P:[0.9,0.7],sing:true}};
+let k5='src',P5=[...F5.src.P],g5=null,play5=false;
+const d5=(F,x,y)=>{const h=1e-4,a=F(x+h,y),b=F(x-h,y),c=F(x,y+h),d=F(x,y-h);return {div:(a[0]-b[0])/(2*h)+(c[1]-d[1])/(2*h),curl:(a[1]-b[1])/(2*h)-(c[0]-d[0])/(2*h)};};
+function adv(F,p,T,n=60){let [x,y]=p;const h=T/n;for(let i=0;i<n;i++){const k1=F(x,y),k2=F(x+h/2*k1[0],y+h/2*k1[1]),k3=F(x+h/2*k2[0],y+h/2*k2[1]),k4=F(x+h*k3[0],y+h*k3[1]);x+=h/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]);y+=h/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1]);}return [x,y];}
+const area=pts=>{let a=0;for(let i=0;i<pts.length;i++){const [x1,y1]=pts[i],[x2,y2]=pts[(i+1)%pts.length];a+=x1*y2-x2*y1;}return Math.abs(a)/2;};
+function lab5(){
+  const F=F5[k5],t=+$('t5').value/1000*1.0;pressGroup('#lab5 [data-f5]',b=>b.dataset.f5===k5);$('t5O').textContent=t.toFixed(2);
+  const g=frame3($('dc'),{xr:[-2.2,2.2],yr:[-2.2,2.2]});g5=g;const {x,X,Y}=g;x.save();x.beginPath();x.rect(g.pl,g.pt,g.pw,g.ph);x.clip();
+  const nc=Math.max(10,Math.round(g.pw/34)),cs=g.pw/nc,nr=Math.max(6,Math.round(g.ph/cs)),cy=g.ph/nr,cells=[],mags=[];
+  for(let j=0;j<nr;j++)for(let i=0;i<nc;i++){const px=g.pl+(i+.5)*cs,py=g.pt+(j+.5)*cy,a=g.iX(px),b=g.iY(py);if(F.sing&&Math.hypot(a,b)<0.25)continue;const [P,Q]=F.f(a,b),M=Math.hypot(P,Q);cells.push([px,py,P,Q,M]);mags.push(M);}
+  mags.sort((a,b)=>a-b);const Mref=mags[Math.floor(mags.length*0.9)]||1;
+  x.globalAlpha=.5;cells.forEach(([px,py,P,Q,M])=>{if(M<1e-9)return;const dx=P*g.sx,dy=-Q*g.sy,n=Math.hypot(dx,dy),L=Math.min(cs,cy)*0.42*(0.3+0.7*Math.min(1,Math.sqrt(M/Mref)));arrow(x,px-dx/n*L/2,py-dy/n*L/2,px+dx/n*L/2,py+dy/n*L/2,css('--muted'),1.3,5);});x.globalAlpha=1;
+  if(F.sing){dot(x,X(0),Y(0),css('--red'),5);}
+  const [px,py]=P5,{div,curl}=d5(F.f,px,py),R0=0.38;
+  /* ink blob */
+  const N=64,blob0=Array.from({length:N},(_,i)=>[px+R0*Math.cos(2*Math.PI*i/N),py+R0*Math.sin(2*Math.PI*i/N)]),blob=t>0?blob0.map(p=>adv(F.f,p,t)):blob0;
+  if(t>0){x.fillStyle=css('--fillA');x.strokeStyle=css('--amp');x.lineWidth=1.8;x.beginPath();blob.forEach(([a,b],i)=>i?x.lineTo(X(a),Y(b)):x.moveTo(X(a),Y(b)));x.closePath();x.fill();x.stroke();
+    const mk=[0,N/4,N/2,3*N/4].map(i=>blob[i]);mk.forEach(([a,b],i)=>dot(x,X(a),Y(b),i?css('--amp'):css('--ink'),i?3:4.5));}
+  /* flux ticks on circle */
+  x.setLineDash([3,3]);x.strokeStyle=css('--muted');x.lineWidth=1;x.beginPath();x.arc(X(px),Y(py),R0*g.sx,0,7);x.stroke();x.setLineDash([]);
+  let fl=[];for(let i=0;i<16;i++){const a=2*Math.PI*i/16,qx=px+R0*Math.cos(a),qy=py+R0*Math.sin(a),[P,Q]=F.f(qx,qy);fl.push([a,P*Math.cos(a)+Q*Math.sin(a)]);}
+  const fm=Math.max(...fl.map(q=>Math.abs(q[1])),1e-9);fl.forEach(([a,fn])=>{const L=16*fn/fm,x0=X(px)+R0*g.sx*Math.cos(a),y0=Y(py)-R0*g.sy*Math.sin(a);if(Math.abs(L)<1)return;arrow(x,x0,y0,x0+L*Math.cos(a),y0-L*Math.sin(a),fn>0?css('--green'):css('--red'),2,6);});
+  /* paddle wheel */
+  const ang=curl/2*(play5||t>0?t:0)*1.0,wr=R0*g.sx*0.8;x.strokeStyle=css('--purple');x.lineWidth=3;for(let i=0;i<4;i++){const a=ang+i*Math.PI/2;x.beginPath();x.moveTo(X(px),Y(py));x.lineTo(X(px)+wr*Math.cos(a),Y(py)-wr*Math.sin(a));x.stroke();dot(x,X(px)+wr*Math.cos(a),Y(py)-wr*Math.sin(a),css('--purple'),3);}
+  dot(x,X(px),Y(py),css('--ink'),4);x.restore();
+  {x.font=`12px ${css('--body')}`;const tw=x.measureText(F.n).width;x.fillStyle=css('--panel');x.globalAlpha=.88;x.fillRect(g.pl+2,g.pt+3,tw+10,18);x.globalAlpha=1;text(x,F.n,g.pl+6,g.pt+16,css('--ink'),12);}
+  const [Fx,Fy]=F.f(px,py),ar=area(blob)/area(blob0);
+  $('r5p').textContent=`(${m(px)}, ${m(py)})`;$('r5f').textContent=`(${m(Fx)}, ${m(Fy)})`;$('r5d').textContent=m(Math.abs(div)<1e-6?0:div);$('r5c').textContent=m(Math.abs(curl)<1e-6?0:curl);$('r5a').textContent=m(ar);$('r5e').textContent=m(Math.exp(div*t));
+  const v=$('v5'),dv=Math.abs(div)<1e-6?0:div,cu=Math.abs(curl)<1e-6?0:curl;
+  v.textContent=(dv>0?'散度为正：圆周上往外流的多（源），墨水面积变大':dv<0?'散度为负：往里流的多（汇），墨水面积变小':'散度为 0：流进等于流出，墨水面积不变')+'；'+(cu>0?'旋度为正：风车逆时针转':cu<0?'旋度为负：风车顺时针转':'旋度为 0：风车不转');v.style.color=css('--ink');
+}
+(()=>{const cv=$('dc');let on=false;const set=e=>{const g=g5;if(!g)return;const r=cv.getBoundingClientRect();let a=g.iX(e.clientX-r.left),b=g.iY(e.clientY-r.top);a=Math.max(-2,Math.min(2,a));b=Math.max(-2,Math.min(2,b));if(F5[k5].sing&&Math.hypot(a,b)<0.45){const q=Math.hypot(a,b)||1;a=a/q*0.45;b=b/q*0.45;}P5=[a,b];Lab.draw(5);};
+  cv.addEventListener('pointerdown',e=>{on=true;cv.setPointerCapture(e.pointerId);set(e);});cv.addEventListener('pointermove',e=>{if(on)set(e);});cv.addEventListener('pointerup',()=>on=false);})();
+document.querySelectorAll('#lab5 [data-f5]').forEach(b=>b.addEventListener('click',()=>{k5=b.dataset.f5;P5=[...F5[k5].P];$('t5').value=0;Lab.draw(5);}));
+$('t5').addEventListener('input',()=>{play5=false;$('p5').textContent='▶ 放一团墨水';Lab.draw(5);});
+const a5=Lab.anim(5,$('dc'),dt=>{let v=+$('t5').value+dt*1000/2.5;if(v>=1000){v=1000;play5=false;$('p5').textContent='▶ 放一团墨水';}$('t5').value=Math.round(v);Lab.draw(5);},()=>play5);
+$('p5').addEventListener('click',()=>{play5=!play5;if(play5&&+$('t5').value>=1000)$('t5').value=0;$('p5').textContent=play5?'⏸ 暂停':'▶ 放一团墨水';Lab.kick(a5);Lab.draw(5);});
+Lab.add(5,lab5,{dc:300});
 Lab.start();
 </script>
 </body></html>
