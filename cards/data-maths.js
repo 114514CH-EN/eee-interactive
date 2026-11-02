@@ -312,4 +312,23 @@ D('MB','MB8','向量微积分 2：线积分与做功','3eb202737d7a816f81dac1d2e
 ['fix',r`本周资料里的笔误`,r`讲义第 43 页 $\mathbf r'=\frac{d\mathbf r}{dt}$ 后面漏了等号；课上例 5 写「$\frac{Q}{4\pi\varepsilon_0}$ = 10 C」，单位应为 V·m；$W_{AC}$ 中间一步 $3.88\times10^{-19}[-1+\frac13]$ 写成正的 $2.586\times10^{-19}$，漏了负号（最后结果 $-2.59\times10^{-19}$ J 对）`],
 ]);
 
+D('MA','MA8','向量空间 2：向量空间、内积与范数','3eb202737d7a8103aad9d6b700342a6f',[
+['q',r`向量空间由哪四样东西组成？什么叫线性运算？`,r`一组向量 V、一组标量 S（实数 ℝ 或复数 ℂ）、标量乘法规则、向量加法规则。只用到「标量乘」和「向量加」的运算叫线性运算（linear operations）。向量空间也叫线性空间，研究它的分支是线性代数，它是线性系统的数学基础`],
+['q',r`向量空间的定义要满足哪些条件？`,r`封闭：$\lambda v\in\mathbb V$、$v+w\in\mathbb V$；$\lambda(v+w)=\lambda v+\lambda w$；有唯一的零向量 0 和唯一的负向量 −v；$u+v=v+u$；$(u+v)+w=u+(v+w)$；$(\lambda+\mu)v=\lambda v+\mu v$；$\lambda(\mu v)=(\lambda\mu)v$；$1v=v$。后面这些平时默认成立，真正要检查的是封闭性和零向量`],
+['q',r`什么是封闭性？为什么单位圆盘 $\{\|v\|\le1\}$ 不是向量空间？`,r`封闭：对空间里的向量做标量乘、加法，结果必须还在这个集合里。单位圆盘里 $u_1=(1,0)$、$u_2=(0,1)$ 都在，但 $u_1+u_2=(1,1)$ 长度 $\sqrt2>1$，跑出去了，所以不是向量空间（讲义第 3 页）`],
+['q',r`内积要满足哪四条？`,r`$\langle v,w\rangle=\overline{\langle w,v\rangle}$；$\langle\lambda v,w\rangle=\bar\lambda\langle v,w\rangle$、$\langle v,\lambda w\rangle=\lambda\langle v,w\rangle$；$\langle u+v,w\rangle=\langle u,w\rangle+\langle v,w\rangle$；$\langle u,u\rangle\ge0$（且只有 u = 0 时为 0）。实向量空间里共轭可以忽略`],
+['q',r`复向量的点积为什么要取共轭？`,r`$v\cdot w=\bar v^Tw=\sum\bar v_nw_n$。不取共轭，长度就坏了：$v=(1,j)$ 时 $v^Tv=1+j^2=0$，非零向量「长度为 0」。取共轭后 $\bar v^Tv=\sum|v_n|^2=2$，是正实数，才能开方当长度`],
+['q',r`讲义例：$v=(2+3j,1-2j)$，$w=(1+4j,-2+2j)$，$v\cdot w$ 和 $w\cdot v$ 是多少？`,r`$v\cdot w=(2-3j)(1+4j)+(1+2j)(-2+2j)=(14+5j)+(-6-2j)=8+3j$。$w\cdot v=8-3j$，正好是共轭：复内积交换顺序要取共轭，不是相等`],
+['q',r`范数（norm）要满足什么？由内积怎样得到范数？`,r`$\|v\|\ge0$；$\|\lambda v\|=|\lambda|\|v\|$；$\|v+w\|\le\|v\|+\|w\|$（三角不等式）；$\|v\|=0\Rightarrow v=0$。任何内积都给出范数 $\|v\|=\sqrt{\langle v,v\rangle}$，实向量就是 $\sqrt{\sum v_n^2}$（欧氏长度）`],
+['q',r`怎样把向量变成单位向量？$(3,4)$ 的单位向量是什么？`,r`除以自己的范数：$\hat v=\frac{v}{\|v\|}$。$\|(3,4)\|=5$，$\hat v=(0.6,0.8)$，长度为 1、方向不变。ℝ² 最常见的单位向量是 $e_1=(1,0)$、$e_2=(0,1)$`],
+['q',r`两个实向量的夹角怎么算？为什么？`,r`$$\cos\theta=\frac{v\cdot w}{\|v\|\|w\|}$$
+二维证明：$\cos\theta_v=v_1/\|v\|$、$\sin\theta_v=v_2/\|v\|$，w 同理；$\theta=\theta_v-\theta_w$，用差角公式 $\cos(\theta_v-\theta_w)=\cos\theta_v\cos\theta_w+\sin\theta_v\sin\theta_w$，代进去就是 $\frac{v_1w_1+v_2w_2}{\|v\|\|w\|}$`],
+['q',r`和单位向量点乘有什么几何意义？`,r`i 是单位向量时，$v\cdot i=\|v\|\cos\theta$ = v 在 i 方向上的分量（投影长度，讲义图 2、式 (31)）。点积正：夹角小于 90°；为 0：垂直；为负：钝角`],
+['q',r`什么是子空间？ℝ² 有哪些子空间？`,r`$\mathbb U\subset\mathbb V$ 且 $(\mathbb U,\mathbb S)$ 本身是向量空间，关键是封闭：$u_1+\lambda u_2\in\mathbb U$。ℝ² 里过原点的直线 $\{\lambda u\}$ 都是子空间；另外 {0} 和 ℝ² 本身也算（讲义说「所有子空间都是这种形式」漏了这两个）。不过原点的直线不是（没有零向量）`],
+['q',r`Tutorial 8 Q1、Q2 的答案？`,r`Q1：$v\cdot w=\bar v^Tw=(-22-32j)+(-32+36j)+(34+18j)+(44-144j)=24-122j$。Q2：$\|v\|=\sqrt{|2+5j|^2+|-3-7j|^2+|10+2j|^2}=\sqrt{29+58+104}=\sqrt{191}\approx13.82$`],
+['q',r`TF-IDF 权重什么时候大？Q3 的余弦相似度怎么算？`,r`$w_{t,d}=f_{t,d}\cdot\log\frac{N}{N_t}$：词在这篇里出现多（f 大）、在整个语料里出现少（IDF 大）时大。每篇文档变成 V 维向量，$\text{CosSim}=\frac{vec(d_1)\cdot vec(d_2)}{\|vec(d_1)\|\|vec(d_2)\|}$。d₁、d₂ 共享 cat、dog：$\frac{(\ln2)^2+(\ln\frac43)^2}{1.722\times1.576}=0.21$。log 的底数不影响结果`],
+['err',r`易错：复内积的顺序和共轭`,r`本课约定 $v\cdot w=\bar v^Tw$：共轭的是第一个向量。$w\cdot v=\overline{v\cdot w}$，结果互为共轭。Q1 不取共轭会得到 $168-150j$（错）。范数一定是正实数：$|a+bj|^2=a^2+b^2$`],
+['fix',r`讲义 Week 8 的笔误`,r`第 6 页两处「Equation (??)」是 LaTeX 引用断了：分别指式 (15)（三角不等式）和式 (20)（欧氏范数）；式 (20) 求和上限写成 n，应为 N；第 8 页 $u_1+\lambda_2u_2$ 多了下标 2，应为 $u_1+\lambda u_2$；第 3 页把 $u+v=v+u$ 叫 symmetry，通常叫交换律（commutativity）`],
+]);
+
 })();

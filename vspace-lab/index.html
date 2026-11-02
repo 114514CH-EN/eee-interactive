@@ -1,21 +1,21 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量空间实验室</title>
-<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
+<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="../assets/common.css">
 <script src="../assets/common.js"></script>
-<style>.ctl select{width:100%}html.embed #lab2 .scroll{display:none}html.embed #lab2 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
+<style>.ctl select{width:100%}.ctl input[type=text]{width:100%}#lab4 table.mini{margin-top:4px}#lab4 table.mini th{white-space:nowrap}html.embed #lab2 .scroll{display:none}html.embed #lab2 .stage.one{grid-template-columns:minmax(0,1fr)}</style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · VECTOR SPACES</div>
   <h1>向量空间实验室</h1>
-  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优。对应 A · Week 7 起的向量空间。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a></nav>
+  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a><a href="#lab3">实验 3 内积、夹角与投影</a><a href="#lab4">实验 4 TF-IDF 余弦相似度</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -41,6 +41,25 @@
   <div class="read"><div><small>迭代次数 i</small><b id="r2i"></b></div><div><small>Distortion（到最近中心的平均距离）</small><b id="r2d"></b></div><div><small>这一步改了归属的点数</small><b id="r2c"></b></div><div><small>当前中心</small><b id="r2k"></b></div></div>
   <div class="scroll"><table class="mini" id="dtab"></table></div>
   <p class="note"><strong>为什么取平均：</strong>中心取簇内点的平均，正好让「平方欧氏距离之和」最小（讲义式 (16)–(17)）。讲义例题用 d₁ 分配、用平均更新，Tutorial Q3 第 4 问也这样做。坏初值的例子里左上一团被两个中心瓜分、另外两团共用一个中心，distortion 更大，但算法已经停住了，这就是「只保证局部最优」（Tutorial Q4）。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 内积、夹角与投影（Week 8）</div>
+  <h2>点积 = 长度 × 长度 × cos θ</h2>
+  <p class="lead">拖动 v、w 两个箭头的尖端。紫色虚线把 v 投影到 w 的方向上，投影长度 d = v·ŵ（讲义图 2）。cos θ = v·w / (‖v‖‖w‖)：同向为 1、垂直为 0、反向为 −1。右图：两个向量长度不变、只改夹角时，点积沿余弦曲线变化。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-v="3,1,1,2">夹角 45°</button><button data-v="2,1,-1,2">垂直：v·w = 0</button><button data-v="1,2,2.5,5">同方向：cos θ = 1</button><button data-v="3,1,-2,-0.5">钝角：v·w 为负</button></div>
+  <div class="stage even"><canvas id="ip" height="320" aria-label="两个向量、夹角和投影，可拖动箭头尖端" style="touch-action:none;cursor:grab"></canvas><canvas id="csn" height="320" aria-label="点积随夹角的变化"></canvas></div>
+  <div class="read"><div><small>v, w</small><b id="r3vw"></b></div><div><small>v·w = v₁w₁ + v₂w₂</small><b id="r3d"></b></div><div><small>‖v‖, ‖w‖</small><b id="r3n"></b></div><div><small>cos θ → θ</small><b id="r3c"></b></div><div><small>投影 d = v·ŵ</small><b id="r3p"></b></div></div>
+</section>
+
+<section class="panel" id="lab4">
+  <div class="tag">实验 4 · TF-IDF 余弦相似度（Week 8 Tutorial Q3）</div>
+  <h2>文档变成向量，相似度就是夹角的余弦</h2>
+  <p class="lead">每行一篇（已预处理）的文档，可以改。IDF(t) = log(N / Nₜ)，权重 w = 词频 × IDF；每篇文档变成一个 V 维向量，两两算 cos θ。log 用哪个底数都一样：换底只是把所有权重乘同一个常数，cos θ 不变。</p>
+  <div class="controls" id="docs"><div class="ctl"><label for="dq1">d₁</label><input id="dq1" type="text" value="cat sit dog mat"><span></span></div><div class="ctl"><label for="dq2">d₂</label><input id="dq2" type="text" value="dog chase cat"><span></span></div><div class="ctl"><label for="dq3">d₃</label><input id="dq3" type="text" value="mouse stay home"><span></span></div><div class="ctl"><label for="dq4">d₄</label><input id="dq4" type="text" value="dog sit dog"><span></span></div><div class="ctl"><label for="dqq">查询 q</label><input id="dqq" type="text" value="dog cat"><span></span></div></div>
+  <div class="scroll"><table class="mini" id="tfw"></table></div>
+  <div class="scroll"><table class="mini" id="sim"></table></div>
+  <p class="note"><strong>为什么用角度而不是距离：</strong>一篇文档复制两遍，词频全部翻倍，向量变长但方向不变，内容其实一样。cos θ 只看方向，所以相似度还是 1；欧氏距离却会变大。Tutorial 答案 CosSim(d₁, d₂) = 0.21，表里可以直接看到。</p>
 </section>
 </div>
 
@@ -122,6 +141,48 @@ document.querySelectorAll('#lab2 [data-k]').forEach(b=>b.addEventListener('click
 let acc2=0;const a2=Lab.anim(2,$('km2'),dt=>{acc2+=dt;if(acc2>0.9){acc2=0;if(S2.done){play2=false;$('kplay').textContent='▶ 自动';}else step2();}},()=>play2);
 $('kplay').addEventListener('click',()=>{if(S2.done)reset2();play2=!play2;$('kplay').textContent=play2?'⏸ 暂停':'▶ 自动';Lab.kick(a2);Lab.draw(2);});
 Lab.add(2,lab2,{km2:300});
+
+/* ---------- Lab 3: inner product, angle, projection; TF-IDF ---------- */
+let V3=[3,1],W3=[1,2],g3=null,drag3=null;
+function lab3(){
+  const g=frame($('ip'),1.3,1.1,2.9,{step:1});g3=g;const {x,X,Y}=g;const [v1,v2]=V3,[w1,w2]=W3;
+  const dv=v1*w1+v2*w2,nv=Math.hypot(v1,v2),nw=Math.hypot(w1,w2),c=nv*nw>1e-12?dv/(nv*nw):NaN,th=Math.acos(Math.max(-1,Math.min(1,c)))/D2R,pd=nw>1e-12?dv/nw:NaN;
+  x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  if(nw>1e-9){const u=[w1/nw,w2/nw],L=20;x.strokeStyle=css('--muted');x.setLineDash([2,5]);x.lineWidth=1;x.beginPath();x.moveTo(X(-u[0]*L),Y(-u[1]*L));x.lineTo(X(u[0]*L),Y(u[1]*L));x.stroke();x.setLineDash([]);
+    const P=[u[0]*pd,u[1]*pd];x.strokeStyle=css('--purple');x.setLineDash([5,4]);x.lineWidth=1.6;x.beginPath();x.moveTo(X(v1),Y(v2));x.lineTo(X(P[0]),Y(P[1]));x.stroke();x.setLineDash([]);
+    x.strokeStyle=css('--purple');x.globalAlpha=.55;x.lineWidth=7;x.beginPath();x.moveTo(X(0),Y(0));x.lineTo(X(P[0]),Y(P[1]));x.stroke();x.globalAlpha=1;
+    {let n=[-u[1],u[0]];if(n[0]*v1+n[1]*v2>0)n=[-n[0],-n[1]];x.font=`600 12px ${css('--body')}`;const tx='d',tw=x.measureText(tx).width,cxp=X(P[0]*0.55)+n[0]*16,cyp=Y(P[1]*0.55)-n[1]*16;label(x,tx,cxp-tw/2,cyp+4,css('--purple'),12);}
+    const a0=Math.atan2(v2,v1),a1=Math.atan2(w2,w1);let da=a1-a0;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;
+    x.strokeStyle=css('--ink');x.lineWidth=1.4;x.beginPath();x.arc(X(0),Y(0),26,-a0,-(a0+da),da>0);x.stroke();const am=a0+da/2;label(x,'θ',X(0)+Math.cos(am)*36-4,Y(0)-Math.sin(am)*36+5,css('--ink'),13);}
+  arrow(x,X(0),Y(0),X(v1),Y(v2),css('--amp'),3,12);arrow(x,X(0),Y(0),X(w1),Y(w2),css('--blue'),3,12);
+  label(x,'v',X(v1)+7,Y(v2)-6,css('--amp'),14);label(x,'w',X(w1)+7,Y(w2)-6,css('--blue'),14);x.restore();
+  /* right: v·w = |v||w| cos θ */
+  const [cx,W,H]=fit($('csn')),M=Math.max(nv*nw,1e-6)*1.12,b=axes(cx,W,H,{x0:0,x1:180,y0:-M,y1:M,xt:[0,45,90,135,180],yt:[+(-nv*nw).toFixed(2),0,+(nv*nw).toFixed(2)],yf:v=>String(v).replace('-','−'),title:'v·w = ‖v‖‖w‖ cos θ',xl:'θ（°）',pl:50});
+  plot(cx,b.X,b.Y,t=>nv*nw*Math.cos(t*D2R),0,180,css('--accent'),2.4);cx.strokeStyle=css('--muted');cx.setLineDash([3,3]);cx.beginPath();cx.moveTo(b.X(90),b.pt);cx.lineTo(b.X(90),H-b.pb);cx.stroke();cx.setLineDash([]);
+  text(cx,'垂直 → 0',b.X(90)+5,b.Y(0)-6,css('--muted'),11);if(isFinite(th))dot(cx,b.X(th),b.Y(dv),css('--amp'),6);
+  $('r3vw').textContent=`(${m(v1)}, ${m(v2)}), (${m(w1)}, ${m(w2)})`;$('r3d').textContent=m(dv);$('r3n').textContent=`${m(nv)}, ${m(nw)}`;$('r3c').textContent=isFinite(c)?`${m(c)} → ${fmt(th,1)}°`:'—';$('r3p').textContent=m(pd);
+
+}
+(()=>{const cv=$('ip'),pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  cv.addEventListener('pointerdown',e=>{const g=g3;if(!g)return;const [px,py]=pos(e),dV=Math.hypot(px-g.X(V3[0]),py-g.Y(V3[1])),dW=Math.hypot(px-g.X(W3[0]),py-g.Y(W3[1]));drag3=dV<=dW?'v':'w';cv.setPointerCapture(e.pointerId);mv(e);});
+  const mv=e=>{if(!drag3||!g3)return;const [px,py]=pos(e);const p=[Math.round(g3.iX(px)*4)/4,Math.round(g3.iY(py)*4)/4];if(drag3==='v')V3=p;else W3=p;Lab.draw(3);};
+  cv.addEventListener('pointermove',mv);cv.addEventListener('pointerup',()=>drag3=null);})();
+document.querySelectorAll('#lab3 [data-v]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.v.split(',').map(Number);V3=[a[0],a[1]];W3=[a[2],a[3]];Lab.draw(3);}));
+Lab.add(3,lab3,{ip:250,csn:250});
+function lab4(){
+  /* TF-IDF */
+  const D=[1,2,3,4].map(i=>$('dq'+i).value.toLowerCase().split(/[^a-zÀ-ɏ一-鿿]+/).filter(Boolean)),q=$('dqq').value.toLowerCase().split(/[^a-zÀ-ɏ一-鿿]+/).filter(Boolean);
+  const voc=[...new Set(D.flat())].sort(),N=D.length,idf=voc.map(t=>{const n=D.filter(d=>d.includes(t)).length;return Math.log(N/n);});
+  const vec=d=>voc.map((t,i)=>d.filter(w=>w===t).length*idf[i]),rows=[...D.map(vec),vec(q)],names=['d₁','d₂','d₃','d₄','q'];
+  const f2=v=>v===0?'0':v.toFixed(2);let h='<tr><th>w = 词频 × IDF</th>'+voc.map(t=>`<th>${t}</th>`).join('')+'<th>‖vec‖</th></tr>';
+  h+='<tr><th>IDF = ln(4/Nₜ)</th>'+idf.map(f2).map(s2=>`<td>${s2}</td>`).join('')+'<td></td></tr>';
+  rows.forEach((r,i)=>{h+=`<tr><th>${names[i]}</th>`+r.map(v=>`<td${v===0?' style="color:var(--muted)"':''}>${f2(v)}</td>`).join('')+`<td>${Math.hypot(...r).toFixed(3)}</td></tr>`;});$('tfw').innerHTML=h;
+  const cs=(a,b2)=>{const na=Math.hypot(...a),nb=Math.hypot(...b2);return na&&nb?a.reduce((s2,t,i)=>s2+t*b2[i],0)/(na*nb):NaN;};
+  let h2='<tr><th>cos θ</th>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr>';rows.forEach((r,i)=>{h2+=`<tr><th>${names[i]}</th>`+rows.map((r2,j)=>{const v=cs(r,r2);return `<td${i===0&&j===1||i===1&&j===0?' style="color:var(--accent);font-weight:700"':''}>${isFinite(v)?v.toFixed(3):'—'}</td>`;}).join('')+'</tr>';});
+  const miss=q.filter(t=>!voc.includes(t));$('sim').innerHTML=h2+(miss.length?`<tr><td colspan="6" style="color:var(--muted)">查询里的 ${miss.join(', ')} 不在词表里，忽略</td></tr>`:'');
+}
+['dq1','dq2','dq3','dq4','dqq'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
+Lab.add(4,lab4,{});
 Lab.start();
 </script>
 </body></html>
