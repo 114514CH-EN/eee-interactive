@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量空间实验室</title>
-<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
+<meta name="description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量空间实验室"><meta property="og:description" content="距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vspace-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +14,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · VECTOR SPACES</div>
   <h1>向量空间实验室</h1>
-  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来。对应 A · Week 7 起的向量空间。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a><a href="#lab3">实验 3 内积、夹角与投影</a><a href="#lab4">实验 4 TF-IDF 余弦相似度</a></nav>
+  <p>距离不止一种：d₁ 走街区、d₂ 走直线、d∞ 只看差得最多的那一维；k-means 反复「分配到最近的中心 → 中心挪到平均位置」，只保证局部最优；点积 = ‖v‖‖w‖cos θ，投影和余弦相似度都从它来；Gram–Schmidt 一步步减掉影子，把一组线性无关的向量变成正交基。对应 A · Week 7 起的向量空间。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 三种距离与单位球</a><a href="#lab2">实验 2 k-means 一步一步</a><a href="#lab3">实验 3 内积、夹角与投影</a><a href="#lab4">实验 4 TF-IDF 余弦相似度</a><a href="#lab5">实验 5 Gram–Schmidt</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -60,6 +60,20 @@
   <div class="scroll"><table class="mini" id="tfw"></table></div>
   <div class="scroll"><table class="mini" id="sim"></table></div>
   <p class="note"><strong>为什么用角度而不是距离：</strong>一篇文档复制两遍，词频全部翻倍，向量变长但方向不变，内容其实一样。cos θ 只看方向，所以相似度还是 1；欧氏距离却会变大。Tutorial 答案 CosSim(d₁, d₂) = 0.21，表里可以直接看到。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 线性无关与 Gram–Schmidt（Week 9）</div>
+  <h2>Gram–Schmidt：减掉影子，再缩成单位长</h2>
+  <p class="lead">拖动 v₁、v₂ 的尖端，按「下一步」：① v₁ 除以长度得到 e₁；② 算 v₂ 在 e₁ 方向的影子 (v₂·e₁)e₁；③ 从 v₂ 里减掉影子得到 v₂′，它和 e₁ 垂直；④ v₂′ 除以长度得到 e₂。把 v₂ 拖到和 v₁ 共线，v₂′ 变成 0：两个向量线性相关，造不出第二个基向量。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-g="5,2,-1,4">讲义 2D 例</button><button data-g="3,1,1,2">夹角 45°</button><button data-g="3,1,2.5,1.25">几乎平行</button><button data-g="2,1,-3,-1.5">共线：线性相关</button></div>
+  <div class="btns"><button id="gprev">← 上一步</button><button id="gnext" class="play">下一步 →</button><button id="gall">全部显示</button></div>
+  <div class="stage even"><canvas id="gs" height="330" aria-label="Gram–Schmidt 二维示意，可拖动 v1、v2" style="touch-action:none;cursor:grab"></canvas><div class="calc" id="gcalc"></div></div>
+  <h2 style="margin-top:6px">三维计算器：先判断线性无关，再做 Gram–Schmidt</h2>
+  <div class="controls"><div class="ctl"><label for="g3p">例子</label><select id="g3p"><option value="3,2,2;-5,4,2;1,-4,2">Tutorial 9 Q2(1)</option><option value="3,2,2;-5,4,2;-1,-2,2">Tutorial 9 Q2(2)</option><option value="-1,1,2;3,2,1;4,2,1">讲义 1.2 例 1（无关）</option><option value="-1,1,2;3,2,1;0,5,7">讲义 1.2 例 2（相关）</option><option value="1,0,0;1,1,0;1,1,1">自己改：(1,0,0)、(1,1,0)、(1,1,1)</option></select><span></span></div>
+  <div class="ctl"><label for="g3a">v₁</label><input id="g3a" type="text"><span></span></div><div class="ctl"><label for="g3b">v₂</label><input id="g3b" type="text"><span></span></div><div class="ctl"><label for="g3c">v₃</label><input id="g3c" type="text"><span></span></div></div>
+  <div class="calc" id="g3out"></div>
+  <p class="note"><strong>为什么减掉影子就垂直：</strong>(v₂ − (v₂·e₁)e₁)·e₁ = v₂·e₁ − (v₂·e₁)(e₁·e₁) = 0，因为 e₁·e₁ = 1。三维时 v₃ 要减掉在 e₁、e₂ 两个方向上的影子。Q2 的两组 v₃ 不同，得到的 e₃ 却一样：e₁、e₂ 定了以后，ℝ³ 里和它们都垂直的单位向量只有 ±(e₁ × e₂) 两个，v₃ 只决定取哪个符号。</p>
 </section>
 </div>
 
@@ -183,6 +197,52 @@ function lab4(){
 }
 ['dq1','dq2','dq3','dq4','dqq'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 Lab.add(4,lab4,{});
+
+/* ---------- Lab 5: Gram-Schmidt ---------- */
+let G1=[5,2],G2=[-1,4],gst=4,gg=null,gdrag=null;
+const mz=v=>m(Math.abs(v)<1e-9?0:v),v2f=v=>`(${v.map(t=>mz(t)).join(', ')})`,dt2=(a,b)=>a.reduce((s2,t,i)=>s2+t*b[i],0),nrm=a=>Math.sqrt(dt2(a,a));
+function lab5(){
+  const cv5=$('gs'),asp=Math.max(0.8,(cv5.getBoundingClientRect().width||500)/(+cv5.getAttribute('height')||330)),xs=[0,G1[0],G2[0],-1.2,1.2],ys=[0,G1[1],G2[1],-1.2,1.2];
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys),R=Math.max((y1-y0)/2,(x1-x0)/2/asp)*1.18,g=frame(cv5,(x0+x1)/2,(y0+y1)/2,R,{step:R>4?1:0.5,lab:R>4?2:2});gg=g;const {x,X,Y}=g;
+  const n1=nrm(G1),e1=n1>1e-9?G1.map(t=>t/n1):[0,0],p=dt2(G2,e1),P=e1.map(t=>t*p),w=[G2[0]-P[0],G2[1]-P[1]],nw=nrm(w),e2=nw>1e-6?w.map(t=>t/nw):[0,0];
+  x.save();x.beginPath();x.rect(g.pl,g.pt,g.W-g.pl-g.pr,g.H-g.pt-g.pb);x.clip();
+  if(gst>=1){x.strokeStyle=css('--muted');x.setLineDash([3,4]);x.lineWidth=1;x.beginPath();x.arc(X(0),Y(0),X(1)-X(0),0,7);x.stroke();x.setLineDash([]);}
+  arrow(x,X(0),Y(0),X(G1[0]),Y(G1[1]),css('--amp'),2.6,11);label(x,'v₁',X(G1[0])+6,Y(G1[1])-6,css('--amp'),13);
+  arrow(x,X(0),Y(0),X(G2[0]),Y(G2[1]),css('--blue'),2.6,11);label(x,'v₂',X(G2[0])+6,Y(G2[1])-6,css('--blue'),13);
+  if(gst>=2){x.strokeStyle=css('--purple');x.globalAlpha=.6;x.lineWidth=7;x.beginPath();x.moveTo(X(0),Y(0));x.lineTo(X(P[0]),Y(P[1]));x.stroke();x.globalAlpha=1;
+    x.setLineDash([5,4]);x.strokeStyle=css('--muted');x.lineWidth=1.3;x.beginPath();x.moveTo(X(G2[0]),Y(G2[1]));x.lineTo(X(P[0]),Y(P[1]));x.stroke();x.setLineDash([]);label(x,'(v₂·e₁)e₁',X(P[0])+6,Y(P[1])+16,css('--purple'),12);}
+  if(gst>=3&&nw>1e-6){arrow(x,X(P[0]),Y(P[1]),X(G2[0]),Y(G2[1]),css('--green'),2.4,10);arrow(x,X(0),Y(0),X(w[0]),Y(w[1]),css('--green'),2.6,11);label(x,'v₂′',X(w[0])+6,Y(w[1])-6,css('--green'),13);}
+  if(gst>=1&&n1>1e-9){arrow(x,X(0),Y(0),X(e1[0]),Y(e1[1]),css('--ink'),3.4,12);label(x,'e₁',X(e1[0])+4,Y(e1[1])+16,css('--ink'),13);}
+  if(gst>=4&&nw>1e-6){arrow(x,X(0),Y(0),X(e2[0]),Y(e2[1]),css('--ink'),3.4,12);label(x,'e₂',X(e2[0])-18,Y(e2[1])-4,css('--ink'),13);}
+  x.restore();
+  const L=[`<b>v₁</b> = ${v2f(G1)}，<b>v₂</b> = ${v2f(G2)}`];
+  if(gst>=1)L.push(`① ‖v₁‖ = ${m(n1)}，e₁ = v₁/‖v₁‖ = <b>${v2f(e1)}</b>`);
+  if(gst>=2)L.push(`② v₂·e₁ = ${m(p)}（v₂ 在 e₁ 方向的分量），影子 = ${v2f(P)}`);
+  if(gst>=3)L.push(`③ v₂′ = v₂ − (v₂·e₁)e₁ = ${v2f(w)}，检查 v₂′·e₁ = ${mz(dt2(w,e1))}`);
+  if(gst>=4)L.push(nw>1e-6?`④ ‖v₂′‖ = ${m(nw)}，e₂ = v₂′/‖v₂′‖ = <b>${v2f(e2)}</b><br>检查：‖e₁‖ = ‖e₂‖ = 1，e₁·e₂ = ${mz(dt2(e1,e2))} ✓`:`④ <b style="color:var(--red)">v₂′ = 0，不能除以 0</b>：v₂ 和 v₁ 共线（线性相关），只能得到一个基向量`);
+  L.push(`<span style="color:var(--muted)">第 ${gst} / 4 步；行列式 v₁ₓv₂ᵧ − v₁ᵧv₂ₓ = ${mz(G1[0]*G2[1]-G1[1]*G2[0])}（为 0 时 v₁、v₂ 线性相关）</span>`);
+  $('gcalc').innerHTML=L.join('<br>');
+}
+(()=>{const cv=$('gs'),pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  cv.addEventListener('pointerdown',e=>{const g=gg;if(!g)return;const [px,py]=pos(e),d1=Math.hypot(px-g.X(G1[0]),py-g.Y(G1[1])),d2=Math.hypot(px-g.X(G2[0]),py-g.Y(G2[1]));gdrag=d1<=d2?1:2;cv.setPointerCapture(e.pointerId);mv(e);});
+  const mv=e=>{if(!gdrag||!gg)return;const [px,py]=pos(e),q=[Math.round(gg.iX(px)*4)/4,Math.round(gg.iY(py)*4)/4];if(gdrag===1)G1=q;else G2=q;Lab.draw(5);};
+  cv.addEventListener('pointermove',mv);cv.addEventListener('pointerup',()=>gdrag=null);})();
+document.querySelectorAll('#lab5 [data-g]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.g.split(',').map(Number);G1=[a[0],a[1]];G2=[a[2],a[3]];gst=0;Lab.draw(5);}));
+$('gprev').addEventListener('click',()=>{gst=Math.max(0,gst-1);Lab.draw(5);});$('gnext').addEventListener('click',()=>{gst=Math.min(4,gst+1);Lab.draw(5);});$('gall').addEventListener('click',()=>{gst=4;Lab.draw(5);});
+/* 3D calculator */
+const parse3=s2=>{const a=s2.split(/[,，\s]+/).filter(Boolean).map(Number);return a.length===3&&a.every(isFinite)?a:null;};
+function gs3calc(){const V=['g3a','g3b','g3c'].map(id=>parse3($(id).value));if(V.some(v=>!v)){$('g3out').innerHTML='每个向量输入 3 个数，用逗号隔开';return;}
+  const [a,b,c]=V,det=a[0]*(b[1]*c[2]-b[2]*c[1])-a[1]*(b[0]*c[2]-b[2]*c[0])+a[2]*(b[0]*c[1]-b[1]*c[0]),f=v=>`(${v.map(t=>fmt(Math.abs(t)<1e-9?0:t,3).replace(/^-/,'−')).join(', ')})`;
+  const L=[`以 v₁、v₂、v₃ 为列的矩阵行列式 det V = ${m(det)} → `+(Math.abs(det)>1e-9?'<b>线性无关</b>，可以做 Gram–Schmidt':'<b style="color:var(--red)">线性相关</b>（有非零解 λ）')];
+  const es=[];let ok=true;V.forEach((v,k)=>{let w=[...v];const parts=[];es.forEach((e,i)=>{const p=dt2(v,e);parts.push(`v${'₁₂₃'[k]}·e${'₁₂₃'[i]} = ${m(p)}`);w=w.map((t,j)=>t-p*e[j]);});const n=nrm(w);
+    if(n<1e-9){L.push(`v${'₁₂₃'[k]}′ = ${f(w)}，长度 0 → <b style="color:var(--red)">停在这里</b>：v${'₁₂₃'[k]} 是前面向量的线性组合（Tutorial Q3）`);ok=false;return;}
+    if(!ok)return;const e=w.map(t=>t/n);es.push(e);L.push(`${k?parts.join('，')+'；':''}v${'₁₂₃'[k]}′ = ${f(w)}，‖v${'₁₂₃'[k]}′‖ = ${m(n)}，<b>e${'₁₂₃'[k]} = ${f(e)}</b>`);});
+  if(es.length===3)L.push(`检查：e₁·e₂ = ${mz(dt2(es[0],es[1]))}，e₁·e₃ = ${mz(dt2(es[0],es[2]))}，e₂·e₃ = ${mz(dt2(es[1],es[2]))}；e₁ × e₂ = ${f([es[0][1]*es[1][2]-es[0][2]*es[1][1],es[0][2]*es[1][0]-es[0][0]*es[1][2],es[0][0]*es[1][1]-es[0][1]*es[1][0]])}`);
+  $('g3out').innerHTML=L.join('<br>');}
+const g3set=()=>{const P=$('g3p').value.split(';');['g3a','g3b','g3c'].forEach((id,i)=>$(id).value=P[i].replace(/,/g,', '));};
+$('g3p').addEventListener('input',()=>{g3set();Lab.draw(5);});['g3a','g3b','g3c'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(5)));g3set();
+const lab5all=()=>{lab5();gs3calc();};
+Lab.add(5,lab5all,{gs:260});
 Lab.start();
 </script>
 </body></html>
