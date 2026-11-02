@@ -292,4 +292,24 @@ $d_1=\sum|x_n-y_n|$（城市街区），$d_2=\sqrt{\sum(x_n-y_n)^2}$（欧氏）
 ['q',r`Tutorial Q5：K 怎么选？`,r`没有标准答案。distortion 随 K 增大总是下降（K = N 时为 0），不能直接取最小。常用：画 distortion–K 曲线找「拐点」（elbow），或按应用背景（有几种工作状态、几类信号）定 K`],
 ]);
 
+D('MB','MB8','向量微积分 2：线积分与做功','3eb202737d7a816f81dac1d2edc7e040',[
+['q',r`线积分和普通定积分有什么不同？`,r`普通定积分 $\int_a^b f(x)\,dx$ 沿 x 轴从 a 走到 b。线积分沿一条曲线 C 走，把每一小段的贡献加起来：$\int_C f\,ds$（ds 是沿曲线的小段长度）或 $\int_C\mathbf F\cdot d\mathbf r$（只算 F 沿切线的分量）。闭合曲线写 $\oint_C$，逆时针为正方向`],
+['q',r`$\int_C(x^2\,dx+(x-y^2)\,dy)$ 沿 $y=1+2x$ 从 (0, 1) 到 (1, 3) 怎么算？`,r`曲线是 y = g(x) 的形式时用代入法：$y=1+2x$，$dy=2\,dx$，全部换成 x，上下限用 x 的范围 0 → 1。$\int_0^1[x^2+(x-(1+2x)^2)\cdot2]\,dx=\int_0^1(-7x^2-6x-2)\,dx=-\frac{22}{3}$（讲义例 2）`],
+['q',r`对弧长的线积分 $\int_C f\,ds$ 怎么化成对 x 的积分？$y=1+2x$ 从 x = 0 到 1 的长度是多少？`,r`$$ds=\sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx$$
+（勾股定理：小段的水平长 dx、竖直长 dy）。$\frac{dy}{dx}=2$，长度 $=\int_0^1\sqrt5\,dx=\sqrt5$（讲义例 3）`],
+['q',r`怎么参数化圆 $x^2+y^2=4$、螺旋线、直线？`,r`圆：$\mathbf r(t)=(2\cos t,2\sin t,0)$，$0\le t\le2\pi$，t 增加 = 逆时针。螺旋线：$(a\cos t,a\sin t,ct)$，c > 0 右手螺旋。过点 a、方向 b 的直线：$\mathbf r(t)=\mathbf a+t\mathbf b$；从 P 到 Q 的线段取 $\mathbf b=Q-P$、$0\le t\le1$`],
+['q',r`参数化曲线上 $\mathbf F\cdot d\mathbf r$ 的线积分公式是什么？三种写法？`,r`$$W=\int_C\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt=\int_a^b(F_1x'+F_2y'+F_3z')\,dt=\int_C(F_1dx+F_2dy+F_3dz)$$
+步骤：① 写出 x(t)、y(t)、z(t)；② 把它们代进 F（F 只在曲线上取值）；③ 求 $\mathbf r'(t)$；④ 点乘、对 t 积分`],
+['q',r`为什么做功是 $\int\mathbf F\cdot d\mathbf r$？`,r`恒力沿直线：$W=\mathbf F\cdot\mathbf d$（力在位移方向的分量 × 距离）。变力沿曲线：切成小段，每段近似恒力直线，$\Delta W_m\approx\mathbf F(\mathbf r(t_m))\cdot\mathbf r'(t_m)\Delta t_m$，加起来再令 $\Delta t\to0$，就是 $\int_a^b\mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt$（讲义第 36–38 页）`],
+['q',r`讲义例 2：$\mathbf F=z\mathbf i-x\mathbf j+y\mathbf k$ 沿螺旋线 $(\cos t,\sin t,3t)$，$0\le t\le2\pi$ 的功？`,r`代入：$\mathbf F=(3t,-\cos t,\sin t)$，$\mathbf r'=(-\sin t,\cos t,3)$，点乘 $-3t\sin t-\cos^2t+3\sin t$。分部积分 $-3\int t\sin t=6\pi$，倍角公式 $\int\cos^2t=\pi$，$\int\sin t=0$。$W=6\pi-\pi=5\pi$。Tutorial Q8 把 −x 换成 +x，得 $7\pi$`],
+['q',r`什么叫路径相关？讲义第 26 页的例子说明了什么？`,r`同样从 A(0, 0) 到 B(1, 1)，$\mathbf F=(0,xy,0)$：沿 $C_1:(t,t)$ 积分 $\int_0^1t^2dt=\frac13$，沿 $C_2:(t,t^2)$ 积分 $\int_0^12t^4dt=\frac25$。结果不同，所以一般的线积分和路径有关，必须说清走哪条路`],
+['q',r`什么时候线积分和路径无关？为什么？`,r`当 $\mathbf F=\nabla f$（某个标量场的梯度，保守场）。证明：$F_1dx+F_2dy+F_3dz=f_xdx+f_ydy+f_zdz=df$，所以 $\int_C\mathbf F\cdot d\mathbf r=f(B)-f(A)$，只看起点、终点。等价说法：绕任意闭合曲线 $\oint\mathbf F\cdot d\mathbf r=0$。例：重力、静电场；摩擦力不保守`],
+['q',r`怎么快速判断二维力场 $\mathbf F=P\mathbf i+Q\mathbf j$ 是否保守？课上例 1 能怎么秒算？`,r`（补充）检查 $\frac{\partial Q}{\partial x}=\frac{\partial P}{\partial y}$（区域无洞）。课上例 1：$P=4x+y$，$Q=x+3y$，$\frac{\partial Q}{\partial x}=1=\frac{\partial P}{\partial y}$ → 保守，$\phi=2x^2+xy+\frac32y^2$，$W=\phi(2,16)-\phi(1,7)=424-82.5=341.5$，和沿 $y=4+3x^2$ 硬算一样`],
+['q',r`课上例 5：电子从 A(3, 12) 移到 C(1, 4)，沿 AC 和沿 A→B→C 的功为什么一样？`,r`点电荷的电场 $\mathbf E=\frac{Q}{4\pi\varepsilon_0}\frac{\mathbf r}{r^3}$ 是 $-\nabla V$（$V=10/r$），保守场。所以 $W=-q\int\mathbf E\cdot d\mathbf r=q[V(C)-V(A)]$ 只和起点终点在哪条等势线上有关：AC 是 $-2.587\times10^{-19}$ J，AB + BC $=-1.906-0.681=-2.587$（×10⁻¹⁹ J）`],
+['err',r`易错：参数化以后忘了把 F 也换成 t`,r`F 只在曲线上取值。$\mathbf F=-y\mathbf i+xy\mathbf j$ 沿 $(\cos t,\sin t)$：要先写成 $\mathbf F=-\sin t\,\mathbf i+\cos t\sin t\,\mathbf j$，再和 $\mathbf r'=(-\sin t,\cos t)$ 点乘（课上例 3，$W=\frac\pi4+\frac13\approx1.119$ J）`],
+['err',r`易错：分段路径、上下限和方向`,r`分段路径（Tutorial Q2）每段单独积分：y = 0 那段 dy = 0，x = 2 那段 dx = 0。上下限按「起点 → 终点」写，反着走（例 5 的 x 从 3 到 1）积分变号。$\int_C y\,dx$ 这类只含 dx 的积分，在竖直线段上为 0`],
+['q',r`Tutorial 2 的 8 个答案是多少？`,r`Q1 265.33（$\frac{796}{3}$）；Q2 $44\frac13$；Q3 $4-\frac\pi2$；Q4 1；Q5 $-3\pi-3\approx-12.42$；Q6 $\frac{28}{3}$；Q7 $\frac75$；Q8 $7\pi\approx21.99$。全部用 SymPy 验算 ✓`],
+['fix',r`本周资料里的笔误`,r`讲义第 43 页 $\mathbf r'=\frac{d\mathbf r}{dt}$ 后面漏了等号；课上例 5 写「$\frac{Q}{4\pi\varepsilon_0}$ = 10 C」，单位应为 V·m；$W_{AC}$ 中间一步 $3.88\times10^{-19}[-1+\frac13]$ 写成正的 $2.586\times10^{-19}$，漏了负号（最后结果 $-2.59\times10^{-19}$ J 对）`],
+]);
+
 })();

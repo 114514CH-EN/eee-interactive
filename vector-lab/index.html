@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>向量微积分实验室</title>
-<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
+<meta name="description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="向量微积分实验室"><meta property="og:description" content="偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f_xx f_yy − f_xy² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/vector-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,8 +16,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART B · VECTOR CALCULUS</div>
   <h1>向量微积分实验室</h1>
-  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影。对应 B · Week 7 起的向量微积分。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a></nav>
+  <p>偏导数是曲面沿 x、y 方向切一刀后切线的斜率；驻点处两个偏导都为 0，用 D = f<sub>xx</sub>f<sub>yy</sub> − f<sub>xy</sub>² 判断极值还是鞍点；梯度指向上升最快的方向，方向导数是它在某个方向上的投影；线积分是沿路径把 F·dr 加起来，保守场只看起点和终点。对应 B · Week 7 起的向量微积分。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 偏导数与驻点</a><a href="#lab2">实验 2 梯度与方向导数</a><a href="#lab3">实验 3 线积分与做功</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -44,6 +44,19 @@
   <div class="controls"><div class="ctl"><label for="ex3">三维例题计算器</label><select id="ex3"><option value="lec">讲义第 51–52 页：x²y + 3y³z² + 2xz</option><option value="e11">课上例 11：3x²y + 2xy²z² + y³z</option><option value="e12">课上例 12：同上，最陡方向</option><option value="q6">Tutorial Q6：3x² + 2y² − z</option><option value="q12">Tutorial Q12：x³y² + 3xz + 2y³z²</option></select><span></span></div></div>
   <div class="calc" id="calc"></div>
   <p class="note"><strong>三步走：</strong>① 求 ∇φ = (φ_x, φ_y, φ_z) 并代入点 P；② 方向向量 A 先除以 |A| 变成单位向量 â（最容易忘）；③ 点乘 â·∇φ。问「哪个方向变化最快」：就是 ∇φ 自己的方向，最大变化率是 |∇φ|。</p>
+</section>
+
+<section class="panel" id="lab3">
+  <div class="tag">实验 3 · 线积分与做功（Week 8）</div>
+  <h2>线积分 = 沿路径把 F·dr 一小段一小段加起来</h2>
+  <p class="lead">灰色小箭头是力场 F。小球沿选中的路径从起点走到终点：橙色箭头是所在处的 F，蓝色箭头是前进方向 T（切线）。每走一小步，做功 F·dr = |F||dr| cos θ：顺着 F 走为正（路径画成绿色），逆着 F 走为负（红色）。右图是累计做功，曲线最后的高度就是线积分 W = ∫F·dr。换一条路径，或者拖动紫色控制点自己弯一条，看 W 变不变。</p>
+  <div class="btns" role="group" aria-label="力场"><button data-f3="pd">讲义第 26 页 F = (0, xy)</button><button data-f3="t2">Tutorial Q2</button><button data-f3="hw3">课上例 3 四分之一圆</button><button data-f3="hw1">课上例 1（保守场）</button><button data-f3="elec">课上例 5 电子与点电荷</button></div>
+  <div class="btns" role="group" aria-label="路径" id="routes"></div>
+  <div class="controls"><div class="ctl"><label for="s3">沿路径走到 t</label><input id="s3" type="range" min="0" max="1000" step="1" value="1000"><output id="s3O"></output></div><div class="btns"><button id="p3" class="play">▶ 走一遍</button></div></div>
+  <p class="verdict" id="v3"></p>
+  <div class="stage even"><canvas id="fld" height="340" aria-label="力场与路径，可拖动紫色控制点" style="touch-action:none;cursor:crosshair"></canvas><canvas id="acc" height="340" aria-label="累计做功随路径进度的变化"></canvas></div>
+  <div class="read"><div><small>W（当前路径）</small><b id="r3W"></b></div><div><small>走到 t 时已做功</small><b id="r3s"></b></div><div><small>此处 F·T（每走 1 单位做的功）</small><b id="r3ft"></b></div><div><small>回路 ∮ = W① − W②</small><b id="r3loop"></b></div></div>
+  <p class="note"><strong>先判断保不保守：</strong>二维力场 F = P i + Q j，算 ∂Q/∂x − ∂P/∂y。处处为 0（区域里没有挖掉的洞）→ 保守场，F = ∇φ，W = φ(终点) − φ(起点)，走哪条路都一样，绕一圈回来 ∮ = 0。不为 0 → W 和路径有关，只能把路径参数化再积分。这个判别式是补充内容（讲义没讲），Week 10 的旋度会正式讲。</p>
 </section>
 </div>
 
@@ -162,6 +175,93 @@ const setAng=d=>{$('ang').value=Math.round(((d%360)+360)%360);Lab.draw(2);};
 $('toGrad').addEventListener('click',()=>{const [gx,gy]=F2[k2].g(...P2);setAng(Math.atan2(gy,gx)/D2R);});
 $('toLevel').addEventListener('click',()=>{const [gx,gy]=F2[k2].g(...P2);setAng(Math.atan2(gy,gx)/D2R+90);});
 Lab.add(2,lab2,{heat2:250,dd:250});
+
+/* ---------- Lab 3: line integrals ---------- */
+const lin=(a,b)=>t=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+const two=(f,g)=>t=>t<.5?f(2*t):g(2*t-1);
+const F3={
+ pd:{n:'F = (0, xy)',P:()=>0,Q:(x,y)=>x*y,A:[0,0],B:[1,1],xr:[-0.15,1.2],yr:[-0.15,1.35],K:[0.95,0.1],curl:'∂Q/∂x − ∂P/∂y = y',
+   R:[['C₁：y = x',lin([0,0],[1,1])],['C₂：y = x²',t=>[t,t*t]]]},
+ t2:{n:'F = (2x² + y, 3xy + 2x)',P:(x,y)=>2*x*x+y,Q:(x,y)=>3*x*y+2*x,A:[0,0],B:[2,3],lA:'O',xr:[-0.3,2.4],yr:[-0.3,3.6],K:[0.2,2.6],curl:'∂Q/∂x − ∂P/∂y = 3y + 1',
+   R:[['先沿 y = 0 再沿 x = 2（题目）',two(lin([0,0],[2,0]),lin([2,0],[2,3]))],['直线 OB',lin([0,0],[2,3])],['先沿 x = 0 再沿 y = 3',two(lin([0,0],[0,3]),lin([0,3],[2,3]))]]},
+ hw3:{n:'F = (−y, xy)',P:(x,y)=>-y,Q:(x,y)=>x*y,A:[1,0],B:[0,1],xr:[-0.15,1.3],yr:[-0.15,1.35],K:[0.1,0.1],curl:'∂Q/∂x − ∂P/∂y = y + 1',
+   R:[['四分之一圆（课上）',t=>[Math.cos(Math.PI*t/2),Math.sin(Math.PI*t/2)]],['直线（弦）',lin([1,0],[0,1])]]},
+ hw1:{n:'F = (4x + y, x + 3y)',P:(x,y)=>4*x+y,Q:(x,y)=>x+3*y,A:[1,7],B:[2,16],xr:[0.4,2.6],yr:[5,17.5],K:[2.45,7.5],phi:(x,y)=>2*x*x+x*y+1.5*y*y,phiT:'φ = 2x² + xy + 1.5y²',curl:'∂Q/∂x − ∂P/∂y = 1 − 1 = 0',
+   R:[['y = 4 + 3x²（课上）',t=>[1+t,4+3*(1+t)**2]],['直线 AB',lin([1,7],[2,16])],['先横后竖',two(lin([1,7],[2,7]),lin([2,7],[2,16]))]]},
+ elec:{n:'外力 F = eE（单位 10⁻¹⁹ J）',P:(x,y)=>16*x/Math.hypot(x,y)**3,Q:(x,y)=>16*y/Math.hypot(x,y)**3,A:[3,12],B:[1,4],lB:'C',xr:[-0.4,4.4],yr:[-0.5,13.2],K:[0.9,10],kx:0.8,phi:(x,y)=>-16/Math.hypot(x,y),phiT:'φ = −16/r',u:' ×10⁻¹⁹ J',curl:'∂Q/∂x − ∂P/∂y = 0（r ≠ 0）',
+   R:[['直线 AC',lin([3,12],[1,4])],['A → B(3, 4) → C',two(lin([3,12],[3,4]),lin([3,4],[1,4]))]],Q0:true}};
+const CIR='①②③④⑤';let k3='pd',r3=0,g3=null,play3=false;const K3={};Object.keys(F3).forEach(k=>K3[k]=[...F3[k].K]);
+const routes3=k=>{const F=F3[k],K=K3[k],A=F.A,B=F.B;return [...F.R,['自由路径（拖紫点）',t=>[(1-t)*(1-t)*A[0]+2*t*(1-t)*K[0]+t*t*B[0],(1-t)*(1-t)*A[1]+2*t*(1-t)*K[1]+t*t*B[1]]]];};
+function samp3(F,f,N=800){const p=[],c=[0],g=[];for(let i=0;i<=N;i++)p.push(f(i/N));
+  for(let i=0;i<N;i++){const [a,b]=p[i],[c1,d]=p[i+1],q=f((i+.5)/N),w=F.P(q[0],q[1])*(c1-a)+F.Q(q[0],q[1])*(d-b);c.push(c[i]+w);g.push(w);}return {p,c,g,N};}
+const tk3=(a,b,n=7)=>{const raw=(b-a)/n,p=10**Math.floor(Math.log10(raw)),st=[1,2,2.5,5,10].map(v=>v*p).find(v=>v>=raw*0.999),r=[];for(let v=Math.ceil(a/st)*st;v<=b+1e-9;v+=st)r.push(+v.toFixed(6));return r;};
+function frame3(cv,F){const [x,W,H]=fit(cv),pl=38,pr=10,pt=10,pb=26,pw=W-pl-pr,ph=H-pt-pb;let [x0,x1]=F.xr,[y0,y1]=F.yr,sx=pw/(x1-x0),sy=ph/(y1-y0);
+  if(Math.max(sx,sy)/Math.min(sx,sy)<3.2){const s=Math.min(sx,sy),cx=(x0+x1)/2,cy=(y0+y1)/2;x0=cx-pw/s/2;x1=cx+pw/s/2;y0=cy-ph/s/2;y1=cy+ph/s/2;sx=sy=s;}
+  const X=v=>pl+(v-x0)*sx,Y=v=>pt+(y1-v)*sy,iX=q=>x0+(q-pl)/sx,iY=q=>y1-(q-pt)/sy;
+  if(F.phi){const s=2,nx=Math.ceil(pw/s),ny=Math.ceil(ph/s),vals=new Float32Array(nx*ny);for(let j=0;j<ny;j++)for(let i=0;i<nx;i++)vals[j*nx+i]=F.phi(iX(pl+(i+.5)*s),iY(pt+(j+.5)*s));
+    const q=[...vals].filter(isFinite).sort((a,b)=>a-b),lo=q[Math.floor(q.length*0.03)],hi=q[Math.floor(q.length*0.97)],nl=12,lev=v=>Math.max(0,Math.min(nl-1,Math.floor((v-lo)/(hi-lo+1e-12)*nl)));
+    const cLo=hex(css('--blue')),cHi=hex(css('--amp')),cMid=hex(css('--panel')),ln=hex(css('--muted'));const off=document.createElement('canvas');off.width=nx;off.height=ny;const oc=off.getContext('2d'),img=oc.createImageData(nx,ny);
+    for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const k=j*nx+i,L=lev(vals[k]),t=(L+.5)/nl,c=t<.5?cLo.map((a,m2)=>a+(cMid[m2]-a)*(t/.5)):cMid.map((a,m2)=>a+(cHi[m2]-a)*((t-.5)/.5));
+      const e=(i<nx-1&&lev(vals[k+1])!==L)||(j<ny-1&&lev(vals[k+nx])!==L),col=e?ln:c;img.data.set([col[0],col[1],col[2],e?120:110],k*4);}
+    oc.putImageData(img,0,0);x.imageSmoothingEnabled=false;x.drawImage(off,0,0,nx,ny,pl,pt,nx*s,ny*s);}
+  x.strokeStyle=css('--line');x.lineWidth=1;x.strokeRect(pl,pt,pw,ph);x.fillStyle=css('--muted');x.font=`11px ${css('--mono')}`;
+  tk3(x0,x1).forEach(v=>{const s2=String(v).replace('-','−');x.fillText(s2,X(v)-x.measureText(s2).width/2,H-pb+14);});
+  tk3(y0,y1).forEach(v=>{const s2=String(v).replace('-','−');x.fillText(s2,pl-5-x.measureText(s2).width,Y(v)+4);});
+  if(x0<0&&x1>0){x.strokeStyle=css('--grid');x.beginPath();x.moveTo(X(0),pt);x.lineTo(X(0),pt+ph);x.stroke();}
+  if(y0<0&&y1>0){x.strokeStyle=css('--grid');x.beginPath();x.moveTo(pl,Y(0));x.lineTo(pl+pw,Y(0));x.stroke();}
+  return {x,W,H,X,Y,iX,iY,pl,pr,pt,pb,pw,ph,x0,x1,y0,y1,sx,sy};}
+function lab3(){
+  const F=F3[k3],RS=routes3(k3);if(r3>=RS.length)r3=0;pressGroup('#lab3 [data-f3]',b=>b.dataset.f3===k3);
+  const rb=$('routes');if(rb.dataset.k!==k3){rb.dataset.k=k3;rb.innerHTML='';RS.forEach((r,i)=>{const b=document.createElement('button');b.textContent=CIR[i]+' '+r[0];b.dataset.r=i;b.onclick=()=>{r3=i;Lab.draw(3);};rb.appendChild(b);});}
+  pressGroup('#routes button',b=>+b.dataset.r===r3);
+  const S=RS.map(r=>samp3(F,r[1])),cur=S[r3],s=+$('s3').value/1000,iS=Math.round(s*cur.N),u=F.u||'';$('s3O').textContent=s.toFixed(2);
+  const g=frame3($('fld'),F);g3=g;const {x,X,Y}=g;x.save();x.beginPath();x.rect(g.pl,g.pt,g.pw,g.ph);x.clip();
+  /* arrow grid */
+  const nc=12,cs=g.pw/nc,nr=Math.max(4,Math.round(g.ph/cs)),cy=g.ph/nr,mags=[],cells=[];
+  for(let j=0;j<nr;j++)for(let i=0;i<nc;i++){const px=g.pl+(i+.5)*cs,py=g.pt+(j+.5)*cy,a=g.iX(px),b=g.iY(py),P=F.P(a,b),Q=F.Q(a,b),M=Math.hypot(P,Q);if(F.Q0&&Math.hypot(a,b)<0.6)continue;cells.push([px,py,P,Q,M]);mags.push(M);}
+  mags.sort((a,b)=>a-b);const Mref=mags[Math.floor(mags.length*0.9)]||1;
+  x.globalAlpha=.55;cells.forEach(([px,py,P,Q,M])=>{if(M<1e-9)return;const dx=P*g.sx,dy=-Q*g.sy,n=Math.hypot(dx,dy),L=Math.min(cs,cy)*0.44*(0.3+0.7*Math.min(1,Math.sqrt(M/Mref)));arrow(x,px-dx/n*L/2,py-dy/n*L/2,px+dx/n*L/2,py+dy/n*L/2,css('--muted'),1.3,5);});x.globalAlpha=1;
+  /* other routes */
+  S.forEach((R,i)=>{if(i===r3)return;x.setLineDash([5,4]);x.strokeStyle=css('--muted');x.lineWidth=1.4;x.beginPath();R.p.forEach(([a,b],k)=>k?x.lineTo(X(a),Y(b)):x.moveTo(X(a),Y(b)));x.stroke();x.setLineDash([]);
+    const mid=R.p[Math.round(R.N*0.62)];text(x,CIR[i],X(mid[0])+5,Y(mid[1])-5,css('--muted'),12);});
+  /* current route: untraversed faded, traversed coloured by sign */
+  x.globalAlpha=.3;x.strokeStyle=css('--ink');x.lineWidth=3;x.beginPath();cur.p.forEach(([a,b],k)=>k?x.lineTo(X(a),Y(b)):x.moveTo(X(a),Y(b)));x.stroke();x.globalAlpha=1;
+  x.lineWidth=3.6;x.lineCap='round';for(let k=0;k<iS;){const sg=cur.g[k]>=0;x.strokeStyle=sg?css('--green'):css('--red');x.beginPath();x.moveTo(X(cur.p[k][0]),Y(cur.p[k][1]));while(k<iS&&(cur.g[k]>=0)===sg){k++;x.lineTo(X(cur.p[k][0]),Y(cur.p[k][1]));}x.stroke();}x.lineCap='butt';
+  /* control point */
+  const K=K3[k3],A=F.A,B=F.B,on=r3===RS.length-1;x.globalAlpha=on?1:.5;x.setLineDash([2,4]);x.strokeStyle=css('--purple');x.lineWidth=1.2;x.beginPath();x.moveTo(X(A[0]),Y(A[1]));x.lineTo(X(K[0]),Y(K[1]));x.lineTo(X(B[0]),Y(B[1]));x.stroke();x.setLineDash([]);dot(x,X(K[0]),Y(K[1]),css('--purple'),6);if(!on)text(x,'拖我',X(K[0])+8,Y(K[1])+4,css('--purple'),11);x.globalAlpha=1;
+  dot(x,X(A[0]),Y(A[1]),css('--ink'),5);dot(x,X(B[0]),Y(B[1]),css('--ink'),5);label(x,F.lA||'A',X(A[0])+7,Y(A[1])+14,css('--ink'),13);label(x,F.lB||'B',X(B[0])+7,Y(B[1])-6,css('--ink'),13);
+  if(k3==='elec'){dot(x,X(0),Y(0),css('--red'),5);label(x,'Q',X(0)+6,Y(0)-6,css('--red'),12);}
+  /* moving point */
+  const j=Math.min(iS,cur.N-1),pp=cur.p[iS],q2=cur.p[j+1],q1=cur.p[j],tx=(q2[0]-q1[0])*g.sx,ty=-(q2[1]-q1[1])*g.sy,tn=Math.hypot(tx,ty)||1,P=F.P(...pp),Q=F.Q(...pp),fx=P*g.sx,fy=-Q*g.sy,fn=Math.hypot(fx,fy);
+  const dl=Math.hypot(q2[0]-q1[0],q2[1]-q1[1])||1,FT=(P*(q2[0]-q1[0])+Q*(q2[1]-q1[1]))/dl;
+  x.restore();
+  if(fn>1e-9)arrow(x,X(pp[0]),Y(pp[1]),X(pp[0])+fx/fn*40,Y(pp[1])+fy/fn*40,css('--amp'),2.8,10);
+  arrow(x,X(pp[0]),Y(pp[1]),X(pp[0])+tx/tn*30,Y(pp[1])+ty/tn*30,css('--blue'),2.8,10);
+  const al=fn>1e-9&&Math.abs((fx*tx+fy*ty)/(fn*tn))>0.9;if(fn>1e-9)label(x,'F',X(pp[0])+fx/fn*46-4,Y(pp[1])+fy/fn*46+4-(al?9:0),css('--amp'),12);label(x,'T',X(pp[0])+tx/tn*36-4,Y(pp[1])+ty/tn*36+4+(al?9:0),css('--blue'),12);
+  dot(x,X(pp[0]),Y(pp[1]),css('--ink'),5);x.font=`12px ${css('--body')}`;const tw=x.measureText(F.n).width;x.fillStyle=css('--panel');x.globalAlpha=.85;x.fillRect(g.pl+2,g.pt+3,tw+10,18);x.globalAlpha=1;text(x,F.n,g.pl+6,g.pt+16,css('--ink'),12);
+  /* accumulated work */
+  const [c,W,H]=fit($('acc'));let lo=0,hi=0;S.forEach(R=>R.c.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}));const pd=(hi-lo)*0.12||1;
+  const yt=tk3(lo-pd,hi+pd,6);
+  const b=axes(c,W,H,{x0:0,x1:1,y0:lo-pd,y1:hi+pd,xt:[0,0.25,0.5,0.75,1],yt,yf:v=>String(v).replace('-','−'),title:'累计做功 ∫ F·dr'+(u?'（×10⁻¹⁹ J）':''),xl:'路径进度 t',pl:48,pr:62});
+  S.forEach((R,i)=>{if(i===r3)return;c.strokeStyle=css('--muted');c.lineWidth=1.3;c.setLineDash([4,3]);c.beginPath();R.c.forEach((v,k)=>k?c.lineTo(b.X(k/R.N),b.Y(v)):c.moveTo(b.X(0),b.Y(v)));c.stroke();c.setLineDash([]);});
+  c.globalAlpha=.3;c.strokeStyle=css('--accent');c.lineWidth=2.6;c.beginPath();cur.c.forEach((v,k)=>k?c.lineTo(b.X(k/cur.N),b.Y(v)):c.moveTo(b.X(0),b.Y(v)));c.stroke();c.globalAlpha=1;
+  c.beginPath();for(let k=0;k<=iS;k++)k?c.lineTo(b.X(k/cur.N),b.Y(cur.c[k])):c.moveTo(b.X(0),b.Y(cur.c[0]));c.stroke();dot(c,b.X(iS/cur.N),b.Y(cur.c[iS]),css('--accent'),5);
+  const ends=S.map((R,i)=>[R.c[R.N],i]).sort((p1,p2)=>p2[0]-p1[0]);let lastY=-1e9;
+  ends.forEach(([v,i])=>{let yy=Math.max(b.Y(v)+4,lastY+13);lastY=yy;text(c,`${CIR[i]} ${m(v)}`,W-b.pr+4,yy,i===r3?css('--accent'):css('--muted'),11);});
+  /* readouts */
+  const Wc=cur.c[cur.N];$('r3W').textContent=m(Wc)+u;$('r3s').textContent=m(cur.c[iS])+u;$('r3ft').textContent=m(FT);$('r3loop').textContent=m(S[0].c[S[0].N]-S[1].c[S[1].N])+u;
+  const v=$('v3');if(F.phi){const d=F.phi(...B)-F.phi(...A);v.textContent=`保守场：${F.curl}，${F.phiT}，W = φ(${F.lB||'B'}) − φ(${F.lA||'A'}) = ${m(d)}${u}，走哪条路都一样`;v.style.color=css('--green');}
+  else{v.textContent=`不保守：${F.curl}，不恒为 0，W 和路径有关（${S.map((R,i)=>CIR[i]+' '+m(R.c[R.N])).join('，')}）`;v.style.color=css('--red');}
+}
+(()=>{const cv=$('fld');let on=false;const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  const set=e=>{const g=g3,F=F3[k3];if(!g)return;const [px,py]=pos(e);let a=g.iX(px),b=g.iY(py);a=Math.max(F.kx??g.x0,Math.min(g.x1,a));b=Math.max(g.y0,Math.min(g.y1,b));K3[k3]=[a,b];r3=routes3(k3).length-1;Lab.draw(3);};
+  cv.addEventListener('pointerdown',e=>{const g=g3;if(!g)return;const [px,py]=pos(e),K=K3[k3];if(Math.hypot(px-g.X(K[0]),py-g.Y(K[1]))<28||r3===routes3(k3).length-1){on=true;cv.setPointerCapture(e.pointerId);set(e);}});
+  cv.addEventListener('pointermove',e=>{if(on)set(e);});cv.addEventListener('pointerup',()=>on=false);})();
+document.querySelectorAll('#lab3 [data-f3]').forEach(b=>b.addEventListener('click',()=>{k3=b.dataset.f3;r3=0;Lab.draw(3);}));
+$('s3').addEventListener('input',()=>{play3=false;$('p3').textContent='▶ 走一遍';Lab.draw(3);});
+const a3=Lab.anim(3,$('fld'),dt=>{let v=+$('s3').value+dt*1000/3.5;if(v>=1000){v=1000;play3=false;$('p3').textContent='▶ 走一遍';}$('s3').value=Math.round(v);Lab.draw(3);},()=>play3);
+$('p3').addEventListener('click',()=>{play3=!play3;if(play3&&+$('s3').value>=1000)$('s3').value=0;$('p3').textContent=play3?'⏸ 暂停':'▶ 走一遍';Lab.kick(a3);Lab.draw(3);});
+Lab.add(3,lab3,{fld:250,acc:250});
 Lab.start();
 </script>
 </body></html>
