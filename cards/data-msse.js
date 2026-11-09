@@ -74,6 +74,29 @@ D('SE5','面向对象与常见误区','3ea202737d7a81f2a6ceccc0045ede91',[
 - ‹def get_age():› 漏了 self；用 print 而不是 return
 - 弯引号 “ ” → invalid character`],
 ]);
+D('SE6','Python 常见误区（纠错）','3ea202737d7a81f4bce0d36a0cd8a14d',[
+['q',r`为什么文件最后一行有语法错误，第一行的 print 也不会执行？`,r`Python 运行一个文件前先分词、编译整个文件。语法错误（SyntaxError、IndentationError、TabError）在编译时就被发现，编译失败就不会生成可执行的字节码，所以一行都不运行。`],
+['q',r`拼错的函数名 ‹pint(x)› 为什么有时报错、有时不报错？`,r`名字要到运行到那一行时才去查找。那一行在一个不成立的 if 里就永远不执行，也就永远不会 NameError，错误一直藏着；条件成立时才报 ‹NameError: name 'pint' is not defined›。`],
+['q',r`看到一段 Traceback，先看哪里？`,r`先看最后一行（错误类型 + 说明），再看它上面最里面一层的文件名和行号，那是真正出错的地方。Traceback 从外到内排列，最后调用的在最下面。语法错误的 ^ 位置可能在真正错误的后面，比如括号没关。`],
+['q',r`变量名必须遵守哪些规则？‹n-gon›、‹n!›、‹paint scene›、‹pass› 为什么都不行？`,r`只能用字母、数字、下划线，不能以数字开头，区分大小写，不能是关键字（Python 3.13 有 35 个，如 pass、class、for）。- 和 ! 是运算符，空格把它拆成两个名字，pass 是关键字。`],
+['q',r`‹123 = n› 和 ‹(sqrt(p**2 - 4*q) - p) / 2 = x› 错在哪？`,r`= 是「把右边的值绑定到左边的名字」，左边必须是名字（或下标、属性），不能是数字或表达式。计算器习惯写成「算式 → x」，Python 要写 ‹x = (sqrt(p**2 - 4*q) - p) / 2›。`],
+['q',r`为什么 ‹y = (x *= 2)› 不行？想在表达式里赋值怎么办？`,r`‹x *= 2› 是语句，没有值，不能放进表达式。分两行写 ‹x *= 2›、‹y = x›。补充：Python 3.8 起可以用海象运算符 ‹y = (x := x * 2)›。`],
+['q',r`‹def foo(2*x, y/2):› 错在哪？`,r`形参（parameter）只能是名字，是函数里用来接值的「空位」；要传 2*x 应该在调用时写实参（argument）：定义 ‹def foo(a, b):›，调用 ‹foo(2*x, y/2)›。`],
+['q',r`‹deffoo():› 和 ‹if x = = 0:› 在 Python 眼里是什么？`,r`空格决定怎么分词。‹deffoo› 是一个名字，Python 以为你在调用函数 deffoo()，读到冒号才报 invalid syntax；‹= =› 是两个单独的赋值号，不是比较运算符 ==。`],
+['q',r`‹if a and b > 0:› 在 a = −5、b = 3 时为什么成立？`,r`比较运算比 and 优先，所以是 ‹a and (b > 0)›。−5 非零，当作 True，整个条件成立。要写 ‹a > 0 and b > 0›。另外 and 返回的是操作数本身：‹2 and 3› 是 3，‹0 and 3› 是 0。`],
+['q',r`判断奇偶为什么不能用 ‹x // 2 == 0›？`,r`// 是整除（商）：只有 x = 0、1 时商为 0，所以 1 被判成偶数、2 被判成奇数。奇偶看余数：‹x % 2 == 0›。% 是取余，不是百分号。`],
+['err',r`哪些误区不报错但结果错？`,r`- ‹x =+ 2›：等于 x = +2
+- ‹a and b > 0›：a 没和 0 比
+- ‹x // 2 == 0›：该用 %
+- ‹-3 <= x < -12›：永远 False
+- ‹x < 3 == True›：链式比较，永远 False
+- ‹foo› 忘了括号：什么都不做
+- ‹X = 2 * x›：大小写不同，x 不变`],
+['q',r`‹x < 3 == True› 为什么在 x = 1 时是 False？`,r`链式比较：‹a < b == c› 等于 ‹a < b and b == c›，即 ‹(x < 3) and (3 == True)›，后半句 False。条件本身已经是布尔值，直接写 ‹if x < 3:›。`],
+['q',r`什么是 shadowing？讲义 ‹def move(left): … left(90)› 为什么 TypeError？`,r`同一个名字在内层被重新绑定，遮住了外层的同名对象。找名字按 Local → Enclosing → Global → Built-in，参数 left = "Yes" 在 Local 里先被找到，‹"Yes"(90)› → ‹'str' object is not callable›。参数改名 turn_left；也别用 sum、list 当变量名。`],
+['err',r`break、return 后面的代码会执行吗？`,r`不会。break 跳出最近的循环，return 离开函数，它们后面同一块里的语句永远执行不到。break 只能写在循环里，写在函数体里是 ‹SyntaxError: 'break' outside loop›。`],
+['fix',r`讲义第 44 页说「Python 是解释型，括号没关时程序会继续运行」，对吗？`,r`运行 .py 文件时不对：Python 先编译整个文件，括号没关直接 ‹SyntaxError: '(' was never closed›，一行都不跑。只有在交互式 Shell 里，它显示 ... 等你继续输入，看起来像「还在继续」。`],
+]);
 D('SE7','SysML 概览与需求工程','3ea202737d7a816b82d6d467df8104fa',[
 ['q',r`SysML 和 UML 是什么关系？为什么系统工程用 SysML？`,r`SysML 基于 UML 2：复用其中一部分（UML4SysML），再加自己的扩展。建模单位从「类 class」换成「块 block」，一个 block 可以是软件、硬件、数据、流程、人员或设施，适合软硬件混合的团队。图从 UML 2 的 13 种减到 9 种。`],
 ['q',r`SysML 的 9 种图怎么分？本课 SysML-Lite 用哪 6 种？`,r`- 行为图：活动 act、序列 sd、状态机 stm、用例 uc

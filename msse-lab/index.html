@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Python 与系统工程实验室</title>
-<meta name="description" content="MSSE 的九个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格。讲义里的笔误都标出来了。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的九个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格。讲义里的笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
+<meta name="description" content="MSSE 的十个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，以及看一段代码卡在分词、编译还是运行哪一步。讲义里的笔误都标出来了。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的十个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，以及看一段代码卡在分词、编译还是运行哪一步。讲义里的笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,14 +42,24 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .info h3{font:600 17px var(--display);margin:0 0 4px}
 .info p{margin:4px 0;font-size:14px}
 .info .lbl{font:12px var(--mono);color:var(--accent);letter-spacing:.06em}
+.kst{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0}
+.kst div{border:1px solid var(--line);border-radius:10px;padding:6px 10px;min-width:0}
+.kst small{display:block;color:var(--muted);font:12px var(--mono)}
+.kst b{font-size:15px}
+.kst .ok{border-color:var(--green)}.kst .ok b{color:var(--green)}
+.kst .bad{border-color:var(--red);background:rgba(196,58,49,.08)}.kst .bad b{color:var(--red)}
+.kst .skip b{color:var(--muted);font-weight:500}
+.ktok{display:flex;flex-wrap:wrap;gap:5px;min-height:28px;max-height:150px;overflow:auto;padding:2px 0}
+.tk{font:13px var(--mono);border:1.5px solid;border-radius:6px;padding:1px 6px;background:var(--bg);white-space:pre}
+.code div.caret{min-height:1.2em;line-height:1.2}.code div.caret::before{content:'';counter-increment:none}
 </style>
 </head><body>
 <div class="wrap">
 <header>
   <div class="tag">MULTIDISCIPLINARY SYSTEMS AND SOFTWARE ENGINEERING · PYTHON · SYSML</div>
   <h1>Python 与系统工程实验室</h1>
-  <p>对应 MSSE 的 Python 三讲（Basics 1 / 2 / 3）、课程概览里的系统开发流程和 Week 7 的 SysML 需求（实验 7–9）。实验 1–3、6–9 纯网页即时运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子，包括类、self 和继承。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a><a href="#lab6">实验 6 常见误区</a><a href="#lab7">实验 7 需求体检</a><a href="#lab8">实验 8 需求关系</a><a href="#lab9">实验 9 胰岛素泵规格</a></nav>
+  <p>对应 MSSE 的 Python 三讲（Basics 1 / 2 / 3）、课程概览里的系统开发流程和 Week 7 的 SysML 需求（实验 7–9）。实验 1–3、6–9 纯网页即时运行；实验 10 和实验 4 一样在浏览器里跑真 Python，看代码卡在分词、编译还是运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子，包括类、self 和继承。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a><a href="#lab6">实验 6 常见误区</a><a href="#lab7">实验 7 需求体检</a><a href="#lab8">实验 8 需求关系</a><a href="#lab9">实验 9 胰岛素泵规格</a><a href="#lab10">实验 10 编译还是运行</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -176,6 +186,25 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="read"><div><small>Δ1 = r1 − r0</small><b id="inD1"></b></div><div><small>Δ2 = r2 − r1</small><b id="inD2"></b></div><div><small>(r2 − r1) / 4</small><b id="inRaw"></b></div><div><small>CompDose</small><b id="inDose"></b></div></div>
   <p class="status" id="inMsg" aria-live="polite"></p>
   <p class="note"><strong>从这个例子学什么：</strong>结构化规格把输入（r0、r1、r2）、输出（CompDose）、动作、前置条件、后置条件分栏写清楚，比一段自然语言好检查得多，但仍然会漏：① 匀速上升没写（内部完整性）；② MinimumDose 是多少、单位是什么，要去别的文档找（外部完整性）；③「rounding」没说 0.5 怎么取，Python 的 <code>round(0.5)</code> 是 0、<code>round(2.5)</code> 是 2（无歧义）；④ 前置条件不满足时怎么办也不在这一条里。写自己的 SysML 报告时用同样的眼光检查每一条需求。</p>
+</section>
+
+<section class="panel" id="lab10">
+  <div class="tag">实验 10 · Lecture 3 Common Misconceptions · 编译时还是运行时（Week 6）</div>
+  <h2>Python 怎么读你的代码：先分词，再编译，最后才一行行执行</h2>
+  <p class="lead">点「分词 → 编译 → 运行」，看这段代码卡在哪一步。<strong>分词</strong>把字符切成单词（名字、运算符、数字、字符串），<strong>编译</strong>检查整段代码的语法，这两步出错时<strong>一行都不会运行</strong>；通过了才<strong>逐行执行</strong>，执行到某一行才去找名字、检查类型。对比前两个例子：错误都在最后一行，语法错误那个什么都没打印，运行时错误那个先打印了两行。可以改代码再运行（第一次要下载约 10 MB 的 Python 3.13）。</p>
+  <div class="btns" role="group" aria-label="例子" id="kBtns"></div>
+  <textarea id="kSrc" spellcheck="false" aria-label="Python 代码" style="min-height:150px"></textarea>
+  <div class="btns"><button id="kRun" class="play">分词 → 编译 → 运行</button></div>
+  <p class="status" id="kStat" aria-live="polite">还没运行。</p>
+  <div class="kst" id="kStages"></div>
+  <div class="tag" style="margin-top:6px">① 分词：Python 看到的单词</div>
+  <div class="ktok" id="kTok"></div>
+  <div class="two">
+    <div><div class="tag">② 编译：语法错误标在这里</div><pre class="code" id="kView" aria-label="代码与错误位置"></pre></div>
+    <div><div class="tag">③ 运行：出错前已经打印的输出</div><pre class="out" id="kOut"></pre></div>
+  </div>
+  <div class="read"><div><small>卡在哪一步</small><b id="kWhere" style="font-size:15px"></b></div><div><small>Python 3.13 的报错</small><b id="kErr" style="font-size:13px"></b></div></div>
+  <p class="note"><strong>看点：</strong>「deffoo()」分词时就成了一个名字 deffoo，编译器以为你在调用函数，读到冒号才报错；「if x = = 0」里是两个单独的 =；「2x」和弯引号 “ ” 分词模块还能切开，编译时才报 invalid decimal literal / invalid character。「拼错名字」那个例子能顺利跑完，因为错的那行没被执行；把 x 改成 −5 再运行就会 NameError。死循环的例子运行 3000 步后被强制停下。</p>
 </section>
 
 </div>
@@ -778,6 +807,113 @@ function lab9(){
 document.querySelectorAll('#lab9 [data-ip]').forEach(b=>b.addEventListener('click',()=>{const p=INP[+b.dataset.ip];$('in0').value=p[1];$('in1').value=p[2];$('in2').value=p[3];Lab.draw(9);}));
 $('inShift').addEventListener('click',()=>{const n=clampN($('inNew').value,0,12,7);$('in0').value=$('in1').value;$('in1').value=$('in2').value;$('in2').value=n;Lab.draw(9);});
 Lab.add(9,lab9,{inc:240});
+
+/* ---------- Lab 10: tokenize -> compile -> run ---------- */
+const KTOOL=`
+import tokenize, io, keyword, sys, json
+def __kcheck(src):
+    r={'tokens':[],'tokErr':None,'tokLine':None,'comp':None,'run':None,'out':'','steps':0}
+    try:
+        for t in tokenize.generate_tokens(io.StringIO(src).readline):
+            k=tokenize.tok_name[t.type]
+            if k in ('NL','ENDMARKER','COMMENT'): continue
+            s=t.string
+            if k=='NAME' and keyword.iskeyword(s): k='KEYWORD'
+            if k=='NEWLINE': s='⏎'
+            if k=='INDENT': s='缩进'
+            if k=='DEDENT': s='退缩进'
+            if k=='NAME' and not s.isidentifier(): k='ERRORTOKEN'
+            r['tokens'].append([k,s,t.start[0]])
+            if len(r['tokens'])>300: break
+    except Exception as e:
+        a=getattr(e,'args',())
+        msg=a[0] if a and isinstance(a[0],str) else str(e)
+        r['tokErr']=type(e).__name__+': '+msg
+        ln=getattr(e,'lineno',None)
+        if ln is None and len(a)>1 and isinstance(a[1],tuple): ln=a[1][0]
+        r['tokLine']=ln
+    try:
+        code=compile(src,'<程序>','exec')
+    except SyntaxError as e:
+        r['comp']={'type':type(e).__name__,'msg':e.msg,'line':e.lineno,'col':e.offset,'end':getattr(e,'end_offset',None),'endline':getattr(e,'end_lineno',None)}
+        return json.dumps(r)
+    out=io.StringIO(); n=[0]
+    def fprint(*a, sep=' ', end='\\n', file=None, flush=False):
+        if out.tell()<4000: out.write(sep.join(str(v) for v in a)+end)
+    def tr(frame, ev, arg):
+        if frame.f_code.co_filename!='<程序>': return None
+        if ev=='line':
+            n[0]+=1
+            if n[0]>3000: raise RuntimeError('运行了 3000 步还没结束，可能是死循环，已强制停止')
+        return tr
+    g={'__name__':'__main__','print':fprint}
+    sys.settrace(tr)
+    try:
+        exec(code,g)
+    except BaseException as e:
+        ln=None; tb=e.__traceback__
+        while tb is not None:
+            if tb.tb_frame.f_code.co_filename=='<程序>': ln=tb.tb_lineno
+            tb=tb.tb_next
+        r['run']={'type':type(e).__name__,'msg':str(e),'line':ln}
+    finally:
+        sys.settrace(None)
+    r['out']=out.getvalue(); r['steps']=n[0]
+    return json.dumps(r)
+`;
+const KP=[
+ ['语法错误在最后','print("第 1 行")\nprint("第 2 行")\nx = 0\nif x = 0:\n    print("零")'],
+ ['运行时错误在最后','def setPenColor(c):\n    print("colour:", c)\n\nprint("第 1 行")\nprint("第 2 行")\nsetPenColor(blue)'],
+ ['deffoo()','deffoo():\n    print("hi")'],
+ ['if x = = 0','x = 0\nif x = = 0:\n    print("zero")'],
+ ['n-gon = 5','n-gon = 5'],
+ ['123 = n','123 = n'],
+ ['print(2x + 1)','x = 2\nprint(2x + 1)'],
+ ['字符串没关','s = "abc\nprint(s)'],
+ ['括号没关','def foo(x):\n    return x\ny = foo(12\nz = 3\nprint(y, z)'],
+ ['弯引号（从 PPT 复制）','s = \u201cabc\u201d\nprint(s)'],
+ ['拼错名字（藏在 if 里）','x = 5\nif x < 0:\n    pint("negative", x)\nprint("done")'],
+ ['x =+ 2','x = 3\nx =+ 2\nprint(x)'],
+ ['and 不会分配','a, b = -5, 3\nif a and b > 0:\n    print("both positive?", a, b)'],
+ ['shadowing','def left(angle):\n    print("turn left", angle)\n\ndef move(left):\n    if left == "Yes":\n        left(90)\n\nmove("Yes")'],
+ ['没有缩进','x = 1\nwhile True:\nif x**3 > 1000:\nbreak\nx += 1'],
+ ['Tab 和空格混用','if True:\n\tx = 1\n        y = 2'],
+ ['死循环（第 52 页）','x = 9\nt = 2\nwhile t < x:\n    if x % t == 0:\n        break\n    print("Not a prime")\nt += 1'],
+];
+let kRes=null,kSrcRan='',kReady=false;
+$('kBtns').innerHTML=KP.map((p,i)=>`<button data-kp="${i}">${esc(p[0])}</button>`).join('');
+$('kSrc').value=KP[0][1];
+const KCOL={KEYWORD:'var(--purple)',NAME:'var(--blue)',OP:'var(--amp)',NUMBER:'var(--green)',STRING:'var(--red)',NEWLINE:'var(--muted)',INDENT:'var(--muted)',DEDENT:'var(--muted)',ERRORTOKEN:'var(--red)',FSTRING_START:'var(--red)',FSTRING_MIDDLE:'var(--red)',FSTRING_END:'var(--red)'};
+async function kRunNow(){const src=$('kSrc').value;$('kRun').disabled=true;
+  try{$('kStat').textContent=py?'运行中…':'正在下载并启动 Python 3（约 10 MB，只需一次）…';await loadPy();
+    if(!kReady){py.runPython(KTOOL);kReady=true;}
+    kRes=JSON.parse(py.globals.get('__kcheck')(src));kSrcRan=src;$('kStat').textContent='完成。改代码后再点一次。';}
+  catch(e){$('kStat').textContent='Python 加载失败：'+e.message+'（需要能访问 cdn.jsdelivr.net）';}
+  finally{$('kRun').disabled=false;Lab.draw(10);}}
+function lab10(){
+  const src=$('kSrc').value;pressGroup('#lab10 [data-kp]',b=>KP[+b.dataset.kp][1]===src);
+  const r=kRes&&kSrcRan===src?kRes:null,lines=src.split('\n');
+  let stage=0;if(r){stage=r.tokErr?1:r.comp?2:r.run?3:4;}
+  const st=[['① 分词','tokenize'],['② 编译','compile'],['③ 运行','run']];
+  $('kStages').innerHTML=st.map(([t,e],i)=>{const n=i+1;let cls='',mark='—';
+    if(r){if(stage===n||(n===2&&stage===1&&r.comp)){cls='bad';mark='✗';}else if(n<stage||stage===4){cls='ok';mark='✓';}else{cls='skip';mark='没执行';}}
+    if(r&&n===1&&stage===2&&!r.tokErr){cls='ok';mark='✓';}
+    return `<div class="${cls}"><small>${e}</small><b>${t} ${mark}</b></div>`;}).join('');
+  $('kTok').innerHTML=r?(r.tokens.map(([k,s,l])=>`<span class="tk" style="border-color:${KCOL[k]||'var(--line)'};color:${KCOL[k]||'var(--ink)'}" title="${k} · 第 ${l} 行">${esc(s)}</span>`).join('')+(r.tokErr?`<span class="tk" style="border-color:var(--red);color:var(--red)">✗ ${esc(r.tokErr)}</span>`:'')):'<span style="color:var(--muted)">运行后显示。紫 = 关键字，蓝 = 名字，橙 = 运算符，绿 = 数字，红 = 字符串。</span>';
+  const errLine=r?(r.comp?r.comp.line:r.run?r.run.line:null):null;
+  $('kView').innerHTML=lines.map((l,i)=>{const n=i+1;let h=`<div class="${n===errLine?'err':''}">${esc(l.replace(/\t/g,'→   '))||' '}</div>`;
+    if(r&&r.comp&&n===r.comp.line&&r.comp.col){const c0=Math.max(1,r.comp.col),c1=(r.comp.end&&(r.comp.endline||n)===n&&r.comp.end>c0)?r.comp.end:c0+1;h+=`<div class="caret" style="color:var(--red)">${' '.repeat(c0-1)+'^'.repeat(Math.max(1,c1-c0))}</div>`;}
+    return h;}).join('');
+  $('kOut').innerHTML=r?(esc(r.out)+(r.run?`<span class="e">${esc(r.run.type+': '+r.run.msg)}</span>`:'')||'<span style="color:var(--muted)">（没有输出）</span>'):'';
+  const where={0:'—',1:'分词就失败：一行都没运行',2:'编译失败：一行都没运行',3:`运行到第 ${r&&r.run?r.run.line:'?'} 行才报错`,4:'顺利跑完：没报错不等于结果对'}[stage];
+  $('kWhere').textContent=where;$('kWhere').style.color=stage===4?css('--green'):stage?css('--red'):'';
+  $('kErr').textContent=r?(r.comp?`${r.comp.type}: ${r.comp.msg}（第 ${r.comp.line} 行）`:r.run?`${r.run.type}: ${r.run.msg}`:r.tokErr?r.tokErr:`运行了 ${r.steps} 步`):'—';
+}
+$('kRun').addEventListener('click',kRunNow);
+$('kSrc').addEventListener('input',()=>Lab.draw(10));
+document.querySelectorAll('#lab10 [data-kp]').forEach(b=>b.addEventListener('click',()=>{$('kSrc').value=KP[+b.dataset.kp][1];Lab.draw(10);if(py)kRunNow();}));
+{const q=new URLSearchParams(location.search).get('k');if(q&&+q>=1&&+q<=KP.length)$('kSrc').value=KP[+q-1][1];}
+Lab.add(10,lab10);
 
 Lab.start();
 </script>
