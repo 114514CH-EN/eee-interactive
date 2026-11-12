@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>通信链路实验室</title>
-<meta name="description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="通信链路实验室"><meta property="og:description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/comms-lab/">
+<meta name="description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器；Week 7 的热噪声 kTB → 信噪比 → 容量、多电平信号在噪声中的判决（Hartley → Shannon）。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="通信链路实验室"><meta property="og:description" content="官方 Lab 1 的互动配套：自己写前缀码编码器 / 解码器、码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半的代价和未见字符的处理。另有七个讲义练习：前缀码解码与误码传播、分组编码逼近熵、香农信道容量、无线链路预算、量化噪声 SQNR、噪声中的误码率、Butterworth 与 Chebyshev 滤波器；Week 7 的热噪声 kTB → 信噪比 → 容量、多电平信号在噪声中的判决（Hartley → Shannon）。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/comms-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,8 +47,8 @@ table.sum td:nth-child(2){font:600 14px var(--mono);white-space:nowrap}table.sum
 <header>
   <div class="tag">COMMUNICATION SYSTEMS (LI) · FOR AEROSPACE A (LH)</div>
   <h1>通信链路实验室</h1>
-  <p><strong>官方 Lab 1（Source Coding）</strong>在最前面：自己写编码器、解码器、码表检查器，压缩真实文本，看统计不准时多花多少比特。后面的实验 1–7 沿着讲义的「通信系统通用模型」走一遍：信源编码 → 信道容量 → 无线传播 → 模拟信号数字化 → 噪声里判决 → 滤波。实验 1–2 接着 Week 3 的信源编码讲；实验 3–7 的公式都来自课程的 <em>Useful Equations</em>，后面几周才会细讲，可以当预习。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab8">Lab 1 · Task 1 编码器</a><a href="#lab9">Task 2 解码器与码表检查</a><a href="#lab10">Task 3 压缩真实文本</a><a href="#lab11">Task 4 统计不准时</a><a href="#lab1">实验 1 前缀码解码</a><a href="#lab2">实验 2 分组编码逼近熵</a><a href="#lab3">实验 3 信道容量</a><a href="#lab4">实验 4 无线链路预算</a><a href="#lab5">实验 5 量化噪声</a><a href="#lab6">实验 6 噪声中的误码</a><a href="#lab7">实验 7 Butterworth / Chebyshev</a></nav>
+  <p><strong>官方 Lab 1（Source Coding）</strong>在最前面：自己写编码器、解码器、码表检查器，压缩真实文本，看统计不准时多花多少比特。后面的实验 1–7 沿着讲义的「通信系统通用模型」走一遍：信源编码 → 信道容量 → 无线传播 → 模拟信号数字化 → 噪声里判决 → 滤波。实验 1–2 接着 Week 3 的信源编码讲；实验 3–7 的公式都来自课程的 <em>Useful Equations</em>，后面几周才会细讲，可以当预习。实验 12–13 对应 Week 7：kTB 热噪声和放大器，电平越多越怕噪声。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab8">Lab 1 · Task 1 编码器</a><a href="#lab9">Task 2 解码器与码表检查</a><a href="#lab10">Task 3 压缩真实文本</a><a href="#lab11">Task 4 统计不准时</a><a href="#lab1">实验 1 前缀码解码</a><a href="#lab2">实验 2 分组编码逼近熵</a><a href="#lab3">实验 3 信道容量</a><a href="#lab4">实验 4 无线链路预算</a><a href="#lab5">实验 5 量化噪声</a><a href="#lab6">实验 6 噪声中的误码</a><a href="#lab7">实验 7 Butterworth / Chebyshev</a><a href="#lab12">实验 12 热噪声 kTB</a><a href="#lab13">实验 13 多电平与噪声</a></nav>
 </header>
 
 <div class="grouphead" id="lab1-official">
@@ -252,6 +252,47 @@ So what should an encoder do when the statistics are unknown? In practice it has
   <div class="stage even"><canvas id="fd" height="260" aria-label="dB 幅频响应（对数频率）"></canvas><canvas id="fl" height="260" aria-label="通带附近线性幅值"></canvas></div>
   <div class="read"><div><small>ε = √(10<sup>波纹/10</sup> − 1)</small><b id="fE"></b></div><div><small>ω<sub>s</sub> 处衰减：Butterworth / Chebyshev</small><b id="fAt" style="font-size:15px"></b></div><div><small>满足指标的最小阶数：Butterworth / Chebyshev</small><b id="fMin" style="font-size:15px"></b></div><div><small>远处斜率</small><b id="fSl" style="font-size:15px"></b></div></div>
   <p class="note"><strong>远处都是 −20n dB/十倍频：</strong>n 阶滤波器在 ω ≫ ω<sub>c</sub> 时都按 1/ω<sup>n</sup> 衰减，Chebyshev 的优势在过渡带——同样阶数下，远处它比 Butterworth 多出约 20log(2<sup>n−1</sup>ε) 的衰减（ε 小时可能反而不如 Butterworth）。阶数公式：Butterworth n ≥ log(10<sup>A/10</sup> − 1)/(2 log(ω<sub>s</sub>/ω<sub>c</sub>))，Chebyshev n ≥ cosh⁻¹(√(10<sup>A/10</sup> − 1)/ε)/cosh⁻¹(ω<sub>s</sub>/ω<sub>p</sub>)。</p>
+</section>
+
+<div class="grouphead" id="week7">
+  <div class="tag">WEEK 7 · BANDWIDTH, CHANNEL CAPACITY & NOISE</div>
+  <h2>实验 12–13：热噪声有多大，噪声里能分几个电平</h2>
+  <p>对应 Week 7 讲义：kTB 热噪声、信噪比、Hartley 定律和讲义从「能分几级」推出 Shannon 定律的思路。误码率的高斯面积见实验 6，Shannon 曲线见实验 3。</p>
+</div>
+
+<section class="panel" id="lab12">
+  <div class="tag">实验 12 · Week 7 · Thermal Noise Power · P<sub>n</sub> = kTB</div>
+  <h2>热噪声 kTB → 信噪比 → 容量：放大器救不了已经被噪声淹没的信号</h2>
+  <p class="lead">电阻里电子的热运动产生白噪声，接收机能拿到的噪声功率是 <strong>P<sub>n</sub> = kTB</strong>，只和温度、带宽有关。信号源电压 V、内阻 R 接匹配负载 R 时，负载上只剩 V/2，信号功率 <strong>P<sub>s</sub> = (V/2)²/R</strong>。默认就是讲义第 30–33 页的题：1 MHz、290 K、1 µV、50 Ω，噪声 4×10⁻¹⁵ W，信号 5×10⁻¹⁵ W，几乎一样大。再加一级放大器：信号和噪声一起被放大，放大器自己还要再加噪声，SNR 只会变差（噪声系数 F 就是变差了多少 dB）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-n="290,6,0,50,0,0">讲义题：1 MHz，1 µV</button><button data-n="290,4,0,50,0,0">带宽缩到 10 kHz</button><button data-n="290,6,0,50,40,0">再放大 40 dB（理想放大器）</button><button data-n="290,6,0,50,40,3">放大 40 dB，F = 3 dB</button><button data-n="20,6,0,50,0,0">接收机制冷到 20 K</button><button data-n="300,7.3,1.65,50,0,0">Wi-Fi：20 MHz，−80 dBm</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="nT">温度 T</label><input id="nT" type="range" min="1" max="1000" step="1" value="290"><output id="nTO"></output></div>
+    <div class="ctl"><label for="nB">带宽 B</label><input id="nB" type="range" min="0" max="9" step="0.01" value="6"><output id="nBO"></output></div>
+    <div class="ctl"><label for="nV">信号源电压 V（开路）</label><input id="nV" type="range" min="-1" max="3" step="0.01" value="0"><output id="nVO"></output></div>
+    <div class="ctl"><label for="nR">源内阻 = 负载 R</label><select id="nR"><option value="50">50 Ω（射频同轴）</option><option value="75">75 Ω（电视天线）</option><option value="600">600 Ω（老式音频 / 电话）</option></select><span></span></div>
+    <div class="ctl"><label for="nG">放大器增益 G</label><input id="nG" type="range" min="0" max="60" step="1" value="0"><output id="nGO"></output></div>
+    <div class="ctl"><label for="nF">放大器噪声系数 F</label><input id="nF" type="range" min="0" max="10" step="0.1" value="0"><output id="nFO"></output></div>
+  </div>
+  <div class="stage one"><canvas id="nLv" height="280" aria-label="信号和噪声的 dBm 电平图"></canvas></div>
+  <div class="read"><div><small>噪声 P<sub>n</sub> = kTB</small><b id="nPn" style="font-size:15px"></b></div><div><small>信号 P<sub>s</sub> = (V/2)²/R</small><b id="nPs" style="font-size:15px"></b></div><div><small>SNR（输入）</small><b id="nSnr" style="font-size:15px"></b></div><div><small>SNR（放大后）</small><b id="nSnr2" style="font-size:15px"></b></div><div><small>Shannon C = B log₂(1 + SNR)</small><b id="nC" style="font-size:15px"></b></div><div><small>讲义说法：能分 m = √(1 + SNR) 级</small><b id="nM" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>记两个数：</strong>290 K 时每 1 Hz 的噪声是 −174 dBm，带宽 B 的噪声就是 −174 + 10log₁₀B dBm（1 MHz → −114 dBm）。带宽每缩小 10 倍，噪声少 10 dB，同一个信号的 SNR 多 10 dB。<strong>为什么放大没用：</strong>理想放大器把信号和噪声乘同一个 G，比值不变；真实放大器还会在输入端等效地加上 kT₀B(F − 1) 的噪声，SNR 降低 F dB。所以接收机的第一级要用低噪声放大器（LNA），而且要尽量窄带。<strong>开路噪声电压</strong> √(4kTRB) 只在 R 两端开路时成立；接上匹配负载后负载上的噪声电压减半，功率正好是 kTB。</p>
+</section>
+
+<section class="panel" id="lab13">
+  <div class="tag">实验 13 · Week 7 · The Effect of Noise · Hartley → Shannon</div>
+  <h2>噪声不变，电平越多越挤：每个符号多带几位，代价是判错</h2>
+  <p class="lead">把 0–1 V 等分成 m 个电平，每个符号带 log₂m 位，Hartley 定律说速率 C = 2B log₂m，m 越大越快。但噪声 σ 不变时，电平间距 d = 1/(m − 1) 越来越小，噪声只要把样本推过 <strong>d/2</strong> 就判错。讲义的粗略说法：信号加噪声的幅度 √(P + N) 要能装下 m 个「噪声那么宽」的格子，即 √(P + N) ≥ m√N，于是 m ≤ √(1 + P/N)，代回 Hartley 就得到 Shannon 的 C = B log₂(1 + P/N)。改 m 和 σ，看样本什么时候开始判错（绿 = 对，红 = 错）。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-m="2,0.07">2 级，σ = 0.07 V</button><button data-m="4,0.07">4 级</button><button data-m="8,0.07">8 级</button><button data-m="16,0.07">16 级</button><button data-m="16,0.01">16 级，噪声小 7 倍</button><button data-m="2,0.25">2 级，σ = 0.25 V</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="mM">电平数 m</label><select id="mM"><option value="2">2（1 位 / 符号）</option><option value="4">4（2 位）</option><option value="8">8（3 位）</option><option value="16">16（4 位）</option><option value="32">32（5 位）</option></select><span></span></div>
+    <div class="ctl"><label for="mS">噪声 σ（rms）</label><input id="mS" type="range" min="0.005" max="0.3" step="0.005" value="0.07"><output id="mSO"></output></div>
+    <div class="ctl"><label for="mB">信道带宽 B</label><input id="mB" type="range" min="1" max="20" step="0.5" value="3"><output id="mBO"></output></div>
+  </div>
+  <div class="btns"><button id="mNew" class="play">换一组符号</button></div>
+  <div class="stage one"><canvas id="mWave" height="260" aria-label="m 电平信号加噪声与判决"></canvas></div>
+  <div class="stage one"><canvas id="mSer" height="230" aria-label="误符号率随噪声的变化"></canvas></div>
+  <div class="read"><div><small>电平间距 d / 安全距离 d/2</small><b id="mD" style="font-size:15px"></b></div><div><small>d/2 是几个 σ</small><b id="mK" style="font-size:15px"></b></div><div><small>误符号率：理论 / 这一屏</small><b id="mSer2" style="font-size:15px"></b></div><div><small>Hartley：2B log₂m</small><b id="mH" style="font-size:15px"></b></div><div><small>讲义判据 m ≤ √(1 + P/N)</small><b id="mMax" style="font-size:15px"></b></div><div><small>Shannon：B log₂(1 + P/N)</small><b id="mC" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>理论误符号率</strong>（m 级等间距，判决门限在相邻电平中点，高斯噪声）：中间的电平两边都可能错，最上和最下的只有一边，平均是 2(1 − 1/m)·Q(d/2σ)，Q(x) = 1 − Φ(x)。m = 2 时就是实验 6 的 1 − Φ(d/2σ)。<strong>讲义判据只是数量级：</strong>它把「噪声 rms 那么宽」当成格子宽度，所以按它分出的 m 个电平实际误符号率并不小（d/2 只有约 0.5σ）。Shannon 定律本身是严格的，但它说的是用足够长、足够聪明的编码才能逼近的上限，不是「把电压切成 m 份」直接能做到的。这里 P 取满幅 (1 V)²、N = σ²。</p>
 </section>
 </div>
 
@@ -697,6 +738,78 @@ $('tSc').addEventListener('pointerleave',()=>{if(tHover>=0){tHover=-1;Lab.draw(1
 Lab.add(10,lab10,{tBud:200,tSc:260});
 $('uSplit').addEventListener('input',()=>Lab.draw(11));$('uMode').addEventListener('change',()=>Lab.draw(11));
 Lab.add(11,lab11,{uCh:220});
+
+/* ---------- Lab 12: thermal noise kTB -> SNR -> capacity ---------- */
+const S12=['nT','nB','nV','nR','nG','nF'],KB=1.38e-23;
+const dBm=P=>10*Math.log10(P/1e-3);
+const dBs=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(2)+' dB';
+const sciW=P=>{const e=Math.floor(Math.log10(P)),m=P/10**e;return (+m.toFixed(2))+(e?'×10'+SUP(e).replace('-','⁻'):'')+' W';};
+function lab12(){
+  const T=val('nT'),B=10**val('nB'),V=1e-6*10**val('nV'),R=val('nR'),Gdb=val('nG'),Fdb=val('nF'),G=10**(Gdb/10),F=10**(Fdb/10);
+  $('nTO').textContent=T+' K';$('nBO').textContent=SI(B,'Hz');$('nVO').textContent=SI(V,'V');$('nGO').textContent=Gdb+' dB';$('nFO').textContent=Fdb.toFixed(1)+' dB';pressP(12,'n',S12);
+  const Pn=KB*T*B,Ps=(V/2)**2/R,snr=Ps/Pn,Na=KB*290*B*(F-1),snr2=Ps/(Pn+Na);
+  $('nPn').textContent=`${sciW(Pn)} = ${dBm(Pn).toFixed(1)} dBm`;$('nPs').textContent=`${sciW(Ps)} = ${dBm(Ps).toFixed(1)} dBm`;
+  $('nSnr').textContent=`${fmt(snr,3)} 倍 = ${dBs(10*Math.log10(snr))}`;
+  $('nSnr2').textContent=Gdb===0&&Fdb===0?'（没有放大器）':`${fmt(snr2,3)} 倍 = ${dBs(10*Math.log10(snr2))}`;
+  const s=Gdb===0&&Fdb===0?snr:snr2;
+  $('nC').textContent=SI(B*LOG2(1+s),'bit/s');$('nM').textContent=fmt(Math.sqrt(1+s),3)+' 级';
+  /* level diagram */
+  const [x,W,H]=fit($('nLv'));const vals=[dBm(Ps),dBm(Pn),dBm(Ps*G),dBm((Pn+Na)*G)];
+  let hi=Math.ceil((Math.max(...vals)+20)/10)*10,lo=Math.floor((Math.min(...vals)-8)/10)*10;if(hi-lo<40)lo=hi-40;
+  const step=(hi-lo)>80?20:10,yt=[];for(let v=lo;v<=hi;v+=step)yt.push(v);
+  const narrow=W<460;
+  const a=axes(x,W,H,{x0:0,x1:4,y0:lo,y1:hi,xt:[],yt,yf:v=>v+'',title:'功率 (dBm)：灰色 = 噪声，彩色 = 信号',pl:44,pb:26});
+  const colX=i=>a.X([0.55,1.25,2.75,3.45][i]);
+  x.globalAlpha=0.85;
+  [[0,vals[0],css('--blue'),'信号'],[1,vals[1],css('--muted'),'噪声'],[2,vals[2],css('--amp'),'信号×G'],[3,vals[3],css('--muted'),'噪声×G']].forEach(([i,v,c,l])=>{const xc=colX(i),w=(a.X(1)-a.X(0))*0.5;x.fillStyle=c;x.fillRect(xc-w/2,a.Y(v),w,a.Y(lo)-a.Y(v));});
+  x.globalAlpha=1;
+  [['信号',0],['kTB',1],['信号×G',2],[Fdb>0?'(kTB+放大器)×G':'kTB×G',3]].forEach(([l,i])=>{text(x,vals[i].toFixed(1),colX(i),a.Y(vals[i])-5,css('--ink'),narrow?10:11,'center');text(x,l,colX(i),H-8,css('--muted'),narrow?9:11,'center');});
+  if(Fdb>0){const add=dBm(Pn*G);x.strokeStyle=css('--ink');x.setLineDash([3,3]);x.lineWidth=1.2;const w=(a.X(1)-a.X(0))*0.5;x.beginPath();x.moveTo(colX(3)-w/2,a.Y(add));x.lineTo(colX(3)+w/2,a.Y(add));x.stroke();x.setLineDash([]);}
+  const arrow=(xa,v1,v2,lab,c)=>{x.strokeStyle=c;x.fillStyle=c;x.lineWidth=1.6;x.beginPath();x.moveTo(xa,a.Y(v1));x.lineTo(xa,a.Y(v2));x.stroke();
+    text(x,lab,xa,Math.min(a.Y(v1),a.Y(v2))-22,c,narrow?10:12,'center');};
+  const mid1=(colX(0)+colX(1))/2,mid2=(colX(2)+colX(3))/2;
+  x.strokeStyle=css('--grid');x.beginPath();x.moveTo(a.X(2),a.pt);x.lineTo(a.X(2),H-a.pb);x.stroke();
+  text(x,'输入端',a.X(0.9),a.pt+14,css('--muted'),11,'center');text(x,Gdb||Fdb?'放大器输出':'（没有放大器）',a.X(3.1),a.pt+14,css('--muted'),11,'center');
+  arrow(mid1,vals[0],vals[1],'SNR '+(vals[0]-vals[1]).toFixed(1).replace('-','−')+' dB',css('--red'));
+  arrow(mid2,vals[2],vals[3],'SNR '+(vals[2]-vals[3]).toFixed(1).replace('-','−')+' dB',css('--red'));
+}
+presets(12,'n',S12);
+Lab.add(12,lab12,{nLv:240});
+
+/* ---------- Lab 13: m levels in noise ---------- */
+const S13=['mM','mS','mB'];let mSeed=4;
+function serTh(m,s){return 2*(1-1/m)*Qf(1/(m-1)/2/s);}
+function lab13(){
+  const m=+$('mM').value,s=val('mS'),Bk=val('mB'),B=Bk*1e3,d=1/(m-1);
+  $('mSO').textContent=s.toFixed(3)+' V';$('mBO').textContent=Bk+' kHz';pressP(13,'m',S13);
+  const r=rng(1000+mSeed*37+m),N=32,ns=24,sym=[],samp=[];
+  const [x,W,H]=fit($('mWave'));const nShow=W<460?16:N;
+  for(let i=0;i<nShow;i++)sym.push(Math.floor(r()*m));
+  const a=axes(x,W,H,{x0:0,x1:nShow,y0:-0.3,y1:1.3,xt:[],yt:[0,0.5,1],yf:v=>v+' V',title:`${m} 个电平，间距 ${fmt(d,3)} V；虚线是判决门限`,pl:40,pb:16,zero:false});
+  x.strokeStyle=css('--grid');x.lineWidth=1;for(let k=0;k<m;k++){x.beginPath();x.moveTo(a.pl,a.Y(k*d));x.lineTo(W-a.pr,a.Y(k*d));x.stroke();}
+  x.strokeStyle=css('--amp');x.setLineDash([4,4]);x.lineWidth=1;for(let k=0;k<m-1;k++){x.beginPath();x.moveTo(a.pl,a.Y((k+0.5)*d));x.lineTo(W-a.pr,a.Y((k+0.5)*d));x.stroke();}x.setLineDash([]);
+  x.strokeStyle=css('--blue');x.lineWidth=1;x.beginPath();let err=0;
+  for(let i=0;i<nShow;i++){const lv=sym[i]*d;for(let j=0;j<ns;j++){const t=i+j/ns,v=lv+s*gauss(r),X=a.X(t),Y=a.Y(Math.max(-0.3,Math.min(1.3,v)));(i||j)?x.lineTo(X,Y):x.moveTo(X,Y);if(j===ns/2)samp.push(v);}}
+  x.stroke();
+  x.strokeStyle=css('--ink');x.globalAlpha=0.55;x.lineWidth=1.4;x.beginPath();for(let i=0;i<nShow;i++){const Y=a.Y(sym[i]*d);i?x.lineTo(a.X(i),Y):x.moveTo(a.X(i),Y);x.lineTo(a.X(i+1),Y);}x.stroke();x.globalAlpha=1;
+  for(let i=0;i<nShow;i++){const dec=Math.max(0,Math.min(m-1,Math.round(samp[i]/d))),ok=dec===sym[i];if(!ok)err++;
+    x.fillStyle=ok?css('--green'):css('--red');x.beginPath();x.arc(a.X(i+0.5),a.Y(Math.max(-0.28,Math.min(1.28,samp[i]))),ok?3.5:4.5,0,7);x.fill();}
+  const th=serTh(m,s),P_N=1/(s*s),mmax=Math.sqrt(1+P_N);
+  $('mD').textContent=`${fmt(d,3)} V / ${fmt(d/2,3)} V`;$('mK').textContent=fmt(d/2/s,3)+' σ';
+  $('mSer2').textContent=`${sci(th)}；这一屏错 ${err}/${nShow}`;
+  $('mH').textContent=SI(2*B*LOG2(m),'bit/s');
+  $('mMax').textContent=`${fmt(mmax,3)} 级 → ${m<=mmax?'m = '+m+' 在范围内':'m = '+m+' 超过了'}`;$('mMax').style.color=m<=mmax?css('--green'):css('--red');
+  $('mC').textContent=SI(B*LOG2(1+P_N),'bit/s');
+  /* SER curves */
+  const [y,W2,H2]=fit($('mSer'));const b=axes(y,W2,H2,{x0:0,x1:0.3,y0:-6,y1:0,xt:[0,0.05,0.1,0.15,0.2,0.25,0.3],xf:v=>v+'',yt:[0,-1,-2,-3,-4,-5,-6],yf:v=>v?'10'+SUP(v).replace('-','⁻'):'1',title:'理论误符号率（对数纵轴）随噪声 σ',pl:44,xl:'σ (V)'});
+  const MS=[2,4,8,16,32],CC=['--green','--blue','--purple','--amp','--red'];
+  MS.forEach((mm,i)=>{plot(y,b.X,b.Y,ss=>{const p=serTh(mm,ss);return p>=1e-6?Math.log10(p):NaN;},0.003,0.3,css(CC[i]),mm===m?2.8:1.3,300);});
+  let lx=W2-b.pr;for(let i=MS.length-1;i>=0;i--){const t='m='+MS[i];y.font=`${MS[i]===m?'600 ':''}11px ${css('--mono')}`;const w=y.measureText(t).width;text(y,t,lx,b.Y(-5.4),css(CC[i]),11,'right');lx-=w+10;}
+  const lp=Math.log10(th);if(lp>-6.2){y.fillStyle=css('--red');y.beginPath();y.arc(b.X(s),b.Y(Math.max(-6,lp)),5,0,7);y.fill();}
+}
+presets(13,'m',S13);
+$('mNew').addEventListener('click',()=>{mSeed++;Lab.draw(13);});
+Lab.add(13,lab13,{mWave:230,mSer:200});
 Lab.start();
 </script>
 </body></html>
