@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>概率实验室</title>
-<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
+<meta name="description" content="自己动手调骰子、抽骰子、取平均、做检验。九个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平，以及 Week 7 讲座补充的超阈值 GPD 和平均超出量图），按钮里的预设就是讲义和 Tutorial 的原题数字。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="概率实验室"><meta property="og:description" content="自己动手调骰子、抽骰子、取平均、做检验。九个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平，以及 Week 7 讲座补充的超阈值 GPD 和平均超出量图），按钮里的预设就是讲义和 Tutorial 的原题数字。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/prob-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <header>
   <div class="tag">ENGINEERING MATHEMATICS 2 · PART A · PROBABILITY</div>
   <h1>概率实验室</h1>
-  <p>自己动手调骰子、抽骰子、取平均、做检验。八个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平），按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a><a href="#lab6">实验 6 最大值的极限</a><a href="#lab7">实验 7 GEV 与重现水平</a><a href="#lab8">实验 8 QQ 图与 Tutorial 6</a></nav>
+  <p>自己动手调骰子、抽骰子、取平均、做检验。九个实验对应 A · Week 1–6（期望方差、Bayes、中心极限定理、假设检验、马尔可夫、极值理论、GEV 拟合的 QQ 图与重现水平，以及 Week 7 讲座补充的超阈值 GPD 和平均超出量图），按钮里的预设就是讲义和 Tutorial 的原题数字。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 期望与方差</a><a href="#lab2">实验 2 Bayes</a><a href="#lab3">实验 3 中心极限定理</a><a href="#lab4">实验 4 假设检验</a><a href="#lab5">实验 5 马尔可夫 / PageRank</a><a href="#lab6">实验 6 最大值的极限</a><a href="#lab7">实验 7 GEV 与重现水平</a><a href="#lab8">实验 8 QQ 图与 Tutorial 6</a><a href="#lab9">实验 9 超阈值与 GPD</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -131,6 +131,21 @@
   <div class="stage even"><canvas id="qqA" height="280" aria-label="QQ 图"></canvas><canvas id="qqB" height="280" aria-label="重现水平图"></canvas></div>
   <div class="read"><div><small>r 年一遇的水平 z<sub>r</sub></small><b id="qq_r"></b></div><div><small>z 每年被超过的概率 / 重现期</small><b id="qq_z"></b></div><div><small>QQ 图相关系数（越接近 1 越直）</small><b id="qq_c"></b></div><div><small>对数似然 ℓ</small><b id="qq_l"></b></div></div>
   <p class="note"><strong>Tutorial 6 答案（自己用最大似然算的，官方 Solution6.m 11 月 6 日才解锁）：</strong>Boston 风速拟合出 ξ ≈ 0.046、μ ≈ 51.70、σ ≈ 6.89；150 年一遇约 <strong>90.5 mph</strong>；100 mph 每年被超过的概率约 0.0023，约 <strong>439 年一遇</strong>。把 ξ 硬设成 0（Gumbel，重新拟合 μ、σ），100 mph 就变成约 965 年一遇：ξ 一点点的差别，外推到几百年以后差好几倍，所以讲座最后要看参数的协方差（不确定性）。</p>
+</section>
+
+<section class="panel" id="lab9">
+  <div class="tag">实验 9 · Week 7 讲座 · 超阈值与广义 Pareto 分布（GPD）</div>
+  <h2>只用最大的那一截数据：阈值 u 选在哪里，答案就跟着变</h2>
+  <p class="lead">GEV 用的是每年一个最大值，扔掉了很多数据。讲座的第二个定理说：只看超过某个足够高的阈值 u 的部分，超出量 X − u 近似服从<strong>广义 Pareto 分布（GPD）</strong>，形状参数 ξ 和 GEV 的是同一个。怎么知道 u「足够高」？画<strong>平均超出量图</strong>（mean excess plot，讲座转写里写成「mean access plot」）：u 以上服从 GPD 时，E[X − u | X &gt; u] 随 u 是一条<strong>直线</strong>，斜率 ξ/(1 − ξ)。左图是这条曲线，右图是用 u 以上的数据估出的 ξ。拖动 u，看估计什么时候稳定、什么时候开始乱跳。</p>
+  <div class="btns" role="group" aria-label="数据"><button data-pt="par">重尾：GPD，ξ = 0.3</button><button data-pt="exp">指数分布：ξ = 0</button><button data-pt="bnd">有上界：GPD，ξ = −0.25</button><button data-pt="nor">正态分布（真实 ξ = 0，但收敛很慢）</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="ptU">阈值 u（取在第几百分位）</label><input id="ptU" type="range" min="0" max="0.98" step="0.01" value="0.5"><output id="ptUO"></output></div>
+    <div class="ctl"><label for="ptS">换一组随机数据（2000 个）</label><input id="ptS" type="range" min="1" max="20" step="1" value="1"><output id="ptSO"></output></div>
+  </div>
+  <p class="verdict" id="pt_v"></p>
+  <div class="stage even"><canvas id="ptA" height="260" aria-label="平均超出量图"></canvas><canvas id="ptB" height="260" aria-label="不同阈值下估计的形状参数"></canvas></div>
+  <div class="read"><div><small>超过 u 的数据个数</small><b id="pt_n"></b></div><div><small>估计 ξ / σ（最大似然）</small><b id="pt_x"></b></div><div><small>每 10 000 个观测超过一次的水平：模型 / 真值</small><b id="pt_r"></b></div><div><small>真实的 ξ</small><b id="pt_t"></b></div></div>
+  <p class="note"><strong>怎么读：</strong>左图的虚线是在当前 u 处拟合的 GPD 预测的直线；u 以上的点沿着它走，说明 u 够高了。u 太低：用到了分布「肚子」里的数据，不服从 GPD，估计有偏差（正态分布在 u 较低时 ξ 明显小于 0）；u 太高：剩下的数据太少，估计乱跳（灰带越来越宽）。讲座说这正是文献里争论的地方：选 2.5 得一个答案，选 1.5 得另一个。ξ、σ 用最大似然估计，和 MATLAB 的 <code>fitdist(y,'GeneralizedPareto')</code> 是同一种方法（y = 超过 u 的部分 x − u）。</p>
 </section>
 
 </div>
@@ -391,6 +406,68 @@ document.querySelectorAll('#lab8 [data-qm]').forEach(b=>b.addEventListener('clic
 $('qqFit').addEventListener('click',()=>{qdm='gev';const D=QD[qds];$('qqM').value=D.mle[0];$('qqS').value=D.mle[1];$('qqX').value=D.mle[2];Lab.draw(8);});
 document.querySelectorAll('#lab8 [data-qp]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.qp.split(',');qdSet(q[0]);qdm=q[1];$('qqM').value=q[2];$('qqS').value=q[3];$('qqX').value=q[4];$('qqR').value=Math.log10(+q[5]);$('qqZ').value=q[6];Lab.draw(8);}));
 Lab.add(8,lab8,{qqA:250,qqB:250});
+
+/* ---------- Lab 9: peaks over threshold, GPD, mean excess plot ---------- */
+function ptR(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+const PT={par:{n:'GPD ξ = 0.3',xi:0.3,q:p=>(Math.pow(1-p,-0.3)-1)/0.3},
+          exp:{n:'指数分布',xi:0,q:p=>-Math.log(1-p)},
+          bnd:{n:'GPD ξ = −0.25',xi:-0.25,q:p=>(Math.pow(1-p,0.25)-1)/-0.25},
+          nor:{n:'正态分布',xi:0,q:p=>invNorm(p)}};
+let ptd='par',ptCache={};
+function ptData(ds,seed){const k=ds+seed;if(ptCache[k])return ptCache[k];const r=ptR(9001+seed*131+ds.charCodeAt(0)),x=[];
+  for(let i=0;i<2000;i++){let u=r();if(u<=1e-12)u=1e-12;if(u>=1-1e-12)u=1-1e-12;x.push(PT[ds].q(u));}
+  x.sort((a,b)=>a-b);return ptCache[k]=x;}
+function ptFit(x,u){const y=x.filter(v=>v>u).map(v=>v-u),n=y.length;if(n<5)return null;const m=y.reduce((a,b)=>a+b,0)/n,v=y.reduce((a,b)=>a+(b-m)**2,0)/(n-1);
+  /* GPD maximum likelihood via profile over theta = xi/sigma: xi = mean(log(1+theta*y)), l = n[-log(xi/theta) - 1 - xi] */
+  const ymax=Math.max(...y),prof=t=>{if(Math.abs(t)<1e-9)return{l:-n*(Math.log(m)+1),xi:0,sg:m};let k=0;for(const v of y){const q=1+t*v;if(q<=0)return{l:-Infinity};k+=Math.log(q);}k/=n;
+    if(Math.abs(k)<1e-12)return{l:-n*(Math.log(m)+1),xi:0,sg:m};const sg=k/t;if(sg<=0)return{l:-Infinity};return{l:-n*Math.log(sg)-(1/k+1)*n*k,xi:k,sg};};
+  const ts=[];for(let i=60;i>=1;i--)ts.push(-(0.999/ymax)*Math.pow(i/60,1.5));ts.push(0);for(let i=1;i<=80;i++)ts.push((20/m)*Math.pow(i/80,3));
+  let bi=0,bl=-Infinity;ts.forEach((t,i)=>{const r=prof(t);if(r.l>bl){bl=r.l;bi=i;}});
+  let a0=ts[Math.max(0,bi-1)],b0=ts[Math.min(ts.length-1,bi+1)];
+  for(let it=0;it<40;it++){const c=a0+(b0-a0)*0.382,d=a0+(b0-a0)*0.618;if(prof(c).l>prof(d).l)b0=d;else a0=c;}
+  const best=prof((a0+b0)/2);return{n,m,v,se:Math.sqrt(v/n),xi:best.xi,sg:best.sg};}
+function lab9(){
+  const D=PT[ptd],seed=+$('ptS').value,x=ptData(ptd,seed),N=x.length,qu=+$('ptU').value,u=x[Math.floor(qu*(N-1))];
+  $('ptUO').textContent=`${Math.round(qu*100)}%（u = ${u.toFixed(2)}）`;$('ptSO').textContent='第 '+seed+' 组';
+  pressGroup('#lab9 [data-pt]',b=>b.dataset.pt===ptd);
+  const ps=[];for(let i=0;i<=98;i++){const uu=x[Math.floor(i/100*(N-1))],f=ptFit(x,uu);if(f)ps.push([uu,f]);}
+  const F=ptFit(x,u);
+  /* mean excess plot */
+  const [a,W,H]=fit($('ptA'));const x0=ps[0][0],x1=ps[ps.length-1][0];
+  let ym=0;ps.forEach(([uu,f])=>ym=Math.max(ym,f.m+1.96*f.se));ym=Math.min(ym*1.05,ps[0][1].m*6+1);
+  const A=axes(a,W,H,{x0,x1,y0:0,y1:ym,xt:niceT(x0,x1),yt:niceT(0,ym),title:'平均超出量 E[X − u | X > u]，灰带 = ±1.96 标准误',xl:'阈值 u',pl:40});
+  a.save();a.beginPath();a.rect(A.pl,A.pt,W-A.pl-A.pr,H-A.pt-A.pb);a.clip();
+  a.fillStyle=css('--shade');a.beginPath();ps.forEach(([uu,f],i)=>{const X=A.X(uu),Y=A.Y(f.m+1.96*f.se);i?a.lineTo(X,Y):a.moveTo(X,Y);});
+  for(let i=ps.length-1;i>=0;i--){const [uu,f]=ps[i];a.lineTo(A.X(uu),A.Y(Math.max(0,f.m-1.96*f.se)));}a.closePath();a.fill();
+  a.strokeStyle=css('--blue');a.lineWidth=2.2;a.beginPath();ps.forEach(([uu,f],i)=>{const X=A.X(uu),Y=A.Y(f.m);i?a.lineTo(X,Y):a.moveTo(X,Y);});a.stroke();
+  if(F&&F.xi<1){const sl=F.xi/(1-F.xi);a.strokeStyle=css('--red');a.setLineDash([6,4]);a.lineWidth=1.6;a.beginPath();a.moveTo(A.X(u),A.Y(F.m));a.lineTo(A.X(x1),A.Y(F.m+sl*(x1-u)));a.stroke();a.setLineDash([]);}
+  a.strokeStyle=css('--amp');a.lineWidth=1.6;a.beginPath();a.moveTo(A.X(u),A.pt);a.lineTo(A.X(u),H-A.pb);a.stroke();a.restore();
+  label(a,'u',Math.min(A.X(u)+4,W-20),A.pt+14,css('--amp'),12);
+  /* xi stability */
+  const [b,W2,H2]=fit($('ptB'));const B=axes(b,W2,H2,{x0,x1,y0:-0.8,y1:0.8,xt:niceT(x0,x1),yt:[-0.8,-0.4,0,0.4,0.8],yf:v=>v.toFixed(1),title:'用 u 以上的数据估计的 ξ',xl:'阈值 u',pl:40});
+  b.save();b.beginPath();b.rect(B.pl,B.pt,W2-B.pl-B.pr,H2-B.pt-B.pb);b.clip();
+  b.strokeStyle=css('--muted');b.setLineDash([5,4]);b.lineWidth=1.3;b.beginPath();b.moveTo(B.X(x0),B.Y(D.xi));b.lineTo(B.X(x1),B.Y(D.xi));b.stroke();b.setLineDash([]);
+  b.strokeStyle=css('--purple');b.lineWidth=2.2;b.beginPath();ps.forEach(([uu,f],i)=>{const X=B.X(uu),Y=B.Y(Math.max(-0.9,Math.min(0.9,f.xi)));i?b.lineTo(X,Y):b.moveTo(X,Y);});b.stroke();
+  b.strokeStyle=css('--amp');b.lineWidth=1.6;b.beginPath();b.moveTo(B.X(u),B.pt);b.lineTo(B.X(u),H2-B.pb);b.stroke();
+  if(F){b.fillStyle=css('--red');b.beginPath();b.arc(B.X(u),B.Y(Math.max(-0.8,Math.min(0.8,F.xi))),5,0,7);b.fill();}b.restore();
+  text(b,`虚线 = 真实 ξ = ${D.xi}`.replace('-','−'),B.pl+6,H2-B.pb-8,css('--muted'),11);
+  /* readouts */
+  if(!F){$('pt_n').textContent='太少';return;}
+  const zeta=F.n/N,m=10000,lev=Math.abs(F.xi)<1e-6?u+F.sg*Math.log(m*zeta):u+F.sg/F.xi*(Math.pow(m*zeta,F.xi)-1),tru=D.q(1-1/m);
+  $('pt_n').textContent=`${F.n} 个（占 ${(zeta*100).toFixed(1)}%）`;
+  $('pt_x').textContent=`${F.xi.toFixed(3).replace('-','−')} / ${F.sg.toFixed(3)}`;
+  $('pt_r').textContent=`${lev.toFixed(2)} / ${tru.toFixed(2)}`;
+  $('pt_t').textContent=(D.xi+'').replace('-','−')+(ptd==='nor'?'（极限）':'');
+  const v=$('pt_v'),err=F.xi-D.xi;
+  if(F.n<40){v.textContent=`u 太高：只剩 ${F.n} 个数据，估计的 ξ 很不稳定，右边的曲线在乱跳`;v.style.color=css('--amp');}
+  else if(Math.abs(err)<0.08){v.textContent=`ξ 的估计 ${F.xi.toFixed(2)} 接近真实值，${F.n} 个数据够用：这一段平均超出量图近似直线`.replace('-','−');v.style.color=css('--accent');}
+  else{v.textContent=`ξ 的估计 ${F.xi.toFixed(2)} 和真实的 ${D.xi} 差了 ${Math.abs(err).toFixed(2)}：`.replace(/-/g,'−')+(ptd==='nor'?'正态分布的尾巴要到很高才像 GPD，u 低时估出来偏负':'u 太低（还在分布的「肚子」里）或者这组随机数据刚好偏了，换一组看看');v.style.color=css('--red');}
+}
+function niceT(a,b){const r=b-a,s=r>8?2:r>4?1:r>2?0.5:r>1?0.25:0.1,t=[];for(let v=Math.ceil(a/s)*s;v<=b+1e-9;v+=s)t.push(+v.toFixed(2));return t;}
+['ptU','ptS'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(9)));
+document.querySelectorAll('#lab9 [data-pt]').forEach(b=>b.addEventListener('click',()=>{ptd=b.dataset.pt;Lab.draw(9);}));
+{const q=new URLSearchParams(location.search).get('pt');if(q&&PT[q])ptd=q;}
+Lab.add(9,lab9,{ptA:230,ptB:230});
 Lab.start();
 </script>
 </body></html>
