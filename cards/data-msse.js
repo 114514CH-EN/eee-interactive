@@ -97,12 +97,30 @@ D('SE6','Python 常见误区（纠错）','3ea202737d7a81f4bce0d36a0cd8a14d',[
 ['err',r`break、return 后面的代码会执行吗？`,r`不会。break 跳出最近的循环，return 离开函数，它们后面同一块里的语句永远执行不到。break 只能写在循环里，写在函数体里是 ‹SyntaxError: 'break' outside loop›。`],
 ['fix',r`讲义第 44 页说「Python 是解释型，括号没关时程序会继续运行」，对吗？`,r`运行 .py 文件时不对：Python 先编译整个文件，括号没关直接 ‹SyntaxError: '(' was never closed›，一行都不跑。只有在交互式 Shell 里，它显示 ... 等你继续输入，看起来像「还在继续」。`],
 ]);
-D('SE7','SysML 概览与需求工程','3ea202737d7a816b82d6d467df8104fa',[
+D('SE7','SysML 概览','3ea202737d7a816b82d6d467df8104fa',[
 ['q',r`SysML 和 UML 是什么关系？为什么系统工程用 SysML？`,r`SysML 基于 UML 2：复用其中一部分（UML4SysML），再加自己的扩展。建模单位从「类 class」换成「块 block」，一个 block 可以是软件、硬件、数据、流程、人员或设施，适合软硬件混合的团队。图从 UML 2 的 13 种减到 9 种。`],
 ['q',r`SysML 的 9 种图怎么分？本课 SysML-Lite 用哪 6 种？`,r`- 行为图：活动 act、序列 sd、状态机 stm、用例 uc
 - 需求图 req
 - 结构图：块定义 bdd、内部块 ibd、包 pkg，以及参数图 par
 - SysML-Lite：包图、需求图、活动图、块定义图、内部块图、参数图`],
+['q',r`7a 第 8 页的 ABS 防抱死例子：同一个系统的四个视角各用什么图？`,r`- **结构**：块定义图（Anti-Lock Controller 由 Traction Detector 和 Brake Modulator 组成）+ 内部块图（两者之间的连接）
+- **行为**：序列图（激活顺序）、状态机（Gripping ⇄ Slipping）、活动图（检测打滑 → 调节刹车力）
+- **需求**：需求图，Anti-Lock Performance «deriveReqt» 自 Stopping Distance
+- **参数**：参数图，$f=t_f b_f(1-t_l)$、$f=ma$、$a=\mathrm{d}v/\mathrm{d}t$、$v=\mathrm{d}x/\mathrm{d}t$`],
+['q',r`块定义图（bdd）和内部块图（ibd）有什么区别？`,r`- **bdd = definition**：定义有哪些类型的块、它们的层次（实心菱形 = 组成，空心三角 = 继承）
+- **ibd = use**：画一个块内部，它的部件实例之间怎么连接、传递什么
+- ABS 例子：bdd 说 Anti-Lock Controller 由 d1、m1 组成；ibd 画出 d1 和 m1 之间的连接 c2`],
+['q',r`参数图有什么用？用 ABS 的 Stopping Distance（60 mph 在 150 ft 内停下）算一下需要的减速度`,r`参数图把需求里的数字和物理方程连起来，用来做工程分析。
+匀减速：$a=\dfrac{v^2}{2d}$，$v=60$ mph $=26.82$ m/s，$d=150$ ft $=45.72$ m
+- $a=26.82^2/(2\times45.72)=$ **7.87 m/s²**（约 0.80 g），刹车时间 3.41 s
+- 1500 kg 的车需要平均刹车力 $f=ma\approx$ **11.8 kN**`],
+['fix',r`7a（SysML Overview）讲义有哪些要注意的地方？`,r`- 第 4 页说 UML 在 2000 年成为 ISO 标准：查到的是 **ISO/IEC 19501:2005**
+- 第 6 页说 SysML-Lite 是「four diagrams」，第 7 页却列了 6 种：理解成四个视角（结构、行为、需求、参数）共 6 种图
+- 第 6 页说 UML 2 有 13 种图：从 UML 2.2 起是 14 种
+- PDF 属性标题写的是「SysML: Requirements」，内容其实是 SysML Overview`]
+]);
+
+D('SE8','需求工程与 SysML 需求图','3ea202737d7a811ea1c5fc782a9dbb4c',[
 ['q',r`什么是需求工程？系统需求是什么？`,r`需求工程：确定客户要系统提供哪些服务、系统在什么约束下运行和开发的过程。系统需求：这个过程中产出的、对系统服务和约束的描述。`],
 ['q',r`需求为什么要写「what 不写 how」？举讲义的例子。`,r`需求说要什么，怎么做留给设计。What：「中心办公室和每个售票亭之间要有安全的通信链路」。How：「用 Cisco 路由器的 802.11n MIMO 无线局域网」。过早写 how 会锁死设计选择；但客户或法规强制的技术是约束，可以写。`],
 ['q',r`功能需求、非功能需求、领域需求分别是什么？`,r`- 功能：系统提供什么服务、对输入怎么反应、特定情况下怎么表现
@@ -129,6 +147,6 @@ D('SE7','SysML 概览与需求工程','3ea202737d7a816b82d6d467df8104fa',[
 - copy：跨项目复用一条需求，副本只读，箭头从副本指向原件
 - trace：通用弱关联，上面几种都不合适时用`],
 ['fix',r`7b 讲义里 SysML 关系名字有哪些笔误？`,r`- 第 30 页写 ‹«derive»›、第 33 页写 ‹«deriveReq»›：正确名字是 ‹«deriveReqt»›
-- 第 37 页 Kettle 练习：两个 Step 2（第三个应为 Step 3），‹SySML› 拼错；「Define、Composite」关系在 SysML 里对应 deriveReqt 和 containment`],
+- 第 37 页 Kettle 练习：两个 Step 2（第三个应为 Step 3），‹SySML› 拼错；「Define、Composite」关系在 SysML 里对应 deriveReqt 和 containment`]
 ]);
 })();
