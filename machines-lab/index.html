@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>电机与变压器实验室</title>
-<meta name="description" content="四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="电机与变压器实验室"><meta property="og:description" content="四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/machines-lab/">
+<meta name="description" content="六个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4–6 对应二年级 DEEM：有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）、交流感应电机（转差率、转矩–转速、变频调速）、永磁无刷直流电机（六步换相、限流与转折转速）。预设就是讲义例题、习题和真题。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="电机与变压器实验室"><meta property="og:description" content="六个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4–6 对应二年级 DEEM：有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）、交流感应电机（转差率、转矩–转速、变频调速）、永磁无刷直流电机（六步换相、限流与转折转速）。预设就是讲义例题、习题和真题。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/machines-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <header>
   <div class="tag">ELECTRICAL ENGINEERING 1 · ELECTRICAL MACHINES</div>
   <h1>电机与变压器实验室</h1>
-  <p>四个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4 对应二年级 DEEM 的有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）。预设就是讲义例题和真题。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 直流电机</a><a href="#lab2">实验 2 变压器匹配</a><a href="#lab3">实验 3 整流滤波</a><a href="#lab4">实验 4 并励与串励</a></nav>
+  <p>六个实验：前三个对应一年级 EE 的 Electrical Machines（直流电机转矩–转速、变压器阻抗匹配、桥式整流加电容滤波），实验 4–6 对应二年级 DEEM：有刷直流电机（并励与串励、效率与转速调整率，含 2026 真题）、交流感应电机（转差率、转矩–转速、变频调速）、永磁无刷直流电机（六步换相、限流与转折转速）。预设就是讲义例题、习题和真题。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 直流电机</a><a href="#lab2">实验 2 变压器匹配</a><a href="#lab3">实验 3 整流滤波</a><a href="#lab4">实验 4 并励与串励</a><a href="#lab5">实验 5 感应电机</a><a href="#lab6">实验 6 无刷直流电机</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -79,6 +79,47 @@
   <div class="stage even"><canvas id="dts" height="260" aria-label="转矩与功率随转速"></canvas><canvas id="die" height="260" aria-label="电流与效率随转速"></canvas></div>
   <div class="read"><div><small>运行点转速</small><b id="d_w" style="font-size:15px"></b></div><div><small>电流 I / 反电动势 E</small><b id="d_i" style="font-size:15px"></b></div><div><small>输入 / 输出 / 铜损 / 其他</small><b id="d_p" style="font-size:13px"></b></div><div><small>效率 η · 转速调整率</small><b id="d_e" style="font-size:15px"></b></div></div>
   <p class="note"><strong>对照 2026 Q3：</strong>k<sub>v</sub> = (200 − 5×0.4)/188.5 = 1.05；堵转电流 500 A、堵转转矩 525 N·m；空载转速 190.4 rad/s（1818 rpm）；最大功率 V²/4R = 25 kW 出现在一半转速；只算电枢铜损时效率 = ω/ω<sub>0</sub>，转速越高效率越高。<strong>讲义两张图</strong>可由「讲义」两个预设复现：并励图是 24 V、1 Ω、k<sub>v</sub> ≈ 2.88（堵转 24 A、69 N·m，空载 8.33 rad/s，最大功率 144 W）；串励图是 120 V、1.2 Ω、K = 0.048（最大功率 V²/4R = 3 kW 出现在 ω = R/K = 25 rad/s，效率 Kω/(R+Kω) 在 94 rad/s 时 79%）。</p>
+</section>
+
+<section class="panel" id="lab5">
+  <div class="tag">实验 5 · 交流感应电机（Year 2 EM Week 7 · Lecture 8）</div>
+  <h2>转子永远比旋转磁场慢一点：转差率 s 决定转矩，也决定浪费多少</h2>
+  <p class="lead">三相定子绕组产生转速 ω<sub>s</sub> = 2πf/P 的旋转磁场（P = 每相极对数）。转子比它慢，转差率 s = (ω<sub>s</sub> − ω<sub>m</sub>)/ω<sub>s</sub>，转子导条里才有感应电流和转矩。简化等效电路（忽略 R<sub>1</sub>、X<sub>m</sub>）：T = V²(R<sub>2</sub>/s) / [ω<sub>s</sub>((R<sub>2</sub>/s)² + X²)]，最大转矩 T<sub>m</sub> = V²/(2ω<sub>s</sub>X) 出现在 s = α = R<sub>2</sub>/X。左图：转矩–转速（橙线是负载，红点是运行点，绿色区是发电机）。右图：气隙功率 P<sub>ag</sub> 分成机械功率 (1 − s)P<sub>ag</sub> 和转子铜损 sP<sub>ag</sub>。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-im="100,50,1,1.5,0.5,3,0">习题 Q2：100 V、50 Hz、X = 1.5 Ω、R₂ = 0.5 Ω</button><button data-im="100,50,1,1.5,0.3,3,0">α = 0.2</button><button data-im="100,50,1,1.5,1.5,3,0">α = 1（堵转时转矩最大）</button><button data-im="100,30,1,1.5,0.5,3,1">变频到 30 Hz（恒 V/f）</button><button data-im="100,30,1,1.5,0.5,3,0">降到 30 Hz 但电压不变</button><button data-im="100,50,2,1.5,0.5,3,0">2 对极：同步 1500 rpm</button><button data-im="100,50,1,1.5,0.5,12,0">负载超过最大转矩</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="iV">每相电压 V（50 Hz 时，rms）</label><input id="iV" type="range" min="20" max="240" step="1" value="100"><output id="iVO"></output></div>
+    <div class="ctl"><label for="iF">电源频率 f (Hz)</label><input id="iF" type="range" min="5" max="60" step="1" value="50"><output id="iFO"></output></div>
+    <div class="ctl"><label for="iP">每相极对数 P</label><input id="iP" type="range" min="1" max="4" step="1" value="1"><output id="iPO"></output></div>
+    <div class="ctl"><label for="iX">转子漏抗 X（50 Hz 时，Ω）</label><input id="iX" type="range" min="0.2" max="4" step="0.05" value="1.5"><output id="iXO"></output></div>
+    <div class="ctl"><label for="iR">转子电阻 R<sub>2</sub> (Ω)</label><input id="iR" type="range" min="0.05" max="4" step="0.01" value="0.5"><output id="iRO"></output></div>
+    <div class="ctl"><label for="iT">负载转矩 T<sub>L</sub> (N·m)</label><input id="iT" type="range" min="0" max="40" step="0.1" value="3"><output id="iTO"></output></div>
+    <div class="ctl"><label for="iVF">变频器</label><select id="iVF"><option value="0">电压固定，只改频率</option><option value="1">恒 V/f：电压跟着频率按比例变</option></select></div>
+  </div>
+  <p class="verdict" id="i_v"></p>
+  <div class="stage even"><canvas id="its" height="260" aria-label="感应电机转矩–转速"></canvas><canvas id="ipf" height="260" aria-label="气隙功率的去向"></canvas></div>
+  <div class="read"><div><small>同步转速 n<sub>s</sub> / 运行转速</small><b id="i_n" style="font-size:15px"></b></div><div><small>转差率 s · 转子电流频率 sf</small><b id="i_s" style="font-size:15px"></b></div><div><small>最大转矩 T<sub>m</sub> · 出现在 s = α</small><b id="i_m" style="font-size:15px"></b></div><div><small>P<sub>ag</sub> / 机械 / 转子铜损 · 转子效率 1 − s</small><b id="i_p" style="font-size:13px"></b></div></div>
+  <p class="note"><strong>对照习题：</strong>100 V、50 Hz、1 对极、X = 1.5 Ω → T<sub>m</sub> = 100²/(2 × 314.2 × 1.5) = 10.6 N·m；R<sub>2</sub> = 0.5 Ω 时 α = 1/3，堵转转矩 T<sub>0</sub> = T<sub>m</sub>·2α/(1 + α²) = 6.37 N·m（官方答案写 5.5 N·m，按讲义的 α 定义算不出来）。<strong>为什么 s = 0 没有转矩：</strong>转子和磁场同速，导条看到的磁通不变，没有感应电动势就没有电流。<strong>转差越大越浪费：</strong>转子铜损 = sP<sub>ag</sub>，所以感应电机都在小转差（几个百分点）下工作。这里是每相的简化模型，没有算定子铜损、铁损和摩擦。</p>
+</section>
+
+<section class="panel" id="lab6">
+  <div class="tag">实验 6 · 永磁无刷直流电机（Year 2 EM Week 8 · Lecture 9）</div>
+  <h2>六步换相：每次只给两相通电，定子磁场一步 60° 地「拉着」永磁转子转</h2>
+  <p class="lead">转子是永磁体，定子三相绕组由三相逆变器（6 个开关）供电。转子位置传感器告诉控制器现在该接通哪两相，使定子磁场总是超前转子 60°–120°。任何时刻两相串联、两个开关导通：V = 2V<sub>OS</sub> + I·2R<sub>ph</sub> + 2kω，T = 2kI（k 是每相反电动势常数）。所以它的转矩–转速和并励直流电机一样是一条直线；驱动器限流时，低速段被削平，直线和平台的交点就是转折转速 ω<sub>c</sub>。</p>
+  <div class="btns" role="group" aria-label="预设"><button data-bl="24,0.025,0.1,0.3,5.9,0.2114">习题 Q5：24 V、k = 0.025、0.1 Ω、限流 5.9 A</button><button data-bl="24,0.025,0.1,0.3,5.9,0.295">Q5：带满 295 mN·m（转折转速）</button><button data-bl="48,0.05,0.2,0.5,20,0.5">自己做一遍：48 V、0.5 N·m</button><button data-bl="12,0.025,0.1,0.3,5.9,0.2114">电压减半：调速</button></div>
+  <div class="controls">
+    <div class="ctl"><label for="bV">直流电源 V (V)</label><input id="bV" type="range" min="6" max="60" step="0.5" value="24"><output id="bVO"></output></div>
+    <div class="ctl"><label for="bK">每相常数 k (V·s/rad)</label><input id="bK" type="range" min="0.005" max="0.2" step="0.001" value="0.025"><output id="bKO"></output></div>
+    <div class="ctl"><label for="bR">每相电阻 R<sub>ph</sub> (Ω)</label><input id="bR" type="range" min="0.01" max="1" step="0.01" value="0.1"><output id="bRO"></output></div>
+    <div class="ctl"><label for="bO">开关导通压降 V<sub>OS</sub> (V)</label><input id="bO" type="range" min="0" max="2" step="0.05" value="0.3"><output id="bOO"></output></div>
+    <div class="ctl"><label for="bI">驱动器限流 I<sub>max</sub> (A)</label><input id="bI" type="range" min="1" max="60" step="0.1" value="5.9"><output id="bIO"></output></div>
+    <div class="ctl"><label for="bT">负载转矩（含摩擦）T<sub>L</sub> (N·m)</label><input id="bT" type="range" min="0" max="3" step="0.0001" value="0.2114"><output id="bTO"></output></div>
+    <div class="ctl"><label for="bA">转子电角度 θ (°)</label><input id="bA" type="range" min="0" max="359" step="1" value="60"><output id="bAO"></output></div>
+  </div>
+  <div class="btns"><button id="bPlay" class="play">▶ 让转子转起来</button></div>
+  <p class="verdict" id="b_v"></p>
+  <div class="stage even"><canvas id="bst" height="260" aria-label="六步换相示意"></canvas><canvas id="btw" height="260" aria-label="无刷直流电机转矩–转速"></canvas></div>
+  <div class="read"><div><small>空载 ω<sub>0</sub> / 转折 ω<sub>c</sub></small><b id="b_0" style="font-size:14px"></b></div><div><small>运行点：转速 · 电流</small><b id="b_w" style="font-size:14px"></b></div><div><small>输入 VI / 开关 2IV<sub>OS</sub> / 绕组 I²·2R<sub>ph</sub> / 输出</small><b id="b_p" style="font-size:13px"></b></div><div><small>效率 · 转速调整率</small><b id="b_e" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>对照习题 Q5：</strong>空载 ω<sub>0</sub> = (24 − 0.6)/(2 × 0.025) = 468 rad/s = 4469 rpm；堵转转矩 295 mN·m 对应电流 0.295/0.05 = 5.9 A（不限流的话堵转电流是 23.4/0.2 = 117 A，所以这个 295 mN·m 只能来自驱动器限流）；转折转速 (23.4 − 0.2 × 5.9)/0.05 = 444.4 rad/s = 4244 rpm（官方 4249）。(b) 4.68 A 时转速 449.3 rad/s = 4290 rpm，和题目给的一致。这里的效率只扣了开关和绕组损耗，没有算摩擦和铁损。</p>
 </section>
 
 </div>
@@ -192,6 +233,100 @@ function lab4(){
 ['dV','dR','dK','dT','dP'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(4)));
 document.querySelectorAll('#lab4 [data-dm]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.dm.split(',');dm=q[0];['dV','dR','dK','dT','dP'].forEach((id,i)=>$(id).value=q[i+1]);Lab.draw(4);}));
 Lab.add(4,lab4,{dts:230,die:230});
+/* ---------- Lab 5: AC induction motor ---------- */
+function imT(V,ws,R2,X,s){if(Math.abs(s)<1e-9)return 0;const r=R2/s;return V*V*r/(ws*(r*r+X*X));}
+function lab5(){
+  const V50=val('iV'),f=val('iF'),P=val('iP'),X50=val('iX'),R2=val('iR'),TL=val('iT'),vf=$('iVF').value==='1';
+  const V=vf?V50*f/50:V50,X=X50*f/50,ws=2*Math.PI*f/P,ns=60*f/P,al=R2/X,Tm=V*V/(2*ws*X);
+  $('iVO').textContent=V50+' V'+(vf&&f!==50?`（现在 ${fmt(V,3)} V）`:'');$('iFO').textContent=f+' Hz';$('iPO').textContent=P+'（'+2*P+' 极）';
+  $('iXO').textContent=X50+' Ω'+(f!==50?`（现在 ${fmt(X,3)} Ω）`:'');$('iRO').textContent=R2+' Ω';$('iTO').textContent=TL+' N·m';
+  pressGroup('#lab5 [data-im]',b=>{const q=b.dataset.im.split(',').map(Number);return q[0]===V50&&q[1]===f&&q[2]===P&&q[3]===X50&&q[4]===R2&&q[5]===TL&&q[6]===(vf?1:0);});
+  const sm=Math.min(al,1);let s=NaN;
+  if(TL<=0)s=0;else if(TL<=Tm&&(al<1||TL<=imT(V,ws,R2,X,1)||true)){let lo=1e-7,hi=sm;if(imT(V,ws,R2,X,hi)>=TL){for(let i=0;i<80;i++){const m=(lo+hi)/2;imT(V,ws,R2,X,m)<TL?lo=m:hi=m;}s=(lo+hi)/2;}}
+  const T0=imT(V,ws,R2,X,1);
+  $('i_m').textContent=`${Tm.toFixed(2)} N·m · α = ${al.toFixed(3)}`;
+  const v=$('i_v');
+  if(isNaN(s)){v.textContent=TL>Tm?`负载 ${TL} N·m 超过最大转矩 ${fmt(Tm,3)} N·m：电机拉不动，会一路减速到停转（堵转转矩只有 ${fmt(T0,3)} N·m）`:`负载超过堵转转矩 ${fmt(T0,3)} N·m，起动不了`;v.style.color=css('--red');
+    $('i_n').textContent=`${Math.round(ns)} rpm / 停转`;$('i_s').textContent='—';$('i_p').textContent='—';}
+  else{const wm=ws*(1-s),I2=V/Math.sqrt((R2/Math.max(s,1e-9))**2+X*X),Pag=s>0?I2*I2*R2/s:0;
+    $('i_n').textContent=`${Math.round(ns)} rpm / ${Math.round(ns*(1-s))} rpm`;$('i_s').textContent=`${(s*100).toFixed(2)} % · ${(s*f).toFixed(2)} Hz`;
+    $('i_p').textContent=s>0?`${Pag.toFixed(0)} / ${(Pag*(1-s)).toFixed(0)} / ${(Pag*s).toFixed(1)} W · ${((1-s)*100).toFixed(1)} %`:'空载：没有功率';
+    v.textContent=s===0?'没有负载：转子几乎和磁场同速，s → 0，没有感应电流，也没有转矩':`运行在 s = ${(s*100).toFixed(2)} %：转速比同步转速低 ${(ns*s).toFixed(0)} rpm（调整率 ≈ s）；转子铜损占进入转子功率的 ${(s*100).toFixed(1)} %`+(s>0.1?'，转差偏大、发热多':'');v.style.color=s>0.1?css('--amp'):css('--blue');}
+  /* torque-speed */
+  const [x,W,H]=fit($('its'));const n0=-0.25*ns,n1=1.25*ns,tm=Math.max(Tm,TL,T0)*1.18;
+  const nT=n=>imT(V,ws,R2,X,(ns-n)/ns);
+  const step=ns>=1500?500:ns>=600?200:100,xt=[];for(let q=Math.ceil(n0/step)*step;q<=n1;q+=step)xt.push(q);
+  const a=axes(x,W,H,{x0:n0,x1:n1,y0:-tm,y1:tm,xt,yt:[-tm,-tm/2,0,tm/2,tm].map(t=>+t.toPrecision(2)),title:'转矩 T (N·m) – 转速 n (rpm)',xl:'rpm',pl:46});
+  x.fillStyle=css('--green');x.globalAlpha=0.08;x.fillRect(a.X(ns),a.pt,a.X(n1)-a.X(ns),H-a.pt-a.pb);x.fillStyle=css('--red');x.fillRect(a.X(n0),a.pt,a.X(0)-a.X(n0),H-a.pt-a.pb);x.globalAlpha=1;
+  x.strokeStyle=css('--grid');x.setLineDash([4,4]);x.beginPath();x.moveTo(a.X(ns),a.pt);x.lineTo(a.X(ns),H-a.pb);x.stroke();x.setLineDash([]);
+  plot(x,a.X,a.Y,nT,n0,n1,css('--blue'),2.6,500);
+  if(TL>0){x.strokeStyle=css('--amp');x.lineWidth=1.6;x.setLineDash([6,4]);x.beginPath();x.moveTo(a.X(0),a.Y(TL));x.lineTo(a.X(ns),a.Y(TL));x.stroke();x.setLineDash([]);}
+  if(!isNaN(s)){x.fillStyle=css('--red');x.beginPath();x.arc(a.X(ns*(1-s)),a.Y(Math.min(TL,tm)),6,0,7);x.fill();}
+  if(al<1.25){x.fillStyle=css('--blue');x.beginPath();x.arc(a.X(ns*(1-al)),a.Y(Tm),4,0,7);x.fill();text(x,'最大转矩',a.X(ns*(1-al))+6,a.Y(Tm)-6,css('--blue'),11);}
+  text(x,'同步',a.X(ns)+4,a.pt+12,css('--muted'),11);text(x,'发电机',a.X(ns)+6,H-a.pb-8,css('--green'),11);text(x,'制动',a.X(n0)+4,H-a.pb-8,css('--red'),11);text(x,'电动机',a.X(ns*0.35),H-a.pb-8,css('--blue'),11);
+  /* power split */
+  const [y,W2,H2]=fit($('ipf'));
+  const ss=[];for(let i=0;i<=200;i++)ss.push(i/200);
+  const b=axes(y,W2,H2,{x0:0,x1:1,y0:0,y1:1,xt:[0,0.25,0.5,0.75,1],xf:v=>v.toString(),yt:[0,0.5,1],yf:v=>Math.round(v*100)+'%',title:'进入转子的功率（气隙功率）的去向，随转差率 s',xl:'s',pl:42});
+  y.fillStyle=css('--green');y.globalAlpha=0.35;y.beginPath();y.moveTo(b.X(0),b.Y(0));y.lineTo(b.X(0),b.Y(1));y.lineTo(b.X(1),b.Y(0));y.closePath();y.fill();
+  y.fillStyle=css('--red');y.beginPath();y.moveTo(b.X(0),b.Y(1));y.lineTo(b.X(1),b.Y(1));y.lineTo(b.X(1),b.Y(0));y.closePath();y.fill();y.globalAlpha=1;
+  text(y,'机械 (1 − s)×气隙功率',b.X(0.05),b.Y(0.18),css('--green'),12);text(y,'转子铜损 s×气隙功率',b.X(0.55),b.Y(0.86),css('--red'),12);
+  if(!isNaN(s)&&s>0){y.strokeStyle=css('--ink');y.lineWidth=2;y.beginPath();y.moveTo(b.X(s),b.Y(0));y.lineTo(b.X(s),b.Y(1));y.stroke();text(y,`s = ${(s*100).toFixed(1)}%`,b.X(s)+5,b.Y(0.55),css('--ink'),11);}
+}
+['iV','iF','iP','iX','iR','iT'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(5)));$('iVF').addEventListener('change',()=>Lab.draw(5));
+document.querySelectorAll('#lab5 [data-im]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.im.split(',');['iV','iF','iP','iX','iR','iT'].forEach((id,i)=>$(id).value=q[i]);$('iVF').value=q[6];Lab.draw(5);}));
+Lab.add(5,lab5,{its:240,ipf:240});
+
+/* ---------- Lab 6: PM brushless DC motor ---------- */
+const bl={play:false};
+function lab6(){
+  const V=val('bV'),k=val('bK'),R=val('bR'),Vo=val('bO'),Im=val('bI'),TL=val('bT'),th=val('bA');
+  $('bVO').textContent=V+' V';$('bKO').textContent=k;$('bRO').textContent=R+' Ω';$('bOO').textContent=Vo+' V';$('bIO').textContent=Im+' A';$('bTO').textContent=fmt(TL*1000,4)+' mN·m';$('bAO').textContent=th+'°';
+  pressGroup('#lab6 [data-bl]',b=>{const q=b.dataset.bl.split(',').map(Number);return q[0]===V&&q[1]===k&&q[2]===R&&q[3]===Vo&&q[4]===Im&&Math.abs(q[5]-TL)<1e-9;});
+  const Ve=V-2*Vo,w0=Ve/(2*k),wc=(Ve-2*R*Im)/(2*k),I=TL/(2*k),T0=2*k*Im;
+  const Iw=w=>Math.max(0,Math.min(Im,(Ve-2*k*w)/(2*R)));
+  $('b_0').textContent=`${w0.toFixed(1)} rad/s（${Math.round(w0*30/Math.PI)} rpm）/ `+(wc>0?`${wc.toFixed(1)} rad/s（${Math.round(wc*30/Math.PI)} rpm）`:'—');
+  const v=$('b_v');let w=NaN;
+  if(I>Im+1e-9){v.innerHTML=`负载需要 ${fmt(I,3)} A，超过驱动器限流 ${Im} A（最大转矩 2kI<sub>max</sub> = ${(T0*1000).toFixed(1)} mN·m）：电机会减速到停`;v.style.color=css('--red');$('b_w').textContent='停转';$('b_p').textContent='—';$('b_e').textContent='—';}
+  else{w=(Ve-2*R*I)/(2*k);if(w<0){w=0;}
+    const Pin=V*I,Psw=2*Vo*I,Pcu=2*R*I*I,Po=TL*w;
+    $('b_w').textContent=`${w.toFixed(1)} rad/s（${Math.round(w*30/Math.PI)} rpm）· ${I.toFixed(2)} A`;
+    $('b_p').textContent=`${Pin.toFixed(1)} / ${Psw.toFixed(2)} / ${Pcu.toFixed(2)} / ${Po.toFixed(1)} W`;
+    $('b_e').textContent=Pin>0?`${(Po/Pin*100).toFixed(1)} % · ${((w0-w)/w0*100).toFixed(1)} %`:'— · 0 %';
+    v.innerHTML=`两相串联：V = 2V<sub>OS</sub> + I·2R<sub>ph</sub> + 2kω → ${V} = ${(2*Vo).toFixed(2)} + ${(2*R*I).toFixed(2)} + ${(2*k*w).toFixed(2)} V；转矩 T = 2kI = ${(2*k*I*1000).toFixed(1)} mN·m`;v.style.color=css('--blue');}
+  /* six-step picture */
+  const [x,W,H]=fit($('bst'));const cx=W*0.34,cy=H/2+6,Rr=Math.min(W*0.3,H*0.4);
+  const seq=[['a','b'],['a','c'],['b','c'],['b','a'],['c','a'],['c','b']],ang={a:0,b:120,c:240},col={a:css('--red'),b:css('--amp'),c:css('--blue')};
+  const sec=Math.floor((((th-30)%360)+360)%360/60),[pp,nn]=seq[sec];
+  x.strokeStyle=css('--muted');x.lineWidth=3;x.beginPath();x.arc(cx,cy,Rr,0,7);x.stroke();
+  let vx=0,vy=0;
+  ['a','b','c'].forEach(p=>{const r=ang[p]*Math.PI/180,ux=Math.cos(r),uy=-Math.sin(r);x.strokeStyle=col[p];x.globalAlpha=0.5;x.lineWidth=1;x.setLineDash([3,4]);x.beginPath();x.moveTo(cx-ux*Rr,cy-uy*Rr);x.lineTo(cx+ux*Rr,cy+uy*Rr);x.stroke();x.setLineDash([]);x.globalAlpha=1;
+    const on=p===pp||p===nn;label(x,p,cx+ux*(Rr+12)-4,cy+uy*(Rr+12)+5,on?col[p]:css('--muted'),on?15:12);const sg=p===pp?1:p===nn?-1:0;vx+=sg*ux;vy+=sg*uy;});
+  const L=Math.hypot(vx,vy);arrow(x,cx,cy,cx+vx/L*Rr*0.88,cy+vy/L*Rr*0.88,css('--ink'),3.4);
+  const rr=(th-180)*Math.PI/180,rx=Math.cos(rr),ry=-Math.sin(rr);
+  x.lineCap='butt';x.lineWidth=14;x.strokeStyle=css('--blue');x.beginPath();x.moveTo(cx-rx*Rr*0.5,cy-ry*Rr*0.5);x.lineTo(cx,cy);x.stroke();x.strokeStyle=css('--red');x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+rx*Rr*0.5,cy+ry*Rr*0.5);x.stroke();x.lineCap='round';
+  label(x,'N',cx+rx*Rr*0.64-5,cy+ry*Rr*0.64+5,css('--red'),13);
+  const lag=((Math.atan2(-vy,vx)*180/Math.PI-(th-180))%360+360)%360;
+  const tx=W*0.68;text(x,`第 ${sec+1} 步`,tx,30,css('--ink'),14);text(x,`导通：${pp}+、${nn}−`,tx,52,css('--ink'),13);text(x,'两相串联、两个开关',tx,72,css('--muted'),12);
+  text(x,`定子磁场超前转子`,tx,100,css('--muted'),12);text(x,`${lag.toFixed(0)}°（60°–120°）`,tx,118,css('--ink'),13);
+  text(x,'黑箭头：定子磁场',tx,H-40,css('--muted'),11);text(x,'红蓝棒：永磁转子',tx,H-22,css('--muted'),11);
+  /* torque-speed */
+  const [y,W2,H2]=fit($('btw'));const wm=w0*1.1,tm=Math.max(T0,TL)*1.25;
+  const b=axes(y,W2,H2,{x0:0,x1:wm,y0:0,y1:tm*1000,xt:[0,wm/4,wm/2,3*wm/4].map(t=>+t.toPrecision(2)),yt:[0,tm*500,tm*1000].map(t=>+t.toPrecision(2)),title:'转矩 T (mN·m) – 转速 ω (rad/s)',xl:'ω',pl:46});
+  y.setLineDash([4,4]);plot(y,b.X,b.Y,u=>{const t=2*k*(Ve-2*k*u)/(2*R)*1000;return t>=0&&t<=tm*1000?t:NaN;},0,wm,css('--muted'),1.2,300);y.setLineDash([]);
+  plot(y,b.X,b.Y,u=>2*k*Iw(u)*1000,0,wm,css('--blue'),2.6,600);
+  y.strokeStyle=css('--amp');y.lineWidth=1.6;y.setLineDash([6,4]);y.beginPath();y.moveTo(b.X(0),b.Y(TL*1000));y.lineTo(b.X(wm),b.Y(TL*1000));y.stroke();y.setLineDash([]);
+  if(wc>0){y.strokeStyle=css('--grid');y.setLineDash([3,3]);y.beginPath();y.moveTo(b.X(wc),b.pt);y.lineTo(b.X(wc),H2-b.pb);y.stroke();y.setLineDash([]);text(y,'ωc',b.X(wc)-26,b.pt+12,css('--muted'),11);}
+  text(y,'ω0',b.X(w0)+4,H2-b.pb-6,css('--muted'),11);
+  if(!isNaN(w)){y.fillStyle=css('--red');y.beginPath();y.arc(b.X(w),b.Y(TL*1000),6,0,7);y.fill();}
+  text(y,'灰虚线：不限流时的直线',b.pl+6,b.pt+12,css('--muted'),11);
+}
+['bV','bK','bR','bO','bI','bT','bA'].forEach(id=>$(id).addEventListener('input',()=>Lab.draw(6)));
+document.querySelectorAll('#lab6 [data-bl]').forEach(b=>b.addEventListener('click',()=>{b.dataset.bl.split(',').forEach((v,i)=>$(['bV','bK','bR','bO','bI','bT'][i]).value=v);Lab.draw(6);}));
+const blAnim=Lab.anim(6,$('bst'),dt=>{const s=$('bA');s.value=(+s.value+dt*90)%360;Lab.draw(6);},()=>bl.play);
+$('bPlay').addEventListener('click',()=>{bl.play=!bl.play;$('bPlay').textContent=bl.play?'⏸ 暂停':'▶ 让转子转起来';Lab.kick(blAnim);});
+Lab.add(6,lab6,{bst:240,btw:240});
+
 Lab.start();
 </script>
 </body></html>

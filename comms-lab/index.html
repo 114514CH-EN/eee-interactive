@@ -210,7 +210,7 @@ So what should an encoder do when the statistics are unknown? In practice it has
   <div class="tag">实验 5 · Transmitting Analogue Signals by Digital Methods · Useful Equations</div>
   <h2>量化噪声：每多 1 bit，SQNR 多 6 dB</h2>
   <p class="lead">先按 f<sub>s</sub> &gt; 2F<sub>max</sub> 采样，再把 −A/2 … A/2 等分成 N = 2<sup>p</sup> 级，每个样本取最近的一级。蓝线是原信号，橙色台阶是量化后的样本，下面红线是量化误差（最大 ±Δ/2）。满幅正弦的 SQNR = 3N²/2，即 6.02p + 1.76 dB；信号比满幅小多少 dB，SQNR 就少多少 dB。</p>
-  <div class="btns" role="group" aria-label="预设"><button data-z="3,0,8">3 bit 粗量化</button><button data-z="8,0,8">电话 PCM：8 kHz × 8 bit</button><button data-z="16,0,44.1">CD：44.1 kHz × 16 bit</button><button data-z="8,-20,8">8 bit 但信号小 20 dB</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-z="3,0,8">3 bit 粗量化</button><button data-z="8,0,8">电话 PCM：8 kHz × 8 bit</button><button data-z="16,0,44.1">CD：44.1 kHz × 16 bit</button><button data-z="8,-20,8">8 bit 但信号小 20 dB</button><button data-z="4,0,8">Week 8 Tutorial：4 bit（含符号位）</button></div>
   <div class="controls">
     <div class="ctl"><label for="zP">位数 p</label><input id="zP" type="range" min="1" max="16" step="1" value="3"><output id="zPO"></output></div>
     <div class="ctl"><label for="zL">信号电平（相对满幅）</label><input id="zL" type="range" min="-40" max="0" step="1" value="0"><output id="zLO"></output></div>
@@ -225,7 +225,7 @@ So what should an encoder do when the statistics are unknown? In practice it has
   <div class="tag">实验 6 · The Effect of Noise · Useful Equations</div>
   <h2>噪声里判 0 还是 1：误码率就是高斯尾巴的面积</h2>
   <p class="lead">发送电平（单极性 0 / A 或双极性 ±A）加上标准差 σ 的高斯噪声，接收端和门限 V<sub>th</sub> 比较。把门限归一化成 x<sub>th</sub> = (V<sub>th</sub> − 电平)/σ，错判概率 = 1 − Φ(x<sub>th</sub>)，就是阴影面积。点「发 2000 个比特」看实际数出的错误和理论是否一致。</p>
-  <div class="btns" role="group" aria-label="预设"><button data-e="uni,1,0.25,0.5">单极性 0/1 V，σ = 0.25，门限 0.5</button><button data-e="uni,1,0.25,0.7">门限偏高到 0.7</button><button data-e="pol,1,0.25,0">双极性 ±1 V，同样噪声</button><button data-e="uni,1,0.5,0.5">噪声加倍 σ = 0.5</button></div>
+  <div class="btns" role="group" aria-label="预设"><button data-e="uni,1,0.25,0.5">单极性 0/1 V，σ = 0.25，门限 0.5</button><button data-e="uni,1,0.25,0.7">门限偏高到 0.7</button><button data-e="pol,1,0.25,0">双极性 ±1 V，同样噪声</button><button data-e="uni,1,0.5,0.5">噪声加倍 σ = 0.5</button><button data-e="uni,1,0.25,0.4">Week 8 例子门限偏低（3.2 V / 8 V）</button></div>
   <div class="controls">
     <div class="ctl"><label for="eM">信号</label><select id="eM"><option value="uni">单极性 0 / A</option><option value="pol">双极性 −A / +A</option></select><span></span></div>
     <div class="ctl"><label for="eA">A (V)</label><input id="eA" type="range" min="0.2" max="2" step="0.05" value="1"><output id="eAO"></output></div>

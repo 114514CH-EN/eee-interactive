@@ -13,7 +13,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [概率实验室](https://114514ch-en.github.io/eee-interactive/prob-lab/) | Maths Part A | 期望与方差、Bayes、中心极限定理、假设检验、马尔可夫过程与 PageRank、极值理论（最大值的极限分布、GEV 与重现水平、QQ 图与 Tutorial 6 的 Boston 风速、超阈值 GPD 与平均超出量图） |
 | [向量空间实验室](https://114514ch-en.github.io/eee-interactive/vspace-lab/) | Maths Part A Week 7–10 | 三种距离 d₁ / d₂ / d∞ 与单位球、k-means 逐步迭代与局部最优、内积夹角与投影、TF-IDF 余弦相似度计算器、Gram–Schmidt 二维动画和三维计算器、特征向量（v 与 Av 共线）、PCA（各方向方差、投影误差） |
 | [信息与编码实验室](https://114514ch-en.github.io/eee-interactive/coding-lab/) | Communication Systems Week 1 / 3 / 4 | 熵、Huffman / Fano / Shannon、分贝、Hamming 码与交织 |
-| [通信链路实验室](https://114514ch-en.github.io/eee-interactive/comms-lab/) | 通信系统 · Lab 1 + Week 3 + Week 7 + Useful Equations | 官方 Lab 1 配套：编码器 / 解码器 / 码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半；另有前缀码解码、分组编码、香农容量、链路预算、量化噪声、误码率、滤波器；Week 7 的热噪声 kTB → SNR → 容量（含放大器噪声系数）、多电平信号在噪声中的判决（Hartley → Shannon） |
+| [通信链路实验室](https://114514ch-en.github.io/eee-interactive/comms-lab/) | 通信系统 · Lab 1 + Week 3 + Week 7–8 + Useful Equations | 官方 Lab 1 配套：编码器 / 解码器 / 码表检查器、压缩真实文本（H、L、ASCII 基线、码长散点图）、用前一半统计编码后一半；另有前缀码解码、分组编码、香农容量、链路预算、量化噪声、误码率、滤波器；Week 7 的热噪声 kTB → SNR → 容量（含放大器噪声系数）、多电平信号在噪声中的判决（Hartley → Shannon）；Week 8 的高斯噪声误码率与 4 bit 量化噪声 Tutorial 预设 |
 | [调制实验室](https://114514ch-en.github.io/eee-interactive/modulation-lab/) | 通信系统 · Week 5 模拟与数字调制 | AM 包络、边带与带宽（含 Tutorial 两音题）、整流 vs 乘本地载波解调、PM 与 FM 的波形 / 瞬时频率 / 频谱与 Carson 带宽、正交调幅 QAM 的相位误差串扰；OOK / BFSK / BPSK 键控与加噪声的相干解调、星座图与噪声（PSK、16-QAM、Gray 码） |
 | [Python 与系统工程实验室](https://114514ch-en.github.io/eee-interactive/msse-lab/) | MSSE · Python Lecture 1–3 / Module Overview / SysML Requirements | 切片边界模型、Python 2 vs 3 除法逐步求值、列表推导式展开、浏览器里逐行执行 Python（Pyodide，含类、self、继承）、Vee 模型、33 个常见误区的真实报错、需求体检（五条充分性标准）、需求图七种关系练习、胰岛素泵 CompDose 结构化规格、看代码卡在分词 / 编译 / 运行哪一步 |
 | [同步状态机实验室](https://114514ch-en.github.io/eee-interactive/fsm-lab/) | DEEM · DE ①② | 布尔函数的几种写法、Moore vs Mealy、用 X 触发器实现 Y、编码分配 |
@@ -26,7 +26,7 @@ EEE Year 1–2 互动学习页面，配合 Notion 课程笔记使用。
 | [滤波与谐振实验室](https://114514ch-en.github.io/eee-interactive/filter-lab/) | EE1 · Communications Circuits | RC / RL 低通高通 Bode 图与相量图、串联 RLC 谐振、三种阻尼 |
 | [傅里叶实验室](https://114514ch-en.github.io/eee-interactive/fourier-lab/) | EE1 Fourier / Maths Part B / 通信 Week 4 | 级数合成与吉布斯现象、rect ⟷ sinc 与线性相位、采样与混叠、傅里叶系数怎么来（正交性）、常数项为什么是 a₀/2、常见脉冲的频谱、DFT 频率轴、任意周期 2L 与奇偶分解（Week 5）、从级数到傅里叶变换（Part B Week 6） |
 | [向量微积分实验室](https://114514ch-en.github.io/eee-interactive/vector-lab/) | Maths Part B Week 7–10 | 偏导数是切片的斜率、驻点与 D 判别式（含「同号也是鞍点」）、梯度与方向导数（含三维例题计算器）、线积分与做功（换路径比较 W，保守场只看起点终点）、二重积分切条（换积分次序、形心、二阶矩）、散度与旋度（墨水团、风车、圆周通量） |
-| [电机与变压器实验室](https://114514ch-en.github.io/eee-interactive/machines-lab/) | EE1 · Electrical Machines / DEEM EM Week 5 | 直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波、并励与串励有刷直流电机 |
+| [电机与变压器实验室](https://114514ch-en.github.io/eee-interactive/machines-lab/) | EE1 · Electrical Machines / DEEM EM Week 5–8 | 直流电机转矩–转速、变压器阻抗匹配、桥式整流与电容滤波、并励与串励有刷直流电机、感应电机转差与变频调速、永磁无刷直流电机六步换相 |
 | [EE1 实验课实验室](https://114514ch-en.github.io/eee-interactive/bench-lab/) | EE1 · Lab 1 / 3 / 5 | 分压器与负载效应、示波器读数（耦合 / 探头 / 触发）、RC 相移记录表、热敏电阻温度计与反推、LED 负载线与额定值、机器人蛇追光 |
 | [工程数学 1 实验室](https://114514ch-en.github.io/eee-interactive/math1-lab/) | Year 1 · Engineering Mathematics 1 | 单位圆与三角函数、参数求导、最大功率、黎曼和与平均值、双曲函数、Taylor 多项式、点积与叉积、矩阵变换与特征向量、高斯消元、振动与振型、复数与 Argand 图、微分方程（斜率场、Euler 法、阻尼与共振）、Newton–Raphson 求根 |
 | [复习卡片](https://114514ch-en.github.io/eee-interactive/cards/) | Year 1 EE、工程数学 1 + Year 2 全部 | 自测题、易错点、勘误卡片，间隔重复（`?c=DE&l=DE5` 只看某一讲） |
