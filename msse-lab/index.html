@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Python 与系统工程实验室</title>
-<meta name="description" content="MSSE 的十个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，以及看一段代码卡在分词、编译还是运行哪一步。讲义里的笔误都标出来了。">
-<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的十个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，以及看一段代码卡在分词、编译还是运行哪一步。讲义里的笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
+<meta name="description" content="MSSE 的十二个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，看一段代码卡在分词、编译还是运行哪一步，以及 SysML 结构建模的模块拆分（耦合与内聚）和 BDD 五种连线练习。讲义里的笔误都标出来了。">
+<meta property="og:type" content="website"><meta property="og:site_name" content="EEE 互动学习页"><meta property="og:title" content="Python 与系统工程实验室"><meta property="og:description" content="MSSE 的十二个实验：切片的边界模型、Python 2 与 3 的除法逐步求值、列表推导式展开成循环、在浏览器里逐行执行真 Python（看变量、别名、异常、类与 self）、Vee 模型的验证与确认、33 个新手常见误区的真实报错，以及 SysML 部分的需求体检、需求图七种关系练习和胰岛素泵结构化规格，看一段代码卡在分词、编译还是运行哪一步，以及 SysML 结构建模的模块拆分（耦合与内聚）和 BDD 五种连线练习。讲义里的笔误都标出来了。"><meta property="og:url" content="https://114514ch-en.github.io/eee-interactive/msse-lab/">
 <meta name="theme-color" content="#f3f5f2" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f1513" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,8 +58,8 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <header>
   <div class="tag">MULTIDISCIPLINARY SYSTEMS AND SOFTWARE ENGINEERING · PYTHON · SYSML</div>
   <h1>Python 与系统工程实验室</h1>
-  <p>对应 MSSE 的 Python 三讲（Basics 1 / 2 / 3）、课程概览里的系统开发流程和 Week 8 的 SysML 需求（Lecture 7b，实验 7–9）。实验 1–3、6–9 纯网页即时运行；实验 10 和实验 4 一样在浏览器里跑真 Python，看代码卡在分词、编译还是运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子，包括类、self 和继承。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
-  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a><a href="#lab6">实验 6 常见误区</a><a href="#lab7">实验 7 需求体检</a><a href="#lab8">实验 8 需求关系</a><a href="#lab9">实验 9 胰岛素泵规格</a><a href="#lab10">实验 10 编译还是运行</a></nav>
+  <p>对应 MSSE 的 Python 三讲（Basics 1 / 2 / 3）、课程概览里的系统开发流程、Week 8 的 SysML 需求（Lecture 7b，实验 7–9）和 Week 9 的结构建模（Lecture 8，实验 11–12）。实验 1–3、5–9、11–12 纯网页即时运行；实验 10 和实验 4 一样在浏览器里跑真 Python，看代码卡在分词、编译还是运行；实验 4 会在浏览器里加载一个真正的 Python 3（Pyodide，第一次约 10 MB），逐行执行讲义里的例子，包括类、self 和继承。讲义有不少 Python 2 写法和笔误，遇到的地方都在注释里标出来了。</p>
+  <nav><a href="../">← 所有互动页</a><a href="#lab1">实验 1 索引与切片</a><a href="#lab2">实验 2 除法与类型</a><a href="#lab3">实验 3 列表推导式</a><a href="#lab4">实验 4 逐行执行 Python</a><a href="#lab5">实验 5 Vee 模型</a><a href="#lab6">实验 6 常见误区</a><a href="#lab7">实验 7 需求体检</a><a href="#lab8">实验 8 需求关系</a><a href="#lab9">实验 9 胰岛素泵规格</a><a href="#lab10">实验 10 编译还是运行</a><a href="#lab11">实验 11 耦合与内聚</a><a href="#lab12">实验 12 BDD 连线</a></nav>
 </header>
 
 <section class="panel" id="lab1">
@@ -205,6 +205,33 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   </div>
   <div class="read"><div><small>卡在哪一步</small><b id="kWhere" style="font-size:15px"></b></div><div><small>Python 3.13 的报错</small><b id="kErr" style="font-size:13px"></b></div></div>
   <p class="note"><strong>看点：</strong>「deffoo()」分词时就成了一个名字 deffoo，编译器以为你在调用函数，读到冒号才报错；「if x = = 0」里是两个单独的 =；「2x」和弯引号 “ ” 分词模块还能切开，编译时才报 invalid decimal literal / invalid character。「拼错名字」那个例子能顺利跑完，因为错的那行没被执行；把 x 改成 −5 再运行就会 NameError。死循环的例子运行 3000 步后被强制停下。</p>
+</section>
+
+<section class="panel" id="lab11">
+  <div class="tag">实验 11 · Lecture 8 Structure · Top-down decomposition: coupling &amp; cohesion（第 6 页）</div>
+  <h2>把智能水壶的软件拆成模块：跨模块的线越少越好，模块里面的线越密越好</h2>
+  <p class="lead">十个功能之间的箭头是数据或控制信号（谁把什么交给谁）。点下面的按钮（或直接点图里的方块）把一个功能换到下一个模块。<strong>耦合</strong>（coupling）= 跨模块的连线数，衡量模块之间互相依赖多少；<strong>内聚</strong>（cohesion）= 每个模块内部连线的密度（实际连线 ÷ 两两配对数），衡量模块里的东西是不是真的属于一起。讲义说好的分解要「尽量减少部件之间的依赖」：低耦合、高内聚。先看三个预设，再自己试。</p>
+  <div class="btns" role="group" aria-label="预设" id="cpPre"></div>
+  <div class="btns" role="group" aria-label="功能，点一下换到下一个模块" id="cpFn"></div>
+  <div><canvas id="cpc" height="340" aria-label="三个模块里的功能和它们之间的连线"></canvas></div>
+  <div class="read"><div><small>耦合：跨模块连线</small><b id="cpC"></b></div><div><small>平均内聚度</small><b id="cpH"></b></div><div><small>模块大小</small><b id="cpS" style="font-size:15px"></b></div></div>
+  <p class="status" id="cpMsg" aria-live="polite"></p>
+  <p class="note"><strong>为什么两个指标都要看：</strong>全部塞进一个模块，耦合是 0，但这个「上帝模块」里什么都有，内聚很低：没法分给不同的人并行开发，改一处可能牵动全部（讲义第 3 页的优点全没了）。按「输入 / 处理 / 输出」这种代码类型分，看着整齐，几乎每条线都跨模块。按功能分（感测与控制、用户界面、通信），跨模块的线只剩少数几条，而且都是清楚的接口（目标温度、状态、报警），这正是后面 IBD 里要画的端口和流。指标的定义是本页为了演示设的简化版，真正的软件度量有很多种。</p>
+</section>
+
+<section class="panel" id="lab12">
+  <div class="tag">实验 12 · SysML BDD · Associations, Generalisation, Dependency（第 27–31 页）</div>
+  <h2>BDD 里的五种连线：选关系，再选符号画在哪一头</h2>
+  <p class="lead">每题给两个块（或参与者）。先选关系：<strong>组合</strong>（黑菱形 ◆，is-part，整体拥有部件）、<strong>共享</strong>（白菱形 ◇，部件不只属于这个整体）、<strong>引用</strong>（没有菱形，is-part 以外的关系）、<strong>泛化</strong>（空心三角 △，is-a，三角画在一般的那一方）、<strong>依赖</strong>（虚线箭头，从依赖方指向被依赖方）。再选符号在哪一头。前 10 题来自讲义的图，后 4 题是笔记里的智能水壶。</p>
+  <div class="btns" role="group" aria-label="题目" id="bdList"></div>
+  <div><canvas id="bdc" height="230" aria-label="两个块和它们之间的连线"></canvas></div>
+  <div class="two">
+    <div><div class="tag">1. 哪种关系？</div><div class="btns" role="group" aria-label="关系" id="bdK"></div></div>
+    <div><div class="tag">2. 符号在哪一头？</div><div class="btns" role="group" aria-label="方向" id="bdD"></div></div>
+  </div>
+  <div class="info" id="bdAns" aria-live="polite"></div>
+  <div class="read"><div><small>已答 / 全对</small><b id="bdScore" style="font-size:15px"></b></div><div><small>出处</small><b id="bdSrc" style="font-size:15px"></b></div></div>
+  <p class="note"><strong>区分口诀：</strong>「拆掉整体，部件跟着没了」→ 组合 ◆（车和它的四个轮子位置、相机和它的安装组件）；「部件还可能属于别的东西」→ 共享 ◇（线束同时连着几个子系统）；「只是用到、连着，不是组成部分」→ 引用（插头连插座、讲义第 29 页的机械和电气连接器）；「A 是一种 B」→ 泛化 △ 在 B；「A 的规格或实现靠 B，B 改了 A 可能要改」→ 依赖 A ⇢ B。讲义第 28 页的注释也说：在 SysML 里白菱形和没有菱形含义相同，靠 profile 加约束才区分，所以考试里能说清「共享 = 部件可以被别的整体共用」就够了。</p>
 </section>
 
 </div>
@@ -914,6 +941,108 @@ $('kSrc').addEventListener('input',()=>Lab.draw(10));
 document.querySelectorAll('#lab10 [data-kp]').forEach(b=>b.addEventListener('click',()=>{$('kSrc').value=KP[+b.dataset.kp][1];Lab.draw(10);if(py)kRunNow();}));
 {const q=new URLSearchParams(location.search).get('k');if(q&&+q>=1&&+q<=KP.length)$('kSrc').value=KP[+q-1][1];}
 Lab.add(10,lab10);
+
+/* ---------- Lab 11: decomposition, coupling and cohesion ---------- */
+const CPF=['温度读取','水位读取','温控回路','加热继电器','干烧保护','按键输入','指令解析','Wi-Fi 收发','状态推送','LED 显示'];
+const CPE=[[0,2,'水温'],[1,4,'水位'],[2,3,'加热开 / 关'],[4,3,'强制断电'],[5,2,'目标温度'],[6,2,'目标温度'],[7,6,'收到的数据包'],[2,8,'状态'],[8,7,'发出的数据包'],[2,9,'状态'],[4,8,'干烧报警'],[4,9,'干烧报警'],[5,9,'按键反馈']];
+const CPM=['A','B','C'];
+const CPP=[['按功能分（感测与控制 / 用户界面 / 通信）',[0,0,0,0,0,1,2,2,2,1]],['按代码类型分（输入 / 处理 / 输出）',[0,0,1,2,1,0,1,0,2,2]],['全部放进一个模块',[0,0,0,0,0,0,0,0,0,0]]];
+let cpA=CPP[0][1].slice();const cpHit=[];
+$('cpPre').innerHTML=CPP.map((p,i)=>`<button data-cp="${i}">${esc(p[0])}</button>`).join('');
+function cpStats(){const mods=[0,1,2].map(m=>CPF.map((_,i)=>i).filter(i=>cpA[i]===m));
+  const cross=CPE.filter(([a,b])=>cpA[a]!==cpA[b]);const coh=[];
+  mods.forEach((L,m)=>{if(L.length<2)return;const inn=CPE.filter(([a,b])=>cpA[a]===m&&cpA[b]===m).length;coh.push([m,inn,L.length*(L.length-1)/2]);});
+  const avg=coh.length?coh.reduce((s,c)=>s+c[1]/c[2],0)/coh.length:NaN;return {mods,cross,coh,avg};}
+function lab11(){
+  const st=cpStats();pressGroup('#cpPre [data-cp]',b=>CPP[+b.dataset.cp][1].every((v,i)=>v===cpA[i]));
+  $('cpFn').innerHTML=CPF.map((f,i)=>`<button data-cf="${i}">${esc(f)} → ${CPM[cpA[i]]}</button>`).join('');
+  $('cpFn').querySelectorAll('[data-cf]').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.cf;cpA[i]=(cpA[i]+1)%3;Lab.draw(11);}));
+  const [x,W,H]=fit($('cpc'));cpHit.length=0;
+  const nar=W<480,gap=nar?8:18,cw=(W-gap*2)/3,nh=24,ny=nar?42:30,f=css('--body');
+  const pos={};
+  st.mods.forEach((L,m)=>{const x0=m*(cw+gap);x.strokeStyle=css('--line');x.lineWidth=1.2;x.fillStyle=css('--bg');x.fillRect(x0,4,cw,H-8);x.strokeRect(x0,4,cw,H-8);
+    text(x,`模块 ${CPM[m]}（${L.length}）`,x0+8,20,css('--muted'),12);
+    const coh=st.coh.find(c=>c[0]===m);if(coh)nar?text(x,`内聚 ${coh[1]}/${coh[2]}`,x0+8,35,css('--accent'),11):text(x,`内聚 ${coh[1]}/${coh[2]}`,x0+cw-6,20,css('--accent'),11,'right');
+    L.forEach((i,k)=>{const y=ny+k*(nh+6),bw=Math.min(cw-28,120),bx=x0+(cw-bw)/2-8;pos[i]={x:bx,y,w:bw,cx:bx+bw/2,cy:y+nh/2,m};cpHit.push([bx,y,bw,nh,i]);});});
+  /* edges */
+  CPE.forEach(([a,b])=>{const A=pos[a],B=pos[b];if(!A||!B)return;const inner=A.m===B.m,col=inner?css('--green'):css('--red');x.strokeStyle=col;x.fillStyle=col;x.lineWidth=inner?1.8:1.4;x.setLineDash(inner?[]:[5,4]);
+    let sx,sy,ex,ey,c1x,c1y,c2x,c2y;
+    if(inner){sx=A.x+A.w;sy=A.cy;ex=B.x+B.w;ey=B.cy;const bulge=14+Math.abs(sy-ey)*0.18;c1x=sx+bulge;c1y=sy;c2x=ex+bulge;c2y=ey;}
+    else{const right=B.m>A.m;sx=right?A.x+A.w:A.x;sy=A.cy;ex=right?B.x:B.x+B.w;ey=B.cy;const d=Math.max(20,Math.abs(ex-sx)*0.4)*(right?1:-1);c1x=sx+d;c1y=sy;c2x=ex-d;c2y=ey;}
+    x.beginPath();x.moveTo(sx,sy);x.bezierCurveTo(c1x,c1y,c2x,c2y,ex,ey);x.stroke();x.setLineDash([]);
+    const an=Math.atan2(ey-c2y,ex-c2x),h=7;x.beginPath();x.moveTo(ex,ey);x.lineTo(ex-h*Math.cos(an-.45),ey-h*Math.sin(an-.45));x.lineTo(ex-h*Math.cos(an+.45),ey-h*Math.sin(an+.45));x.closePath();x.fill();});
+  Object.entries(pos).forEach(([i,p])=>{x.fillStyle=css('--panel');x.strokeStyle=css('--ink');x.lineWidth=1.2;x.fillRect(p.x,p.y,p.w,nh);x.strokeRect(p.x,p.y,p.w,nh);
+    x.font=`${W<480?11:12}px ${f}`;x.fillStyle=css('--ink');x.textAlign='center';x.fillText(CPF[i],p.cx,p.y+16);x.textAlign='left';});
+  $('cpC').textContent=`${st.cross.length} / ${CPE.length} 条`;$('cpC').style.color=st.cross.length<=6?css('--green'):st.cross.length>=10?css('--red'):'';
+  $('cpH').textContent=isFinite(st.avg)?st.avg.toFixed(2):'—';$('cpH').style.color=st.avg>=0.6?css('--green'):st.avg<0.3?css('--red'):'';
+  $('cpS').textContent=st.mods.map((L,m)=>`${CPM[m]} ${L.length}`).join(' · ');
+  const used=st.mods.filter(L=>L.length).length;let msg;
+  if(used===1)msg='只有一个模块：没有跨模块的线，但模块里十个功能挤在一起，内聚只有 0.29。没法分给不同的人做，也看不出接口在哪。';
+  else{const ifs={};st.cross.forEach(([a,b,l])=>{const k=`${CPM[cpA[a]]}→${CPM[cpA[b]]}`;(ifs[k]=ifs[k]||new Set()).add(l);});
+    msg='跨模块的接口（之后在 IBD 里画成端口和流）：'+Object.entries(ifs).map(([k,v])=>`${k}：${[...v].join('、')}`).join('；')+'。';}
+  $('cpMsg').textContent=msg;
+}
+$('cpc').addEventListener('click',e=>{const r=$('cpc').getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;const h=cpHit.find(([x0,y0,w,hh])=>px>=x0&&px<=x0+w&&py>=y0&&py<=y0+hh);if(h){cpA[h[4]]=(cpA[h[4]]+1)%3;Lab.draw(11);}});
+$('cpPre').querySelectorAll('[data-cp]').forEach(b=>b.addEventListener('click',()=>{cpA=CPP[+b.dataset.cp][1].slice();Lab.draw(11);}));
+{const q=new URLSearchParams(location.search).get('cp');if(q&&+q>=1&&+q<=CPP.length)cpA=CPP[+q-1][1].slice();}
+Lab.add(11,lab11,{cpc:340});
+
+/* ---------- Lab 12: BDD associations ---------- */
+const BDK=[['comp','组合 ◆'],['shared','共享 ◇'],['ref','引用（无菱形）'],['gen','泛化 △'],['dep','依赖 ⇢']];
+const BDQ=[
+ {a:['block','Air Compressor'],b:['block','Motor'],k:'comp',d:'a',p:'第 14 页（幻灯片 20）',w:'电机是空气压缩机的组成部分（part），压缩机没了，这个电机作为「它的部件」也就不存在了：组合，黑菱形在整体 Air Compressor 那一头。同一张 BDD 里 Motor Controller、Pump、Tank 也都是这样连的。'},
+ {a:['block','Camera'],b:['block','Mount Assembly'],k:'comp',d:'a',p:'第 27 页',w:'讲义第 27 页的「Composite Association Path」例子：Camera 由 Protective Housing、Mount Assembly、Electronics Assembly、Camera Module 组成，黑菱形在 Camera 一头，Mount Assembly 那头的角色名是 ma。'},
+ {a:['block','Mount Assembly'],b:['block','Pan Gimbal'],k:'comp',d:'a',p:'第 27 页',w:'组合可以一层层往下分：Mount Assembly 又由两个 Stepper Motor Module、Platform、Tilt Gimbal、Pan Gimbal 组成。Pan Gimbal 那头的角色名是 azimuth gimbal（方位云台）。'},
+ {a:['block','Mechanical Power Subsystem'],b:['block','Distribution Harness'],k:'shared',d:'a',p:'第 28 页',w:'配电线束（Distribution Harness）不只属于机械电源子系统，它引用的 Camera Harness、Electronics Harness、Mount Harness 也连到相机的其他部分。部件可能被别的整体共用：共享，白菱形在 Mechanical Power Subsystem 一头。'},
+ {a:['block','Wired Camera'],b:['block','Camera'],k:'gen',d:'b',p:'第 30 页',w:'有线相机「是一种」相机（is-a）。它继承 Camera 的全部部件（Electronics Assembly、Protective Housing、Camera Module、Mount Assembly），再加上自己的 Ethernet Card、Power Supply。空心三角画在一般的那一方 Camera。'},
+ {a:['block','Polarized Light'],b:['block','Light'],k:'gen',d:'b',p:'第 32 页',w:'偏振光是一种光：继承 Light 的 flux（W）和 illuminance（lx），再加上 orientation 和 polarization。三角在 Light 一头。'},
+ {a:['block','Coherent Light'],b:['block','Polarized Light'],k:'gen',d:'b',p:'第 32 页',w:'相干光又是一种偏振光（讲义这样建模），再加 coherence length 和 frequency。泛化可以连成一串：Coherent Light → Polarized Light → Light。所以激光器输出的 Coherent Light 可以接到要求 Polarized Light 或 Light 的地方（右边 Laser Test 的 l2、l3）。'},
+ {a:['actor','Driver'],b:['actor','Vehicle Occupant'],k:'gen',d:'b',p:'第 19 页（幻灯片 25）',w:'司机是一种车内乘员，乘客也是。泛化不只用于块，参与者、信号都可以用（第 30 页：Can be used for all box types）。三角在 Vehicle Occupant 一头。'},
+ {a:['block','Automobile Domain'],b:['block','Vehicle'],k:'comp',d:'a',p:'第 19 页（幻灯片 25）',w:'整个汽车领域（BDD 的顶层）由 Vehicle、Driver、Passenger、Baggage、Physical Environment 组成，黑菱形在 Automobile Domain 一头。Vehicle 标着 «system of interest»：我们要设计的就是它，其余是它所处的环境（上下文）。'},
+ {a:['interfaceBlock','3 Pin AC Socket Interface'],b:['interfaceBlock','3 Pin AC Plug Interface'],k:'ref',d:'-',p:'第 34 页（幻灯片 41）',w:'插头和插座互相连着（关联名 Plug To Socket，两头的多重性都是 1），但谁也不是谁的组成部分：引用关联，没有菱形。讲义第 29 页的「Reference Association - Example」也是用引用关联画机械和电气连接器。'},
+ {a:['block','Intelligent Kettle'],b:['block','Heating Element'],k:'comp',d:'a',p:'本页水壶例子',w:'发热管装在水壶里，是水壶的组成部分：组合，黑菱形在 Intelligent Kettle 一头。'},
+ {a:['block','Intelligent Kettle'],b:['block','UK Mains Socket'],k:'ref',d:'-',p:'本页水壶例子',w:'插座是墙上的，不属于水壶；水壶只是使用它、连到它：引用关联。在 IBD 里这条连接会通过插头端口画成电能的流。'},
+ {a:['block','Smart Kettle'],b:['block','Kettle'],k:'gen',d:'b',p:'本页水壶例子',w:'智能水壶是一种水壶：继承发热管、壶身、底座，再加 Wi-Fi 模块和温控器。三角在 Kettle 一头。'},
+ {a:['block','Thermostat Controller'],b:['block','Temperature Sensor'],k:'dep',d:'ab',p:'本页水壶例子',w:'温控器的实现依赖温度传感器的规格（量程、输出是电压还是电阻）：传感器从 NTC 换成 PT100，温控器的程序就得改。依赖箭头从依赖方 Thermostat Controller 指向被依赖方 Temperature Sensor（第 31 页：supplier 一端的改变可能导致另一端改变）。'},
+];
+let bdI=0;const bdPick={};
+$('bdList').innerHTML=BDQ.map((q,i)=>`<button data-bd="${i}" title="${esc(q.a[1]+' / '+q.b[1])}">${i+1}</button>`).join('');
+$('bdK').innerHTML=BDK.map(([k,l])=>`<button data-bk="${k}">${esc(l)}</button>`).join('');
+const bdDirs=k=>k==='comp'||k==='shared'?[['a',(k==='comp'?'◆':'◇')+' 在 A（左）'],['b',(k==='comp'?'◆':'◇')+' 在 B（右）']]:k==='gen'?[['a','△ 在 A（左）'],['b','△ 在 B（右）']]:k==='dep'?[['ab','A ⇢ B'],['ba','B ⇢ A']]:k==='ref'?[['-','两头都没有符号']]:[];
+function bdBox(x,cx,cy,w,el){const [st,name]=el,f=css('--body');
+  if(st==='actor'){x.strokeStyle=css('--ink');x.lineWidth=1.6;const t=cy-34;x.beginPath();x.arc(cx,t,9,0,2*Math.PI);x.moveTo(cx,t+9);x.lineTo(cx,t+34);x.moveTo(cx-16,t+18);x.lineTo(cx+16,t+18);x.moveTo(cx,t+34);x.lineTo(cx-13,t+52);x.moveTo(cx,t+34);x.lineTo(cx+13,t+52);x.stroke();
+    text(x,name,cx,t+70,css('--ink'),13,'center');return [cx-18,cx+18];}
+  x.font=`600 13px ${f}`;const nl=rlWrap(x,name,w-14),h=30+nl.length*16+18,top=cy-h/2;
+  x.fillStyle=css('--panel');x.strokeStyle=css('--blue');x.lineWidth=1.5;x.fillRect(cx-w/2,top,w,h);x.strokeRect(cx-w/2,top,w,h);
+  x.textAlign='center';x.fillStyle=css('--muted');x.font=`11px ${f}`;x.fillText(`«${st}»`,cx,top+16);x.fillStyle=css('--ink');x.font=`600 13px ${f}`;nl.forEach((l,i)=>x.fillText(l,cx,top+33+i*16));
+  x.strokeStyle=css('--line');x.beginPath();x.moveTo(cx-w/2,top+h-14);x.lineTo(cx+w/2,top+h-14);x.stroke();x.textAlign='left';return [cx-w/2,cx+w/2];}
+function bdLine(x,xa,xb,y,k,d,col){x.strokeStyle=col;x.fillStyle=col;x.lineWidth=1.8;
+  const dash=k==='dep';x.setLineDash(dash?[6,4]:[]);x.beginPath();x.moveTo(xa,y);x.lineTo(xb,y);x.stroke();x.setLineDash([]);
+  const end=(d==='a'||d==='ba')?xa:xb,dir=end===xa?1:-1; /* dir: pointing into the line from the end */
+  if(k==='comp'||k==='shared'){x.beginPath();x.moveTo(end,y);x.lineTo(end+dir*11,y-7);x.lineTo(end+dir*22,y);x.lineTo(end+dir*11,y+7);x.closePath();if(k==='comp')x.fill();else{x.fillStyle=css('--panel');x.fill();x.stroke();}}
+  else if(k==='gen'){x.beginPath();x.moveTo(end,y);x.lineTo(end+dir*15,y-9);x.lineTo(end+dir*15,y+9);x.closePath();x.fillStyle=css('--panel');x.fill();x.stroke();}
+  else if(k==='dep'){x.beginPath();x.moveTo(end+dir*12,y-7);x.lineTo(end,y);x.lineTo(end+dir*12,y+7);x.stroke();}
+  const lb={comp:'part（is-part）',shared:'shared',ref:'reference',gen:'generalisation（is-a）',dep:'«dependency»'}[k];
+  x.font=`600 12px ${css('--mono')}`;x.fillStyle=col;x.textAlign='center';x.fillText(lb,(xa+xb)/2,y-11);x.textAlign='left';}
+function lab12(){
+  const q=BDQ[bdI],pk=bdPick[bdI]||{};pressGroup('#bdList [data-bd]',b=>+b.dataset.bd===bdI);pressGroup('#bdK [data-bk]',b=>b.dataset.bk===pk.k);
+  $('bdD').innerHTML=bdDirs(pk.k).map(([d,l])=>`<button data-bdd="${d}" aria-pressed="${pk.d===d}">${l}</button>`).join('')||'<span class="status">先选关系</span>';
+  $('bdD').querySelectorAll('[data-bdd]').forEach(b=>b.addEventListener('click',()=>{bdPick[bdI]={...(bdPick[bdI]||{}),d:b.dataset.bdd};Lab.draw(12);}));
+  const done=pk.k&&pk.d&&bdDirs(pk.k).some(o=>o[0]===pk.d);
+  const [x,W,H]=fit($('bdc'));const bw=Math.min(220,W*0.34),ax=bw/2+8,bx=W-bw/2-8,cy=H/2-4;
+  text(x,'A',ax,16,css('--muted'),12,'center');text(x,'B',bx,16,css('--muted'),12,'center');
+  const ea=bdBox(x,ax,cy,bw,q.a),eb=bdBox(x,bx,cy,bw,q.b),xa=ea[1]+2,xb=eb[0]-2;
+  if(done){const ok=pk.k===q.k&&pk.d===q.d;bdLine(x,xa,xb,cy,q.k,q.d,css('--accent'));if(!ok){bdLine(x,xa,xb,cy+40,pk.k,pk.d,css('--red'));text(x,'你的',(xa+xb)/2,cy+60,css('--red'),11,'center');}
+    const lab=BDK.find(r=>r[0]===q.k)[1];$('bdAns').innerHTML=`<p class="lbl">${ok?'✓ 关系和符号位置都对':pk.k!==q.k?'✗ 正确的关系是 '+esc(lab):'✗ 关系对了，符号画反了一头'}</p><p>${q.w}</p>`;}
+  else{if(pk.k)text(x,'再选符号在哪一头',(xa+xb)/2,cy-6,css('--muted'),12,'center');$('bdAns').innerHTML='<p style="color:var(--muted)">选好关系和符号位置就显示答案。</p>';}
+  $('bdSrc').textContent=q.p;
+  $('bdList').querySelectorAll('[data-bd]').forEach(b=>{const p=bdPick[b.dataset.bd],qq=BDQ[+b.dataset.bd];b.style.borderColor=!(p&&p.k&&p.d)?'':(p.k===qq.k&&p.d===qq.d?'var(--green)':'var(--red)');});
+  const ans=Object.keys(bdPick).filter(i=>bdPick[i].k&&bdPick[i].d);$('bdScore').textContent=`${ans.length} / ${ans.filter(i=>bdPick[i].k===BDQ[i].k&&bdPick[i].d===BDQ[i].d).length}（共 ${BDQ.length} 题）`;
+}
+$('bdList').querySelectorAll('[data-bd]').forEach(b=>b.addEventListener('click',()=>{bdI=+b.dataset.bd;Lab.draw(12);}));
+$('bdK').querySelectorAll('[data-bk]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.bk,o=bdPick[bdI]||{};const keep=o.d&&bdDirs(k).some(z=>z[0]===o.d);bdPick[bdI]={k,d:keep?o.d:(k==='ref'?'-':undefined)};Lab.draw(12);}));
+{const q=new URLSearchParams(location.search).get('b');if(q&&+q>=1&&+q<=BDQ.length)bdI=+q-1;}
+Lab.add(12,lab12,{bdc:210});
 
 Lab.start();
 </script>
